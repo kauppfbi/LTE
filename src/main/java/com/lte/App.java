@@ -32,7 +32,8 @@ public class App extends Application {
 
 		try {
 			// initialize DB
-			connection = new DBconnection();
+			//connection = new DBconnection();
+			connection = null;
 
 			// Agent-Objekt erstellen und dem Controller0 mitgeben
 			Agent agent = new Agent(connection);
@@ -47,20 +48,6 @@ public class App extends Application {
 			controller0.setAgent(agent);
 
 			stage.show();
-
-			// stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-			// public void handle(WindowEvent we) {
-			// // close DB connection
-			// try {
-			// connection.stmt.close();
-			// connection.con.close();
-			// } catch (SQLException e) {
-			// e.printStackTrace();
-			// }
-			// stage.close();
-			// System.out.println("Stage is closing");
-			// }
-			// });
 
 		} catch (IOException e) {
 			e.printStackTrace();
