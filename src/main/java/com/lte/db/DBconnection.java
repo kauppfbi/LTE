@@ -2,6 +2,8 @@ package com.lte.db;
 
 import java.sql.*;
 
+import com.lte.models.GameDB;
+
 public class DBconnection {
 
 	// Create db connection and statement object
@@ -297,7 +299,7 @@ public class DBconnection {
 	 * array[0] = 0 if we started, 1 of opponent started <br>
 	 * array[1..n] = columns of turns
 	 */
-	public int[] getReplayTurns(int GameID, int SetNumber){
+	private int[] getReplayTurns(int GameID, int SetNumber){
 		
 		int totalRows = 0;
 		int[] turns = null;
@@ -380,7 +382,7 @@ public class DBconnection {
 	 * @param GameID
 	 * @return number of sets in game
 	 */
-	public int getNumberOfSetsInGame(int GameID){
+	private int getNumberOfSetsInGame(int GameID){
 		int number = 0;
 		
 		try {
@@ -419,7 +421,7 @@ public class DBconnection {
 	
 	/**
 	 * Call to get all games of the database with additional info
-	 * @return Raw ResultSet of all entries in the game table with additional info from Opponent
+	 * @return GameDB array with information about all games in the db. Based on GameDB model
 	 * Column 1 = Opponent name <br>
 	 * Column 2 = PlayTime <br>
 	 * Column 3 = GameID <br>
@@ -427,8 +429,18 @@ public class DBconnection {
 	 * Column 5 = PointsOpponent <br>
 	 * Column 6 = Winner
 	 */
-	public ResultSet getGames(){
+	public GameDB[] getGames(){
 		ResultSet res = null;
+		GameDB[] gamesInfo = null;
+		GameDB gameInfo = null;
+		int totalGames = 0;
+		
+		int mGameID = 0;
+		String mOpponentName;
+		String mPlayTime;
+		int mNumberOfSets;
+		
+		int counter = 0;
 		
 		try {
 			stmt = con.createStatement();
@@ -437,18 +449,111 @@ public class DBconnection {
 			e.printStackTrace();
 		}
 		
-		String sql = "Select OpponentName, PlayTime, GameID, PointsOwn, PointsOpponent, Winner from PUBLIC.GAME, PUBLIC.OPPONENT where GAME.OPPONENTID = OPPONENT.OPPONENTID";
+		String sql = "Select GameID, OpponentName, PlayTime, PointsOwn, PointsOpponent, Winner from PUBLIC.GAME, PUBLIC.OPPONENT where GAME.OPPONENTID = OPPONENT.OPPONENTID";
 		
 		try {
 			res = stmt.executeQuery(sql);
 			System.out.println("LOG: Got all games");
+			
+			if (res.next()) {
+				res.last();
+		        totalGames = res.getRow();
+		        res.beforeFirst();
+		        gamesInfo = new GameDB[totalGames];
+		        
+		        // Iterate over ResultSet and move GameInfo to GameDB object
+		        while (res.next()) {
+					mGameID = res.getInt(3);
+					mOpponentName = res.getString(1);
+					mPlayTime = res.getString(2);
+					mNumberOfSets = getNumberOfSetsInGame(mGameID);
+					
+					gameInfo = new GameDB(mGameID, mOpponentName, mPlayTime, mNumberOfSets);
+					gamesInfo[counter] = gameInfo;
+					counter++;
+				}
+			}else{
+				System.out.println("LOG: no games found");
+			}		
+			
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		return res;
+		return gamesInfo;
 	}
+	
+	/**
+	 * Method returns GameDB object with all the information needed to fill 2nd dropdown and replay a complete set for a selected gameID.
+	 * @param GameID
+	 * @return GameDB object with the following attributes: <br>
+	 * SetID <br>
+	 * PointsOwnBeforeSet <br>
+	 * PointsOpponentBeforeSet <br>
+	 * Winner <br>
+	 * ReplayTurns as int array with the following specification: <br>
+	 * array[0] = 0 if we started, 1 of opponent started <br>
+	 * array[1..n] = columns of turns 
+	 */
+	public GameDB[] getSetInfos(int GameID){
+		ResultSet res = null;
+		GameDB[] gamesInfo = null;
+		GameDB gameInfo = null;
+		int totalSets = 0;
+		
+		int setID;
+		int pointsOwn;
+		int pointsOpponent;
+		String winner;
+		int[] replayTurns;
+		
+		int counter = 0;
+		
+		try {
+			stmt = con.createStatement();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		String sql = "Select SetID, PointsOwnBeforeSet, PointsOpponentBeforeSet, Winner from PUBLIC.GAMESET WHERE GAMEID = " + GameID + "ORDER BY SetID ASC";
+		
+		try {
+			res = stmt.executeQuery(sql);
+			System.out.println("LOG: Got all sets of game");
+			
+			if (res.next()) {
+				res.last();
+		        totalSets = res.getRow();
+		        res.beforeFirst();
+		        gamesInfo = new GameDB[totalSets];
+		        
+		        // Iterate over ResultSet and move GameInfo to GameDB object
+		        while (res.next()) {
+					
+		        	setID = res.getInt(1);
+		        	pointsOwn = res.getInt(2);
+		        	pointsOpponent = res.getInt(3);
+		        	winner = res.getString(4);
+		        	replayTurns = getReplayTurns(GameID, counter+1);
+		        	
+					gameInfo = new GameDB(setID, pointsOwn, pointsOpponent, winner, replayTurns);
+					gamesInfo[counter] = gameInfo;
+					counter++;
+				}
+			}else{
+				System.out.println("LOG: no sets found");
+			}		
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return gamesInfo;
+	}
+	
 	
 	/**
 	 * Sets game result (score) in db table after game ends
