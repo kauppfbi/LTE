@@ -32,8 +32,8 @@ public class App extends Application {
 
 		try {
 			// initialize DB
-			//connection = new DBconnection();
-			connection = null;
+			connection = new DBconnection();
+			
 
 			// Agent-Objekt erstellen und dem Controller0 mitgeben
 			Agent agent = new Agent(connection);
