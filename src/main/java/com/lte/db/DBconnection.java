@@ -30,11 +30,11 @@ public class DBconnection {
 	}
 	
 	/**
-	 * Inserts a new player into the database and checks if the user already exists
+	 * Inserts a new opponent into the database and checks if the opponent already exists
 	 * @param name
-	 * @return playerid of existing or new player
+	 * @return opponentID of existing or new opponent
 	 */
-	private int insertPlayer(String name) {
+	private int insertOpponent(String name) {
 		
 		try {
 			stmt = con.createStatement();
@@ -43,23 +43,23 @@ public class DBconnection {
 			System.out.println("LOG: couldn't create statement");
 		}
 		
-		String sql = "INSERT INTO \"PUBLIC\".\"PLAYER\" (\"NAME\" ) VALUES ('" + name + "')";
+		String sql = "INSERT INTO \"PUBLIC\".\"OPPONENT\" (\"OpponentName\" ) VALUES ('" + name + "')";
 		
 		try {
 			stmt.executeQuery(sql);
-			System.out.println("LOG: created new player entry in db table PLAYER");
+			System.out.println("LOG: created new opponent entry in db table PLAYER");
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.out.println("LOG: couldn't create new player in db");
+			System.out.println("LOG: couldn't create new opponent in db");
 		}
 		
-		sql = "SELECT max(PLAYERID) from PUBLIC.PLAYER";
+		sql = "SELECT max(OpponentID) from PUBLIC.Opponent";
 		int id = 0;
 		
 		try {
 			
 			ResultSet res = stmt.executeQuery(sql);
-			System.out.println("LOG: got new playerid from db table PLAYER");
+			System.out.println("LOG: got new opponent from db table opponent");
 			
 			if(res.next()) {
 				id = res.getInt(1);
@@ -79,9 +79,9 @@ public class DBconnection {
 	 * @param opponentName
 	 * @param startingPlayer
 	 * @return integer array with game information <br>
-	 * array[0] = gameid <br>
-	 * array[1] = setid <br>
-	 * array[2] = opponentid
+	 * array[0] = gameID <br>
+	 * array[1] = setID <br>
+	 * array[2] = opponentID
 	 * 
 	 */
 	public int[] startNewGame(String opponentName, String startingPlayer) {
@@ -98,27 +98,27 @@ public class DBconnection {
 		}
 		
 		// create player entry or get id of existing player entry		
-		String sql = "SELECT * FROM \"PUBLIC\".\"PLAYER\" WHERE NAME = '" + opponentName + "'";
+		String sql = "SELECT * FROM \"PUBLIC\".\"OPPONENT\" WHERE OpponentName = '" + opponentName + "'";
 		
 		try {
 			ResultSet res = stmt.executeQuery(sql);
 			
 			if (!res.isBeforeFirst() ) {    
-			    System.out.println("LOG: player not found, creating new player"); 
-			    opponentID = insertPlayer(opponentName);
+			    System.out.println("LOG: opponent not found, creating new opponent"); 
+			    opponentID = insertOpponent(opponentName);
 			}else{
-				System.out.println("LOG: player already existed, skipping creation");
+				System.out.println("LOG: opponent already existed, skipping creation");
 				if(res.next()) {
 					opponentID = res.getInt(1);
 				}
 				res.close();
 			}			
 		} catch (SQLException e) {
-			System.out.println("Couldn't create new player or get playerid of existing player");
+			System.out.println("Couldn't create new opponent or get opponentid of existing opponent");
 		}
 		
-		// create new game entry with playerid as opponent, current time and no values for points and winner
-		sql = "INSERT INTO \"PUBLIC\".\"GAME\" ( \"OPPONENTID\", \"POINTSOWN\", \"POINTSOPPONENT\", \"WINNER\" ) VALUES ( " + opponentID + ", null, null, '')";
+		// create new game entry with opponentid as opponent
+		sql = "INSERT INTO \"PUBLIC\".\"GAME\" ( \"OpponentID\" ) VALUES ( " + opponentID + " )";
 		try {
 			stmt.executeQuery(sql);
 			System.out.println("LOG: Created game entry in db table");
@@ -142,7 +142,7 @@ public class DBconnection {
 		}
 		
 		// create 1st gameset referencing the id of the newly created game, starting player O or X
-		sql = "INSERT INTO \"PUBLIC\".\"GAMESET\" ( \"GAMEID\", \"STARTINGPLAYER\" ) VALUES ( " + gameID + ", '" + startingPlayer + "')";
+		sql = "INSERT INTO \"PUBLIC\".\"GAMESET\" ( \"GAMEID\", \"STARTINGPLAYER\", \"PointsOwnBeforeSet\", \"PointsOpponentBeforeSet\" ) VALUES ( " + gameID + ", '" + startingPlayer + "', 0, 0)";
 		
 		try {
 			stmt.executeQuery(sql);
@@ -151,6 +151,7 @@ public class DBconnection {
 			e.printStackTrace();
 		}
 		
+		// get id of newly created set
 		sql = "SELECT max(SETID) from PUBLIC.GAMESET";
 		try {
 			
@@ -176,12 +177,12 @@ public class DBconnection {
 	
 	/**
 	 * Creates new entry in the database for a new set after the previous ended. Updates the game entry in the database with the score after the previous set.
-	 * @param iGameID
-	 * @param GamePointsOwn
-	 * @param GamePointsOpponent
+	 * @param GameID
+	 * @param CurrentGamePointsOwn
+	 * @param CurrentGamePointsOpponent
 	 * @return ID of new gameset
 	 */
-	public int createNewSet(int iGameID, int GamePointsOwn, int GamePointsOpponent) {
+	public int createNewSet(int iGameID, int CurrentGamePointsOwn, int CurrentGamePointsOpponent) {
 		// Set starting player to opposite player than set before
 		// Update game entry with latest score
 		
@@ -198,7 +199,7 @@ public class DBconnection {
 		}
 		
 		//get latest set from selected gameID
-		String sql = "SELECT max(SETID) from PUBLIC.GAMESET WHERE GameID = iGameID";
+		String sql = "SELECT max(SETID) from PUBLIC.GAMESET WHERE GameID = " + iGameID;
 		
 		try {
 			ResultSet res = stmt.executeQuery(sql);
@@ -230,8 +231,17 @@ public class DBconnection {
 			newStartingPlayer = "X";
 		}
 		
-		sql = "INSERT INTO \"PUBLIC\".\"GAMESET\" ( \"GAMEID\", \"STARTINGPLAYER\" ) VALUES ( " + iGameID + ", '" + newStartingPlayer + "')";
+		// Create new entry
+		sql = "INSERT INTO \"PUBLIC\".\"GAMESET\" ( \"GAMEID\", \"STARTINGPLAYER\", \"PointsOwnBeforeSet\", \"PointsOpponentBeforeSet\" ) VALUES ( " + iGameID + ", '" + newStartingPlayer + "', " + CurrentGamePointsOwn + ", " + CurrentGamePointsOpponent + ")";
 		
+		try {
+			stmt.executeQuery(sql);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+			System.out.println("LOG: Couldn't create new set!");
+		}
+		
+		// Get id of new gameset entry
 		sql = "SELECT max(SETID) from PUBLIC.GAMESET";
 		try {
 			
@@ -246,8 +256,6 @@ public class DBconnection {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		updateScore(iGameID, GamePointsOwn, GamePointsOpponent);
 		
 		return setID; //SetID
 	}
@@ -279,23 +287,6 @@ public class DBconnection {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		/*
-		sql = "SELECT max(TurnID) from PUBLIC.TURN";
-		try {
-			ResultSet res = stmt.executeQuery(sql);
-			if(res.next()) {
-				turnID = res.getInt(1);
-			}
-			res.close();
-			System.out.println("LOG: got turn id of newly created turn");
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return turnID;
-		*/
 	}
 	
 	/**
@@ -307,10 +298,6 @@ public class DBconnection {
 	 * array[1..n] = columns of turns
 	 */
 	public int[] getReplayTurns(int GameID, int SetNumber){
-		
-		// TODO
-		// Include sets!!!!, Use 1,2,3 and not 12, 15, 27
-		// TODO
 		
 		int totalRows = 0;
 		int[] turns = null;
@@ -327,7 +314,6 @@ public class DBconnection {
 		}
 		
 		// Mapping von eingegebener Satznummer zu SatzID in DB
-		
 		String sql = "SELECT * FROM PUBLIC.GAMESET WHERE GAMEID = " + GameID;
 		
 		try {
@@ -362,7 +348,6 @@ public class DBconnection {
 		        res.beforeFirst();
 		        
 		        //get starting player and first turn
-		        
 		        if(res.next()) {
 		        	
 		        	if (res.getString(4) == "X") {
@@ -420,7 +405,6 @@ public class DBconnection {
 		
 		try {
 			ResultSet res = stmt2.executeQuery();
-			
 			if(res.next()) {
 				res.last();
 		        number = res.getRow();
@@ -434,11 +418,14 @@ public class DBconnection {
 	}
 	
 	/**
-	 * Call to get all games of the database
-	 * @return Raw ResultSet of all entries in the game table
-	 * Column 1 = Opponent name
-	 * Column 2 = Playtime
-	 * Column 3 = GameID
+	 * Call to get all games of the database with additional info
+	 * @return Raw ResultSet of all entries in the game table with additional info from Opponent
+	 * Column 1 = Opponent name <br>
+	 * Column 2 = PlayTime <br>
+	 * Column 3 = GameID <br>
+	 * Column 4 = PointsOwn <br>
+	 * Column 5 = PointsOpponent <br>
+	 * Column 6 = Winner
 	 */
 	public ResultSet getGames(){
 		ResultSet res = null;
@@ -450,7 +437,7 @@ public class DBconnection {
 			e.printStackTrace();
 		}
 		
-		String sql = "Select NAME, PLAYTIME, GAMEID from PUBLIC.GAME, PUBLIC.PLAYER where GAME.OPPONENTID = PLAYER.PLAYERID";
+		String sql = "Select OpponentName, PlayTime, GameID, PointsOwn, PointsOpponent, Winner from PUBLIC.GAME, PUBLIC.OPPONENT where GAME.OPPONENTID = OPPONENT.OPPONENTID";
 		
 		try {
 			res = stmt.executeQuery(sql);
@@ -464,28 +451,35 @@ public class DBconnection {
 	}
 	
 	/**
-	 * Updates gamescore of an exisiting game, e.g. after a set
+	 * Sets game result (score) in db table after game ends
 	 * @param GameID
 	 * @param PointsOwn
 	 * @param PointsOpponent
 	 */
-	private void updateScore(int GameID, int PointsOwn, int PointsOpponent){
-		String sql = "UPDATE \"PUBLIC\".\"GAME\" SET (\"PointsOwn\", \"PointsOpponent\") = (" + PointsOwn + ", " + PointsOpponent + ") WHERE \"GameID\" = " + GameID;
+	public void updateScoreOfGame(int GameID, int PointsOwn, int PointsOpponent, String Winner){
+		String sql = "UPDATE \"PUBLIC\".\"GAME\" SET (\"PointsOwn\", \"PointsOpponent\", \"Winner\") = (" + PointsOwn + ", " + PointsOpponent + ", " + Winner + ") WHERE \"GameID\" = " + GameID;
 		try {
 			stmt.executeQuery(sql);
-			System.out.println("LOG: Updates game entry with new score");
+			System.out.println("LOG: Set game score");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-
-	/*
-	public String getOpponentForGameID(int GameID){
-		// Get OpponentID from GameID
-		// Search for OpponentID in player.PlayerID
-		// Return player.name of entry
-		return "";
+	
+	/**
+	 * Updates Winner of set after the completion of a set
+	 * @param SetID
+	 * @param Winner
+	 */
+	public void updateWinnerOfSet(int SetID, String Winner){
+		String sql = "UPDATE \"PUBLIC\".\"GAMESET\" SET (\"Winner\") = (" + Winner + ") WHERE \"SetID\" = " + SetID;
+		try {
+			stmt.executeQuery(sql);
+			System.out.println("LOG: Updated winner of last set");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
-	*/
 }
