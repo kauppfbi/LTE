@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<apps>
+	<app>
+		<name>LTE</name>
+		<id>257244</id>
+		<key>9f51aecddb01d8fc6a81</key>
+		<secret>0f543c2f8faab3c052ef</secret>
+		<cluster>US-East-1</cluster>
+	</app>
+
+	<app>
+		<name>4G</name>
+		<id>249683</id>
+		<key>48530e33c6e42edf24ec</key>
+		<secret>586cb2197774b6116009</secret>
+		<cluster>EU-West-1</cluster>
+	</app>
+</apps>
