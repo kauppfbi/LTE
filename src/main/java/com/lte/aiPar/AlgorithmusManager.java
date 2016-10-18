@@ -16,6 +16,7 @@ public class AlgorithmusManager {
 		final ExecutorService service;
 		List<Callable<Integer>> list = new ArrayList<> ();
 		List<Future<Integer>> future = new ArrayList<> ();
+		int roundCounter = 0;
 		
 		//************Konstruktoren************************************************
 		public AlgorithmusManager() {
@@ -38,6 +39,16 @@ public class AlgorithmusManager {
 			
 			//Laufzeitanalyse starten
 			final long timeStart = System.currentTimeMillis(); 
+			
+			
+			//Die ersten Runden beschleunigen
+			roundCounter++;
+			if(roundCounter >= 7){
+				//Tiefe = eingestellte Tiefe
+			}else
+			{
+				algorithmusTiefe = 6;
+			}
 			
 			//Arrays l�schen
 			list.clear();
@@ -136,29 +147,4 @@ public class AlgorithmusManager {
 			return spalte;
 		}
 		
-		public int tiefeAutomatischWaehlen(double maxLaufzeit) throws Exception{
-			
-			//Uebertrage double in int Milisek
-			int laufzeitMiliSek = (int) (maxLaufzeit * 1000);
-			
-			//Interiere ueber Moeglichkeiten
-			for (int i = 6; i < 20; i++) {
-				
-				//Erzeuge neuen initialien Spielstand
-				Spielstand testSpielstand = new Spielstand();
-				testSpielstand.initialisiere();
-
-				//Spiele und pr�fe ob die Zeit passt
-				System.out.println("Teste Tiefe " + i);
-				final long timeStartTest = System.currentTimeMillis();
-				ParallelAlphaBeta(testSpielstand.getSpielfeld(), i, 'X', 'O');
-				final long timeEndTest = System.currentTimeMillis();
-				
-				//Wenn ueberschritten, dann gebe letzten zurueck
-		        if((timeEndTest - timeStartTest) > laufzeitMiliSek){
-		        	return i-1;
-		        }
-			}	
-			return 20;
-		}
 }
