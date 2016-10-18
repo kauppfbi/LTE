@@ -45,6 +45,7 @@ public class AgentRekonst extends Thread {
 	public void run() {
 
 		//Hier rekonstruieren.....
+		//Test
 		
 	}
 
