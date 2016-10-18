@@ -26,23 +26,23 @@
 				<Font size="36.0" />
 			</font>
 		</Text>
-		<Text fill="#62bdee" layoutX="861.0" layoutY="190.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Einstellungen">
+		<Text fill="#62bdee" layoutX="832.0" layoutY="190.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Einstellungen">
 			<font>
 				<Font size="36.0" />
 			</font>
 		</Text>
-		<Button fx:id="startGame" layoutX="844.0" layoutY="460.0" mnemonicParsing="false" onAction="#startSet" text="Spiel starten!">
+		<Button fx:id="startGame" layoutX="815.0" layoutY="460.0" mnemonicParsing="false" onAction="#startSet" text="Spiel starten!">
          <font>
             <Font size="18.0" />
          </font></Button>
-		<ChoiceBox fx:id="dataTrans" layoutX="1005.0" layoutY="238.0" prefHeight="25.0" prefWidth="124.0" />
-		<Button fx:id="fileSelect" layoutX="1005.0" layoutY="297.0" mnemonicParsing="false" onAction="#fileSelect" text="Auswaehlen" />
-		<Text fill="#62bdee" layoutX="831.0" layoutY="317.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Kontaktpfad: ">
+		<ChoiceBox fx:id="dataTrans" layoutX="976.0" layoutY="238.0" prefHeight="25.0" prefWidth="124.0" />
+		<Button fx:id="fileSelect" layoutX="976.0" layoutY="297.0" mnemonicParsing="false" onAction="#fileSelect" text="Auswaehlen" />
+		<Text fill="#62bdee" layoutX="802.0" layoutY="317.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Kontaktpfad: ">
          <font>
             <Font size="18.0" />
          </font></Text>
-		<Spinner fx:id="timeSpinner" layoutX="1005.0" layoutY="361.0" prefHeight="25.0" prefWidth="124.0" />
-		<Text fill="#62bdee" layoutX="831.0" layoutY="381.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Rechenzeit (Sek.) :" wrappingWidth="153.45705699920654">
+		<Spinner fx:id="timeSpinner" layoutX="976.0" layoutY="361.0" prefHeight="25.0" prefWidth="124.0" />
+		<Text fill="#62bdee" layoutX="802.0" layoutY="381.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Rechenzeit (Sek.) :" wrappingWidth="153.45705699920654">
          <font>
             <Font size="18.0" />
          </font></Text>
@@ -51,7 +51,7 @@
 				<Font size="36.0" />
 			</font>
 		</Text>
-		<Text fill="#62bdee" layoutX="832.0" layoutY="258.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Schnittstelle:" wrappingWidth="105.49999545671744">
+		<Text fill="#62bdee" layoutX="803.0" layoutY="258.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Schnittstelle:" wrappingWidth="105.49999545671744">
          <font>
             <Font size="18.0" />
          </font></Text>
@@ -97,12 +97,12 @@
 				<Font size="36.0" />
 			</font>
 		</Label>
-      <Button fx:id="backToStart" layoutX="1028.0" layoutY="460.0" mnemonicParsing="false" onAction="#goToStartmenu" text="Zurück">
+      <Button fx:id="backToStart" layoutX="999.0" layoutY="460.0" mnemonicParsing="false" onAction="#goToStartmenu" text="Zurück">
          <font>
             <Font size="18.0" />
          </font></Button>
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-      <Text fx:id="textKontaktpfad" fill="#62bdee" layoutX="444.0" layoutY="232.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="303.8574175834656" />
-      <ChoiceBox fx:id="playerChoice" layoutX="448.0" layoutY="295.0" prefHeight="25.0" prefWidth="124.0" />
+      <Text fx:id="textKontaktpfad" fill="#62bdee" layoutX="803.0" layoutY="335.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="303.8574175834656" />
+      <ChoiceBox fx:id="playerChoice" layoutX="1107.0" layoutY="238.0" prefHeight="25.0" prefWidth="50.0" />
 	</children>
 </AnchorPane>

@@ -178,7 +178,7 @@ public class Controller1 {
 		dataTrans.getSelectionModel().selectedIndexProperty().addListener(listener);
 		
 		// PlayerChoice Initialisierung + ChangeListener
-		playerChoice.setItems(FXCollections.observableArrayList("Player X", "Player O"));
+		playerChoice.setItems(FXCollections.observableArrayList("X", "O"));
 		playerChoice.getSelectionModel().selectFirst();
 		ChangeListener<Number> listener1 = new ChangeListener<Number>() {
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
