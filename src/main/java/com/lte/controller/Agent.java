@@ -188,15 +188,15 @@ public class Agent {
 	}
 	
 	// get gameinfo for coice in reconstruction:
-	public ResultSet getRecGameInfo(){
+	public GameDB[] getRecGameInfo(){
 		System.out.println("agent rec");
-		ResultSet res = connection.getGames();
+		GameDB[] res = connection.getGames();
 		return res;
 	}
 	
 	// get setnumbers for choice in reconstruction:
-	public int getRecSetNumber(int gameID){
-		int setNumber = connection.getNumberOfSetsInGame(gameID);
+	public GameDB[] getRecSetNumber(int gameID){
+		GameDB[] setNumber = connection.getSetInfos(gameID);
 		return(setNumber);
 	}
 	

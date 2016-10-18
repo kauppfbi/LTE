@@ -98,7 +98,7 @@ public class Controller0 {
 			stage.getIcons().add(image);
 
 			// FXMLLoader
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/views/layout1.fxml"));
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout1.fxml"));
 			// Neues Layout in eine neue Scene laden und auf die Stage setzen
 			stage.setScene(new Scene((AnchorPane) loader.load()));
 
@@ -131,7 +131,7 @@ public class Controller0 {
 			stage.getIcons().add(image);
 			
 			// FXMLLoader
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/views/layout2.fxml"));
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout2.fxml"));
 			// Neues Layout in eine neue Scene laden und auf die Stage setzen
 			stage.setScene(new Scene((AnchorPane) loader.load()));
 

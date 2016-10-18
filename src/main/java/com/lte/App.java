@@ -39,7 +39,7 @@ public class App extends Application {
 			Agent agent = new Agent(connection);
 
 			// FXMLLoader
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/views/layout0.fxml"));
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("./gui/views/layout0.fxml"));
 			// Neues Layout in eine neue Scene laden und auf die Stage setzen
 			stage.setScene(new Scene((AnchorPane) loader.load()));
 			// erstellter Controller1 wird geladen und anschlie�end der Agent

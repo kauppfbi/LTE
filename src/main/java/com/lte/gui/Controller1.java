@@ -233,7 +233,7 @@ public class Controller1 {
 		stage.getIcons().add(image);
 
 		// FXMLLoader
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/views/layout0.fxml"));
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
 		// Neues Layout in eine neue Scene laden und auf die Stage setzen
 		stage.setScene(new Scene((AnchorPane) loader.load()));
 

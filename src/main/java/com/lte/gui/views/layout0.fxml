@@ -9,7 +9,7 @@
 
 <!-- Controller.java behandelt die Userinteraktionen (I/O, ...) -->
 
-<AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onDragDetected="#buttonPressed" prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Controller0">
+<AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onDragDetected="#buttonPressed" prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.lte.gui.Controller0">
    <children>
       <ImageView fx:id="imageView" fitHeight="600.0" fitWidth="1200.0" pickOnBounds="true" preserveRatio="true" />
       <Text layoutX="498.0" layoutY="167.0" strokeType="OUTSIDE" strokeWidth="0.0" text="LTE 4-Gewinnt">

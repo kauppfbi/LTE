@@ -3,8 +3,10 @@ package com.lte.gui;
 import java.io.File;
 import java.io.IOException;
 import java.sql.ResultSet;
+import java.util.TreeMap;
 
 import com.lte.controller.Agent;
+import com.lte.models.GameDB;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -100,7 +102,7 @@ public class Controller2 {
 	    	// Referrenz zur aktuellen Stage herstellen
 	    	stage = (Stage) backToStart.getScene().getWindow();
 	        // FXMLLoader        
-	        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/views/layout0.fxml"));
+	        FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
 		    // Neues Layout in eine neue Scene laden und auf die Stage setzen
 		    stage.setScene(new Scene((AnchorPane) loader.load()));
 		    
@@ -124,49 +126,44 @@ public class Controller2 {
 	}
 	
 	public void getRecGameInfo(){
-		ResultSet res = agent.getRecGameInfo();
-		ObservableList<Integer> game = FXCollections.observableArrayList();
-		ObservableList info = FXCollections.observableArrayList();
+		GameDB[] recGame = agent.getRecGameInfo();
+		// GameIDs
+		ObservableList<Integer> gameID = FXCollections.observableArrayList();
+		// Shown content in gameChoiceBox, Game Info (opponentplayer und playtime)
+		ObservableList<String> info = FXCollections.observableArrayList();
+		// Connection between content and gameID
+		TreeMap<String, Integer> connection = new TreeMap<String, Integer>();
 		
-		try {
-			while(res.next()){
-				gameID = res.getInt(1);
-				game.add(gameID);
-				
-				opponentID = res.getInt(2);
-				
-				playTime = res.getString(3);
-				info.add(playTime);
-//				System.out.println(gameID);
-//				System.out.println(opponentID);
-//				System.out.println(playTime);
-			}
-		} catch (Exception e) {
-			// TODO: handle exception
+		for(int i = 0; i < recGame.length; i++){
+			gameID.add(recGame[i].getGameID());
+			info.add(recGame[i].getOpponentName().concat(" | ").concat(recGame[i].getPlayTime()));
+			connection.put(info.get(i), gameID.get(i));
+			System.out.println(gameID.get(i));
 		}
-		
+
 		// Initialisiere die ChoiceBox mit den rekonstruierbaren Spielen!
 		// PlayerChoice Initialisierung + ChangeListener
 		gameChoice.setItems(info);
 		gameChoice.getSelectionModel().selectFirst();
+		setChoice.getSelectionModel().selectFirst();
 
-		ChangeListener<Number> listenerGame = new ChangeListener<Number>() {
-			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
-				System.out.println("Rekonstruierbares Spiel: (Index, gameID)" + gameChoice.getSelectionModel().getSelectedIndex() + ", " + game.get(gameChoice.getSelectionModel().getSelectedIndex()));
-				ObservableList<Integer> sets = FXCollections.observableArrayList();
-				for(int i = 1; i <= agent.getRecSetNumber(game.get(gameChoice.getSelectionModel().getSelectedIndex())); i++){
-					sets.add(i);
-				}
-				setChoice.setItems(sets);
-				ChangeListener<Number> listenerSet = new ChangeListener<Number>() {
-					public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
-						gameID = game.get(gameChoice.getSelectionModel().getSelectedIndex());
-						setNumber = sets.get(setChoice.getSelectionModel().getSelectedIndex());
-					}
-				};
-				setChoice.getSelectionModel().selectedIndexProperty().addListener(listenerSet);
-			}
-		};		
-		gameChoice.getSelectionModel().selectedIndexProperty().addListener(listenerGame);
+//		ChangeListener<Number> listenerGame = new ChangeListener<Number>() {
+//			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
+//				System.out.println("Rekonstruierbares Spiel: (Index, gameID)" + gameChoice.getSelectionModel().getSelectedIndex() + ", " + game.get(gameChoice.getSelectionModel().getSelectedIndex()));
+//				ObservableList<Integer> sets = FXCollections.observableArrayList();
+//				for(int i = 1; i <= agent.getRecSetNumber(game.get(gameChoice.getSelectionModel().getSelectedIndex())); i++){
+//					sets.add(i);
+//				}
+//				setChoice.setItems(sets);
+//				ChangeListener<Number> listenerSet = new ChangeListener<Number>() {
+//					public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
+//						gameID = game.get(gameChoice.getSelectionModel().getSelectedIndex());
+//						setNumber = sets.get(setChoice.getSelectionModel().getSelectedIndex());
+//					}
+//				};
+//				setChoice.getSelectionModel().selectedIndexProperty().addListener(listenerSet);
+//			}
+//		};		
+//		gameChoice.getSelectionModel().selectedIndexProperty().addListener(listenerGame);
 	}
 }
