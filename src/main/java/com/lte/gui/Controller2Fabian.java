@@ -3,7 +3,7 @@ package com.lte.gui;
 import java.sql.ResultSet;
 import java.util.TreeMap;
 
-import com.lte.controller.Agent;
+import com.lte.controller.AgentSpiele;
 import com.lte.models.GameDB;
 
 import javafx.application.Application;
@@ -26,7 +26,7 @@ public class Controller2Fabian extends Application {
 	final TextField subject = new TextField("");
 	final TextArea text = new TextArea("");
 
-	public void start(Stage stage, Agent agent) {
+	public void start(Stage stage, AgentSpiele agent) {
 		stage.setTitle("Controller2Fabian");
 		Scene scene = new Scene(new Group(), 450, 250);
 

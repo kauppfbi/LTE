@@ -19,7 +19,7 @@ import com.lte.models.*;
  * @author kauppfbi
  *
  */
-public class Agent {
+public class AgentSpiele extends Thread {
 
 	private InterfaceManager interfaceManager;
 
@@ -38,11 +38,11 @@ public class Agent {
 	// KI Manager
 	AlgorithmusManager algorithmManager;
 
-	public Agent(DBconnection connection) {
+	public AgentSpiele(DBconnection connection) {
 		this.connection = connection;
 	}
 
-	public void spiele() {
+	public void run() {
 
 		// ********* instanciate all controllers ****************
 		long now = System.currentTimeMillis();

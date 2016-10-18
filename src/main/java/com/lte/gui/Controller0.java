@@ -21,22 +21,22 @@ import javafx.scene.shape.*;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 
-import com.lte.controller.Agent;
+import com.lte.controller.AgentSpiele;
 import com.lte.models.*;
 
 public class Controller0 {
 
-	// import logik.Agent notwendig!!!
-	private Agent agent;
+	// import logik.AgentSpiele notwendig!!!
+	private AgentSpiele AgentSpiele;
 	private Settings settings;
 	private GameInfo gameInfo;
 
-	public void setAgent(Agent agent) {
-		this.agent = agent;
+	public void setAgent(AgentSpiele AgentSpiele) {
+		this.AgentSpiele = AgentSpiele;
 	}
 
-	public Agent getAgent() {
-		return agent;
+	public AgentSpiele getAgent() {
+		return AgentSpiele;
 	}
 
 	public Settings getSettings() {
@@ -102,14 +102,14 @@ public class Controller0 {
 			// Neues Layout in eine neue Scene laden und auf die Stage setzen
 			stage.setScene(new Scene((AnchorPane) loader.load()));
 
-			// erstellter Controller1 wird geladen und anschlie�end der Agent
+			// erstellter Controller1 wird geladen und anschlie�end der AgentSpiele
 			// �bergeben
 			Controller1 controller1 = loader.<Controller1>getController();
-			controller1.setAgent(agent);
+			controller1.setAgent(AgentSpiele);
 			controller1.getAgent().setSettings(settings);
 			controller1.getAgent().setGameInfo(gameInfo);
 			controller1.getAgent().setController1(controller1);
-			controller1.setSettings(agent.getSettings());
+			controller1.setSettings(AgentSpiele.getSettings());
 			controller1.initialize2();
 
 			stage.show();
@@ -135,10 +135,10 @@ public class Controller0 {
 			// Neues Layout in eine neue Scene laden und auf die Stage setzen
 			stage.setScene(new Scene((AnchorPane) loader.load()));
 
-			// erstellter Controller2 wird geladen und anschlie�end der Agent
+			// erstellter Controller2 wird geladen und anschlie�end der AgentSpiele
 			// �bergeben
 			Controller2 controller2 = loader.<Controller2>getController();
-			controller2.setAgent(agent);
+			controller2.setAgent(AgentSpiele);
 			controller2.getAgent().setController2(controller2);
 			controller2.getRecGameInfo();
 			
@@ -157,8 +157,8 @@ public class Controller0 {
 	@FXML
 	public void exitApplication(ActionEvent event) {
 		try {
-			agent.getConnection().stmt.close();
-			agent.getConnection().con.close();
+			AgentSpiele.getConnection().stmt.close();
+			AgentSpiele.getConnection().con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
