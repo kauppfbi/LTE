@@ -32,30 +32,6 @@ public class Controller0 {
 	private GameInfo gameInfo;
 
 	
-	public MainController getController() {
-		return controller;
-	}
-
-	public void setController(MainController controller) {
-		this.controller = controller;
-	}
-
-	public Settings getSettings() {
-		return settings;
-	}
-
-	public void setSettings(Settings settings) {
-		this.settings = settings;
-	}
-
-	public GameInfo getGameInfo() {
-		return gameInfo;
-	}
-
-	public void setGameInfo(GameInfo gameInfo) {
-		this.gameInfo = gameInfo;
-	}
-
 	@FXML
 	AnchorPane pane;
 	
@@ -163,6 +139,35 @@ public class Controller0 {
 		}
 
 	    ((Stage)pane.getScene().getWindow()).close();
+	}
+	
+	/*
+	 * Getter and Setter
+	 */
+
+
+	public MainController getController() {
+		return controller;
+	}
+
+	public void setController(MainController controller) {
+		this.controller = controller;
+	}
+
+	public Settings getSettings() {
+		return settings;
+	}
+
+	public void setSettings(Settings settings) {
+		this.settings = settings;
+	}
+
+	public GameInfo getGameInfo() {
+		return gameInfo;
+	}
+
+	public void setGameInfo(GameInfo gameInfo) {
+		this.gameInfo = gameInfo;
 	}
 
 }
