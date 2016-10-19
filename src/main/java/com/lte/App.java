@@ -39,10 +39,7 @@ public class App extends Application {
 			
 			//Main Controller
 			MainController controller = new MainController(connection);
-			controller.start();
 			
-			// Agent-Objekt erstellen und dem Controller0 mitgeben
-			AgentSpiele agent = new AgentSpiele(connection);
 
 			// FXMLLoader
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("./gui/views/layout0.fxml"));
