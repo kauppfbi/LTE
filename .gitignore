@@ -11,3 +11,7 @@ target/**
 *.ear
 
 .idea/
+
+# DB lock
+db/game.lck
+db/game.tmp
