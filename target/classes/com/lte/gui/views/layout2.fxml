@@ -40,7 +40,7 @@
          <font>
             <Font size="18.0" />
          </font></Button>
-      <Button fx:id="pause" layoutX="778.0" layoutY="348.0" mnemonicParsing="false" text="Pause">
+      <Button fx:id="pause" layoutX="778.0" layoutY="348.0" mnemonicParsing="false" onAction="#pauseRec" text="Pause">
          <font>
             <Font size="18.0" />
          </font></Button>

@@ -116,6 +116,10 @@ public class Controller2 {
 	
 	@FXML
 	public void playRec(ActionEvent event){
+		//Next und Back disabled
+		nextStep.setDisable(true);
+		backStep.setDisable(true);
+		
 		System.out.println(gameID);
 		System.out.println(setNumber);
 		int[] recGame =  agent.getReplayTurns(gameID, setNumber);
@@ -123,6 +127,13 @@ public class Controller2 {
 //		for (int i = 0; i < recGame.length; i++) {
 //			System.out.println(recGame[i]);
 //		}
+	}
+	
+	@FXML
+	public void pauseRec(ActionEvent event){
+		//Next und Back disabled to false
+		nextStep.setDisable(false);
+		backStep.setDisable(false);
 	}
 	
 	public void getRecGameInfo(){
