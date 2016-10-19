@@ -2,15 +2,11 @@ package com.lte.gui;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.ResultSet;
 import java.util.TreeMap;
 
-import com.lte.controller.AgentSpiele;
 import com.lte.controller.MainController;
 import com.lte.models.GameDB;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -21,11 +17,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.*;
 import javafx.scene.text.Text;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 
