@@ -1,5 +1,6 @@
 package com.lte;
 
+import java.io.File;
 import java.io.IOException;
 
 import com.lte.controller.Agent;
@@ -9,6 +10,7 @@ import com.lte.gui.Controller0;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -42,6 +44,10 @@ public class App extends Application {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("./gui/views/layout0.fxml"));
 			// Neues Layout in eine neue Scene laden und auf die Stage setzen
 			stage.setScene(new Scene((AnchorPane) loader.load()));
+			// set Icon
+			File file = new File("files/images/icon.png");
+			Image image = new Image(file.toURI().toString());
+			stage.getIcons().add(image);
 			// erstellter Controller1 wird geladen und anschlie�end der Agent
 			// �bergeben
 			Controller0 controller0 = loader.<Controller0>getController();
