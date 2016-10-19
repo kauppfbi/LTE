@@ -208,7 +208,7 @@ public class Controller1 {
 		fileChooser.setTitle("Kontaktpfad w�hlen");
 
 		// Background Image
-		File file = new File("files/images/kuenstliche-intellegenz.jpg");
+		File file = new File("files/images/gameplay.png");
 		Image image = new Image(file.toURI().toString());
 		imageView.setImage(image);
 	}
