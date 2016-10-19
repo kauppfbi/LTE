@@ -3,7 +3,6 @@ package com.lte;
 import java.io.File;
 import java.io.IOException;
 
-import com.lte.controller.AgentSpiele;
 import com.lte.controller.MainController;
 import com.lte.db.DBconnection;
 import com.lte.gui.Controller0;
@@ -24,7 +23,6 @@ public class App extends Application {
 
 	// Stage ist der Au�encontainer, unique
 	private Stage stage;
-	private AnchorPane layout0;
 
 	// DB Connection
 	DBconnection connection;
