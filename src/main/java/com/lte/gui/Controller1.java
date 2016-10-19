@@ -4,6 +4,8 @@ package com.lte.gui;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.ListIterator;
 import java.util.Optional;
 
 import com.lte.controller.AgentSpiele;
@@ -17,6 +19,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
@@ -76,27 +79,6 @@ public class Controller1 {
 
 	@FXML
 	Button backToStart;
-
-	@FXML
-	Button BColumn0;
-
-	@FXML
-	Button BColumn1;
-
-	@FXML
-	Button BColumn2;
-
-	@FXML
-	Button BColumn3;
-
-	@FXML
-	Button BColumn4;
-
-	@FXML
-	Button BColumn5;
-
-	@FXML
-	Button BColumn6;
 
 	@FXML
 	ImageView imageView;
@@ -389,5 +371,25 @@ public class Controller1 {
 		return timelimit;
 	}
 
+	//Spielfeld leeren --> unfertig
+	@FXML
+	public void clearGrid() {
+		ArrayList<Node> children = (ArrayList<Node>) gameGrid.getChildren();
+		for(int i= 0; i< children.size(); i++){
+			//children.
+		}
+		
+	}
+	
+	//Testmethode - wieder loeschen
+	public void testclear(ActionEvent event){
+		clearGrid();
+	}
+	
+	//Testmethode - wieder loeschen
+	public void steine(ActionEvent event){
+		//fill(int columnIndex, int rowIndex, char player, boolean endGame)
+		fill(2,3,'X',false);
+	}
 	
 }
