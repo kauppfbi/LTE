@@ -22,7 +22,7 @@ import com.lte.models.Settings;
  * @author kauppfbi
  *
  */
-public class MainController extends Thread {
+public class MainController {
 	/*
 	 * Attributes
 	 */
@@ -158,6 +158,7 @@ public class MainController extends Thread {
 	 * @return true if interface was initilaized successfully
 	 */
 	private boolean initializeInterface() {
+		System.out.println(settings);
 		if (settings.isCompleted()) {
 			if (settings.getInterfaceType() == InterfaceManager.FILE_Type) {
 				interfaceManager = new FileIM(settings.getContactPath(), settings.getServerChar());
