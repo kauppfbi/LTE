@@ -85,7 +85,6 @@ public class Controller2 {
 	@FXML
 	public void goToStartmenu(ActionEvent event) throws IOException{
 		Stage stage; 
-		AnchorPane layout;
 	    if(event.getSource()==backToStart){
 	    	// Referrenz zur aktuellen Stage herstellen
 	    	stage = (Stage) backToStart.getScene().getWindow();
