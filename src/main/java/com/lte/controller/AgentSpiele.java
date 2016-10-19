@@ -11,6 +11,8 @@ import com.lte.gui.*;
 import com.lte.interfaces.*;
 import com.lte.models.*;
 
+import javafx.application.Platform;
+
 
 /**
  * main controller; coordinates data exchange and communication between all
@@ -19,7 +21,7 @@ import com.lte.models.*;
  * @author kauppfbi
  *
  */
-public class Agent {
+public class AgentSpiele extends Thread {
 
 	private InterfaceManager interfaceManager;
 
@@ -38,12 +40,14 @@ public class Agent {
 	// KI Manager
 	AlgorithmusManager algorithmManager;
 
-	public Agent(DBconnection connection) {
+	public AgentSpiele(DBconnection connection) {
 		this.connection = connection;
 	}
 
-	public void spiele() {
+	public void run() {
 
+		System.out.println("Spielen läuft");
+		
 		// ********* instanciate all controllers ****************
 		long now = System.currentTimeMillis();
 
@@ -51,12 +55,14 @@ public class Agent {
 
 		// interfaceManager = new FileIM("C:/Users/Florian/Desktop/4G_Test", 'o');
 		boolean successfull = initializeInterface();
-		if (!successfull)
+		if (!successfull){
 			JOptionPane.showInternalMessageDialog(null, "Interface wurde nicht erfolgreich initilisiert!");
-
+		}
+		
 		// lade KI
 		algorithmManager = new AlgorithmusManager();
-
+		System.out.println("KI geladen");
+		
 		// lade DB Controller
 		int ids[] = connection.startNewGame(gameInfo.getOpponentName(), "X");
 
@@ -70,12 +76,15 @@ public class Agent {
 		// lade Spielstand-Logik
 		Spielstand currentGameScore = new Spielstand();
 		currentGameScore.initialisiere();
-
+		System.out.println("Spielstand initialisiert");
+		
+		
 		ServerMessage message = interfaceManager.receiveMessage();
-		int opponentMove = message.getOpponentMove();
+		System.out.println(message);
+		int opponentMoveStart = message.getOpponentMove();
 		boolean startingRound = false;
 		//set starting Player
-		if(opponentMove == -1){
+		if(opponentMoveStart == -1){
 			//wir starten
 			gameInfo.setNextPlayer('X');
 		} else {
@@ -100,13 +109,19 @@ public class Agent {
 					if (!message.getWinner().equals("offen")) {
 						break;
 					}
-					opponentMove = message.getOpponentMove();
+					int opponentMove = message.getOpponentMove();
 
 					currentGameScore.spiele(opponentMove, 'O');
 
 					// visualisiere in GUI
 					int row = currentGameScore.getZeile(opponentMove);
+					
+					//Starte neuen Thread um JavaFx zu befuellen
+			        Platform.runLater(new Runnable() {
+			            @Override public void run() {
 					controller1.fill(opponentMove, row, gameInfo.getNextPlayer(), false);
+			            }
+			        });
 
 					// Log turn in DB
 					connection.pushTurn(gameInfo.getGameID(), gameInfo.getSetID(), "O", opponentMove);
@@ -134,7 +149,13 @@ public class Agent {
 
 					// visualisiere in GUI
 					int row = currentGameScore.getZeile(nextMove);
-					controller1.fill(nextMove, row, gameInfo.getNextPlayer(), false);
+					//Starte neuen Thread um JavaFx zu befuellen
+			        Platform.runLater(new Runnable() {
+			            @Override public void run() {
+						controller1.fill(nextMove, row, gameInfo.getNextPlayer(), false);
+			            }
+			        });
+					
 
 					// log turn in DB
 					connection.pushTurn(gameInfo.getGameID(), gameInfo.getSetID(), "X", nextMove);

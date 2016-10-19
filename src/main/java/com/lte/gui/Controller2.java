@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.util.TreeMap;
 
-import com.lte.controller.Agent;
+import com.lte.controller.AgentSpiele;
 import com.lte.models.GameDB;
 
 import javafx.beans.value.ChangeListener;
@@ -31,13 +31,13 @@ import javafx.stage.Stage;
 public class Controller2 {
 	
 	// import logik.Agent; notwendig!!!
-	private Agent agent;
+	private AgentSpiele agent;
 	
-	public void setAgent(Agent agent){
+	public void setAgent(AgentSpiele agent){
 		this.agent = agent;
 	}
 	
-	public Agent getAgent(){
+	public AgentSpiele getAgent(){
 		return agent;
 	}
 	

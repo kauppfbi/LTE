@@ -6,7 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 
-import com.lte.controller.Agent;
+import com.lte.controller.AgentSpiele;
 import com.lte.interfaces.InterfaceManager;
 import com.lte.models.Settings;
 
@@ -108,7 +108,7 @@ public class Controller1 {
 	ChoiceBox playerChoice;
 	
 	// non fxml-objects
-	private Agent agent;
+	private AgentSpiele agent;
 
 	private Settings settings;
 
@@ -120,11 +120,11 @@ public class Controller1 {
 
 
 	//Getter and Setter 
-	public void setAgent(Agent agent) {
+	public void setAgent(AgentSpiele agent) {
 		this.agent = agent;
 	}
 
-	public Agent getAgent() {
+	public AgentSpiele getAgent() {
 		return agent;
 	}
 
@@ -266,7 +266,7 @@ public class Controller1 {
 			// triggert Spielmethode des Agenten
 			// Logik liegt nun beim Agenten
 			// Gui visualisiert nur noch "passiv" auf Aufruf des Agenten
-			agent.spiele();
+			agent.start();
 		}
 
 		// *********************GAME OVER*************************

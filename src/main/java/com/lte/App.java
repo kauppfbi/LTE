@@ -2,7 +2,7 @@ package com.lte;
 
 import java.io.IOException;
 
-import com.lte.controller.Agent;
+import com.lte.controller.AgentSpiele;
 import com.lte.db.DBconnection;
 import com.lte.gui.Controller0;
 
@@ -36,7 +36,7 @@ public class App extends Application {
 			
 
 			// Agent-Objekt erstellen und dem Controller0 mitgeben
-			Agent agent = new Agent(connection);
+			AgentSpiele agent = new AgentSpiele(connection);
 
 			// FXMLLoader
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("./gui/views/layout0.fxml"));
