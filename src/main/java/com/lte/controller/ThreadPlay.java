@@ -1,16 +1,12 @@
 package com.lte.controller;
 
-import javax.swing.JOptionPane;
 
 import com.lte.aiPar.AlgorithmusManager;
 import com.lte.db.DBconnection;
-import com.lte.gui.Controller0;
 import com.lte.gui.Controller1;
-import com.lte.gui.Controller2;
 import com.lte.interfaces.InterfaceManager;
 import com.lte.models.GameInfo;
 import com.lte.models.ServerMessage;
-import com.lte.models.Settings;
 import com.lte.models.Spielstand;
 
 import javafx.application.Platform;
