@@ -47,7 +47,7 @@ public class Controller0 {
 		Stage stage;
 		if (event.getSource() == toGame) {
 			// Team-Namen setzen
-			String nameX = playerX.getText();
+			//String nameX = playerX.getText();
 			String nameO = playerO.getText();
 
 			// new Settings object
@@ -86,7 +86,6 @@ public class Controller0 {
 	// Screen********************
 	public void reconstructGame(ActionEvent event) throws IOException {
 		Stage stage;
-		AnchorPane layout;
 		if (event.getSource() == reGame) {
 			// Referrenz zur aktuellen Stage herstellen
 			stage = (Stage) toGame.getScene().getWindow();
