@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 
-import com.lte.controller.AgentSpiele;
 import com.lte.controller.MainController;
 import com.lte.interfaces.InterfaceManager;
 import com.lte.models.Settings;
@@ -93,8 +92,9 @@ public class Controller1 {
 	@FXML
 	Text textKontaktpfad;
 
+	//TODO playerChoice auslesen
 	@FXML
-	ChoiceBox playerChoice;
+	ChoiceBox<String> playerChoice;
 
 	// non fxml-objects
 	private MainController controller;
@@ -203,16 +203,11 @@ public class Controller1 {
 		imageView.setImage(image);
 	}
 
-	@FXML
-	private void dataTest() {
-		String test = dataTransChoices();
-	}
 
 	// *******************Zur�ck zum Startbildschirm**********************
 	@FXML
 	private void goToStartmenu(ActionEvent event) throws IOException {
 		Stage stage;
-		AnchorPane layout;
 		// Referrenz zur aktuellen Stage herstellen
 		stage = (Stage) backToStart.getScene().getWindow();
 
@@ -261,7 +256,6 @@ public class Controller1 {
 	// *********************GAME OVER*************************
 	public void gameOver(char winningPlayer, int[][] winningCombo) {
 		// private void gameOver(char winningPlayer, int[] winningCombo){
-		String ergebnis = "default";
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Game Over");
 		if (winningPlayer == 'X') {
@@ -303,7 +297,6 @@ public class Controller1 {
 
 			// zur�ck zu Controller0/layout0
 			Stage stage;
-			AnchorPane layout;
 			// Referrenz zur aktuellen Stage herstellen
 			stage = (Stage) backToStart.getScene().getWindow();
 			// FXMLLoader
@@ -355,13 +348,5 @@ public class Controller1 {
 		namePlayerX.setText("LTE");
 		namePlayerO.setText(controller.getGameInfo().getOpponentName());
 
-	}
-
-	// (Dateischnittstelle oder Pusher) - Felix
-	private String dataTransChoices() {
-		String selection = "";
-		selection = dataTrans.getValue();
-		System.out.println("ChoiceBox Auswahl: " + selection);
-		return selection;
 	}
 }
