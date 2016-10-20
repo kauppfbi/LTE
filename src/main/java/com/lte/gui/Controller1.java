@@ -9,6 +9,7 @@ import java.util.Optional;
 import com.lte.controller.MainController;
 import com.lte.interfaces.InterfaceManager;
 import com.lte.models.Settings;
+import com.lte.models.Spielstand;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -342,8 +343,30 @@ public class Controller1 {
 	}
 	
 	//highlight winning-combo
-	public void highlightWinning(){
-		//Input: Reihe und Spalte
-		//Idee: Umrandung (ROT) für Circles
+	public void highlightWinning(int[][] woGewonnen){
+		//int [4][2] --> 4 Steine mit jeweils x und y Pos.
+		//[0][0] = Spalte  --  [0][1] = Zeile usw.
+		//Methodenaufruf von woGewonnen!!! --> Fabi fragen
+		
+		//Durchiterieren des Arrays
+		for(int i = 0; i<=3; i++){
+			int column = woGewonnen[i][0];
+			int row = woGewonnen[i][1];
+			setHighlight(column, row);
+		}
+	}
+	
+	//Einfuegen der neuen Kreise der winning-combo
+	public void setHighlight(int column, int row){
+		//new Circle
+		Circle circle2 = new Circle();
+		circle2.setRadius(35.0);
+		
+		//Ueberschreiben des vorhandenen Kreises
+		circle2.setFill(Color.web("#FF0000", 0.8));
+		GridPane.setColumnIndex(circle2, column);
+		GridPane.setRowIndex(circle2, (5 - row));
+		gameGrid.getChildren().add(circle2);
+		gameGrid.setHalignment(circle2, HPos.CENTER);
 	}
 }
