@@ -8,6 +8,8 @@ import com.lte.controller.MainController;
 import com.lte.models.GameDB;
 import com.lte.models.SetDB;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -59,7 +61,7 @@ public class Controller2 {
 	Button backToStart;
 	
 	@FXML
-	ChoiceBox selectGame;
+	ChoiceBox<?> selectGame;
 	
 	@FXML
 	ImageView imageView;
@@ -125,43 +127,49 @@ public class Controller2 {
 		backStep.setDisable(false);
 	}
 	
+	
+	// Methode zum Befuellen der Choice Boxes und zum Anfuegen der ChangeListeners
 	public void getRecGameInfo(){
 	
 		GameDB[] recGame = controller.getRecGameInfo();
 		// Shown content in gameChoiceBox, Game Info (opponentplayer und playtime)
-		ObservableList<String> info = FXCollections.observableArrayList();
+		ObservableList<String> gameInfo = FXCollections.observableArrayList();
 		// Connection between content and gameID
-		TreeMap<String, Integer> connection = new TreeMap<String, Integer>();
+		TreeMap<Integer, Integer> connection = new TreeMap<Integer, Integer>();
 		
 		for(int i = 0; i < recGame.length; i++){
 			int gameID = recGame[i].getGameID();
-			info.add(recGame[i].getOpponentName().concat(" | ").concat(recGame[i].getPlayTime()));
-			connection.put(info.get(i), gameID);
+			System.out.println(gameID);
+			gameInfo.add(recGame[i].getOpponentName().concat(" | ").concat(recGame[i].getPlayTime()));
+			connection.put(i, gameID);
 		}
 
 		// Initialisiere die ChoiceBox mit den rekonstruierbaren Spielen!
 		// PlayerChoice Initialisierung + ChangeListener
-		gameChoice.setItems(info);
+		gameChoice.setItems(gameInfo);
 		gameChoice.getSelectionModel().selectFirst();
 		setChoice.getSelectionModel().selectFirst();
 
-//		ChangeListener<Number> listenerGame = new ChangeListener<Number>() {
-//			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
-//				System.out.println("Rekonstruierbares Spiel: (Index, gameID)" + gameChoice.getSelectionModel().getSelectedIndex() + ", " + game.get(gameChoice.getSelectionModel().getSelectedIndex()));
-//				ObservableList<Integer> sets = FXCollections.observableArrayList();
-//				for(int i = 1; i <= agent.getRecSetNumber(game.get(gameChoice.getSelectionModel().getSelectedIndex())); i++){
-//					sets.add(i);
-//				}
-//				setChoice.setItems(sets);
-//				ChangeListener<Number> listenerSet = new ChangeListener<Number>() {
-//					public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
-//						gameID = game.get(gameChoice.getSelectionModel().getSelectedIndex());
-//						setNumber = sets.get(setChoice.getSelectionModel().getSelectedIndex());
-//					}
-//				};
-//				setChoice.getSelectionModel().selectedIndexProperty().addListener(listenerSet);
-//			}
-//		};		
-//		gameChoice.getSelectionModel().selectedIndexProperty().addListener(listenerGame);
+		ChangeListener<Number> listenerGame = new ChangeListener<Number>() {
+			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
+				
+				int selectedGameID = gameChoice.getSelectionModel().getSelectedIndex();
+				
+				// testing purpose
+				System.out.println("Rekonstruierbares Spiel: (Index, gameID)" + selectedGameID + ", " + connection.get(selectedGameID));
+				
+				// for setChoice
+				SetDB[] sets = controller.getRecSetInfo(selectedGameID);
+				ObservableList<Integer> setNumber = FXCollections.observableArrayList();
+				
+				// setNumber ObservableList gets filled with the number of played Sets
+				for(int i = 1; i <= sets.length; i++){
+					setNumber.add(i);
+				}
+				setChoice.setItems(setNumber);
+			}
+		};
+		
+		gameChoice.getSelectionModel().selectedIndexProperty().addListener(listenerGame);
 	}
 }
