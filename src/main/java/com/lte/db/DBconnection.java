@@ -299,7 +299,7 @@ public class DBconnection {
 	 * array[0] = 0 if we started, 1 of opponent started <br>
 	 * array[1..n] = columns of turns
 	 */
-	public int[] getReplayTurns(int GameID, int SetNumber){
+	private int[] getReplayTurns(int GameID, int SetNumber){
 		
 		int totalRows = 0;
 		int[] turns = null;
