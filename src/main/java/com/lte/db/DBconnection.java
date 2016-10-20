@@ -441,19 +441,24 @@ public class DBconnection {
 		int mNumberOfSets;
 		
 		int counter = 0;
+		String sql = "Select GAMEID, OPPONENTNAME, PLAYTIME, POINTSOWN, POINTSOPPONENT, WINNER from PUBLIC.GAME, PUBLIC.OPPONENT where GAME.OPPONENTID = OPPONENT.OPPONENTID";
 		
 		try {
-			stmt = con.createStatement();
+			//stmt = con.createStatement();
+			PreparedStatement stmt = con.prepareStatement(sql, ResultSet.TYPE_SCROLL_SENSITIVE,
+					   ResultSet.CONCUR_UPDATABLE);
+			res = stmt.executeQuery();
+			System.out.println("LOG: Got all games");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		String sql = "Select GAMEID, OPPONENTNAME, PLAYTIME, POINTSOWN, POINTSOPPONENT, WINNER from PUBLIC.GAME, PUBLIC.OPPONENT where GAME.OPPONENTID = OPPONENT.OPPONENTID";
+		
 		
 		try {
-			res = stmt.executeQuery(sql);
-			System.out.println("LOG: Got all games");
+			//res = stmt.executeQuery(sql);
+			
 			
 			if (res.next()) {
 				res.last();
@@ -463,9 +468,9 @@ public class DBconnection {
 		        
 		        // Iterate over ResultSet and move GameInfo to GameDB object
 		        while (res.next()) {
-					mGameID = res.getInt(3);
-					mOpponentName = res.getString(1);
-					mPlayTime = res.getString(2);
+					mGameID = res.getInt(1);
+					mOpponentName = res.getString(2);
+					mPlayTime = res.getString(3);
 					mNumberOfSets = getNumberOfSetsInGame(mGameID);
 					
 					gameInfo = new GameDB(mGameID, mOpponentName, mPlayTime, mNumberOfSets);

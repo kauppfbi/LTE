@@ -3,7 +3,7 @@ package com.lte;
 import java.io.File;
 import java.io.IOException;
 
-import com.lte.controller.AgentSpiele;
+import com.lte.controller.MainController;
 import com.lte.db.DBconnection;
 import com.lte.gui.Controller0;
 
@@ -23,7 +23,6 @@ public class App extends Application {
 
 	// Stage ist der Au�encontainer, unique
 	private Stage stage;
-	private AnchorPane layout0;
 
 	// DB Connection
 	DBconnection connection;
@@ -36,9 +35,9 @@ public class App extends Application {
 			// initialize DB
 			connection = new DBconnection();
 			
-
-			// Agent-Objekt erstellen und dem Controller0 mitgeben
-			AgentSpiele agent = new AgentSpiele(connection);
+			//Main Controller
+			MainController controller = new MainController(connection);
+			
 
 			// FXMLLoader
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("./gui/views/layout0.fxml"));
@@ -51,7 +50,7 @@ public class App extends Application {
 			// erstellter Controller1 wird geladen und anschlie�end der Agent
 			// �bergeben
 			Controller0 controller0 = loader.<Controller0>getController();
-			controller0.setAgent(agent);
+			controller0.setController(controller);
 
 			stage.show();
 

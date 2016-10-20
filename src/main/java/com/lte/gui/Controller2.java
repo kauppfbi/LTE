@@ -2,14 +2,11 @@ package com.lte.gui;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.ResultSet;
 import java.util.TreeMap;
 
-import com.lte.controller.AgentSpiele;
+import com.lte.controller.MainController;
 import com.lte.models.GameDB;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -20,25 +17,20 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.*;
 import javafx.scene.text.Text;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 
 public class Controller2 {
 	
-	// import logik.Agent; notwendig!!!
-	private AgentSpiele agent;
+	private MainController controller;	
 	
-	public void setAgent(AgentSpiele agent){
-		this.agent = agent;
+	public MainController getController() {
+		return controller;
 	}
-	
-	public AgentSpiele getAgent(){
-		return agent;
+
+	public void setController(MainController controller) {
+		this.controller = controller;
 	}
 	
 	int setNumber = 0;
@@ -82,10 +74,6 @@ public class Controller2 {
 	
 	@FXML
 	public void initialize(){
-		
-		
-		
-		
 		//Background
 		File file = new File("files/images/loadgamescreen.png");
 		Image image = new Image(file.toURI().toString());
@@ -97,7 +85,6 @@ public class Controller2 {
 	@FXML
 	public void goToStartmenu(ActionEvent event) throws IOException{
 		Stage stage; 
-		AnchorPane layout;
 	    if(event.getSource()==backToStart){
 	    	// Referrenz zur aktuellen Stage herstellen
 	    	stage = (Stage) backToStart.getScene().getWindow();
@@ -108,7 +95,7 @@ public class Controller2 {
 		    
 		    // erstellter Controller1 wird geladen und anschlie�end der Agent �bergeben
 		    Controller0 controller0 = loader.<Controller0>getController();
-		    controller0.setAgent(agent);
+		    controller0.setController(controller);
 		    
 		    stage.show();    
 	    }
@@ -122,7 +109,7 @@ public class Controller2 {
 		
 		System.out.println(gameID);
 		System.out.println(setNumber);
-		int[] recGame =  agent.getReplayTurns(gameID, setNumber);
+		int[] recGame =  controller.getReplayTurns(gameID, setNumber);
 		// klappt leider noch nicht, aktueller Stand.
 //		for (int i = 0; i < recGame.length; i++) {
 //			System.out.println(recGame[i]);
@@ -137,7 +124,7 @@ public class Controller2 {
 	}
 	
 	public void getRecGameInfo(){
-		GameDB[] recGame = agent.getRecGameInfo();
+		GameDB[] recGame = controller.getRecGameInfo();
 		// GameIDs
 		ObservableList<Integer> gameID = FXCollections.observableArrayList();
 		// Shown content in gameChoiceBox, Game Info (opponentplayer und playtime)
