@@ -517,19 +517,12 @@ public class DBconnection {
 		
 		int counter = 0;
 		
-		try {
-			stmt = con.createStatement();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 		String sql = "Select SETID, POINTSOWNBEFORESET, POINTSOPPONENTBEFORESET, WINNER from PUBLIC.GAMESET WHERE GAMEID = " + GameID + "ORDER BY SETID ASC";
 		
 		try {
-			res = stmt.executeQuery(sql);
-			System.out.println("LOG: Got all sets of game");
-			
+			PreparedStatement stmt2 = con.prepareStatement(sql, ResultSet.TYPE_SCROLL_SENSITIVE,
+					   ResultSet.CONCUR_UPDATABLE);
+			res = stmt2.executeQuery();
 			if (res.next()) {
 				res.last();
 		        totalSets = res.getRow();
@@ -551,12 +544,14 @@ public class DBconnection {
 				}
 			}else{
 				System.out.println("LOG: no sets found");
-			}		
+			}	
 			
+			System.out.println("LOG: Got all Sets");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		return gamesInfo;
 	}
 	
