@@ -1,14 +1,12 @@
 package com.lte.gui;
 
-
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.ListIterator;
 import java.util.Optional;
 
-import com.lte.controller.AgentSpiele;
+import com.lte.controller.MainController;
 import com.lte.interfaces.InterfaceManager;
 import com.lte.models.Settings;
 
@@ -34,16 +32,6 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-
-/*
- * Im Controller wird ein Agent Objekt erstellt, um aus dem Controller mit
- * dem Agent zu kommunizieren. z.B.: F�r User-Eingaben, wie "neues_Spiel",
- * "Spiel_rekonstruieren", ...
- * 
- * Im Agent wird ein Controller Objekt erstellt, damit der Agent mit dem
- * Controller kommunizieren kann. z.B.: F�r Agent-Events, wie
- * "Spiele_Stein", ...
- */
 public class Controller1 {
 
 	// *****************layout1 Komponenten*******************
@@ -82,32 +70,32 @@ public class Controller1 {
 
 	@FXML
 	ImageView imageView;
-	
+
 	@FXML
 	Text textKontaktpfad;
-	
+
+	//TODO playerChoice auslesen
 	@FXML
-	ChoiceBox playerChoice;
-	
+	ChoiceBox<String> playerChoice;
+
 	// non fxml-objects
-	private AgentSpiele agent;
+	private MainController controller;
 
 	private Settings settings;
 
 	final FileChooser fileChooser = new FileChooser();
 
-	//TODO Datenhaltung optimieren --> Informationen aus Agenten!
+	// TODO Datenhaltung optimieren --> Informationen aus Agenten!
 	String playerX = "defaultX";
 	String playerO = "defaultO";
 
-
-	//Getter and Setter 
-	public void setAgent(AgentSpiele agent) {
-		this.agent = agent;
+	// Getter and Setter
+	public MainController getController() {
+		return controller;
 	}
 
-	public AgentSpiele getAgent() {
-		return agent;
+	public void setController(MainController controller) {
+		this.controller = controller;
 	}
 
 	public Settings getSettings() {
@@ -117,9 +105,9 @@ public class Controller1 {
 	public void setSettings(Settings settings) {
 		this.settings = settings;
 	}
-	
-	//*******FXML-Methoden************
-	
+
+	// *******FXML-Methoden************
+
 	@FXML
 	private void initialize() {
 
@@ -158,7 +146,7 @@ public class Controller1 {
 			}
 		};
 		dataTrans.getSelectionModel().selectedIndexProperty().addListener(listener);
-		
+
 		// PlayerChoice Initialisierung + ChangeListener
 		playerChoice.setItems(FXCollections.observableArrayList("X", "O"));
 		playerChoice.getSelectionModel().selectFirst();
@@ -166,14 +154,16 @@ public class Controller1 {
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
 				System.out.println("Ausgewaehlter Player:" + playerChoice.getSelectionModel().getSelectedIndex());
 				if (dataTrans.getSelectionModel().getSelectedIndex() == 0) {
-					settings.setServerChar('X');;
+					settings.setServerChar('X');
+					;
 				} else if (dataTrans.getSelectionModel().getSelectedIndex() == 1) {
-					settings.setServerChar('O');;
+					settings.setServerChar('O');
+					;
 				}
 			}
 		};
 		playerChoice.getSelectionModel().selectedIndexProperty().addListener(listener1);
-		
+
 		// TimeSpinner Initialisierung + ChangeListener
 		timeSpinner.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(0.5, 10, 0.5, 0.1));
 		timeSpinner.setEditable(false);
@@ -195,17 +185,11 @@ public class Controller1 {
 		imageView.setImage(image);
 	}
 
-	@FXML
-	private void dataTest() {
-		String test = dataTransChoices();
-	}
-
 
 	// *******************Zur�ck zum Startbildschirm**********************
 	@FXML
 	private void goToStartmenu(ActionEvent event) throws IOException {
 		Stage stage;
-		AnchorPane layout;
 		// Referrenz zur aktuellen Stage herstellen
 		stage = (Stage) backToStart.getScene().getWindow();
 
@@ -222,103 +206,99 @@ public class Controller1 {
 		// erstellter Controller1 wird geladen und anschlie�end der Agent
 		// �bergeben
 		Controller0 controller0 = loader.<Controller0>getController();
-		controller0.setAgent(agent);
+		controller0.setController(controller);
 
 		stage.show();
 
 	}
 
 	// Button fileSelect: �ffnen eines Dateiexplorers zur Auswahl des jeweiligen
-		// Kontaktpfades - Felix
-		@FXML
-		private String fileSelect() {
-			Stage mainStage = null;
-			DirectoryChooser directoryChooser = new DirectoryChooser();
-			directoryChooser.setTitle("Verzeichnis des Kontaktpfades w�hlen!");
-			File selectedFile = directoryChooser.showDialog(mainStage);
-			String kontaktpfad = selectedFile.getPath();
-			settings.setContactPath(kontaktpfad);
-			textKontaktpfad.setText(kontaktpfad);
-			System.out.println("Kontaktpfad: " + kontaktpfad);
-			return kontaktpfad;
+	// Kontaktpfades - Felix
+	@FXML
+	private String fileSelect() {
+		Stage mainStage = null;
+		DirectoryChooser directoryChooser = new DirectoryChooser();
+		directoryChooser.setTitle("Verzeichnis des Kontaktpfades w�hlen!");
+		File selectedFile = directoryChooser.showDialog(mainStage);
+		String kontaktpfad = selectedFile.getPath();
+		settings.setContactPath(kontaktpfad);
+		textKontaktpfad.setText(kontaktpfad);
+		System.out.println("Kontaktpfad: " + kontaktpfad);
+		return kontaktpfad;
+	}
+
+	@FXML
+	private void startSet(ActionEvent event) {
+		// triggert Spielmethode des Agenten
+		// Logik liegt nun beim Agenten
+		// Gui visualisiert nur noch "passiv" auf Aufruf des Agenten
+		controller.playSet();
+	}
+
+	// *********************GAME OVER*************************
+	public void gameOver(char winningPlayer, int[][] winningCombo) {
+		// private void gameOver(char winningPlayer, int[] winningCombo){
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Game Over");
+		if (winningPlayer == 'X') {
+			alert.setHeaderText("Sie haben gewonnen!" + "\n" + "Was nun?");
+		} else if (winningPlayer == 'O') {
+			alert.setHeaderText("Sie haben verloren!" + "\n" + "Was nun?");
+		} else {
+			alert.setHeaderText("Unentschieden!" + "\n" + "Was nun?");
 		}
 
-		@FXML
-		private void startSet(ActionEvent event) {
-			// triggert Spielmethode des Agenten
-			// Logik liegt nun beim Agenten
-			// Gui visualisiert nur noch "passiv" auf Aufruf des Agenten
-			agent.start();
-		}
+		ButtonType weiter = new ButtonType("Weiter spielen");
+		ButtonType beenden = new ButtonType("Beenden");
 
-		// *********************GAME OVER*************************
-		public void gameOver(char winningPlayer, int[][] winningCombo) {
-			// private void gameOver(char winningPlayer, int[] winningCombo){
-			String ergebnis = "default";
-			Alert alert = new Alert(AlertType.CONFIRMATION);
-			alert.setTitle("Game Over");
-			if(winningPlayer == 'X'){
-				alert.setHeaderText("Sie haben gewonnen!" + "\n" + "Was nun?");	
-			} else if(winningPlayer == 'O'){
-				alert.setHeaderText("Sie haben verloren!" + "\n" + "Was nun?");	
-			} else {
-				alert.setHeaderText("Unentschieden!" + "\n" + "Was nun?");
+		alert.getButtonTypes().setAll(weiter, beenden);
+
+		Optional<ButtonType> result = alert.showAndWait();
+
+		if (result.get() == weiter) {
+			// Steine wieder entfernen, sauberes Spielfeld
+			gameGrid.getChildren().clear();
+			gameGrid.setGridLinesVisible(true);
+
+			// Gewinner bekommt einen Punkt
+			if (winningPlayer == 'X') {
+				int playerX = Integer.parseInt(ltePoints.getText());
+				ltePoints.setText(String.valueOf(playerX + 1));
+			} else if (winningPlayer == 'O') {
+				int playerO = Integer.parseInt(opponentPoints.getText());
+				opponentPoints.setText(String.valueOf(playerO + 1));
 			}
-			
 
-			ButtonType weiter = new ButtonType("Weiter spielen");
-			ButtonType beenden = new ButtonType("Beenden");
+			// Satz um eines Hochz�hlen
+			int satz = Integer.parseInt(set.getText());
+			set.setText(String.valueOf(satz + 1));
 
-			alert.getButtonTypes().setAll(weiter, beenden);
+		} else if (result.get() == beenden) {
+			// TODO altes Controller Modell verwerfen und dem Agenten mitteilen
+			// TODO ggf. Spiel zu Rekonstruieren speichern
 
-			Optional<ButtonType> result = alert.showAndWait();
-
-			if (result.get() == weiter) {
-				// Steine wieder entfernen, sauberes Spielfeld
-				gameGrid.getChildren().clear();
-				gameGrid.setGridLinesVisible(true);
-
-				// Gewinner bekommt einen Punkt
-				if (winningPlayer == 'X') {
-					int playerX = Integer.parseInt(ltePoints.getText());
-					ltePoints.setText(String.valueOf(playerX + 1));
-				} else if (winningPlayer == 'O') {
-					int playerO = Integer.parseInt(opponentPoints.getText());
-					opponentPoints.setText(String.valueOf(playerO + 1));
-				}
-
-				// Satz um eines Hochz�hlen
-				int satz = Integer.parseInt(set.getText());
-				set.setText(String.valueOf(satz + 1));
-
-			} else if (result.get() == beenden) {
-				// TODO altes Controller Modell verwerfen und dem Agenten mitteilen
-				// TODO ggf. Spiel zu Rekonstruieren speichern
-
-				// zur�ck zu Controller0/layout0
-				Stage stage;
-				AnchorPane layout;
-				// Referrenz zur aktuellen Stage herstellen
-				stage = (Stage) backToStart.getScene().getWindow();
-				// FXMLLoader
-				FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/views/layout0.fxml"));
-				// Neues Layout in eine neue Scene laden und auf die Stage setzen
-				try {
-					stage.setScene(new Scene((AnchorPane) loader.load()));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-
-				// erstellter Controller1 wird geladen und anschlie�end der Agent
-				// �bergeben
-				Controller0 controller0 = loader.<Controller0>getController();
-				controller0.setAgent(agent);
-
-				stage.show();
+			// zur�ck zu Controller0/layout0
+			Stage stage;
+			// Referrenz zur aktuellen Stage herstellen
+			stage = (Stage) backToStart.getScene().getWindow();
+			// FXMLLoader
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/views/layout0.fxml"));
+			// Neues Layout in eine neue Scene laden und auf die Stage setzen
+			try {
+				stage.setScene(new Scene((AnchorPane) loader.load()));
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
+
+			// erstellter Controller1 wird geladen und anschlie�end der Agent
+			// �bergeben
+			Controller0 controller0 = loader.<Controller0>getController();
+			controller0.setController(controller);
+
+			stage.show();
 		}
-		
-	
+	}
+
 	/**
 	 * Fill-Methode bef�llt die Felder des gridPanes (= Spielfeld) von layout1
 	 * mit den geworfenen Steinen �bergabeparameter: int columnIndex, int
@@ -334,13 +314,13 @@ public class Controller1 {
 		if (player == 'X') {
 			circle.setFill(Color.web("#62dbee", 0.85));
 			GridPane.setColumnIndex(circle, columnIndex);
-			GridPane.setRowIndex(circle, (5-rowIndex));
+			GridPane.setRowIndex(circle, (5 - rowIndex));
 			gameGrid.getChildren().add(circle);
 			gameGrid.setHalignment(circle, HPos.CENTER);
 		} else if (player == 'O') {
 			circle.setFill(Color.web("#46c668", 0.8));
 			GridPane.setColumnIndex(circle, columnIndex);
-			GridPane.setRowIndex(circle, (5-rowIndex));
+			GridPane.setRowIndex(circle, (5 - rowIndex));
 			gameGrid.getChildren().add(circle);
 			gameGrid.setHalignment(circle, HPos.CENTER);
 		}
@@ -348,28 +328,10 @@ public class Controller1 {
 
 	public void initialize2() {
 		namePlayerX.setText("LTE");
-		namePlayerO.setText(agent.getGameInfo().getOpponentName());
+		namePlayerO.setText(controller.getGameInfo().getOpponentName());
 
 	}
-	
-	// (Dateischnittstelle oder Pusher) - Felix
-	private String dataTransChoices() {
-		String selection = "";
-		selection = dataTrans.getValue();
-		System.out.println("ChoiceBox Auswahl: " + selection);
-		return selection;
-	}
 
-	
-	// Spinner timeSpinner: Auswahl, was das Zeitlimit f�r die jeweilige
-	// Berechnung ist - Felix
-	private double getTimelimit() {
-		double timelimit = 0;
-		// timeSpinner Value auslesen
-		timelimit = (double) timeSpinner.getValue();
-		System.out.println("Rechenzeit= " + timelimit);
-		return timelimit;
-	}
 
 	//Spielfeld leeren --> unfertig
 	@FXML
@@ -391,5 +353,4 @@ public class Controller1 {
 		//fill(int columnIndex, int rowIndex, char player, boolean endGame)
 		fill(2,3,'X',false);
 	}
-	
 }

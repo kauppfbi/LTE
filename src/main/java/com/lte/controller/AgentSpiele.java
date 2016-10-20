@@ -1,4 +1,4 @@
-package  com.lte.controller;
+package com.lte.controller;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,14 +13,6 @@ import com.lte.models.*;
 
 import javafx.application.Platform;
 
-
-/**
- * main controller; coordinates data exchange and communication between all
- * interfaces or rather controllers.
- * 
- * @author kauppfbi
- *
- */
 public class AgentSpiele extends Thread {
 
 	private InterfaceManager interfaceManager;
@@ -47,22 +39,23 @@ public class AgentSpiele extends Thread {
 	public void run() {
 
 		System.out.println("Spielen läuft");
-		
+
 		// ********* instanciate all controllers ****************
 		long now = System.currentTimeMillis();
 
 		// instanciate interface
 
-		// interfaceManager = new FileIM("C:/Users/Florian/Desktop/4G_Test", 'o');
+		// interfaceManager = new FileIM("C:/Users/Florian/Desktop/4G_Test",
+		// 'o');
 		boolean successfull = initializeInterface();
-		if (!successfull){
+		if (!successfull) {
 			JOptionPane.showInternalMessageDialog(null, "Interface wurde nicht erfolgreich initilisiert!");
 		}
-		
+
 		// lade KI
 		algorithmManager = new AlgorithmusManager();
 		System.out.println("KI geladen");
-		
+
 		// lade DB Controller
 		int ids[] = connection.startNewGame(gameInfo.getOpponentName(), "X");
 
@@ -77,15 +70,14 @@ public class AgentSpiele extends Thread {
 		Spielstand currentGameScore = new Spielstand();
 		currentGameScore.initialisiere();
 		System.out.println("Spielstand initialisiert");
-		
-		
+
 		ServerMessage message = interfaceManager.receiveMessage();
 		System.out.println(message);
 		int opponentMoveStart = message.getOpponentMove();
 		boolean startingRound = false;
-		//set starting Player
-		if(opponentMoveStart == -1){
-			//wir starten
+		// set starting Player
+		if (opponentMoveStart == -1) {
+			// wir starten
 			gameInfo.setNextPlayer('X');
 		} else {
 			gameInfo.setNextPlayer('O');
@@ -115,13 +107,14 @@ public class AgentSpiele extends Thread {
 
 					// visualisiere in GUI
 					int row = currentGameScore.getZeile(opponentMove);
-					
-					//Starte neuen Thread um JavaFx zu befuellen
-			        Platform.runLater(new Runnable() {
-			            @Override public void run() {
-					controller1.fill(opponentMove, row, gameInfo.getNextPlayer(), false);
-			            }
-			        });
+
+					// Starte neuen Thread um JavaFx zu befuellen
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							controller1.fill(opponentMove, row, gameInfo.getNextPlayer(), false);
+						}
+					});
 
 					// Log turn in DB
 					connection.pushTurn(gameInfo.getGameID(), gameInfo.getSetID(), "O", opponentMove);
@@ -136,7 +129,7 @@ public class AgentSpiele extends Thread {
 			}
 
 			// ***** wir spielen Zug *****
-			else if (gameInfo.getNextPlayer() == 'X') {				
+			else if (gameInfo.getNextPlayer() == 'X') {
 				System.out.println("Wir spielen");
 				try {
 					// berechne n�chsten Zug - KI gibt Spalte zur�ck
@@ -149,13 +142,13 @@ public class AgentSpiele extends Thread {
 
 					// visualisiere in GUI
 					int row = currentGameScore.getZeile(nextMove);
-					//Starte neuen Thread um JavaFx zu befuellen
-			        Platform.runLater(new Runnable() {
-			            @Override public void run() {
-						controller1.fill(nextMove, row, gameInfo.getNextPlayer(), false);
-			            }
-			        });
-					
+					// Starte neuen Thread um JavaFx zu befuellen
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							controller1.fill(nextMove, row, gameInfo.getNextPlayer(), false);
+						}
+					});
 
 					// log turn in DB
 					connection.pushTurn(gameInfo.getGameID(), gameInfo.getSetID(), "X", nextMove);
@@ -170,7 +163,7 @@ public class AgentSpiele extends Thread {
 		} // endwhile
 
 		algorithmManager.shutdown();
-		
+
 		// ****** Spiel ist entschieden *******
 
 		// TODO Zuordnung von X/O zu Teamnamen
@@ -180,7 +173,7 @@ public class AgentSpiele extends Thread {
 		// [Pos][Spalte] / [Pos][Zeile]
 		// System.out.println(aktuellerSpielstand.woGewonnen());
 
-		//controller1.gameOver();
+		// controller1.gameOver();
 		// TODO gameOver(String winnerTeam, int[] winnerCombo);
 	}
 
@@ -202,25 +195,23 @@ public class AgentSpiele extends Thread {
 		}
 	}
 
-	// for testing reasons
 	public int[] getReplayTurns(int GameID, int setNumber) {
-		int turns[] = connection.getReplayTurns(GameID, setNumber);
-		return turns;
+		return connection.getReplayTurns(GameID, setNumber);
 	}
-	
+
 	// get gameinfo for coice in reconstruction:
-	public GameDB[] getRecGameInfo(){
+	public GameDB[] getRecGameInfo() {
 		System.out.println("agent rec");
 		GameDB[] res = connection.getGames();
 		return res;
 	}
-	
+
 	// get setnumbers for choice in reconstruction:
-	public GameDB[] getRecSetNumber(int gameID){
+	public GameDB[] getRecSetNumber(int gameID) {
 		GameDB[] setNumber = connection.getSetInfos(gameID);
-		return(setNumber);
+		return (setNumber);
 	}
-	
+
 	// public static void main(String[] args) {
 	// Agent agent = new Agent(new DBconnection());
 	// agent.getReplayTurns(23, 1);
@@ -281,5 +272,5 @@ public class AgentSpiele extends Thread {
 	public void setGameInfo(GameInfo gameInfo) {
 		this.gameInfo = gameInfo;
 	}
-	
+
 }

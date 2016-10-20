@@ -6,57 +6,23 @@ import java.sql.SQLException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import java.io.File;
-import javafx.collections.FXCollections;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.*;
-import javafx.scene.text.Text;
-import javafx.stage.FileChooser;
-
-import com.lte.controller.AgentSpiele;
+import com.lte.controller.MainController;
 import com.lte.models.*;
 
 public class Controller0 {
 
-	// import logik.AgentSpiele notwendig!!!
-	private AgentSpiele AgentSpiele;
+	private MainController controller;
 	private Settings settings;
 	private GameInfo gameInfo;
 
-	public void setAgent(AgentSpiele AgentSpiele) {
-		this.AgentSpiele = AgentSpiele;
-	}
-
-	public AgentSpiele getAgent() {
-		return AgentSpiele;
-	}
-
-	public Settings getSettings() {
-		return settings;
-	}
-
-	public void setSettings(Settings settings) {
-		this.settings = settings;
-	}
-
-	public GameInfo getGameInfo() {
-		return gameInfo;
-	}
-
-	public void setGameInfo(GameInfo gameInfo) {
-		this.gameInfo = gameInfo;
-	}
-
-
-
+	
 	@FXML
 	AnchorPane pane;
 	
@@ -81,7 +47,7 @@ public class Controller0 {
 		Stage stage;
 		if (event.getSource() == toGame) {
 			// Team-Namen setzen
-			String nameX = playerX.getText();
+			//String nameX = playerX.getText();
 			String nameO = playerO.getText();
 
 			// new Settings object
@@ -105,11 +71,11 @@ public class Controller0 {
 			// erstellter Controller1 wird geladen und anschlie�end der AgentSpiele
 			// �bergeben
 			Controller1 controller1 = loader.<Controller1>getController();
-			controller1.setAgent(AgentSpiele);
-			controller1.getAgent().setSettings(settings);
-			controller1.getAgent().setGameInfo(gameInfo);
-			controller1.getAgent().setController1(controller1);
-			controller1.setSettings(AgentSpiele.getSettings());
+			controller1.setController(controller);
+			controller1.getController().setSettings(settings);
+			controller1.getController().setGameInfo(gameInfo);
+			controller1.getController().setController1(controller1);
+			controller1.setSettings(controller.getSettings());
 			controller1.initialize2();
 
 			stage.show();
@@ -120,7 +86,6 @@ public class Controller0 {
 	// Screen********************
 	public void reconstructGame(ActionEvent event) throws IOException {
 		Stage stage;
-		AnchorPane layout;
 		if (event.getSource() == reGame) {
 			// Referrenz zur aktuellen Stage herstellen
 			stage = (Stage) toGame.getScene().getWindow();
@@ -138,8 +103,8 @@ public class Controller0 {
 			// erstellter Controller2 wird geladen und anschlie�end der AgentSpiele
 			// �bergeben
 			Controller2 controller2 = loader.<Controller2>getController();
-			controller2.setAgent(AgentSpiele);
-			controller2.getAgent().setController2(controller2);
+			controller2.setController(controller);
+			controller2.getController().setController2(controller2);
 			controller2.getRecGameInfo();
 			
 			stage.show();
@@ -157,13 +122,42 @@ public class Controller0 {
 	@FXML
 	public void exitApplication(ActionEvent event) {
 		try {
-			AgentSpiele.getConnection().stmt.close();
-			AgentSpiele.getConnection().con.close();
+			controller.getConnection().stmt.close();
+			controller.getConnection().con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 
 	    ((Stage)pane.getScene().getWindow()).close();
+	}
+	
+	/*
+	 * Getter and Setter
+	 */
+
+
+	public MainController getController() {
+		return controller;
+	}
+
+	public void setController(MainController controller) {
+		this.controller = controller;
+	}
+
+	public Settings getSettings() {
+		return settings;
+	}
+
+	public void setSettings(Settings settings) {
+		this.settings = settings;
+	}
+
+	public GameInfo getGameInfo() {
+		return gameInfo;
+	}
+
+	public void setGameInfo(GameInfo gameInfo) {
+		this.gameInfo = gameInfo;
 	}
 
 }

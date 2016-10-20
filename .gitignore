@@ -2,6 +2,7 @@
 .project
 .settings/
 target/**
+target
 *.DS_Store**
 *.class
 
@@ -11,3 +12,7 @@ target/**
 *.ear
 
 .idea/
+
+# DB lock
+db/game.lck
+db/game.tmp
