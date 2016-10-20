@@ -340,4 +340,10 @@ public class Controller1 {
 	    gameGrid.getChildren().add(0,node);
 		
 	}
+	
+	//highlight winning-combo
+	public void highlightWinning(){
+		//Input: Reihe und Spalte
+		//Idee: Umrandung (ROT) für Circles
+	}
 }
