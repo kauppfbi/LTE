@@ -13,11 +13,13 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -72,6 +74,9 @@ public class Controller2 {
 	
 	@FXML
 	Text metaText;
+	
+	@FXML
+	GridPane gameGrid;
 	
 	@FXML
 	public void initialize(){
@@ -165,5 +170,14 @@ public class Controller2 {
 //			}
 //		};		
 //		gameChoice.getSelectionModel().selectedIndexProperty().addListener(listenerGame);
+	}
+	
+	//clear GameGrid
+	@FXML
+	public void clearGrid() {
+		Node node = gameGrid.getChildren().get(0);
+	    gameGrid.getChildren().clear();
+	    gameGrid.getChildren().add(0,node);
+		
 	}
 }
