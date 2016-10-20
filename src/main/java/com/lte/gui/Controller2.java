@@ -65,10 +65,10 @@ public class Controller2 {
 	ImageView imageView;
 	
 	@FXML
-	ChoiceBox gameChoice;
+	ChoiceBox<String> gameChoice;
 	
 	@FXML
-	ChoiceBox setChoice;
+	ChoiceBox<Integer> setChoice;
 	
 	@FXML
 	Text metaText;
@@ -111,7 +111,7 @@ public class Controller2 {
 		System.out.println(gameID);
 		System.out.println(setNumber);
 		//************************************HIER WEITER***********************************
-		SetDB[] recGame =  controller.getSetInfos(gameID);
+		// SetDB[] recGame =  controller.getSetInfos(gameID);
 		// klappt leider noch nicht, aktueller Stand.
 //		for (int i = 0; i < recGame.length; i++) {
 //			System.out.println(recGame[i]);
@@ -126,19 +126,17 @@ public class Controller2 {
 	}
 	
 	public void getRecGameInfo(){
+	
 		GameDB[] recGame = controller.getRecGameInfo();
-		// GameIDs
-		ObservableList<Integer> gameID = FXCollections.observableArrayList();
 		// Shown content in gameChoiceBox, Game Info (opponentplayer und playtime)
 		ObservableList<String> info = FXCollections.observableArrayList();
 		// Connection between content and gameID
 		TreeMap<String, Integer> connection = new TreeMap<String, Integer>();
 		
 		for(int i = 0; i < recGame.length; i++){
-			gameID.add(recGame[i].getGameID());
+			int gameID = recGame[i].getGameID();
 			info.add(recGame[i].getOpponentName().concat(" | ").concat(recGame[i].getPlayTime()));
-			connection.put(info.get(i), gameID.get(i));
-			System.out.println(gameID.get(i));
+			connection.put(info.get(i), gameID);
 		}
 
 		// Initialisiere die ChoiceBox mit den rekonstruierbaren Spielen!
