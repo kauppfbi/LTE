@@ -15,11 +15,15 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.HPos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -36,8 +40,8 @@ public class Controller2 {
 		this.controller = controller;
 	}
 	
-	int setNumber = 0;
-	int gameID = 0;
+	SetDB[] sets; 
+	int gameID;
 	int opponentID = 0;
 	String playTime = null;
 	
@@ -76,6 +80,9 @@ public class Controller2 {
 	Text metaText;
 	
 	@FXML
+	GridPane gameGrid;
+	
+	@FXML
 	public void initialize(){
 		//Background
 		File file = new File("files/images/loadgamescreen.png");
@@ -83,6 +90,7 @@ public class Controller2 {
 		imageView.setImage(image);
 		
 	}
+	
 	
 	// *******************Zur�ck zum Startbildschirm**********************
 	@FXML
@@ -110,15 +118,77 @@ public class Controller2 {
 		nextStep.setDisable(true);
 		backStep.setDisable(true);
 		
-		System.out.println(gameID);
-		System.out.println(setNumber);
-		//************************************HIER WEITER***********************************
-		// SetDB[] recGame =  controller.getSetInfos(gameID);
-		// klappt leider noch nicht, aktueller Stand.
-//		for (int i = 0; i < recGame.length; i++) {
-//			System.out.println(recGame[i]);
-//		}
+		System.out.println("GameID:" + gameID);
+		System.out.println("sets beim Spielen: " + sets[0].getSetID());
+		
+		int recSetNumber = setChoice.getSelectionModel().getSelectedIndex();
+		System.out.println("Setnumber:" + recSetNumber);
+		System.out.println("SetID: " + sets[recSetNumber].getSetID());
+		
+		int[] recTurns = sets[recSetNumber].getReplayTurns();
+		System.out.println("RecTurns:" + recTurns);
+		fillRec(recTurns);
 	}
+	
+	// fills in the rec turns into the Gridpane
+	private void fillRec(int[] recTurns) {
+		
+		
+		int rowIndex0 = 0;
+		int rowIndex1 = 0;
+		int rowIndex2 = 0;
+		int rowIndex3 = 0;
+		int rowIndex4 = 0;
+		int rowIndex5 = 0;
+		int rowIndex6 = 0;
+		
+		for(int i = 1; i < recTurns.length; i++){
+			
+			Circle circle = new Circle();
+			circle.setRadius(20.0);
+			int columnIndex = recTurns[i];
+			int rowIndex = 0;
+			
+			switch(recTurns[i]){
+				case 0: rowIndex = rowIndex0;
+						rowIndex0++;
+						break;
+				case 1: rowIndex = rowIndex1;
+						rowIndex1++;
+						break;
+				case 2: rowIndex = rowIndex2;
+						rowIndex2++;
+						break;
+				case 3: rowIndex = rowIndex3;
+						rowIndex3++;
+						break;
+				case 4: rowIndex = rowIndex4;
+						rowIndex4++;
+						break;
+				case 5: rowIndex = rowIndex5;
+						rowIndex5++;
+						break;
+				case 6: rowIndex = rowIndex6;
+						rowIndex6++;
+						break;
+			}
+			
+			if (recTurns[0] == 0) {	
+				circle.setFill(Color.web("#62dbee", 0.85));
+				recTurns[0] = 1;
+			} else if (recTurns[0] == 1) {
+				circle.setFill(Color.web("#46c668", 0.8));
+				recTurns[0] = 0;
+			}	
+			GridPane.setColumnIndex(circle, columnIndex);
+			GridPane.setRowIndex(circle, (5 - rowIndex));
+			gameGrid.getChildren().add(circle);
+			gameGrid.setHalignment(circle, HPos.CENTER);		
+
+		}
+
+	}
+	
 	
 	@FXML
 	public void pauseRec(ActionEvent event){
@@ -149,17 +219,22 @@ public class Controller2 {
 		gameChoice.setItems(gameInfo);
 		gameChoice.getSelectionModel().selectFirst();
 		setChoice.getSelectionModel().selectFirst();
+		
+		// ohne "ChangeEvent" ist der erste Wert standardmaessig der ausgewaehlte Wert, bzw. GameID
+		gameID = gameChoice.getSelectionModel().getSelectedIndex();
 
 		ChangeListener<Number> listenerGame = new ChangeListener<Number>() {
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
 				
-				int selectedGameID = gameChoice.getSelectionModel().getSelectedIndex();
+				gameID = gameChoice.getSelectionModel().getSelectedIndex();
 				
 				// testing purpose
-				System.out.println("Rekonstruierbares Spiel: (Index, gameID)" + selectedGameID + ", " + connection.get(selectedGameID));
+				System.out.println("Rekonstruierbares Spiel: (Index, gameID)" + gameID + ", " + connection.get(gameID));
 				
 				// for setChoice
-				SetDB[] sets = controller.getRecSetInfo(selectedGameID);
+				System.out.println("gameID beim konfigurieren: " + gameID);
+				sets = controller.getRecSetInfo(gameID);
+				System.out.println("sets beim konfigurieren: " + sets[0].getSetID());
 				ObservableList<Integer> setNumber = FXCollections.observableArrayList();
 				
 				// setNumber ObservableList gets filled with the number of played Sets
@@ -169,7 +244,6 @@ public class Controller2 {
 				setChoice.setItems(setNumber);
 			}
 		};
-		
 		gameChoice.getSelectionModel().selectedIndexProperty().addListener(listenerGame);
 	}
 }
