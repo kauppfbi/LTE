@@ -3,6 +3,7 @@ package com.lte.db;
 import java.sql.*;
 
 import com.lte.models.GameDB;
+import com.lte.models.SetDB;
 
 public class DBconnection {
 
@@ -502,10 +503,10 @@ public class DBconnection {
 	 * array[0] = 0 if we started, 1 of opponent started <br>
 	 * array[1..n] = columns of turns 
 	 */
-	public GameDB[] getSetInfos(int GameID){
+	public SetDB[] getSetInfos(int GameID){
 		ResultSet res = null;
-		GameDB[] gamesInfo = null;
-		GameDB gameInfo = null;
+		SetDB[] gamesInfo = null;
+		SetDB gameInfo = null;
 		int totalSets = 0;
 		
 		int setID;
@@ -533,9 +534,9 @@ public class DBconnection {
 				res.last();
 		        totalSets = res.getRow();
 		        res.beforeFirst();
-		        gamesInfo = new GameDB[totalSets];
+		        gamesInfo = new SetDB[totalSets];
 		        
-		        // Iterate over ResultSet and move GameInfo to GameDB object
+		        // Iterate over ResultSet and move SetInfo to SetDB object
 		        while (res.next()) {
 					
 		        	setID = res.getInt(1);
@@ -544,7 +545,7 @@ public class DBconnection {
 		        	winner = res.getString(4);
 		        	replayTurns = getReplayTurns(GameID, counter+1);
 		        	
-					gameInfo = new GameDB(setID, pointsOwn, pointsOpponent, winner, replayTurns);
+					gameInfo = new SetDB(setID, pointsOwn, pointsOpponent, winner, replayTurns);
 					gamesInfo[counter] = gameInfo;
 					counter++;
 				}

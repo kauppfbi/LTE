@@ -6,6 +6,7 @@ import java.util.TreeMap;
 
 import com.lte.controller.MainController;
 import com.lte.models.GameDB;
+import com.lte.models.SetDB;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -109,7 +110,8 @@ public class Controller2 {
 		
 		System.out.println(gameID);
 		System.out.println(setNumber);
-		int[] recGame =  controller.getReplayTurns(gameID, setNumber);
+		//************************************HIER WEITER***********************************
+		SetDB[] recGame =  controller.getSetInfos(gameID);
 		// klappt leider noch nicht, aktueller Stand.
 //		for (int i = 0; i < recGame.length; i++) {
 //			System.out.println(recGame[i]);
