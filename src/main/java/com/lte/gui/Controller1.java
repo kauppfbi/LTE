@@ -309,7 +309,7 @@ public class Controller1 {
 	public void fill(int columnIndex, int rowIndex, char player, boolean endGame) {
 		// player 0 = red, player 1 = yellow
 		Circle circle = new Circle();
-		circle.setRadius(20.0);
+		circle.setRadius(35.0);
 
 		if (player == 'X') {
 			circle.setFill(Color.web("#62dbee", 0.85));
@@ -332,25 +332,12 @@ public class Controller1 {
 
 	}
 
-
-	//Spielfeld leeren --> unfertig
+	//clear GameGrid
 	@FXML
 	public void clearGrid() {
-		ArrayList<Node> children = (ArrayList<Node>) gameGrid.getChildren();
-		for(int i= 0; i< children.size(); i++){
-			//children.
-		}
+		Node node = gameGrid.getChildren().get(0);
+	    gameGrid.getChildren().clear();
+	    gameGrid.getChildren().add(0,node);
 		
-	}
-	
-	//Testmethode - wieder loeschen
-	public void testclear(ActionEvent event){
-		clearGrid();
-	}
-	
-	//Testmethode - wieder loeschen
-	public void steine(ActionEvent event){
-		//fill(int columnIndex, int rowIndex, char player, boolean endGame)
-		fill(2,3,'X',false);
 	}
 }
