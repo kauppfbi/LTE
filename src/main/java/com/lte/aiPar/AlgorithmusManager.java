@@ -68,6 +68,8 @@ public class AlgorithmusManager {
 				algorithmusTiefe = 6;
 			}
 			
+			System.out.println(algorithmusTiefe);
+			
 			//Pr�fe ob nur noch ein Zug vorhanden ist
 			if(zuege.size() == 1)
 			{
@@ -143,7 +145,7 @@ public class AlgorithmusManager {
 			
 			//Laufzeit messen
 			final long timeEnd2 = System.currentTimeMillis(); 
-	        System.out.println("Laufzeit: " + (timeEnd2 - timeStart) + " Millisek.");
+	        System.out.println("Laufzeit KI: " + (timeEnd2 - timeStart) + " Millisek.");
 			
 			//Spalte zur�ck geben
 			return spalte;

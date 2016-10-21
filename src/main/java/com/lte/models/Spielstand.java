@@ -61,7 +61,7 @@ public class Spielstand {
 					throw new IllegalArgumentException("Spalte ist voll");
 				}
 				//Wenn ein freier Slot gefunden wurde, dann platziere das Zeichen des entsprechenden Spielers
-				if (spielfeld[arraySpalte][zeile] == '.') {
+				else if (spielfeld[arraySpalte][zeile] == '.') {
 					spielfeld[arraySpalte][zeile] = playerZeichen;
 					break;
 				}
@@ -333,7 +333,7 @@ public class Spielstand {
 		}
 		
 		public int getZeile(int arraySpalte){
-			
+			System.out.println("Array Spalte " + arraySpalte);
 			for (int zeile = 5; zeile > -2; zeile--) {
 				if(zeile == -1){
 					//Spalte ist leer
@@ -341,6 +341,7 @@ public class Spielstand {
 				}
 				if (spielfeld[arraySpalte][zeile] == 'O' || spielfeld[arraySpalte][zeile] == 'X') {
 					
+					System.out.println("Array Zeile " + zeile);
 					return zeile;
 				}
 			}
