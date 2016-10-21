@@ -332,6 +332,22 @@ public class Spielstand {
 			
 		}
 		
+		public int getZeile(int arraySpalte){
+			
+			for (int zeile = 5; zeile > -2; zeile--) {
+				if(zeile == -1){
+					//Spalte ist leer
+					throw new IllegalArgumentException("Spalte ist leer");
+				}
+				if (spielfeld[arraySpalte][zeile] == 'O' || spielfeld[arraySpalte][zeile] == 'X') {
+					
+					return zeile;
+				}
+			}
+			return 0;
+
+		}
+		
 		
 		
 	}
