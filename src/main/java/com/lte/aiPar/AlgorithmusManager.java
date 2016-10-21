@@ -40,16 +40,6 @@ public class AlgorithmusManager {
 			//Laufzeitanalyse starten
 			final long timeStart = System.currentTimeMillis(); 
 			
-			
-			//Die ersten Runden beschleunigen
-			roundCounter++;
-			if(roundCounter >= 7){
-				//Tiefe = eingestellte Tiefe
-			}else
-			{
-				algorithmusTiefe = 6;
-			}
-			
 			//Arrays l�schen
 			list.clear();
 			future.clear();
@@ -65,6 +55,18 @@ public class AlgorithmusManager {
 			//M�gliche Z�ge
 			ArrayList<Integer> zuege = new ArrayList<>();
 			zuege = parAlgSpielstand.moeglicheZuege();
+			
+			//Die ersten Runden beschleunigen
+			roundCounter++;
+			if(zuege.size() < 7){
+				//Eingestellte Tiefe verwenden
+			}
+			else if(roundCounter >= 7){
+				algorithmusTiefe = 8;
+			}else
+			{
+				algorithmusTiefe = 6;
+			}
 			
 			//Pr�fe ob nur noch ein Zug vorhanden ist
 			if(zuege.size() == 1)
