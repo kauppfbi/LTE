@@ -8,6 +8,7 @@ import com.lte.controller.MainController;
 import com.lte.models.GameDB;
 import com.lte.models.SetDB;
 
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -141,6 +142,18 @@ public class Controller2 {
 		metaText.setText(nameOwn + " " + pointsOwn + " | " + pointsOpponent + " " + nameOpponent + "    " + numberCurrentSet + "/" + numberAllSets);
 		
 		fillRec(recTurns);
+//		Platform.runLater(new Runnable() {
+//			@Override
+//			public void run() {
+//				fillRec(recTurns);
+//			}
+//		});
+//		try {
+//			Thread.sleep(1000);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
+		
 	}
 	
 	// fills in the rec turns into the Gridpane
