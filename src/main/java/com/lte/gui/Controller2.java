@@ -8,6 +8,7 @@ import com.lte.controller.MainController;
 import com.lte.models.GameDB;
 import com.lte.models.SetDB;
 
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -41,7 +42,8 @@ public class Controller2 {
 		this.controller = controller;
 	}
 	
-	SetDB[] sets; 
+	SetDB[] sets;
+	GameDB[] games;
 	int gameID;
 	int opponentID = 0;
 	String playTime = null;
@@ -128,7 +130,31 @@ public class Controller2 {
 		
 		int[] recTurns = sets[recSetNumber].getReplayTurns();
 		System.out.println("RecTurns:" + recTurns);
+		
+		String pointsOpponent = String.valueOf(sets[recSetNumber].getPointsOpponent());
+		String pointsOwn = String.valueOf(sets[recSetNumber].getPointsOwn());
+		
+		String nameOpponent = games[gameID].getOpponentName() ;
+		String nameOwn = "LTE";
+		
+		String numberAllSets = String.valueOf(games[gameID].getNumberOfSets());
+		String numberCurrentSet = String.valueOf(recSetNumber);
+		
+		metaText.setText(nameOwn + " " + pointsOwn + " | " + pointsOpponent + " " + nameOpponent + "    " + numberCurrentSet + "/" + numberAllSets);
+		
 		fillRec(recTurns);
+//		Platform.runLater(new Runnable() {
+//			@Override
+//			public void run() {
+//				fillRec(recTurns);
+//			}
+//		});
+//		try {
+//			Thread.sleep(1000);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
+		
 	}
 	
 	// fills in the rec turns into the Gridpane
@@ -202,16 +228,16 @@ public class Controller2 {
 	// Methode zum Befuellen der Choice Boxes und zum Anfuegen der ChangeListeners
 	public void getRecGameInfo(){
 	
-		GameDB[] recGame = controller.getRecGameInfo();
+		games = controller.getRecGameInfo();
 		// Shown content in gameChoiceBox, Game Info (opponentplayer und playtime)
 		ObservableList<String> gameInfo = FXCollections.observableArrayList();
 		// Connection between content and gameID
 		TreeMap<Integer, Integer> connection = new TreeMap<Integer, Integer>();
 		
-		for(int i = 0; i < recGame.length; i++){
-			int gameID = recGame[i].getGameID();
+		for(int i = 0; i < games.length; i++){
+			int gameID = games[i].getGameID();
 			System.out.println(gameID);
-			gameInfo.add(recGame[i].getOpponentName().concat(" | ").concat(recGame[i].getPlayTime()));
+			gameInfo.add(games[i].getOpponentName().concat(" | ").concat(games[i].getPlayTime()));
 			connection.put(i, gameID);
 		}
 
