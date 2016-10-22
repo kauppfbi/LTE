@@ -2,6 +2,8 @@ package com.lte.gui;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.ListIterator;
 import java.util.Optional;
 
 import com.lte.controller.MainController;
@@ -15,6 +17,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
@@ -64,27 +67,6 @@ public class Controller1 {
 
 	@FXML
 	Button backToStart;
-
-	@FXML
-	Button BColumn0;
-
-	@FXML
-	Button BColumn1;
-
-	@FXML
-	Button BColumn2;
-
-	@FXML
-	Button BColumn3;
-
-	@FXML
-	Button BColumn4;
-
-	@FXML
-	Button BColumn5;
-
-	@FXML
-	Button BColumn6;
 
 	@FXML
 	ImageView imageView;
@@ -327,7 +309,7 @@ public class Controller1 {
 	public void fill(int columnIndex, int rowIndex, char player, boolean endGame) {
 		// player 0 = red, player 1 = yellow
 		Circle circle = new Circle();
-		circle.setRadius(20.0);
+		circle.setRadius(35.0);
 
 		if (player == 'X') {
 			circle.setFill(Color.web("#62dbee", 0.85));
@@ -348,5 +330,14 @@ public class Controller1 {
 		namePlayerX.setText("LTE");
 		namePlayerO.setText(controller.getGameInfo().getOpponentName());
 
+	}
+
+	//clear GameGrid
+	@FXML
+	public void clearGrid() {
+		Node node = gameGrid.getChildren().get(0);
+	    gameGrid.getChildren().clear();
+	    gameGrid.getChildren().add(0,node);
+		
 	}
 }

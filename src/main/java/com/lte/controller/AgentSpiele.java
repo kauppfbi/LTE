@@ -167,11 +167,19 @@ public class AgentSpiele extends Thread {
 		// ****** Spiel ist entschieden *******
 
 		// TODO Zuordnung von X/O zu Teamnamen
-		System.out.println("Spieler: " + message.getWinner() + " hat gewonnen");
+		System.out.println("Message: " + message.getWinner() + " hat gewonnen");
+		System.out.println("KI: Spieler " + currentGameScore.isGewonnen() + " hat gewonnen");
 
 		// - Rückgabe der gewonnen Kombination aus dem Spieldstand int[3][1] ->
-		// [Pos][Spalte] / [Pos][Zeile]
-		// System.out.println(aktuellerSpielstand.woGewonnen());
+		controller1.gameOver(currentGameScore.isGewonnen(),currentGameScore.woGewonnen());
+		
+		//Ausgabe in Konsole zur Kontrolle
+		System.out.println("Winning Kombi");
+		int[][] woGewonnen = currentGameScore.woGewonnen();
+		for (int i = 0; i < woGewonnen.length; i++) {
+			System.out.print(woGewonnen[i][0]);
+			System.out.println(woGewonnen[i][1]);
+		}
 
 		// controller1.gameOver();
 		// TODO gameOver(String winnerTeam, int[] winnerCombo);

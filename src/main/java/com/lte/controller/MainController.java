@@ -134,26 +134,22 @@ public class MainController {
 	 ********* Reconstruction***********
 	 ***********************************/
 	
-//  Das ist veraltet!!!
-//	public int[] getReplayTurns(int GameID, int setNumber) {
-//		return connection.getReplayTurns(GameID, setNumber);
-//	}
-	
-//  Nutze Stattdessen getSetInfos, welches in den int[] replayTurns fuellt!!
-	public SetDB[] getSetInfos(int GameID) {
+
+	/* calls function "getSetInfos(GameID)" in DBconnection, creates an SetDB Array
+	 * 1 SetDB Object = Infos about 1 played Set
+	 * length of SetDB-Array = Number of played Sets in Game
+	*/
+	public SetDB[] getRecSetInfo(int GameID) {
 		return connection.getSetInfos(GameID);	
 	}
 	
-	// get gameinfo for coice in reconstruction:
+	// get gameinfo for choice in reconstruction:
 	public GameDB[] getRecGameInfo() {
 		return connection.getGames();
 	}
-
-	// get setnumbers for choice in reconstruction:
-//	public GameDB[] getRecSetNumber(int gameID) {
-//		return connection.getSetInfos(gameID);
-//	}
-
+	
+	
+	
 	/*
 	 * private methods - helping methods
 	 */
