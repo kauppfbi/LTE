@@ -17,6 +17,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -271,5 +272,14 @@ public class Controller2 {
 			}
 		};
 		gameChoice.getSelectionModel().selectedIndexProperty().addListener(listenerGame);
+	}
+	
+	//clear GameGrid
+	@FXML
+	public void clearGrid() {
+		Node node = gameGrid.getChildren().get(0);
+	    gameGrid.getChildren().clear();
+	    gameGrid.getChildren().add(0,node);
+		
 	}
 }
