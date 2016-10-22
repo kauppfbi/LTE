@@ -2,9 +2,10 @@ package com.lte.gui;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.ListIterator;
 import java.util.Optional;
 
-import com.lte.controller.AgentSpiele;
 import com.lte.controller.MainController;
 import com.lte.interfaces.InterfaceManager;
 import com.lte.models.Settings;
@@ -16,6 +17,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
@@ -67,34 +69,14 @@ public class Controller1 {
 	Button backToStart;
 
 	@FXML
-	Button BColumn0;
-
-	@FXML
-	Button BColumn1;
-
-	@FXML
-	Button BColumn2;
-
-	@FXML
-	Button BColumn3;
-
-	@FXML
-	Button BColumn4;
-
-	@FXML
-	Button BColumn5;
-
-	@FXML
-	Button BColumn6;
-
-	@FXML
 	ImageView imageView;
 
 	@FXML
 	Text textKontaktpfad;
 
+	//TODO playerChoice auslesen
 	@FXML
-	ChoiceBox playerChoice;
+	ChoiceBox<String> playerChoice;
 
 	// non fxml-objects
 	private MainController controller;
@@ -203,16 +185,11 @@ public class Controller1 {
 		imageView.setImage(image);
 	}
 
-	@FXML
-	private void dataTest() {
-		String test = dataTransChoices();
-	}
 
 	// *******************Zur�ck zum Startbildschirm**********************
 	@FXML
 	private void goToStartmenu(ActionEvent event) throws IOException {
 		Stage stage;
-		AnchorPane layout;
 		// Referrenz zur aktuellen Stage herstellen
 		stage = (Stage) backToStart.getScene().getWindow();
 
@@ -261,7 +238,6 @@ public class Controller1 {
 	// *********************GAME OVER*************************
 	public void gameOver(char winningPlayer, int[][] winningCombo) {
 		// private void gameOver(char winningPlayer, int[] winningCombo){
-		String ergebnis = "default";
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Game Over");
 		if (winningPlayer == 'X') {
@@ -303,7 +279,6 @@ public class Controller1 {
 
 			// zur�ck zu Controller0/layout0
 			Stage stage;
-			AnchorPane layout;
 			// Referrenz zur aktuellen Stage herstellen
 			stage = (Stage) backToStart.getScene().getWindow();
 			// FXMLLoader
@@ -334,7 +309,7 @@ public class Controller1 {
 	public void fill(int columnIndex, int rowIndex, char player, boolean endGame) {
 		// player 0 = red, player 1 = yellow
 		Circle circle = new Circle();
-		circle.setRadius(20.0);
+		circle.setRadius(35.0);
 
 		if (player == 'X') {
 			circle.setFill(Color.web("#62dbee", 0.85));
@@ -357,11 +332,12 @@ public class Controller1 {
 
 	}
 
-	// (Dateischnittstelle oder Pusher) - Felix
-	private String dataTransChoices() {
-		String selection = "";
-		selection = dataTrans.getValue();
-		System.out.println("ChoiceBox Auswahl: " + selection);
-		return selection;
+	//clear GameGrid
+	@FXML
+	public void clearGrid() {
+		Node node = gameGrid.getChildren().get(0);
+	    gameGrid.getChildren().clear();
+	    gameGrid.getChildren().add(0,node);
+		
 	}
 }

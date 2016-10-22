@@ -13,6 +13,7 @@ import com.lte.interfaces.FileIM;
 import com.lte.interfaces.InterfaceManager;
 import com.lte.models.GameDB;
 import com.lte.models.GameInfo;
+import com.lte.models.SetDB;
 import com.lte.models.Settings;
 
 /**
@@ -133,20 +134,22 @@ public class MainController {
 	 ********* Reconstruction***********
 	 ***********************************/
 	
-	public int[] getReplayTurns(int GameID, int setNumber) {
-		return connection.getReplayTurns(GameID, setNumber);
+
+	/* calls function "getSetInfos(GameID)" in DBconnection, creates an SetDB Array
+	 * 1 SetDB Object = Infos about 1 played Set
+	 * length of SetDB-Array = Number of played Sets in Game
+	*/
+	public SetDB[] getRecSetInfo(int GameID) {
+		return connection.getSetInfos(GameID);	
 	}
 	
-	// get gameinfo for coice in reconstruction:
+	// get gameinfo for choice in reconstruction:
 	public GameDB[] getRecGameInfo() {
 		return connection.getGames();
 	}
-
-	// get setnumbers for choice in reconstruction:
-	public GameDB[] getRecSetNumber(int gameID) {
-		return connection.getSetInfos(gameID);
-	}
-
+	
+	
+	
 	/*
 	 * private methods - helping methods
 	 */

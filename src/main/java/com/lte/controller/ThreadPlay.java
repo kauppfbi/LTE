@@ -1,16 +1,12 @@
 package com.lte.controller;
 
-import javax.swing.JOptionPane;
 
 import com.lte.aiPar.AlgorithmusManager;
 import com.lte.db.DBconnection;
-import com.lte.gui.Controller0;
 import com.lte.gui.Controller1;
-import com.lte.gui.Controller2;
 import com.lte.interfaces.InterfaceManager;
 import com.lte.models.GameInfo;
 import com.lte.models.ServerMessage;
-import com.lte.models.Settings;
 import com.lte.models.Spielstand;
 
 import javafx.application.Platform;
@@ -19,6 +15,7 @@ public class ThreadPlay extends Thread {
 
 	// interface to server
 	private InterfaceManager interfaceManager;
+	long timeStart;
 
 	// GUI controller
 	private Controller1 controller1;
@@ -39,6 +36,8 @@ public class ThreadPlay extends Thread {
 		this.gameInfo = gameInfo;
 		this.connection = connection;
 		this.algorithmManager = algorithmManager;
+		timeStart = 0;
+
 	}
 
 	@Override
@@ -87,6 +86,7 @@ public class ThreadPlay extends Thread {
 						startingRound = false;
 					} else {
 						message = interfaceManager.receiveMessage();
+						timeStart = System.currentTimeMillis();
 					}
 					// - Spiel entschieden/gewonnen
 					if (!message.getWinner().equals("offen")) {
@@ -103,7 +103,7 @@ public class ThreadPlay extends Thread {
 					Platform.runLater(new Runnable() {
 						@Override
 						public void run() {
-							controller1.fill(opponentMove, row, gameInfo.getNextPlayer(), false);
+							controller1.fill(opponentMove, row, 'O', false);
 						}
 					});
 
@@ -128,6 +128,9 @@ public class ThreadPlay extends Thread {
 
 					// sende n�chsten Zug an Server
 					interfaceManager.sendMove(nextMove);
+					
+					final long timeEnd = System.currentTimeMillis(); 
+			        System.out.println("Antwortzeit: " + (timeEnd - timeStart) + " Millisek.");
 
 					currentGameScore.spiele(nextMove, 'X');
 
@@ -137,7 +140,7 @@ public class ThreadPlay extends Thread {
 					Platform.runLater(new Runnable() {
 						@Override
 						public void run() {
-							controller1.fill(nextMove, row, gameInfo.getNextPlayer(), false);
+							controller1.fill(nextMove, row, 'X', false);
 						}
 					});
 
@@ -156,15 +159,28 @@ public class ThreadPlay extends Thread {
 		algorithmManager.shutdown();
 
 		// ****** Spiel ist entschieden *******
-
+		
 		// TODO Zuordnung von X/O zu Teamnamen
-		System.out.println("Spieler: " + message.getWinner() + " hat gewonnen");
+		System.out.println("Message: " + message.getWinner() + " hat gewonnen");
+		System.out.println("KI: Spieler " + currentGameScore.isGewonnen() + " hat gewonnen");
+		
+		// - Rückgabe der gewonnen Kombination aus dem Spieldstand int[4][1] ->
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				controller1.gameOver(currentGameScore.isGewonnen(),currentGameScore.woGewonnen());
+			}
+		});
 
-		// - Rückgabe der gewonnen Kombination aus dem Spieldstand int[3][1] ->
-		// [Pos][Spalte] / [Pos][Zeile]
-		// System.out.println(aktuellerSpielstand.woGewonnen());
-
-		// controller1.gameOver();
-		// TODO gameOver(String winnerTeam, int[] winnerCombo);
+		
+		//Ausgabe in Konsole zur Kontrolle
+		System.out.println("Winning Kombi");
+		int[][] woGewonnen = currentGameScore.woGewonnen();
+		for (int i = 0; i < woGewonnen.length; i++) {
+			System.out.print(woGewonnen[i][0] + " ");
+			System.out.println(woGewonnen[i][1]);
+		}
+		
+		
 	}
 }
