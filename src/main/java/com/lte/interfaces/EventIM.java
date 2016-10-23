@@ -130,14 +130,4 @@ public class EventIM implements InterfaceManager{
 		
 		serverMessage = new ServerMessage(unlocked, setStatus, opponentMove, winner);
 	}
-	
-	public static void main(String[] args) {
-		EventIM manager = new EventIM();
-		
-		for(int i = 0; i < 5; i++){
-			System.out.println(manager.receiveMessage());
-			manager.sendMove(2);
-		}
-		System.out.println();
-	}
 }
