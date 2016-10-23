@@ -49,8 +49,6 @@ public class Controller2 {
 	String playTime = null;
 	
 	// FXML-Referrenzen
-	@FXML
-	Button startReconstruction;
 	
 	@FXML
 	Button nextStep;
@@ -86,9 +84,24 @@ public class Controller2 {
 	GridPane gameGrid;
 	
 	@FXML
+	Text metaPlayer0;
+	
+	@FXML
+	Text metaPlayerX;
+	
+	@FXML
+	Text points0;
+	
+	@FXML
+	Text pointsX;
+	
+	@FXML
+	Text currentSet;
+	
+	@FXML
 	public void initialize(){
 		//Background
-		File file = new File("files/images/loadgamescreen.png");
+		File file = new File("files/images/gameplay.png");
 		Image image = new Image(file.toURI().toString());
 		imageView.setImage(image);
 		
@@ -140,7 +153,13 @@ public class Controller2 {
 		String numberAllSets = String.valueOf(games[gameID].getNumberOfSets());
 		String numberCurrentSet = String.valueOf(recSetNumber);
 		
-		metaText.setText(nameOwn + " " + pointsOwn + " | " + pointsOpponent + " " + nameOpponent + "    " + numberCurrentSet + "/" + numberAllSets);
+		//metaText.setText(nameOwn + " " + pointsOwn + " | " + pointsOpponent + " " + nameOpponent + "    " + numberCurrentSet + "/" + numberAllSets);
+		
+		metaPlayer0.setText(nameOwn);
+		metaPlayerX.setText(nameOpponent);
+		points0.setText(pointsOwn);
+		pointsX.setText(pointsOpponent);
+		currentSet.setText(numberCurrentSet+" / "+numberAllSets);
 		
 		fillRec(recTurns);
 //		Platform.runLater(new Runnable() {
@@ -172,7 +191,7 @@ public class Controller2 {
 		for(int i = 1; i < recTurns.length; i++){
 			
 			Circle circle = new Circle();
-			circle.setRadius(20.0);
+			circle.setRadius(35.0);
 			int columnIndex = recTurns[i];
 			int rowIndex = 0;
 			
