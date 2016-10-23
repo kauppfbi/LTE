@@ -32,19 +32,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
       </GridPane>
-      <Button fx:id="nextStep" layoutX="776.0" layoutY="437.0" mnemonicParsing="false" text="Nächster">
-         <font>
-            <Font size="18.0" />
-         </font></Button>
-      <Button fx:id="backStep" layoutX="776.0" layoutY="519.0" mnemonicParsing="false" text="Zurück">
-         <font>
-            <Font size="18.0" />
-         </font></Button>
-      <Button fx:id="pause" layoutX="778.0" layoutY="348.0" mnemonicParsing="false" onAction="#pauseRec" text="Pause">
-         <font>
-            <Font size="18.0" />
-         </font></Button>
-      <Button fx:id="play" layoutX="776.0" layoutY="274.0" mnemonicParsing="false" onAction="#playRec" text="Play">
+      <Button fx:id="pause" layoutX="1099.0" layoutY="406.0" mnemonicParsing="false" onAction="#pauseRec" text="Pause">
          <font>
             <Font size="18.0" />
          </font></Button>
@@ -52,8 +40,8 @@
          <font>
             <Font size="18.0" />
          </font></Button>
-      <ChoiceBox fx:id="gameChoice" layoutX="986.0" layoutY="287.0" prefHeight="25.0" prefWidth="204.0" />
-      <ChoiceBox fx:id="setChoice" layoutX="986.0" layoutY="355.0" prefHeight="25.0" prefWidth="204.0" />
+      <ChoiceBox fx:id="gameChoice" layoutX="966.0" layoutY="238.0" prefHeight="25.0" prefWidth="204.0" />
+      <ChoiceBox fx:id="setChoice" layoutX="966.0" layoutY="306.0" prefHeight="25.0" prefWidth="204.0" />
       <Text fx:id="metaPlayer0" fill="#68c1ed" layoutX="150.0" layoutY="105.0" strokeType="OUTSIDE" strokeWidth="0.0">
          <font>
             <Font size="36.0" />
@@ -89,5 +77,10 @@
             <Font size="36.0" />
          </font>
       </Text>
+      <Button fx:id="play" layoutX="966.0" layoutY="406.0" mnemonicParsing="false" onAction="#playRec" text="Play">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>

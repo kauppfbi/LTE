@@ -49,13 +49,6 @@ public class Controller2 {
 	String playTime = null;
 	
 	// FXML-Referrenzen
-	
-	@FXML
-	Button nextStep;
-	
-	@FXML
-	Button backStep;
-	
 	@FXML
 	Button pause;
 	
@@ -104,7 +97,6 @@ public class Controller2 {
 		File file = new File("files/images/gameplay.png");
 		Image image = new Image(file.toURI().toString());
 		imageView.setImage(image);
-		
 	}
 	
 	
@@ -131,8 +123,8 @@ public class Controller2 {
 	@FXML
 	public void playRec(ActionEvent event){
 		//Next und Back disabled
-		nextStep.setDisable(true);
-		backStep.setDisable(true);
+		//nextStep.setDisable(true);
+		//backStep.setDisable(true);
 		
 		System.out.println("GameID:" + gameID);
 		System.out.println("sets beim Spielen: " + sets[0].getSetID());
@@ -239,8 +231,8 @@ public class Controller2 {
 	@FXML
 	public void pauseRec(ActionEvent event){
 		//Next und Back disabled to false
-		nextStep.setDisable(false);
-		backStep.setDisable(false);
+		//nextStep.setDisable(false);
+		//backStep.setDisable(false);
 	}
 	
 	
