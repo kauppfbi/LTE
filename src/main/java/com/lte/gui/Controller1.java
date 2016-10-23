@@ -153,12 +153,10 @@ public class Controller1 {
 		ChangeListener<Number> listener1 = new ChangeListener<Number>() {
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
 				System.out.println("Ausgewaehlter Player:" + playerChoice.getSelectionModel().getSelectedIndex());
-				if (dataTrans.getSelectionModel().getSelectedIndex() == 0) {
+				if (playerChoice.getValue().equals("X")) {
 					settings.setServerChar('X');
-					;
-				} else if (dataTrans.getSelectionModel().getSelectedIndex() == 1) {
+				} else if (playerChoice.getValue().equals("O")) {
 					settings.setServerChar('O');
-					;
 				}
 			}
 		};
