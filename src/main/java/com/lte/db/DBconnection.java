@@ -1,9 +1,11 @@
 package com.lte.db;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 import com.lte.models.GameDB;
 import com.lte.models.SetDB;
+import com.lte.models.DBscoreboard;
 
 public class DBconnection {
 
@@ -587,5 +589,92 @@ public class DBconnection {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public DBscoreboard[] getScoreboard() {
+		DBscoreboard opponentStats = null;
+		ArrayList<String> names = new ArrayList<String>();
+		DBscoreboard[] opponentsStats = null;
+		
+		// Get unique number of opponents for opponentsStats array size
+		String sql = "SELECT DISTINCT COUNT(OPPONENTNAME) FROM PUBLIC.OPPONENT";
+		try {
+			ResultSet res = stmt.executeQuery(sql);
+			System.out.println("LOG: Got unique number of opponents");
+			if (res.next()) {
+				opponentsStats = new DBscoreboard[res.getInt(1)];
+			}else{
+				System.out.println("LOG: No opponents received");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		sql = "SELECT OPPONENTID, OPPONENTNAME, GAMEID, WINNER FROM PUBLIC.GAME, PUBLIC.OPPONENT WHERE GAME.OPPONENTID = OPPONENT.OPPONENTID";
+		
+		PreparedStatement stmt2;
+		try {
+			stmt2 = con.prepareStatement(sql, ResultSet.TYPE_SCROLL_SENSITIVE,
+					   ResultSet.CONCUR_UPDATABLE);
+			ResultSet res = stmt2.executeQuery();
+			
+			while (res.next()) {
+				opponentStats = new DBscoreboard();
+				String opponentName = res.getString(2);
+				int index = 0;
+				int wins = 0;
+				int loses = 0;
+				int score = 0;
+				
+				if (names.contains(opponentName)) {
+					// Get position in ArrayList
+					index = names.indexOf(opponentName);
+					// Get DBscoreboard object from DBscoreboard array at this position
+					opponentStats = opponentsStats[index];
+					// Modify DBscoreboard object 
+					wins = opponentStats.getWins();
+					loses = opponentStats.getLoses();
+					score = opponentStats.getScore();
+					
+					if (res.getString(4).equals("X")) {
+						// add 1 to loses
+						loses++;
+					}else if (res.getString(4).equals("O")) {
+						// add 1 to wins
+						wins++;
+					}
+					
+					// recalc score
+					score = wins - loses;
+					opponentStats.setLoses(loses);
+					opponentStats.setWins(wins);
+					opponentStats.setScore(score);
+					
+					// push the updated object to the position in the array
+					opponentsStats[index] = opponentStats;
+				}else{
+					names.add(opponentName);
+					index = names.indexOf(opponentName);
+					// create object
+					opponentStats.setOpponentName(opponentName);
+					if (res.getString(4).equals("X")) {
+						opponentStats.setLoses(1);
+						opponentStats.setWins(0);
+					}else if (res.getString(4).equals("O")) {
+						opponentStats.setWins(1);
+						opponentStats.setLoses(0);
+					}
+					opponentStats.setScore(opponentStats.getWins() - opponentStats.getLoses());
+					opponentsStats[index] = opponentStats;
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("LOG: Got scoreboard information");
+		}
+		
+		return opponentsStats;
+		
 	}
 }
