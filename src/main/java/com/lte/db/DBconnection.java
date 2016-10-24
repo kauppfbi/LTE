@@ -145,12 +145,12 @@ public class DBconnection {
 	 * Updates the game entry in the database with the score after the previous
 	 * set.
 	 * 
-	 * @param GameID
-	 * @param CurrentGamePointsOwn
-	 * @param CurrentGamePointsOpponent
+	 * @param gameID
+	 * @param currentGamePointsOwn
+	 * @param currentGamePointsOpponent
 	 * @return ID of new gameset
 	 */
-	public int createNewSet(int iGameID, int CurrentGamePointsOwn, int CurrentGamePointsOpponent) {
+	public int createNewSet(int gameID, int currentGamePointsOwn, int currentGamePointsOpponent) {
 		// Set starting player to opposite player than set before
 		// Update game entry with latest score
 
@@ -167,7 +167,7 @@ public class DBconnection {
 		}
 
 		// get latest set from selected gameID
-		String sql = "SELECT max(SETID) from PUBLIC.GAMESET WHERE GAMEID = " + iGameID;
+		String sql = "SELECT max(SETID) from PUBLIC.GAMESET WHERE GAMEID = " + gameID;
 
 		try {
 			ResultSet res = stmt.executeQuery(sql);
@@ -201,7 +201,7 @@ public class DBconnection {
 
 		// Create new entry
 		sql = "INSERT INTO \"PUBLIC\".\"GAMESET\" ( \"GAMEID\", \"STARTINGPLAYER\", \"POINTSOWNBEFORESET\", \"POINTSOPPONENTBEFORESET\" ) VALUES ( "
-				+ iGameID + ", '" + newStartingPlayer + "', " + CurrentGamePointsOwn + ", " + CurrentGamePointsOpponent
+				+ gameID + ", '" + newStartingPlayer + "', " + currentGamePointsOwn + ", " + currentGamePointsOpponent
 				+ ")";
 
 		try {
@@ -223,8 +223,7 @@ public class DBconnection {
 			res.close();
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("LOG: couldn't get last set from gameset table");
 		}
 
 		return setID; // SetID
@@ -233,12 +232,12 @@ public class DBconnection {
 	/**
 	 * Saves a turn of a specific game, set and player into the database.
 	 * 
-	 * @param GameID
-	 * @param SetID
-	 * @param Player
-	 * @param Column
+	 * @param gameID
+	 * @param setID
+	 * @param player
+	 * @param column
 	 */
-	public void pushTurn(int GameID, int SetID, String Player, int Column) {
+	public void pushTurn(int gameID, int setID, String player, int column) {
 
 		// int turnID = 0;
 
@@ -251,7 +250,7 @@ public class DBconnection {
 
 		// get latest set from selected gameID
 		String sql = "INSERT INTO \"PUBLIC\".\"TURN\" ( \"GAMEID\", \"SETID\", \"TURN\", \"COLUMN\" ) VALUES ( "
-				+ GameID + ", " + SetID + ", '" + Player + "', " + Column + ")";
+				+ gameID + ", " + setID + ", '" + player + "', " + column + ")";
 		try {
 			stmt.executeQuery(sql);
 			System.out.println("LOG: inserted new turn in db table turn");
@@ -264,11 +263,11 @@ public class DBconnection {
 	/**
 	 * Updates Winner of set after the completion of a set
 	 * 
-	 * @param SetID
-	 * @param Winner
+	 * @param setID
+	 * @param winner
 	 */
-	public void updateWinnerOfSet(int SetID, String Winner) {
-		String sql = "UPDATE \"PUBLIC\".\"GAMESET\" SET (\"WINNER\") = (" + Winner + ") WHERE \"SETID\" = " + SetID;
+	public void updateWinnerOfSet(int setID, String winner) {
+		String sql = "UPDATE \"PUBLIC\".\"GAMESET\" SET (\"WINNER\") = (" + winner + ") WHERE \"SETID\" = " + setID;
 		try {
 			stmt.executeQuery(sql);
 			System.out.println("LOG: Updated winner of last set");
@@ -281,13 +280,13 @@ public class DBconnection {
 	/**
 	 * Sets game result (score) in db table after game ends
 	 * 
-	 * @param GameID
-	 * @param PointsOwn
-	 * @param PointsOpponent
+	 * @param gameID
+	 * @param pointsOwn
+	 * @param pointsOpponent
 	 */
-	public void updateScoreOfGame(int GameID, int PointsOwn, int PointsOpponent, String Winner) {
-		String sql = "UPDATE \"PUBLIC\".\"GAME\" SET (\"POINTSOWN\", \"POINTSOPPONENT\", \"WINNER\") = (" + PointsOwn
-				+ ", " + PointsOpponent + ", " + Winner + ") WHERE \"GAMEID\" = " + GameID;
+	public void updateScoreOfGame(int gameID, int pointsOwn, int pointsOpponent, String winner) {
+		String sql = "UPDATE \"PUBLIC\".\"GAME\" SET (\"POINTSOWN\", \"POINTSOPPONENT\", \"WINNER\") = (" + pointsOwn
+				+ ", " + pointsOpponent + ", " + winner + ") WHERE \"GAMEID\" = " + gameID;
 		try {
 			stmt.executeQuery(sql);
 			System.out.println("LOG: Set game score");
@@ -369,7 +368,7 @@ public class DBconnection {
 	 * Method returns GameDB object with all the information needed to fill 2nd
 	 * dropdown and replay a complete set for a selected gameID.
 	 * 
-	 * @param GameID
+	 * @param gameID
 	 * @return GameDB object with the following attributes: <br>
 	 *         SetID <br>
 	 *         PointsOwnBeforeSet <br>
@@ -379,7 +378,7 @@ public class DBconnection {
 	 *         array[0] = 0 if we started, 1 of opponent started <br>
 	 *         array[1..n] = columns of turns
 	 */
-	public SetDB[] getSetInfos(int GameID) {
+	public SetDB[] getSetInfos(int gameID) {
 		ResultSet res = null;
 		SetDB[] gamesInfo = null;
 		SetDB gameInfo = null;
@@ -394,7 +393,7 @@ public class DBconnection {
 		int counter = 0;
 
 		String sql = "Select SETID, POINTSOWNBEFORESET, POINTSOPPONENTBEFORESET, WINNER from PUBLIC.GAMESET WHERE GAMEID = "
-				+ GameID + "ORDER BY SETID ASC";
+				+ gameID + "ORDER BY SETID ASC";
 
 		try {
 			PreparedStatement stmt2 = con.prepareStatement(sql, ResultSet.TYPE_SCROLL_SENSITIVE,
@@ -413,7 +412,7 @@ public class DBconnection {
 					pointsOwn = res.getInt(2);
 					pointsOpponent = res.getInt(3);
 					winner = res.getString(4);
-					replayTurns = getReplayTurns(GameID, counter + 1);
+					replayTurns = getReplayTurns(gameID, counter + 1);
 
 					gameInfo = new SetDB(setID, pointsOwn, pointsOpponent, winner, replayTurns);
 					gamesInfo[counter] = gameInfo;
@@ -576,19 +575,19 @@ public class DBconnection {
 	 * Gets all turns of a specific gameset and returns it together with the
 	 * starting player in that set.
 	 * 
-	 * @param GameID
-	 * @param SetNumber
+	 * @param gameID
+	 * @param setNumber
 	 * @return integer array: <br>
 	 *         array[0] = 0 if we started, 1 of opponent started <br>
 	 *         array[1..n] = columns of turns
 	 */
-	private int[] getReplayTurns(int GameID, int SetNumber) {
+	private int[] getReplayTurns(int gameID, int setNumber) {
 
 		int totalRows = 0;
 		int[] turns = null;
 		int counter = 2;
 		int startingPlayer = 0; // 0 = we started, 1 = opponent started
-		int mapping[] = new int[getNumberOfSetsInGame(GameID)];
+		int mapping[] = new int[getNumberOfSetsInGame(gameID)];
 		int mappingCounter = 0;
 
 		try {
@@ -599,7 +598,7 @@ public class DBconnection {
 		}
 
 		// Mapping von eingegebener Satznummer zu SatzID in DB
-		String sql = "SELECT * FROM PUBLIC.GAMESET WHERE GAMEID = " + GameID;
+		String sql = "SELECT * FROM PUBLIC.GAMESET WHERE GAMEID = " + gameID;
 
 		try {
 			ResultSet res = stmt.executeQuery(sql);
@@ -615,7 +614,7 @@ public class DBconnection {
 		PreparedStatement stmt2 = null;
 		try {
 			stmt2 = con.prepareStatement(
-					"SELECT * FROM PUBLIC.TURN WHERE GAMEID = " + GameID + " AND SETID = " + mapping[SetNumber - 1],
+					"SELECT * FROM PUBLIC.TURN WHERE GAMEID = " + gameID + " AND SETID = " + mapping[setNumber - 1],
 					ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
@@ -663,10 +662,10 @@ public class DBconnection {
 	/**
 	 * Returns number of sets in a specific game
 	 * 
-	 * @param GameID
+	 * @param gameID
 	 * @return number of sets in game
 	 */
-	private int getNumberOfSetsInGame(int GameID) {
+	private int getNumberOfSetsInGame(int gameID) {
 		int number = 0;
 
 		try {
@@ -681,7 +680,7 @@ public class DBconnection {
 		 */
 		PreparedStatement stmt2 = null;
 		try {
-			stmt2 = con.prepareStatement("SELECT * FROM PUBLIC.GAMESET WHERE GAMEID = " + GameID,
+			stmt2 = con.prepareStatement("SELECT * FROM PUBLIC.GAMESET WHERE GAMEID = " + gameID,
 					ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 		} catch (SQLException e1) {
 			e1.printStackTrace();
