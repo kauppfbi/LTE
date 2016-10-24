@@ -236,6 +236,7 @@ public class Controller1 {
 
 	// *********************GAME OVER*************************
 	public void gameOver(char winningPlayer, int[][] winningCombo) {
+		highlightWinning(winningCombo);
 		// private void gameOver(char winningPlayer, int[] winningCombo){
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Game Over");
