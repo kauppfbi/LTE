@@ -257,8 +257,7 @@ public class Controller1 {
 
 		if (result.get() == weiter) {
 			// Steine wieder entfernen, sauberes Spielfeld
-			gameGrid.getChildren().clear();
-			gameGrid.setGridLinesVisible(true);
+			clearGrid();
 
 			// Gewinner bekommt einen Punkt
 			if (winningPlayer == 'X') {
