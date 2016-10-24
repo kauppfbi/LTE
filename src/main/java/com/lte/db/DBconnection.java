@@ -255,8 +255,8 @@ public class DBconnection {
 			stmt.executeQuery(sql);
 			System.out.println("LOG: inserted new turn in db table turn");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.out.println("LOG: couldn't insert turn into database");
 		}
 	}
 
@@ -272,8 +272,8 @@ public class DBconnection {
 			stmt.executeQuery(sql);
 			System.out.println("LOG: Updated winner of last set");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.out.println("LOG: couldn't update winner of set");
 		}
 	}
 
@@ -291,8 +291,8 @@ public class DBconnection {
 			stmt.executeQuery(sql);
 			System.out.println("LOG: Set game score");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.out.println("LOG: couldn't update gamescore in db");
 		}
 	}
 
@@ -328,8 +328,8 @@ public class DBconnection {
 			res = stmt.executeQuery();
 			System.out.println("LOG: Got all games");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.out.println("LOG: couldn't get games from db");
 		}
 
 		try {
@@ -357,8 +357,8 @@ public class DBconnection {
 			}
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.out.println("LOG: couldn't iterate over game resultset");
 		}
 
 		return gamesInfo;
@@ -424,8 +424,8 @@ public class DBconnection {
 
 			System.out.println("LOG: Got all Sets");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.out.println("LOG: couldn't get sets of game");
 		}
 
 		return gamesInfo;
@@ -453,8 +453,8 @@ public class DBconnection {
 				System.out.println("LOG: No opponents received");
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.out.println("LOG: couldn't get distinct number of players form db");
 		}
 
 		sql = "SELECT OPPONENTID, OPPONENTNAME, GAMEID, WINNER FROM PUBLIC.GAME, PUBLIC.OPPONENT WHERE GAME.OPPONENTID = OPPONENT.OPPONENTID";
@@ -564,8 +564,8 @@ public class DBconnection {
 			res.close();
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.out.println("LOG: couldn't get id from created opponent");
 		}
 
 		return id;
@@ -617,8 +617,8 @@ public class DBconnection {
 					"SELECT * FROM PUBLIC.TURN WHERE GAMEID = " + gameID + " AND SETID = " + mapping[setNumber - 1],
 					ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
+			System.out.println("LOG: couldn't prepare sql statement");
 		}
 
 		try {
@@ -652,8 +652,8 @@ public class DBconnection {
 			res.close();
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.out.println("LOG: couldn't get turns of specified set");
 		}
 
 		return turns;
