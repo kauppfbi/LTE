@@ -256,11 +256,24 @@ public class Controller2 {
 		// PlayerChoice Initialisierung + ChangeListener
 		gameChoice.setItems(gameInfo);
 		gameChoice.getSelectionModel().selectFirst();
-		setChoice.getSelectionModel().selectFirst();
 		
 		// ohne "ChangeEvent" ist der erste Wert standardmaessig der ausgewaehlte Wert, bzw. GameID
 		gameID = gameChoice.getSelectionModel().getSelectedIndex();
 
+		//setChoice shows first entry without ChangeListener
+		gameID = gameChoice.getSelectionModel().getSelectedIndex();// testing purpose
+		System.out.println("Rekonstruierbares Spiel: (Index, gameID)" + gameID + ", " + connection.get(gameID));// for setChoice
+		System.out.println("gameID beim konfigurieren: " + gameID);
+		sets = controller.getRecSetInfo(gameID);
+		System.out.println("sets beim konfigurieren: " + sets[0].getSetID());
+		ObservableList<Integer> setNumber = FXCollections.observableArrayList();// setNumber ObservableList gets filled with the number of played Sets
+		for(int i = 1; i <= sets.length; i++){
+			setNumber.add(i);
+		}
+		setChoice.setItems(setNumber);
+		setChoice.getSelectionModel().selectFirst();
+		
+		
 		ChangeListener<Number> listenerGame = new ChangeListener<Number>() {
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
 				
