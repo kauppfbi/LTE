@@ -33,10 +33,10 @@ public class Controller0 {
 	Button reGame;
 
 	@FXML
-	TextField playerX;
+	ComboBox<String> playerX;
 
 	@FXML
-	TextField playerO;
+	ComboBox<String> playerO;
 
 	@FXML
 	ImageView imageView;
@@ -48,7 +48,7 @@ public class Controller0 {
 		if (event.getSource() == toGame) {
 			// Team-Namen setzen
 			//String nameX = playerX.getText();
-			String nameO = playerO.getText();
+			String nameO = playerO.getValue();
 
 			// new Settings object
 			this.settings = new Settings();
@@ -117,6 +117,13 @@ public class Controller0 {
 		File file = new File("files/images/Screen0.png");
 		Image image = new Image(file.toURI().toString());
 		imageView.setImage(image);
+		
+		//name playerX default LTE
+		playerX.setEditable(true);
+		playerX.setValue("LTE");
+		
+		//set playerO editable
+		playerO.setEditable(true);
 	}
 	
 	@FXML
