@@ -18,11 +18,7 @@ import com.lte.models.*;
 
 public class Controller0 {
 
-	private MainController controller;
-	private Settings settings;
-	private GameInfo gameInfo;
-
-	
+	// FXML Declarations
 	@FXML
 	AnchorPane pane;
 	
@@ -41,8 +37,17 @@ public class Controller0 {
 	@FXML
 	ImageView imageView;
 	
+
 	@FXML
 	ListView<String> scoreBoard;
+
+	// non-FXML Declarations
+	private MainController controller;
+	private Settings settings;
+	private GameInfo gameInfo;
+
+	
+
 
 	// *******************Switch von Welcome zu Game Screen********************
 	@FXML
