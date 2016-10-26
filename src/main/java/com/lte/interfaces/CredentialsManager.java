@@ -13,7 +13,7 @@ public class CredentialsManager {
 		JSONObject jsonObject = new JSONObject(jsonString);
 		JSONObject jsonCredentials = jsonObject.getJSONObject("credentials");
 		
-		/*
+		/**
 		 * [0] --> id
 		 * [1] --> key
 		 * [2] --> secret
@@ -26,12 +26,12 @@ public class CredentialsManager {
 		return credentials;
 	}
 	
-	public void setCredentials(String id, String key, String secret){
+	public void setCredentials(String [] credentials){
 		JSONObject jsonObject = new JSONObject();
 		JSONObject jsonCredentials = new JSONObject();
-		jsonCredentials.put("id", id);
-		jsonCredentials.put("key", key);
-		jsonCredentials.put("secret", secret);
+		jsonCredentials.put("id", credentials[0]);
+		jsonCredentials.put("key", credentials[1]);
+		jsonCredentials.put("secret", credentials[2]);
 		jsonObject.put("credentials", jsonCredentials);
 		
 		PrintWriter writer = null;
@@ -49,7 +49,7 @@ public class CredentialsManager {
 	
 	private String readFile(String filename) {
 		String content = null;
-		File file = new File(filename); // for ex foo.txt
+		File file = new File(filename);
 		FileReader reader = null;
 		try {
 			reader = new FileReader(file);
