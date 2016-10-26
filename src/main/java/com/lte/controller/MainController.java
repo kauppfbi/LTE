@@ -166,9 +166,9 @@ public class MainController {
 			if (settings.getInterfaceType() == InterfaceManager.FILE_Type) {
 				interfaceManager = new FileIM(settings.getContactPath(), settings.getServerChar());
 			} else if (settings.getInterfaceType() == InterfaceManager.EVENT_TYPE) {
-				interfaceManager = new EventIM();
+				interfaceManager = new EventIM(settings.getCredentials());
 			} else if (settings.getInterfaceType() == InterfaceManager.EVENT_TYPE_JSON) {
-				interfaceManager = new EventIMJSON();
+				interfaceManager = new EventIMJSON(settings.getCredentials());
 			} else {
 				System.err.println("Interface konnte nicht korrekt zugeordnet und initialisiert werden!");
 				return false;
