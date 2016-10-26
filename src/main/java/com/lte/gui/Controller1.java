@@ -235,7 +235,11 @@ public class Controller1 {
 		// triggert Spielmethode des Agenten
 		// Logik liegt nun beim Agenten
 		// Gui visualisiert nur noch "passiv" auf Aufruf des Agenten
-		updateCredentials();
+		String interfaceType = settings.getInterfaceType();
+		if (interfaceType.equals(InterfaceManager.EVENT_TYPE)
+				|| interfaceType.equals(InterfaceManager.EVENT_TYPE_JSON)) {
+			updateCredentials();
+		}
 		controller.playSet();
 	}
 
