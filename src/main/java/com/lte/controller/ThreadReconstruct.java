@@ -2,10 +2,9 @@ package com.lte.controller;
 
 import com.lte.gui.Controller2;
 
-import javafx.geometry.HPos;
-import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
+import javafx.application.Platform;
+
+
 
 /**
  * ThreadReconstruct coordinates the Reconstruction of Games/Sets<br>
@@ -40,6 +39,8 @@ public class ThreadReconstruct extends Thread{
 		this.recTurns = recTurns;
 	}
 
+	
+	// TODO @Fabian Soelker: Der Thread run() blockiert uns waehrend der Ausfuehrung das gesamte Programm, kannst du das Fixen??
 	@Override
 	/**
 	 * fillRec method replays the turns of the selected set into the GridPane gameGrid<br>
@@ -84,9 +85,11 @@ public class ThreadReconstruct extends Thread{
 				case 6: rowIndex = rowIndex6;
 						rowIndex6++;
 						break;
+				default:
+					break;
 			}
-				
-			// logik
+			
+			// logic for color select
 			if (recTurns[0] == 0) {	
 				recTurns[0] = 1;
 				// blue
@@ -95,8 +98,27 @@ public class ThreadReconstruct extends Thread{
 				recTurns[0] = 0;
 				// green
 				color = 1;
-			}	
-			controller2.replayTurn(columnIndex, rowIndex, color);
+			}
+			
+			final int frowIndex = rowIndex;
+			final int fcolor = color;
+
+			Platform.runLater(new Runnable() {
+				@Override
+				public void run() {
+					controller2.replayTurn(columnIndex, frowIndex, fcolor);
+				}
+			});
+			
+			try {
+				// problem: Thread does not lose the ownership of the monitor...
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				Thread.currentThread().interrupt();
+			}
+			//end of run()
 			
 	}//run
 }//class

@@ -158,8 +158,9 @@ public class Controller2 {
 		for(int i = 0; i < 3; i++){
 			System.out.println(recTurns[i]);
 		}
+		
 		thread =  new ThreadReconstruct(this, recTurns);
-		thread.run();
+		thread.start();
 	}
 	
 	// fills in the rec turns into the Gridpane
@@ -185,7 +186,8 @@ public class Controller2 {
 		GridPane.setColumnIndex(circle, columnIndex);
 		GridPane.setRowIndex(circle, (5 - rowIndex));
 		gameGrid.getChildren().add(circle);
-		gameGrid.setHalignment(circle, HPos.CENTER);		
+		gameGrid.setHalignment(circle, HPos.CENTER);
+		
 	}
 
 	
