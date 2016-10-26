@@ -81,6 +81,7 @@ public class Controller1 {
 
 	// non-FXML Declarations
 	private MainController controller;
+	// private ThreadReconstruct controller;
 	private Settings settings;
 	final FileChooser fileChooser = new FileChooser();
 
@@ -106,7 +107,6 @@ public class Controller1 {
 	}
 
 	// *******FXML-Methoden************
-
 	@FXML
 	private void initialize() {
 

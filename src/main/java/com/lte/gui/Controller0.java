@@ -51,6 +51,7 @@ public class Controller0 {
 	
 	// non-FXML Declarations
 	private MainController controller;
+	// private ThreadReconstruct controller;
 	private Settings settings;
 	private GameInfo gameInfo;
 
