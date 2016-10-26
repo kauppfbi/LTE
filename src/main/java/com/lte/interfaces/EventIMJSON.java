@@ -29,7 +29,7 @@ public class EventIMJSON implements InterfaceManager {
 			}
 		});
 
-		this.pusher = new Pusher("9f51aecddb01d8fc6a81", options);
+		this.pusher = new Pusher(credentials[1], options);
 
 		pusher.connect();
 
