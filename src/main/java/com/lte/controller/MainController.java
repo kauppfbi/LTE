@@ -147,7 +147,6 @@ public class MainController {
 	}
 	
 	
-	
 	/*
 	 * private methods - helping methods
 	 */
