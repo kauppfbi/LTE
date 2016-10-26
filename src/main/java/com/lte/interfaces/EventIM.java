@@ -16,18 +16,22 @@ import com.lte.models.ServerMessage;
  */
 public class EventIM implements InterfaceManager{
 
+	private String [] credentials;
 	private PusherOptions options;
 	private Pusher pusher;
 	private PrivateChannel channel;
 	private ServerMessage serverMessage;
 	
 	public EventIM(){
+		CredentialsManager credentialsManager = new CredentialsManager();
+		credentials = credentialsManager.readCredentials();
+		
 		this.options = new PusherOptions();
 		options.setAuthorizer(new Authorizer() {
 			@Override
 			public String authorize(String channel, String socketId) throws AuthorizationFailureException {
-				com.pusher.rest.Pusher pusher = new com.pusher.rest.Pusher("257244", "9f51aecddb01d8fc6a81",
-						"0f543c2f8faab3c052ef");
+				com.pusher.rest.Pusher pusher = new com.pusher.rest.Pusher(credentials[0], credentials[1],
+						credentials[2]);
 				String response = pusher.authenticate(socketId, channel);
 				System.out.println(response);
 				return response;
