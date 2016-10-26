@@ -11,17 +11,12 @@ import com.pusher.client.channel.PrivateChannel;
 import com.pusher.client.channel.PrivateChannelEventListener;
 
 public class EventIMJSON implements InterfaceManager {
-
-	private String [] credentials;
 	private PusherOptions options;
 	private Pusher pusher;
 	private PrivateChannel channel;
 	private ServerMessage serverMessage;
 	
-	public EventIMJSON(){
-		CredentialsManager credentialsManager = new CredentialsManager();
-		credentials = credentialsManager.readCredentials();
-		
+	public EventIMJSON(String [] credentials){
 		this.options = new PusherOptions();
 		options.setAuthorizer(new Authorizer() {
 			@Override

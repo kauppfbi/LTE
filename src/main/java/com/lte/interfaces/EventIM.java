@@ -16,16 +16,12 @@ import com.lte.models.ServerMessage;
  */
 public class EventIM implements InterfaceManager{
 
-	private String [] credentials;
 	private PusherOptions options;
 	private Pusher pusher;
 	private PrivateChannel channel;
 	private ServerMessage serverMessage;
 	
-	public EventIM(){
-		CredentialsManager credentialsManager = new CredentialsManager();
-		credentials = credentialsManager.readCredentials();
-		
+	public EventIM(String [] credentials){		
 		this.options = new PusherOptions();
 		options.setAuthorizer(new Authorizer() {
 			@Override
