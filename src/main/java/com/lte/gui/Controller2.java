@@ -8,7 +8,6 @@ import com.lte.controller.MainController;
 import com.lte.models.GameDB;
 import com.lte.models.SetDB;
 
-import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -29,26 +28,9 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-
 public class Controller2 {
 	
-	private MainController controller;	
-	
-	public MainController getController() {
-		return controller;
-	}
-
-	public void setController(MainController controller) {
-		this.controller = controller;
-	}
-	
-	SetDB[] sets;
-	GameDB[] games;
-	int gameID;
-	int opponentID = 0;
-	String playTime = null;
-	
-	// FXML-Referrenzen
+	// FXML Declarations
 	@FXML
 	Button pause;
 	
@@ -90,6 +72,21 @@ public class Controller2 {
 	
 	@FXML
 	Text currentSet;
+	
+	// non-FXML Declarations
+	private MainController controller;	
+	private SetDB[] sets;
+	private GameDB[] games;
+	private int gameID;
+	
+	// Getter and Setter
+	public MainController getController() {
+		return controller;
+	}
+
+	public void setController(MainController controller) {
+		this.controller = controller;
+	}
 	
 	@FXML
 	public void initialize(){
@@ -169,8 +166,12 @@ public class Controller2 {
 	}
 	
 	// fills in the rec turns into the Gridpane
+	/**
+	 * fillRec
+	 * 
+	 * @param recTurns
+	 */
 	private void fillRec(int[] recTurns) {
-		
 		
 		int rowIndex0 = 0;
 		int rowIndex1 = 0;

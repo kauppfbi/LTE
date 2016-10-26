@@ -35,7 +35,7 @@ import javafx.stage.Stage;
 
 public class Controller1 {
 
-	// *****************layout1 Komponenten*******************
+	// FXML Declarations
 	@FXML
 	Button fileSelect;
 
@@ -79,11 +79,9 @@ public class Controller1 {
 	@FXML
 	ChoiceBox<String> playerChoice;
 
-	// non fxml-objects
+	// non-FXML Declarations
 	private MainController controller;
-
 	private Settings settings;
-
 	final FileChooser fileChooser = new FileChooser();
 
 	// TODO Datenhaltung optimieren --> Informationen aus Agenten!
