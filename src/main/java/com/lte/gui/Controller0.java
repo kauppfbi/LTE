@@ -37,10 +37,18 @@ public class Controller0 {
 	@FXML
 	ImageView imageView;
 	
-
 	@FXML
 	ListView<String> scoreBoard;
 
+	@FXML
+	RadioButton AiVsAi;
+	
+	@FXML
+	RadioButton AiVsPlayer;
+	
+	@FXML
+	RadioButton PlayerVsPlayer;
+	
 	// non-FXML Declarations
 	private MainController controller;
 	private Settings settings;
@@ -132,6 +140,12 @@ public class Controller0 {
 		
 		//set playerO editable
 		playerO.setEditable(true);
+		
+		//initialize ToggleGroup for RadioButtons
+		ToggleGroup tgroup = new ToggleGroup();
+		AiVsAi.setToggleGroup(tgroup);
+		AiVsPlayer.setToggleGroup(tgroup);
+		PlayerVsPlayer.setToggleGroup(tgroup);
 	}
 	
 	@FXML

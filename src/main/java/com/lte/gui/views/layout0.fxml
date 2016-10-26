@@ -19,40 +19,40 @@
             <Font name="System Bold" size="48.0" />
          </font>
       </Text>
-      <Button fx:id="toGame" layoutX="948.0" layoutY="560.0" mnemonicParsing="false" onAction="#buttonPressed" text="Weiter zum Spiel">
+      <Button fx:id="toGame" layoutX="855.0" layoutY="574.0" mnemonicParsing="false" onAction="#buttonPressed" text="Weiter zum Spiel">
          <font>
             <Font size="16.0" />
          </font>
       </Button>
-      <Button fx:id="reGame" layoutX="948.0" layoutY="489.0" mnemonicParsing="false" onAction="#reconstructGame" prefHeight="37.0" prefWidth="142.0" text="Rekonstruieren">
+      <Button fx:id="reGame" layoutX="855.0" layoutY="503.0" mnemonicParsing="false" onAction="#reconstructGame" prefHeight="37.0" prefWidth="142.0" text="Rekonstruieren">
          <font>
             <Font size="16.0" />
          </font>
       </Button>
-      <Text layoutX="468.0" layoutY="203.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Player X">
+      <Text layoutX="456.0" layoutY="201.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Spieler 1">
          <font>
-            <Font size="14.0" />
+            <Font name="System Bold" size="18.0" />
          </font>
       </Text>
-      <Text layoutX="754.0" layoutY="202.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Player O">
+      <Text layoutX="743.0" layoutY="200.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Spieler 2">
          <font>
-            <Font size="14.0" />
+            <Font name="System Bold" size="18.0" />
          </font>
       </Text>
       <ComboBox fx:id="playerX" layoutX="418.0" layoutY="212.0" prefWidth="150.0" />
       <ComboBox fx:id="playerO" layoutX="705.0" layoutY="212.0" prefWidth="150.0" />
       <ListView fx:id="scoreBoard" layoutX="47.0" layoutY="326.0" prefHeight="353.0" prefWidth="609.0" />
-      <RadioButton layoutX="961.0" layoutY="348.0" mnemonicParsing="false" text="RadioButton">
+      <RadioButton fx:id="AiVsAi" layoutX="855.0" layoutY="348.0" mnemonicParsing="false" text="KI vs. KI">
          <font>
             <Font size="16.0" />
          </font>
       </RadioButton>
-      <RadioButton layoutX="961.0" layoutY="384.0" mnemonicParsing="false" text="RadioButton">
+      <RadioButton fx:id="AiVsPlayer" layoutX="855.0" layoutY="382.0" mnemonicParsing="false" text="KI vs. User">
          <font>
             <Font size="16.0" />
          </font>
       </RadioButton>
-      <RadioButton layoutX="961.0" layoutY="420.0" mnemonicParsing="false" text="RadioButton">
+      <RadioButton fx:id="PlayerVsPlayer" layoutX="855.0" layoutY="420.0" mnemonicParsing="false" text="User vs. User">
          <font>
             <Font size="16.0" />
          </font>
