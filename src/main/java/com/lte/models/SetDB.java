@@ -1,5 +1,17 @@
 package com.lte.models;
 
+/**
+ * SetDB is a model<br>
+ * SetDB-Objects are used to reconstruct a selected Set<br>
+ * SetDB-Object equals one entry in DB-Table GameSet<br><br>
+ * 
+ * Info: the int[]-Array stores the playedTurns,<br>
+ * int[0] == 0 -> We started the set<br>
+ * int[0] == 1 -> Enemy started the set<br>
+ * 
+ * @author Florian
+ *
+ */
 public class SetDB {
 
 	private int setID;
@@ -8,7 +20,15 @@ public class SetDB {
 	private String winner;
 	private int[] replayTurns;
 	
-	// Constructor for second dropdown - Set Selection - Replay turns already included
+	/**
+	 * Constructor for SetDB-Object <br><br>
+	 * 
+	 * @param setID
+	 * @param pointsOwn
+	 * @param pointsOpponent
+	 * @param winner
+	 * @param replayTurns
+	 */
 	public SetDB(int setID, int pointsOwn, int pointsOpponent, String winner, int[] replayTurns) {
 		this.setID = setID;
 		this.pointsOwn = pointsOwn;

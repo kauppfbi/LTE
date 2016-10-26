@@ -133,8 +133,6 @@ public class MainController {
 	/***********************************
 	 ********* Reconstruction***********
 	 ***********************************/
-	
-
 	/* calls function "getSetInfos(GameID)" in DBconnection, creates an SetDB Array
 	 * 1 SetDB Object = Infos about 1 played Set
 	 * length of SetDB-Array = Number of played Sets in Game
@@ -147,7 +145,6 @@ public class MainController {
 	public GameDB[] getRecGameInfo() {
 		return connection.getGames();
 	}
-	
 	
 	
 	/*
