@@ -144,6 +144,7 @@ public class Controller0 {
 		//initialize ToggleGroup for RadioButtons
 		ToggleGroup tgroup = new ToggleGroup();
 		AiVsAi.setToggleGroup(tgroup);
+		AiVsAi.setSelected(true);
 		AiVsPlayer.setToggleGroup(tgroup);
 		PlayerVsPlayer.setToggleGroup(tgroup);
 	}
