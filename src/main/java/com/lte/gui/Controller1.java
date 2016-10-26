@@ -7,10 +7,12 @@ import java.util.ListIterator;
 import java.util.Optional;
 
 import com.lte.controller.MainController;
+import com.lte.interfaces.CredentialsManager;
 import com.lte.interfaces.InterfaceManager;
 import com.lte.models.Settings;
 import com.lte.models.Spielstand;
 
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -18,6 +20,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -32,6 +35,7 @@ import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 
 public class Controller1 {
 
@@ -231,6 +235,7 @@ public class Controller1 {
 		// triggert Spielmethode des Agenten
 		// Logik liegt nun beim Agenten
 		// Gui visualisiert nur noch "passiv" auf Aufruf des Agenten
+		updateCredentials();
 		controller.playSet();
 	}
 
@@ -367,5 +372,22 @@ public class Controller1 {
 		GridPane.setRowIndex(circle2, (5 - row));
 		gameGrid.getChildren().add(circle2);
 		gameGrid.setHalignment(circle2, HPos.CENTER);
+	}
+	
+	private void updateCredentials(){
+		CredentialsManager credentialsManager = new CredentialsManager();
+		String [] defaultCredentials = credentialsManager.readCredentials();
+		
+		
+		CredentialsInputDialog dialog = new CredentialsInputDialog(defaultCredentials);
+		String [] selectedCredentials = dialog.getResult();
+		
+		if (selectedCredentials == null){
+			System.err.println("Credentials wurden nicht gewählt!");
+		} else {
+			settings.setCredentials(selectedCredentials);
+			credentialsManager.setCredentials(selectedCredentials);
+		}
+		
 	}
 }
