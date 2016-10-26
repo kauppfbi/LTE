@@ -40,6 +40,9 @@ public class Controller0 {
 
 	@FXML
 	ImageView imageView;
+	
+	@FXML
+	ListView<String> scoreBoard;
 
 	// *******************Switch von Welcome zu Game Screen********************
 	@FXML
