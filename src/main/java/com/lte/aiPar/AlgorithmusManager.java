@@ -45,9 +45,7 @@ public class AlgorithmusManager {
 			future.clear();
 			
 			//H�chstwert und Spalte
-			int hoechster = 0;
-			hoechster = -Integer.MAX_VALUE;
-
+			int hoechster = -1000000;
 			
 			//Neuen Spielstand aufbauen
 			Spielstand parAlgSpielstand = new Spielstand(spielfeld);
@@ -58,14 +56,9 @@ public class AlgorithmusManager {
 			
 			//Die ersten Runden beschleunigen
 			roundCounter++;
-			if(zuege.size() < 7){
-				//Eingestellte Tiefe verwenden
-			}
-			else if(roundCounter >= 7){
+
+			if(roundCounter <= 7){
 				algorithmusTiefe = 8;
-			}else
-			{
-				algorithmusTiefe = 6;
 			}
 			
 			System.out.println(algorithmusTiefe);
@@ -97,7 +90,7 @@ public class AlgorithmusManager {
 			for (int i = 0; i < zuege.size(); i++) {
 				parAlgSpielstand.spiele(zuege.get(i), playerZeichen);
 				
-				list.add(new Algorithmus(parAlgSpielstand.getSpielfeld(), algorithmusTiefe-1, playerZeichen, gegner));
+				list.add(new Algorithmus(parAlgSpielstand.getSpielfeld(), algorithmusTiefe-1));
 
 				parAlgSpielstand.reDo(zuege.get(i));
 			}
@@ -138,7 +131,7 @@ public class AlgorithmusManager {
 			    counter++;
 			  }
 			
-			if(hoechster == -Integer.MAX_VALUE){
+			if(hoechster == -1000000){
 				spalte = zuege.get(0);
 				System.out.println("Verloren");
 			}

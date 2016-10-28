@@ -11,30 +11,27 @@ public class Algorithmus implements Callable<Integer>{
 	//*********Klassenvariablen****************************
 	private int gewuenschtetiefe;
 	private int gespeicherterZug;
-	private char playerZeichen;
-	private char gegner;
 	private Spielstand pufferSpielstand;
 	
 	//********Konstruktoren********************************
-	public Algorithmus(char[][] spielfeld, int algorithmusTiefe, char playerZeichen, char gegner){
+	public Algorithmus(char[][] spielfeld, int algorithmusTiefe){
 	
 	//Ereuge neuen Spielstand f�r den Algorithmus
 	pufferSpielstand = new Spielstand(spielfeld);
 	
 	//Gew�nschte Tiefe
 	gewuenschtetiefe = algorithmusTiefe;
+
 	
-	//Player
-	this.gegner = gegner;
-	this.playerZeichen = playerZeichen;
 	}
 	
 	//*******Methoden**************************************
 	
 	
-	public int max(int tiefe, int alpha, int beta, char playerZeichen, char gegner) {
+	public int max(int tiefe, int alpha, int beta) {
 		char isGewonnen = pufferSpielstand.isGewonnen();
-	    if (tiefe == 0 || pufferSpielstand.moeglicheZuege().size() == 0 || isGewonnen != 'N'){
+	    ArrayList<Integer> moeglicheZuege = pufferSpielstand.moeglicheZuege();
+	    if (tiefe == 0 || moeglicheZuege.size() == 0 || isGewonnen != 'N'){
 	    	if(isGewonnen != 'N'){
 	    		return (pufferSpielstand.eval() * ((tiefe + 1)) * 100);
 	    	}else{
@@ -42,16 +39,15 @@ public class Algorithmus implements Callable<Integer>{
 	    	}
 	    }
 	    int maxWert = alpha;
-	    ArrayList<Integer> moeglicheZuege = pufferSpielstand.moeglicheZuege();
 	    for (int i = 0; i < moeglicheZuege.size(); i++)
 	    {
 	       try {
-			pufferSpielstand.spiele(moeglicheZuege.get(i), playerZeichen);
+			pufferSpielstand.spiele(moeglicheZuege.get(i), 'X');
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	       int wert = min(tiefe-1, maxWert, beta, playerZeichen, gegner);
+	       int wert = min(tiefe-1, maxWert, beta);
 	       try {
 			pufferSpielstand.reDo(moeglicheZuege.get(i));
 		} catch (Exception e) {
@@ -70,9 +66,10 @@ public class Algorithmus implements Callable<Integer>{
 	 }
 	
 	
-	 public int min(int tiefe, int alpha, int beta, char playerZeichen, char gegner) {
+	 public int min(int tiefe, int alpha, int beta) {
 		char isGewonnen = pufferSpielstand.isGewonnen();
-	    if (tiefe == 0 || pufferSpielstand.moeglicheZuege().size() == 0 || isGewonnen != 'N'){
+	    ArrayList<Integer> moeglicheZuege = pufferSpielstand.moeglicheZuege();
+	    if (tiefe == 0 || moeglicheZuege.size() == 0 || isGewonnen != 'N'){
 	    	if(isGewonnen != 'N'){
 	    		return (pufferSpielstand.eval() * ((tiefe + 1)) * 100);
 	    	}else{
@@ -80,17 +77,16 @@ public class Algorithmus implements Callable<Integer>{
 	    	}
 	    }
 	    int minWert = beta;
-	    ArrayList<Integer> moeglicheZuege = pufferSpielstand.moeglicheZuege();
 	    for (int i = 0; i < moeglicheZuege.size(); i++)
 	    {
 	    	try {
-				pufferSpielstand.spiele(moeglicheZuege.get(i), gegner);
+				pufferSpielstand.spiele(moeglicheZuege.get(i), 'O');
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 	    	
-	       int wert = max(tiefe-1, alpha, minWert, playerZeichen, gegner);
+	       int wert = max(tiefe-1, alpha, minWert);
 	       try {
 				pufferSpielstand.reDo(moeglicheZuege.get(i));
 			} catch (Exception e) {
@@ -109,7 +105,7 @@ public class Algorithmus implements Callable<Integer>{
 	@Override
 	public Integer call() throws Exception {
 
-			int min = min(gewuenschtetiefe, -Integer.MAX_VALUE, Integer.MAX_VALUE, playerZeichen, gegner);					
+			int min = min(gewuenschtetiefe, -1000000, 1000000);					
 			return min;
 	}
 	

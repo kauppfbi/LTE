@@ -26,7 +26,7 @@ public class SingleAlgorithmus{
 	
 	public  int alphaBeta(){ 
        
-		max(gewuenschtetiefe, -Integer.MAX_VALUE, Integer.MAX_VALUE);
+		max(gewuenschtetiefe, -1000000, 1000000);
 		
 
 		return gespeicherterZug;

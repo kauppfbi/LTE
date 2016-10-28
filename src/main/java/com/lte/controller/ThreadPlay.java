@@ -2,6 +2,7 @@ package com.lte.controller;
 
 
 import com.lte.aiPar.AlgorithmusManager;
+import com.lte.aiPar.SingleAlgorithmus;
 import com.lte.db.DBconnection;
 import com.lte.gui.Controller1;
 import com.lte.interfaces.InterfaceManager;
@@ -111,7 +112,7 @@ public class ThreadPlay extends Thread {
 					connection.pushTurn(gameInfo.getGameID(), gameInfo.getSetID(), "O", opponentMove);
 
 					gameInfo.setNextPlayer('X');
-					currentGameScore.print();
+					//currentGameScore.print();
 					continue;
 
 				} catch (Exception e) {
@@ -148,7 +149,7 @@ public class ThreadPlay extends Thread {
 					connection.pushTurn(gameInfo.getGameID(), gameInfo.getSetID(), "X", nextMove);
 
 					gameInfo.setNextPlayer('O');
-					currentGameScore.print();
+					//currentGameScore.print();
 					continue;
 				} catch (Exception e) {
 					e.printStackTrace();

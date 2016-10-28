@@ -95,7 +95,7 @@ public class Spielstand {
 					//Es steht kein Zeichen mehr zur Verfügung
 					throw new IllegalArgumentException("Spalte ist leer");
 				}
-				//Wenn ein Spielderzeichen gefunden wurde, dann lösche dieses
+				//Wenn ein Spielerzeichen gefunden wurde, dann lösche dieses
 				if (spielfeld[arraySpalte][zeile] == 'X' || spielfeld[arraySpalte][zeile] ==  'O') {
 					spielfeld[arraySpalte][zeile] = '.';
 					break;
@@ -227,10 +227,10 @@ public class Spielstand {
 			//horizantale Möglichkeiten (24)
 			for(int spalte = 0; spalte < 4; spalte++){
 				for(int zeile = 0; zeile < 6; zeile++){
+					if(spielfeld[spalte][zeile] == '.'){break;}
 					int bewertung = 0;
 					bewertung = evalFunction(spielfeld[spalte][zeile], spielfeld[spalte+1][zeile], spielfeld[spalte+2][zeile], spielfeld[spalte+3][zeile]);
 					if(bewertung == 100000){return 'X';}else if(bewertung == -100000){return 'O';}
-					else if(bewertung == 0){break;}	
 					}
 				}
 			
@@ -238,16 +238,17 @@ public class Spielstand {
 			//Vertikale Möglichkeiten (24)
 			for(int spalte = 0; spalte < 7; spalte++){
 				for(int zeile = 0; zeile < 3; zeile++){
+					if(spielfeld[spalte][zeile] == '.'){break;}
 					int bewertung = 0;
 					bewertung = evalFunction(spielfeld[spalte][zeile], spielfeld[spalte][zeile+1], spielfeld[spalte][zeile+2], spielfeld[spalte][zeile+3]);
 						if(bewertung == 100000){return 'X';}else if(bewertung == -100000){return 'O';}
-						else if(bewertung == 0){break;}
 				}
 			}
 			
 			//Unten Links -> Oben Rechts (12)
 			for (int spalte = 0; spalte < 4; spalte++) {
 				for (int zeile = 0; zeile < 3; zeile++) {
+					if(spielfeld[spalte][zeile] == '.'){break;}
 					int bewertung = 0;
 					bewertung = evalFunction(spielfeld[spalte][zeile], spielfeld[spalte+1][zeile+1], spielfeld[spalte+2][zeile+2], spielfeld[spalte+3][zeile+3]);
 					if(bewertung == 100000){return 'X';}else if(bewertung == -100000){return 'O';}
