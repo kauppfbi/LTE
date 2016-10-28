@@ -21,6 +21,9 @@ public class GameScore {
 	//*************Methoden*****************************************************
 	
 		//************Initialisiere*************************************************
+	/**
+	 * Initializes all slots of the corresponding field of the game score with the initial character '.'
+	 */
 		public void initialize(){
 			
 			//Initialisiert jedes Feld im Spieldfeld mir CHAR '.'
@@ -34,6 +37,9 @@ public class GameScore {
 		}
 		
 		//*************Print***********************************************************
+		/**
+		 * returns the current field in the console
+		 */
 		public void print(){
 			
 			//Gebe das Spielfeld in der Konsole aus
@@ -49,6 +55,13 @@ public class GameScore {
 		}
 		
 		//*************Spiele***************************************************************
+		/**
+		 * plays a move for for a given player and a column in the given field
+		 * @param arraycolumn column for the move on the field
+		 * @param playerCharacter character for the given move. 'O' or 'X'.
+		 * @return new field with imported move
+		 * @throws Exception move is not possible
+		 */
 		public char[][] play(int arraycolumn, char playerCharacter) throws Exception{
 			
 			//Nehme das Spielfeld aus dem Importparameter und spiele die angegebene column für den Spieler
@@ -70,7 +83,10 @@ public class GameScore {
 			
 			return field;
 		}
-		
+		/**
+		 * returns hard copy of a field
+		 * @return hard copy field[][]
+		 */
 		public char[][] getField(){
 			char[][] deepField = new char[7][6];
 			
@@ -84,7 +100,13 @@ public class GameScore {
 		}
 		
 		//*************Mache Zug rückgängig***************************************************************
-		public char[][] reDo(int arraycolumn) throws Exception{
+		/**
+		 * Undo the last move in a given column
+		 * @param arraycolumn column for the move
+		 * @return new field without given move in given column
+		 * @throws Exception column is empty
+		 */
+		public char[][] unDo(int arraycolumn) throws Exception{
 			
 			//Nehme  die angegebene column und mache den letzten Zug rückgängig
 			//Werfe eine Ausnahme, wenn der Spielzug nicht möglich ist
@@ -108,6 +130,10 @@ public class GameScore {
 		
 		
 		//*************Mögliche Züge**********************************************************
+		/**
+		 * Return possible moves for the current field of the game score
+		 * @return ArrayList<Integer> with possible moves
+		 */
 		public ArrayList<Integer> possibleMoves(){
 				
 				ArrayList<Integer> moves = new ArrayList<>();
@@ -124,6 +150,10 @@ public class GameScore {
 		}
 		
 		// ***************Gebe gewonnene Kombination zurÃ¼ck*********
+		/**
+		 * returns the winning combination of the current field of the game score
+		 * @return int[4][2] with [column][row] 
+		 */
 		public int[][] winWhere() {
 			int[][] winWhere = new int[4][2];
 
@@ -220,6 +250,10 @@ public class GameScore {
 		}
 		
 		//****************Ist das Spiel gewonnen?*******************************************
+		/**
+		 * Returns if the current game score is won by one player
+		 * @return char 'N' for no winner. 'X' for the own player and 'O' for the opponent.
+		 */
 		public char isWon(){
 			char isGewonnen = 'N';
 			
@@ -272,67 +306,83 @@ public class GameScore {
 		
 		//*********Bewerte Spielstand*********************************************
 		//Insgesamt 72 mögliche 4er Kombinationen
+		/**
+		 * Return a rating for the current field of the game score
+		 * @return returns an overall rating as integer
+		 */
 		public int eval(){
-			int ratingGesamt = 0;
+			int ratingOverall = 0;
 			
 			//horizantale Möglichkeiten (24)
 			for(int column = 0; column < 4; column++){
 				for(int row = 0; row < 6; row++){
-					ratingGesamt = ratingGesamt + evalFunction(field[column][row], field[column+1][row], field[column+2][row], field[column+3][row]);
+					ratingOverall = ratingOverall + evalFunction(field[column][row], field[column+1][row], field[column+2][row], field[column+3][row]);
 				}
 			}
 			
 			//Vertikale Möglichkeiten (24)
 			for(int column = 0; column < 7; column++){
 				for(int row = 0; row < 3; row++){
-					ratingGesamt = ratingGesamt + evalFunction(field[column][row], field[column][row+1], field[column][row+2], field[column][row+3]);
+					ratingOverall = ratingOverall + evalFunction(field[column][row], field[column][row+1], field[column][row+2], field[column][row+3]);
 				}
 			}
 			
 			//Unten Links -> Oben Rechts (12)
 			for (int column = 0; column < 4; column++) {
 				for (int row = 0; row < 3; row++) {
-					ratingGesamt = ratingGesamt + evalFunction(field[column][row], field[column+1][row+1], field[column+2][row+2], field[column+3][row+3]);
+					ratingOverall = ratingOverall + evalFunction(field[column][row], field[column+1][row+1], field[column+2][row+2], field[column+3][row+3]);
 				}
 			}
 			
 			//Oben Links -> Unten Rechts (12)
 			for (int column = 0; column < 4; column++) {
 				for (int row = 5; row > 2; row--) {
-					ratingGesamt = ratingGesamt + evalFunction(field[column][row], field[column+1][row-1], field[column+2][row-2], field[column+3][row-3]);
+					ratingOverall = ratingOverall + evalFunction(field[column][row], field[column+1][row-1], field[column+2][row-2], field[column+3][row-3]);
 				}
 			}
 			
-			return ratingGesamt;
+			return ratingOverall;
 		}
 		
 		//*************ratingsfunktion***************************************
-		public int evalFunction(char eins, char zwei, char drei, char vier){
+		/**
+		 * Returns a rating for four given characters. Is called by eval()
+		 * @param one first character
+		 * @param two second character
+		 * @param three third character
+		 * @param four fourth character
+		 * @return returns a rating as integer
+		 */
+		private int evalFunction(char one, char two, char three, char four){
 			int rating = 0;
 			int agent = 0;
-			int gegner = 0;
+			int opponent = 0;
 			
-			if(eins == 'X'){agent++;}else if (eins == 'O') {gegner++;}
-			if(zwei == 'X'){agent++;}else if (zwei == 'O') {gegner++;}
-			if(drei == 'X'){agent++;}else if (drei == 'O') {gegner++;}
-			if(vier == 'X'){agent++;}else if (vier == 'O') {gegner++;}
+			if(one == 'X'){agent++;}else if (one == 'O') {opponent++;}
+			if(two == 'X'){agent++;}else if (two == 'O') {opponent++;}
+			if(three == 'X'){agent++;}else if (three == 'O') {opponent++;}
+			if(four == 'X'){agent++;}else if (four == 'O') {opponent++;}
 			
-			if(agent != 0 && gegner != 0){rating = 0; return rating;}
+			if(agent != 0 && opponent != 0){rating = 0; return rating;}
 			
 			if(agent == 1){rating = rating + 1; return rating;} 
 			else if(agent == 2){rating = rating + 10; return rating;}
 			else if(agent == 3){rating = rating + 1000; return rating;}
 			else if(agent == 4){rating = rating + 100000; return rating;}
 			
-			if(gegner == 1){rating = rating -1; return rating;}
-			else if(gegner == 2){rating = rating -10; return rating;}
-			else if(gegner == 3){rating = rating -1000; return rating;}
-			else if(gegner == 4){rating = rating -100000; return rating;}
+			if(opponent == 1){rating = rating -1; return rating;}
+			else if(opponent == 2){rating = rating -10; return rating;}
+			else if(opponent == 3){rating = rating -1000; return rating;}
+			else if(opponent == 4){rating = rating -100000; return rating;}
 			
 			return rating;
 			
 		}
-		
+		/**
+		 * Returns the row of the highest stone in the given column
+		 * @param arraycolumn column for the stone
+		 * @return returns column as integer
+		 */
 		public int getRow(int arraycolumn){
 			System.out.println("Array column " + arraycolumn);
 			for (int row = 5; row > -2; row--) {

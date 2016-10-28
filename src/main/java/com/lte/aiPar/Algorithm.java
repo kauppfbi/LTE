@@ -27,8 +27,14 @@ public class Algorithm implements Callable<Integer>{
 	
 	//*******Methoden**************************************
 	
-	
-	public int max(int depth, int alpha, int beta) {
+	/**
+	 * Recursively processing of max step in alpha beta algorithm
+	 * @param depth remaining algorithm depth
+	 * @param alpha alpha value of current alpha beta
+	 * @param beta beta value of current alpha beta
+	 * @return
+	 */
+	private int max(int depth, int alpha, int beta) {
 		char isWon = bufferdGameScore.isWon();
 	    ArrayList<Integer> possibleMoves = bufferdGameScore.possibleMoves();
 	    if (depth == 0 || possibleMoves.size() == 0 || isWon != 'N'){
@@ -49,7 +55,7 @@ public class Algorithm implements Callable<Integer>{
 		}
 	       int value = min(depth-1, maxValue, beta);
 	       try {
-			bufferdGameScore.reDo(possibleMoves.get(i));
+			bufferdGameScore.unDo(possibleMoves.get(i));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -66,7 +72,14 @@ public class Algorithm implements Callable<Integer>{
 	 }
 	
 	
-	 public int min(int depth, int alpha, int beta) {
+	/**
+	 * Recursively processing of min step in alpha beta algorithm
+	 * @param depth remaining algorithm depth
+	 * @param alpha alpha value of current alpha beta
+	 * @param beta beta value of current alpha beta
+	 * @return
+	 */
+	 private int min(int depth, int alpha, int beta) {
 		char isWon = bufferdGameScore.isWon();
 	    ArrayList<Integer> possibleMoves = bufferdGameScore.possibleMoves();
 	    if (depth == 0 || possibleMoves.size() == 0 || isWon != 'N'){
@@ -88,7 +101,7 @@ public class Algorithm implements Callable<Integer>{
 	    	
 	       int wert = max(depth-1, alpha, minValue);
 	       try {
-				bufferdGameScore.reDo(possibleMoves.get(i));
+				bufferdGameScore.unDo(possibleMoves.get(i));
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -101,6 +114,7 @@ public class Algorithm implements Callable<Integer>{
 	    }
 	    return minValue;
 	 }
+
 
 	@Override
 	public Integer call() throws Exception {

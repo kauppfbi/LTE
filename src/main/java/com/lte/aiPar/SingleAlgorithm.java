@@ -24,15 +24,26 @@ public class SingleAlgorithm{
 	
 	//*******Methoden**************************************
 	
-	public  int alphaBeta(){ 
+	/**
+	 * Performs single threaded alpha beta algorithm 
+	 * @return savedMove as integer
+	 */
+	public int alphaBeta(){ 
        
 		max(startDepth, -1000000, 1000000);
 		
-
 		return savedMove;
 	}
 	
-	public  int max(int depth, int alpha, int beta) {
+	
+	/**
+	 * Recursively processing of max step in alpha beta algorithm
+	 * @param depth remaining algorithm depth
+	 * @param alpha alpha value of current alpha beta
+	 * @param beta beta value of current alpha beta
+	 * @return
+	 */
+	private int max(int depth, int alpha, int beta) {
 	    if (depth == 0){
 	       return bufferdGameScore.eval();
 	    }
@@ -48,7 +59,7 @@ public class SingleAlgorithm{
 		}
 	       int value = min(depth-1, maxValue, beta);
 	       try {
-			bufferdGameScore.reDo(possibleMoves.get(i));
+			bufferdGameScore.unDo(possibleMoves.get(i));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -63,9 +74,15 @@ public class SingleAlgorithm{
 	    }
 	    return maxValue;
 	 }
-	
-	
-	 public  int min(int depth, int alpha, int beta) {
+
+	/**
+	 * Recursively processing of min step in alpha beta algorithm
+	 * @param depth remaining algorithm depth
+	 * @param alpha alpha value of current alpha beta
+	 * @param beta beta value of current alpha beta
+	 * @return
+	 */
+	 private int min(int depth, int alpha, int beta) {
 	    if (depth == 0 || bufferdGameScore.possibleMoves().size() == 0){
 	    	return bufferdGameScore.eval();
 	    }
@@ -82,7 +99,7 @@ public class SingleAlgorithm{
 	    	
 	       int value = max(depth-1, alpha, minValue);
 	       try {
-				bufferdGameScore.reDo(possibleMoves.get(i));
+				bufferdGameScore.unDo(possibleMoves.get(i));
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

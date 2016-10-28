@@ -29,11 +29,23 @@ public class AlgorithmManager {
 		//*************Methoden*****************************************************
 
 		//******Shutdown********************************
+		/**
+		 * Shuts thread pool down
+		 */
 		public void shutdown(){
 			service.shutdownNow();
 		}
 		
 		//******Alpha Beta**************************************
+		/**
+		 * Multi threaded implementation of alpha beta algorithm to compute the next move
+		 * @param field current field for processing the next move
+		 * @param algorithmDepth algorithm depth for alpha beta algorithm
+		 * @param playerCharacter character of own player
+		 * @param opponent character of opponent
+		 * @return best move as integer
+		 * @throws Exception
+		 */
 		public int ParallelAlphaBeta(char[][] field, int algorithmDepth, char playerCharacter, char opponent) throws Exception{
 			
 			
@@ -82,7 +94,7 @@ public class AlgorithmManager {
 		        
 			}
 			else {
-				parAlgGameScore.reDo(simpleMove);
+				parAlgGameScore.unDo(simpleMove);
 			}
 			
 			
@@ -92,7 +104,7 @@ public class AlgorithmManager {
 				
 				list.add(new Algorithm(parAlgGameScore.getField(), algorithmDepth-1));
 
-				parAlgGameScore.reDo(moves.get(i));
+				parAlgGameScore.unDo(moves.get(i));
 			}
 			
 			
@@ -125,7 +137,7 @@ public class AlgorithmManager {
 			    	else{
 			    		System.out.println("Gef�hrliche Stellung in Spalte erkannt: " + moves.get(counter));
 			    	}
-			    	parAlgGameScore.reDo(moves.get(counter));
+			    	parAlgGameScore.unDo(moves.get(counter));
 			    	}
 			    
 			    counter++;
