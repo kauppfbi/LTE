@@ -49,6 +49,13 @@ public class ThreadPlay extends Thread {
 		// lade KI
 		algorithmManager = new AlgorithmusManager();
 		System.out.println("KI geladen");
+		// Starte neuen Thread um JavaFx zu befuellen
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				controller1.showReady();
+			}
+		});
 
 		ServerMessage message = interfaceManager.receiveMessage();
 		int opponentMoveStart = message.getOpponentMove();
@@ -76,6 +83,8 @@ public class ThreadPlay extends Thread {
 		Spielstand currentGameScore = new Spielstand();
 		currentGameScore.initialisiere();
 		System.out.println("Spielstand initialisiert");
+		
+		
 
 		while (true) {
 			// ***** Gegner spielt Zug ******

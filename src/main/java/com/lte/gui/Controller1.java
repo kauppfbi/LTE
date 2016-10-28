@@ -240,6 +240,15 @@ public class Controller1 {
 		}
 		controller.playSet();
 	}
+	
+	//**********************Show Ready************************
+	public void showReady(){
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Information");
+		alert.setHeaderText("Spiel initialisiert");
+		alert.setContentText("Meldung bestätigen und auf Antwort des Servers warten");
+		alert.show();
+	}
 
 	// *********************GAME OVER*************************
 	public void gameOver(char winningPlayer, int[][] winningCombo) {
