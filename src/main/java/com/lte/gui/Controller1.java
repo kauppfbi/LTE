@@ -10,7 +10,7 @@ import com.lte.controller.MainController;
 import com.lte.interfaces.CredentialsManager;
 import com.lte.interfaces.InterfaceManager;
 import com.lte.models.Settings;
-import com.lte.models.Spielstand;
+import com.lte.models.GameScore;
 
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;

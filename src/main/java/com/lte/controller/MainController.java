@@ -2,7 +2,7 @@ package com.lte.controller;
 
 import javax.swing.JOptionPane;
 
-import com.lte.aiPar.AlgorithmusManager;
+import com.lte.aiPar.AlgorithmManager;
 import com.lte.db.DBconnection;
 import com.lte.gui.Controller0;
 import com.lte.gui.Controller1;
@@ -44,7 +44,7 @@ public class MainController {
 	private DBconnection connection;
 
 	// KI Manager
-	AlgorithmusManager algorithmManager;
+	AlgorithmManager algorithmManager;
 
 	/*
 	 * Constructor
