@@ -2,6 +2,7 @@ package com.lte.gui;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ListIterator;
 import java.util.Optional;
@@ -29,6 +30,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.scene.text.Text;
@@ -40,6 +42,9 @@ import javafx.util.Pair;
 public class Controller1 extends GUIController{
 
 	// FXML Declarations
+	@FXML 
+	Pane gameSet;
+	
 	@FXML
 	Button fileSelect;
 
@@ -396,5 +401,16 @@ public class Controller1 extends GUIController{
 			credentialsManager.setCredentials(selectedCredentials);
 		}
 		
+	}
+	@FXML
+	public void exitApplication(ActionEvent event) {
+		try {
+			controller.getConnection().stmt.close();
+			controller.getConnection().con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		((Stage)gameSet.getScene().getWindow()).close();
 	}
 }
