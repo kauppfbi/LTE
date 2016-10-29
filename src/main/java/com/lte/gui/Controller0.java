@@ -17,7 +17,6 @@ import com.lte.controller.MainController;
 import com.lte.models.*;
 
 public class Controller0 extends GUIController{
-
 	// FXML Declarations
 	@FXML
 	AnchorPane pane;
@@ -55,10 +54,8 @@ public class Controller0 extends GUIController{
 	private Settings settings;
 	private GameInfo gameInfo;
 
-	
-
-
 	public Controller0(MainController mainController) {
+		this.controller = mainController;
 	}
 
 	// *******************Switch von Welcome zu Game Screen********************
@@ -71,9 +68,11 @@ public class Controller0 extends GUIController{
 			String nameO = playerO.getValue();
 
 			// new Settings object
-			this.settings = new Settings();
+			settings = new Settings();
+			controller.setSettings(settings);
 			// pass opponennt name
-			this.gameInfo = new GameInfo(nameO);
+			gameInfo = new GameInfo(nameO);
+			controller.setGameInfo(gameInfo);
 
 			// Referrenz zur aktuellen Stage herstellen
 			stage = (Stage) toGame.getScene().getWindow();
@@ -85,18 +84,10 @@ public class Controller0 extends GUIController{
 
 			// FXMLLoader
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout1.fxml"));
+			loader.setController(controller.getController1());
+			
 			// Neues Layout in eine neue Scene laden und auf die Stage setzen
 			stage.setScene(new Scene((AnchorPane) loader.load()));
-
-			// erstellter Controller1 wird geladen und anschlie�end der AgentSpiele
-			// �bergeben
-			Controller1 controller1 = loader.<Controller1>getController();
-			controller1.setController(controller);
-			controller1.getController().setSettings(settings);
-			controller1.getController().setGameInfo(gameInfo);
-			//controller1.getController().setController1(controller1);
-			controller1.setSettings(controller.getSettings());
-			controller1.initialize2();
 
 			stage.show();
 		}
@@ -117,15 +108,10 @@ public class Controller0 extends GUIController{
 			
 			// FXMLLoader
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout2.fxml"));
+			loader.setController(controller.getController2());
+			
 			// Neues Layout in eine neue Scene laden und auf die Stage setzen
 			stage.setScene(new Scene((AnchorPane) loader.load()));
-
-			// erstellter Controller2 wird geladen und anschlie�end der AgentSpiele
-			// �bergeben
-			Controller2 controller2 = loader.<Controller2>getController();
-			controller2.setController(controller);
-			controller2.getController().setController2(controller2);
-			controller2.getRecGameInfo();
 			
 			stage.show();
 		}
@@ -133,6 +119,7 @@ public class Controller0 extends GUIController{
 
 	@FXML
 	public void initialize() {
+		System.out.println("Initialize Controller0!");
 		// Background Image
 		File file = new File("files/images/Screen0.png");
 		Image image = new Image(file.toURI().toString());
@@ -165,19 +152,11 @@ public class Controller0 extends GUIController{
 	    ((Stage)pane.getScene().getWindow()).close();
 	}
 	
+	
+	
 	/*
 	 * Getter and Setter
 	 */
-
-
-	public MainController getController() {
-		return controller;
-	}
-
-	public void setController(MainController controller) {
-		this.controller = controller;
-	}
-
 	public Settings getSettings() {
 		return settings;
 	}

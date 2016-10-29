@@ -87,13 +87,17 @@ public class Controller1 extends GUIController{
 	private MainController controller;
 	// private ThreadReconstruct controller;
 	private Settings settings;
-	final FileChooser fileChooser = new FileChooser();
+	final FileChooser fileChooser;
 
 	// TODO Datenhaltung optimieren --> Informationen aus Agenten!
 	String playerX = "defaultX";
 	String playerO = "defaultO";
 
 	public Controller1(MainController mainController) {
+		this.controller = mainController;
+		this.settings = mainController.getSettings();
+		
+		this.fileChooser = new FileChooser();
 	}
 
 	// Getter and Setter
@@ -115,7 +119,7 @@ public class Controller1 extends GUIController{
 
 	// *******FXML-Methoden************
 	@FXML
-	private void initialize() {
+	public void initialize() {
 
 		set.setText("0");
 
@@ -187,6 +191,9 @@ public class Controller1 extends GUIController{
 		File file = new File("files/images/gameplay.png");
 		Image image = new Image(file.toURI().toString());
 		imageView.setImage(image);
+		
+		namePlayerX.setText("LTE");
+		namePlayerO.setText(controller.getGameInfo().getOpponentName());
 	}
 
 
@@ -204,13 +211,9 @@ public class Controller1 extends GUIController{
 
 		// FXMLLoader
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
+		loader.setController(controller.getController0());
 		// Neues Layout in eine neue Scene laden und auf die Stage setzen
 		stage.setScene(new Scene((AnchorPane) loader.load()));
-
-		// erstellter Controller1 wird geladen und anschlie�end der Agent
-		// �bergeben
-		Controller0 controller0 = loader.<Controller0>getController();
-		controller0.setController(controller);
 
 		stage.show();
 
@@ -302,17 +305,13 @@ public class Controller1 extends GUIController{
 			stage = (Stage) backToStart.getScene().getWindow();
 			// FXMLLoader
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/views/layout0.fxml"));
+			loader.setController(controller.getController0());
 			// Neues Layout in eine neue Scene laden und auf die Stage setzen
 			try {
 				stage.setScene(new Scene((AnchorPane) loader.load()));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-
-			// erstellter Controller1 wird geladen und anschlie�end der Agent
-			// �bergeben
-			Controller0 controller0 = loader.<Controller0>getController();
-			controller0.setController(controller);
 
 			stage.show();
 		}
@@ -343,12 +342,6 @@ public class Controller1 extends GUIController{
 			gameGrid.getChildren().add(circle);
 			gameGrid.setHalignment(circle, HPos.CENTER);
 		}
-	}
-
-	public void initialize2() {
-		namePlayerX.setText("LTE");
-		namePlayerO.setText(controller.getGameInfo().getOpponentName());
-
 	}
 
 	//clear GameGrid

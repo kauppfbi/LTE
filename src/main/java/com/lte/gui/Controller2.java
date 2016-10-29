@@ -84,18 +84,9 @@ public class Controller2 extends GUIController{
 	
 	
 	public Controller2(MainController mainController) {
-		// TODO Auto-generated constructor stub
+		this.controller = mainController;
 	}
 
-	// Getter and Setter
-	public MainController getController() {
-		return controller;
-	}
-
-	public void setController(MainController controller) {
-		this.controller = controller;
-	}
-	
 	@FXML
 	public void initialize(){
 		//Background
@@ -109,17 +100,14 @@ public class Controller2 extends GUIController{
 	@FXML
 	public void goToStartmenu(ActionEvent event) throws IOException{
 		Stage stage; 
-	    if(event.getSource()==backToStart){
+	    if(event.getSource() == backToStart){
 	    	// Referrenz zur aktuellen Stage herstellen
 	    	stage = (Stage) backToStart.getScene().getWindow();
 	        // FXMLLoader        
 	        FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
+	        loader.setController(controller.getController0());
 		    // Neues Layout in eine neue Scene laden und auf die Stage setzen
 		    stage.setScene(new Scene((AnchorPane) loader.load()));
-		    
-		    // erstellter Controller1 wird geladen und anschlie�end der Agent �bergeben
-		    Controller0 controller0 = loader.<Controller0>getController();
-		    controller0.setController(controller);
 		    
 		    stage.show();    
 	    }
