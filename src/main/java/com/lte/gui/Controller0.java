@@ -119,7 +119,6 @@ public class Controller0 extends GUIController{
 
 	@FXML
 	public void initialize() {
-		System.out.println("Initialize Controller0!");
 		// Background Image
 		File file = new File("files/images/Screen0.png");
 		Image image = new Image(file.toURI().toString());
