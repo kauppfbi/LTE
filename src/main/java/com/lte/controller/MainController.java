@@ -66,7 +66,8 @@ public class MainController {
 
 	public Controller0 getController0() {
 		if (controller0 == null){
-			return new Controller0(this);
+			this.controller0 = new Controller0(this);
+			return controller0;
 		}else {
 		return controller0;
 		}
@@ -74,7 +75,8 @@ public class MainController {
 
 	public Controller1 getController1() {
 		if (controller1 == null){
-			return new Controller1(this);
+			this.controller1 = new Controller1(this);
+			return controller1;
 		}else {
 		return controller1;
 		}
@@ -82,23 +84,17 @@ public class MainController {
 
 	public Controller2 getController2() {
 		if (controller2 == null){
-			return new Controller2(this);
+			this.controller2 = new Controller2(this);
+			return controller2;
 		}else {
 		return controller2;
 		}
-	}
-
-	public void setController2(Controller2 controller2) {
-		this.controller2 = controller2;
 	}
 
 	public DBconnection getConnection() {
 		return connection;
 	}
 
-	public void setConnection(DBconnection connection) {
-		this.connection = connection;
-	}
 
 	public Settings getSettings() {
 		return settings;
