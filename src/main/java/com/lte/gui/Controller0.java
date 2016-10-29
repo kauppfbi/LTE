@@ -16,7 +16,7 @@ import javafx.scene.image.ImageView;
 import com.lte.controller.MainController;
 import com.lte.models.*;
 
-public class Controller0 {
+public class Controller0 extends GUIController{
 
 	// FXML Declarations
 	@FXML

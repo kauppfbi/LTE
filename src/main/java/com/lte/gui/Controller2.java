@@ -30,7 +30,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class Controller2 {
+public class Controller2 extends GUIController{
 	
 	// FXML Declarations
 	@FXML

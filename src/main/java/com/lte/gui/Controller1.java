@@ -37,7 +37,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
-public class Controller1 {
+public class Controller1 extends GUIController{
 
 	// FXML Declarations
 	@FXML
