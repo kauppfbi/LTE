@@ -49,8 +49,8 @@ public class App extends Application {
 			stage.getIcons().add(image);
 			// erstellter Controller1 wird geladen und anschlie�end der Agent
 			// �bergeben
-			Controller0 controller0 = loader.<Controller0>getController();
-			controller0.setController(controller);
+			Controller0 controller0 = new Controller0(controller);
+			loader.setController(controller0);
 
 			stage.show();
 
