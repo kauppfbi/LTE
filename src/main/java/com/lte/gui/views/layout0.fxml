@@ -11,7 +11,7 @@
 
 <!-- Controller.java behandelt die Userinteraktionen (I/O, ...) -->
 
-<AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onDragDetected="#buttonPressed" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.lte.gui.Controller0">
+<AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onDragDetected="#buttonPressed" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" >
    <children>
       <ImageView fx:id="imageView" fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true" />
       <Text layoutX="465.0" layoutY="159.0" strokeType="OUTSIDE" strokeWidth="0.0" text="LTE 4-Gewinnt">
