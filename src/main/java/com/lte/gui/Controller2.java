@@ -8,8 +8,6 @@ import com.lte.controller.MainController;
 import com.lte.controller.ThreadReconstruct;
 import com.lte.models.GameDB;
 import com.lte.models.SetDB;
-
-import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -83,11 +81,10 @@ public class Controller2 {
 	
 	// non-FXML Declarations
 	private MainController controller;	
-	private ThreadReconstruct thread;
+	private ThreadReconstruct threadReconstruct;
 	private SetDB[] sets;
 	private GameDB[] games;
 	private int gameID;
-	
 	
 	// Getter and Setter
 	public MainController getController() {
@@ -109,6 +106,9 @@ public class Controller2 {
 		pause.setDisable(true);
 		next.setDisable(true);
 		back.setDisable(true);
+		
+		threadReconstruct = new ThreadReconstruct(this, null);
+		
 		
 	}
 	
@@ -133,26 +133,16 @@ public class Controller2 {
 	    }
 	}
 	
-	@FXML
-	public void playRec(ActionEvent event){
-		//Next und Back disabled
-		//Pause enabled
-		//nextStep.setDisable(true);
-		//backStep.setDisable(true);
-		clearGrid();
-		pause.setDisable(false);
-		next.setDisable(true);
-		back.setDisable(true);
-		
-		System.out.println("GameID:" + gameID);
-		System.out.println("sets beim Spielen: " + sets[0].getSetID());
+	private int [] prepareRecTurns(){
+		//System.out.println("GameID:" + gameID);
+		//System.out.println("sets beim Spielen: " + sets[0].getSetID());
 		
 		int recSetNumber = setChoice.getSelectionModel().getSelectedIndex();
-		System.out.println("Setnumber:" + recSetNumber);
-		System.out.println("SetID: " + sets[recSetNumber].getSetID());
+		//System.out.println("Setnumber:" + recSetNumber);
+		//System.out.println("SetID: " + sets[recSetNumber].getSetID());
 		
 		int[] recTurns = sets[recSetNumber].getReplayTurns();
-		System.out.println("RecTurns:" + recTurns);
+		//System.out.println("RecTurns:" + recTurns);
 		
 		String pointsOpponent = String.valueOf(sets[recSetNumber].getPointsOpponent());
 		String pointsOwn = String.valueOf(sets[recSetNumber].getPointsOwn());
@@ -171,13 +161,31 @@ public class Controller2 {
 		pointsX.setText(pointsOpponent);
 		currentSet.setText(numberCurrentSet+" / "+numberAllSets);
 		
-		// fillRec runs in Thread
-		for(int i = 0; i < 3; i++){
-			System.out.println(recTurns[i]);
-		}
+		return recTurns;
+	}
+	
+	@FXML
+	public void playRec(ActionEvent event){
+		//Next und Back disabled
+		//Pause enabled
+		//nextStep.setDisable(true);
+		//backStep.setDisable(true);
 		
-		thread =  new ThreadReconstruct(this, recTurns, false);
-		thread.start();
+		pause.setDisable(false);
+		play.setDisable(true);
+//		next.setDisable(true);
+//		back.setDisable(true);
+
+
+		synchronized (threadReconstruct) {
+			if (threadReconstruct.getState() == Thread.State.NEW) {
+				clearGrid();
+				threadReconstruct.setRecTurns(prepareRecTurns());
+				threadReconstruct.start();
+			} else if (threadReconstruct.getState() == Thread.State.WAITING) {
+				threadReconstruct.notify();
+			}
+		}
 	}
 	
 	// fills in the rec turns into the Gridpane
@@ -209,16 +217,18 @@ public class Controller2 {
 	
 	
 	@FXML
-	public void pauseRec(ActionEvent event){
-		synchronized(thread){
-			System.out.println("Rekonstruieren ist pausiert!");
-			thread.setPause(true);
-		}
-		//Next und Back disabled to false
-		//nextStep.setDisable(false);
-		//backStep.setDisable(false);
+	public void pauseRec(ActionEvent event) {
+		play.setDisable(false);
+		pause.setDisable(true);
+		synchronized (threadReconstruct) {
+			System.out.println(threadReconstruct.getState());
+			if (threadReconstruct.getState() == Thread.State.RUNNABLE || threadReconstruct.getState() == Thread.State.TIMED_WAITING) {
+				threadReconstruct.interrupt();
+			} else {
+				threadReconstruct.notify();
+			}
+		}	
 	}
-	
 	
 	// Methode zum Befuellen der Choice Boxes und zum Anfuegen der ChangeListeners
 	public void getRecGameInfo(){
@@ -284,7 +294,7 @@ public class Controller2 {
 	
 	//clear GameGrid
 	@FXML
-	public void clearGrid() {
+	private void clearGrid() {
 		Node node = gameGrid.getChildren().get(0);
 	    gameGrid.getChildren().clear();
 	    gameGrid.getChildren().add(0,node);
