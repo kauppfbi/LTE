@@ -38,20 +38,17 @@ public class App extends Application {
 			//Main Controller
 			MainController controller = new MainController(connection);
 			
-
 			// FXMLLoader
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("./gui/views/layout0.fxml"));
+			Controller0 controller0 = new Controller0(controller);
+			loader.setController(controller0);
 			// Neues Layout in eine neue Scene laden und auf die Stage setzen
 			stage.setScene(new Scene((AnchorPane) loader.load()));
 			// set Icon
 			File file = new File("files/images/icon.png");
 			Image image = new Image(file.toURI().toString());
 			stage.getIcons().add(image);
-			// erstellter Controller1 wird geladen und anschlie�end der Agent
-			// �bergeben
-			Controller0 controller0 = new Controller0(controller);
-			loader.setController(controller0);
-
+			
 			stage.show();
 
 		} catch (IOException e) {
