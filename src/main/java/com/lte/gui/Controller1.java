@@ -93,6 +93,9 @@ public class Controller1 extends GUIController{
 	String playerX = "defaultX";
 	String playerO = "defaultO";
 
+	public Controller1(MainController mainController) {
+	}
+
 	// Getter and Setter
 	public MainController getController() {
 		return controller;

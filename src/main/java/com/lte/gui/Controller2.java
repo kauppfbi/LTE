@@ -83,6 +83,10 @@ public class Controller2 extends GUIController{
 	private int gameID;
 	
 	
+	public Controller2(MainController mainController) {
+		// TODO Auto-generated constructor stub
+	}
+
 	// Getter and Setter
 	public MainController getController() {
 		return controller;

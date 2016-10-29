@@ -65,23 +65,27 @@ public class MainController {
 	}
 
 	public Controller0 getController0() {
+		if (controller0 == null){
+			return new Controller0(this);
+		}else {
 		return controller0;
-	}
-
-	public void setController0(Controller0 controller0) {
-		this.controller0 = controller0;
+		}
 	}
 
 	public Controller1 getController1() {
+		if (controller1 == null){
+			return new Controller1(this);
+		}else {
 		return controller1;
-	}
-
-	public void setController1(Controller1 controller1) {
-		this.controller1 = controller1;
+		}
 	}
 
 	public Controller2 getController2() {
+		if (controller2 == null){
+			return new Controller2(this);
+		}else {
 		return controller2;
+		}
 	}
 
 	public void setController2(Controller2 controller2) {

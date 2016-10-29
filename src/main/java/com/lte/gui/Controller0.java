@@ -58,6 +58,9 @@ public class Controller0 extends GUIController{
 	
 
 
+	public Controller0(MainController mainController) {
+	}
+
 	// *******************Switch von Welcome zu Game Screen********************
 	@FXML
 	public void buttonPressed(ActionEvent event) throws IOException {
@@ -91,7 +94,7 @@ public class Controller0 extends GUIController{
 			controller1.setController(controller);
 			controller1.getController().setSettings(settings);
 			controller1.getController().setGameInfo(gameInfo);
-			controller1.getController().setController1(controller1);
+			//controller1.getController().setController1(controller1);
 			controller1.setSettings(controller.getSettings());
 			controller1.initialize2();
 
