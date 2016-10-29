@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.lte.gui.Controller2">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.lte.gui.Controller2">
    <children>
       <ImageView fx:id="imageView" fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true" />
       <GridPane fx:id="gameGrid" alignment="BOTTOM_LEFT" gridLinesVisible="true" layoutX="100.0" layoutY="153.0" prefHeight="499.0" prefWidth="672.0" AnchorPane.leftAnchor="95.0" AnchorPane.topAnchor="165.0">
@@ -32,7 +32,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
       </GridPane>
-      <Button fx:id="pause" layoutX="1099.0" layoutY="406.0" mnemonicParsing="false" onAction="#pauseRec" text="Pause">
+      <Button fx:id="pause" layoutX="1033.0" layoutY="406.0" mnemonicParsing="false" onAction="#pauseRec" text="Pause">
          <font>
             <Font size="18.0" />
          </font></Button>
@@ -78,6 +78,16 @@
          </font>
       </Text>
       <Button fx:id="play" layoutX="966.0" layoutY="406.0" mnemonicParsing="false" onAction="#playRec" text="Play">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Button>
+      <Button fx:id="next" layoutX="1114.0" layoutY="406.0" mnemonicParsing="false" text="Next">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Button>
+      <Button fx:id="back" layoutX="1185.0" layoutY="406.0" mnemonicParsing="false" text="Back">
          <font>
             <Font size="18.0" />
          </font>

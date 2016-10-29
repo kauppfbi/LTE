@@ -37,6 +37,12 @@ public class Controller2 {
 	Button pause;
 	
 	@FXML
+	Button next;
+	
+	@FXML
+	Button back;
+	
+	@FXML
 	Button play;
 	
 	@FXML
@@ -98,6 +104,12 @@ public class Controller2 {
 		File file = new File("files/images/gameplay.png");
 		Image image = new Image(file.toURI().toString());
 		imageView.setImage(image);
+		
+		//Pause, Next, Back default is disabled:
+		pause.setDisable(true);
+		next.setDisable(true);
+		back.setDisable(true);
+		
 	}
 	
 	
@@ -124,8 +136,13 @@ public class Controller2 {
 	@FXML
 	public void playRec(ActionEvent event){
 		//Next und Back disabled
+		//Pause enabled
 		//nextStep.setDisable(true);
 		//backStep.setDisable(true);
+		clearGrid();
+		pause.setDisable(false);
+		next.setDisable(true);
+		back.setDisable(true);
 		
 		System.out.println("GameID:" + gameID);
 		System.out.println("sets beim Spielen: " + sets[0].getSetID());
@@ -159,7 +176,7 @@ public class Controller2 {
 			System.out.println(recTurns[i]);
 		}
 		
-		thread =  new ThreadReconstruct(this, recTurns);
+		thread =  new ThreadReconstruct(this, recTurns, false);
 		thread.start();
 	}
 	
@@ -186,14 +203,17 @@ public class Controller2 {
 		GridPane.setColumnIndex(circle, columnIndex);
 		GridPane.setRowIndex(circle, (5 - rowIndex));
 		gameGrid.getChildren().add(circle);
-		gameGrid.setHalignment(circle, HPos.CENTER);
-		
+		gameGrid.setHalignment(circle, HPos.CENTER);	
 	}
 
 	
 	
 	@FXML
 	public void pauseRec(ActionEvent event){
+		synchronized(thread){
+			System.out.println("Rekonstruieren ist pausiert!");
+			thread.setPause(true);
+		}
 		//Next und Back disabled to false
 		//nextStep.setDisable(false);
 		//backStep.setDisable(false);

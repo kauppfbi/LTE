@@ -298,7 +298,7 @@ public class Controller1 {
 			// Referrenz zur aktuellen Stage herstellen
 			stage = (Stage) backToStart.getScene().getWindow();
 			// FXMLLoader
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/views/layout0.fxml"));
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
 			// Neues Layout in eine neue Scene laden und auf die Stage setzen
 			try {
 				stage.setScene(new Scene((AnchorPane) loader.load()));

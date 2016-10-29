@@ -20,15 +20,17 @@ public class ThreadReconstruct extends Thread{
 	
 	private Controller2 controller2;
 	private int[] recTurns;
+	private boolean pause = false;
 	
 	/**
 	 * 
 	 * @param controller2
 	 * @param recTurns
 	 */
-	public ThreadReconstruct(Controller2 controller2, int[] recTurns){
+	public ThreadReconstruct(Controller2 controller2, int[] recTurns, boolean pause){
 		this.controller2 = controller2;
 		this.recTurns = recTurns;
+		this.pause = pause;
 	}
 	
 	public int[] getRecTurns() {
@@ -39,6 +41,9 @@ public class ThreadReconstruct extends Thread{
 		this.recTurns = recTurns;
 	}
 
+	public void setPause(boolean pause){
+		this.pause = pause;
+	}
 	
 	// TODO @Fabian Soelker: Der Thread run() blockiert uns waehrend der Ausfuehrung das gesamte Programm, kannst du das Fixen??
 	@Override
@@ -47,7 +52,15 @@ public class ThreadReconstruct extends Thread{
 	 * fillRec is called by playRec-method in Controller2<br>
 	 * playRec-method listens to Button "Play"<br>
 	 */
-	public void run(){
+	public synchronized void run(){
+		while(pause == true){
+			try {
+				System.out.println("Thread is waiting!");
+				wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 		
 		int rowIndex0 = 0;
 		int rowIndex1 = 0;
@@ -114,14 +127,9 @@ public class ThreadReconstruct extends Thread{
 				// problem: Thread does not lose the ownership of the monitor...
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				Thread.currentThread().interrupt();
-			}
-			//end of run()
-			
+			}		
+		}//for
 	}//run
 }//class
-
-	
-}
