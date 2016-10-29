@@ -20,7 +20,7 @@ public class Settings {
 	// Initialisiert mit Pusher, weil das Standard-ausgewaehlt ist im Controller1
 	private String interfaceType;
 	private char serverChar;
-	
+	private String [] credentials;
 	
 	public Settings(double calculationTime, String contactPath, String interfaceType, char serverChar) {
 		this.calculationTime = calculationTime;
@@ -67,6 +67,14 @@ public class Settings {
 
 	public void setServerChar(char serverChar) {
 		this.serverChar = serverChar;
+	}	
+
+	public String[] getCredentials() {
+		return credentials;
+	}
+
+	public void setCredentials(String[] credentials) {
+		this.credentials = credentials;
 	}
 
 	/**

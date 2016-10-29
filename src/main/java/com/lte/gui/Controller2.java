@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.TreeMap;
 
 import com.lte.controller.MainController;
+import com.lte.controller.ThreadReconstruct;
 import com.lte.models.GameDB;
 import com.lte.models.SetDB;
 
@@ -29,26 +30,9 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-
 public class Controller2 {
 	
-	private MainController controller;	
-	
-	public MainController getController() {
-		return controller;
-	}
-
-	public void setController(MainController controller) {
-		this.controller = controller;
-	}
-	
-	SetDB[] sets;
-	GameDB[] games;
-	int gameID;
-	int opponentID = 0;
-	String playTime = null;
-	
-	// FXML-Referrenzen
+	// FXML Declarations
 	@FXML
 	Button pause;
 	
@@ -90,6 +74,23 @@ public class Controller2 {
 	
 	@FXML
 	Text currentSet;
+	
+	// non-FXML Declarations
+	private MainController controller;	
+	private ThreadReconstruct thread;
+	private SetDB[] sets;
+	private GameDB[] games;
+	private int gameID;
+	
+	
+	// Getter and Setter
+	public MainController getController() {
+		return controller;
+	}
+
+	public void setController(MainController controller) {
+		this.controller = controller;
+	}
 	
 	@FXML
 	public void initialize(){
@@ -153,79 +154,42 @@ public class Controller2 {
 		pointsX.setText(pointsOpponent);
 		currentSet.setText(numberCurrentSet+" / "+numberAllSets);
 		
-		fillRec(recTurns);
-//		Platform.runLater(new Runnable() {
-//			@Override
-//			public void run() {
-//				fillRec(recTurns);
-//			}
-//		});
-//		try {
-//			Thread.sleep(1000);
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
+		// fillRec runs in Thread
+		for(int i = 0; i < 3; i++){
+			System.out.println(recTurns[i]);
+		}
 		
+		thread =  new ThreadReconstruct(this, recTurns);
+		thread.start();
 	}
 	
 	// fills in the rec turns into the Gridpane
-	private void fillRec(int[] recTurns) {
-		
-		
-		int rowIndex0 = 0;
-		int rowIndex1 = 0;
-		int rowIndex2 = 0;
-		int rowIndex3 = 0;
-		int rowIndex4 = 0;
-		int rowIndex5 = 0;
-		int rowIndex6 = 0;
-		
-		for(int i = 1; i < recTurns.length; i++){
-			
-			Circle circle = new Circle();
-			circle.setRadius(35.0);
-			int columnIndex = recTurns[i];
-			int rowIndex = 0;
-			
-			switch(recTurns[i]){
-				case 0: rowIndex = rowIndex0;
-						rowIndex0++;
-						break;
-				case 1: rowIndex = rowIndex1;
-						rowIndex1++;
-						break;
-				case 2: rowIndex = rowIndex2;
-						rowIndex2++;
-						break;
-				case 3: rowIndex = rowIndex3;
-						rowIndex3++;
-						break;
-				case 4: rowIndex = rowIndex4;
-						rowIndex4++;
-						break;
-				case 5: rowIndex = rowIndex5;
-						rowIndex5++;
-						break;
-				case 6: rowIndex = rowIndex6;
-						rowIndex6++;
-						break;
-			}
-			
-			if (recTurns[0] == 0) {	
-				circle.setFill(Color.web("#62dbee", 0.85));
-				recTurns[0] = 1;
-			} else if (recTurns[0] == 1) {
-				circle.setFill(Color.web("#46c668", 0.8));
-				recTurns[0] = 0;
-			}	
-			GridPane.setColumnIndex(circle, columnIndex);
-			GridPane.setRowIndex(circle, (5 - rowIndex));
-			gameGrid.getChildren().add(circle);
-			gameGrid.setHalignment(circle, HPos.CENTER);		
+	/**
+	 * fillRec method replays the turns of the selected set into the GridPane gameGrid<br>
+	 * fillRec is called by playRec-method<br>
+	 * playRec-method listens to Button "Play"<br>
+	 * 
+	 * @param recTurns
+	 */
+	public void replayTurn (int columnIndex, int rowIndex, int color) {
+		Circle circle = new Circle();
+		circle.setRadius(35.0);
 
-		}
-
+		if (color == 0) {	
+			// blue
+			circle.setFill(Color.web("#62dbee", 0.85));
+		} else if (color == 1) {
+			// green
+			circle.setFill(Color.web("#46c668", 0.8));
+		}	
+			
+		GridPane.setColumnIndex(circle, columnIndex);
+		GridPane.setRowIndex(circle, (5 - rowIndex));
+		gameGrid.getChildren().add(circle);
+		gameGrid.setHalignment(circle, HPos.CENTER);
+		
 	}
+
 	
 	
 	@FXML
@@ -256,11 +220,24 @@ public class Controller2 {
 		// PlayerChoice Initialisierung + ChangeListener
 		gameChoice.setItems(gameInfo);
 		gameChoice.getSelectionModel().selectFirst();
-		setChoice.getSelectionModel().selectFirst();
 		
 		// ohne "ChangeEvent" ist der erste Wert standardmaessig der ausgewaehlte Wert, bzw. GameID
 		gameID = gameChoice.getSelectionModel().getSelectedIndex();
 
+		//setChoice shows first entry without ChangeListener
+		gameID = gameChoice.getSelectionModel().getSelectedIndex();// testing purpose
+		System.out.println("Rekonstruierbares Spiel: (Index, gameID)" + gameID + ", " + connection.get(gameID));// for setChoice
+		System.out.println("gameID beim konfigurieren: " + gameID);
+		sets = controller.getRecSetInfo(gameID);
+		System.out.println("sets beim konfigurieren: " + sets[0].getSetID());
+		ObservableList<Integer> setNumber = FXCollections.observableArrayList();// setNumber ObservableList gets filled with the number of played Sets
+		for(int i = 1; i <= sets.length; i++){
+			setNumber.add(i);
+		}
+		setChoice.setItems(setNumber);
+		setChoice.getSelectionModel().selectFirst();
+		
+		
 		ChangeListener<Number> listenerGame = new ChangeListener<Number>() {
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
 				

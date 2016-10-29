@@ -18,11 +18,7 @@ import com.lte.models.*;
 
 public class Controller0 {
 
-	private MainController controller;
-	private Settings settings;
-	private GameInfo gameInfo;
-
-	
+	// FXML Declarations
 	@FXML
 	AnchorPane pane;
 	
@@ -33,13 +29,34 @@ public class Controller0 {
 	Button reGame;
 
 	@FXML
-	TextField playerX;
+	ComboBox<String> playerX;
 
 	@FXML
-	TextField playerO;
+	ComboBox<String> playerO;
 
 	@FXML
 	ImageView imageView;
+	
+	@FXML
+	ListView<String> scoreBoard;
+
+	@FXML
+	RadioButton AiVsAi;
+	
+	@FXML
+	RadioButton AiVsPlayer;
+	
+	@FXML
+	RadioButton PlayerVsPlayer;
+	
+	// non-FXML Declarations
+	private MainController controller;
+	// private ThreadReconstruct controller;
+	private Settings settings;
+	private GameInfo gameInfo;
+
+	
+
 
 	// *******************Switch von Welcome zu Game Screen********************
 	@FXML
@@ -48,7 +65,7 @@ public class Controller0 {
 		if (event.getSource() == toGame) {
 			// Team-Namen setzen
 			//String nameX = playerX.getText();
-			String nameO = playerO.getText();
+			String nameO = playerO.getValue();
 
 			// new Settings object
 			this.settings = new Settings();
@@ -117,6 +134,20 @@ public class Controller0 {
 		File file = new File("files/images/Screen0.png");
 		Image image = new Image(file.toURI().toString());
 		imageView.setImage(image);
+		
+		//name playerX default LTE
+		playerX.setEditable(true);
+		playerX.setValue("LTE");
+		
+		//set playerO editable
+		playerO.setEditable(true);
+		
+		//initialize ToggleGroup for RadioButtons
+		ToggleGroup tgroup = new ToggleGroup();
+		AiVsAi.setToggleGroup(tgroup);
+		AiVsAi.setSelected(true);
+		AiVsPlayer.setToggleGroup(tgroup);
+		PlayerVsPlayer.setToggleGroup(tgroup);
 	}
 	
 	@FXML

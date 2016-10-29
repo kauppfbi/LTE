@@ -1,13 +1,14 @@
 package com.lte.controller;
 
 
-import com.lte.aiPar.AlgorithmusManager;
+import com.lte.aiPar.AlgorithmManager;
+import com.lte.aiPar.SingleAlgorithm;
 import com.lte.db.DBconnection;
 import com.lte.gui.Controller1;
 import com.lte.interfaces.InterfaceManager;
 import com.lte.models.GameInfo;
 import com.lte.models.ServerMessage;
-import com.lte.models.Spielstand;
+import com.lte.models.GameScore;
 
 import javafx.application.Platform;
 
@@ -27,10 +28,10 @@ public class ThreadPlay extends Thread {
 	private DBconnection connection;
 
 	// KI Manager
-	AlgorithmusManager algorithmManager;
+	AlgorithmManager algorithmManager;
 
 	public ThreadPlay(InterfaceManager interfaceManager, Controller1 controller1, GameInfo gameInfo,
-			DBconnection connection, AlgorithmusManager algorithmManager) {
+			DBconnection connection, AlgorithmManager algorithmManager) {
 		this.interfaceManager = interfaceManager;
 		this.controller1 = controller1;
 		this.gameInfo = gameInfo;
@@ -46,8 +47,15 @@ public class ThreadPlay extends Thread {
 		System.out.println("Spielen läuft");
 
 		// lade KI
-		algorithmManager = new AlgorithmusManager();
+		algorithmManager = new AlgorithmManager();
 		System.out.println("KI geladen");
+		// Starte neuen Thread um JavaFx zu befuellen
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				controller1.showReady();
+			}
+		});
 
 		ServerMessage message = interfaceManager.receiveMessage();
 		int opponentMoveStart = message.getOpponentMove();
@@ -72,9 +80,11 @@ public class ThreadPlay extends Thread {
 		gameInfo.setGameInProgress(true);
 
 		// lade Spielstand-Logik
-		Spielstand currentGameScore = new Spielstand();
-		currentGameScore.initialisiere();
+		GameScore currentGameScore = new GameScore();
+		currentGameScore.initialize();
 		System.out.println("Spielstand initialisiert");
+		
+		
 
 		while (true) {
 			// ***** Gegner spielt Zug ******
@@ -94,10 +104,10 @@ public class ThreadPlay extends Thread {
 					}
 					int opponentMove = message.getOpponentMove();
 
-					currentGameScore.spiele(opponentMove, 'O');
+					currentGameScore.play(opponentMove, 'O');
 
 					// visualisiere in GUI
-					int row = currentGameScore.getZeile(opponentMove);
+					int row = currentGameScore.getRow(opponentMove);
 
 					// Starte neuen Thread um JavaFx zu befuellen
 					Platform.runLater(new Runnable() {
@@ -111,7 +121,7 @@ public class ThreadPlay extends Thread {
 					connection.pushTurn(gameInfo.getGameID(), gameInfo.getSetID(), "O", opponentMove);
 
 					gameInfo.setNextPlayer('X');
-					currentGameScore.print();
+					//currentGameScore.print();
 					continue;
 
 				} catch (Exception e) {
@@ -124,7 +134,7 @@ public class ThreadPlay extends Thread {
 				System.out.println("Wir spielen");
 				try {
 					// berechne n�chsten Zug - KI gibt Spalte zur�ck
-					int nextMove = algorithmManager.ParallelAlphaBeta(currentGameScore.getSpielfeld(), 10, 'X', 'O');
+					int nextMove = algorithmManager.ParallelAlphaBeta(currentGameScore.getField(), 10, 'X', 'O');
 
 					// sende n�chsten Zug an Server
 					interfaceManager.sendMove(nextMove);
@@ -132,10 +142,10 @@ public class ThreadPlay extends Thread {
 					final long timeEnd = System.currentTimeMillis(); 
 			        System.out.println("Antwortzeit: " + (timeEnd - timeStart) + " Millisek.");
 
-					currentGameScore.spiele(nextMove, 'X');
+					currentGameScore.play(nextMove, 'X');
 
 					// visualisiere in GUI
-					int row = currentGameScore.getZeile(nextMove);
+					int row = currentGameScore.getRow(nextMove);
 					// Starte neuen Thread um JavaFx zu befuellen
 					Platform.runLater(new Runnable() {
 						@Override
@@ -148,7 +158,7 @@ public class ThreadPlay extends Thread {
 					connection.pushTurn(gameInfo.getGameID(), gameInfo.getSetID(), "X", nextMove);
 
 					gameInfo.setNextPlayer('O');
-					currentGameScore.print();
+					//currentGameScore.print();
 					continue;
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -162,20 +172,20 @@ public class ThreadPlay extends Thread {
 		
 		// TODO Zuordnung von X/O zu Teamnamen
 		System.out.println("Message: " + message.getWinner() + " hat gewonnen");
-		System.out.println("KI: Spieler " + currentGameScore.isGewonnen() + " hat gewonnen");
+		System.out.println("KI: Spieler " + currentGameScore.isWon() + " hat gewonnen");
 		
 		// - Rückgabe der gewonnen Kombination aus dem Spieldstand int[4][1] ->
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				controller1.gameOver(currentGameScore.isGewonnen(),currentGameScore.woGewonnen());
+				controller1.gameOver(currentGameScore.isWon(),currentGameScore.winWhere());
 			}
 		});
 
 		
 		//Ausgabe in Konsole zur Kontrolle
 		System.out.println("Winning Kombi");
-		int[][] woGewonnen = currentGameScore.woGewonnen();
+		int[][] woGewonnen = currentGameScore.winWhere();
 		for (int i = 0; i < woGewonnen.length; i++) {
 			System.out.print(woGewonnen[i][0] + " ");
 			System.out.println(woGewonnen[i][1]);

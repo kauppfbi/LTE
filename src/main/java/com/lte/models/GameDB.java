@@ -1,12 +1,27 @@
 package  com.lte.models;
 
+/**
+ * GameDB is a model
+ * GameDB-Objects are used for reconstruct the past games
+ * GameDB-Object equals one entry in DB-Table Game
+ * 
+ * @author Florian
+ *
+ */
 public class GameDB {
 	private int gameID;
 	private String opponentName;
 	private String playTime;
 	private int numberOfSets;
-	
-	// Constructor for first dropdown - Game Selection
+
+	/**
+	 * Constructor for GameDB<br><br>
+	 * 
+	 * @param gameID
+	 * @param opponentName
+	 * @param playTime
+	 * @param numberOfSets
+	 */
 	public GameDB(int gameID, String opponentName, String playTime, int numberOfSets) {
 		this.gameID = gameID;
 		this.opponentName = opponentName;
@@ -14,8 +29,7 @@ public class GameDB {
 		this.numberOfSets = numberOfSets;
 	}
 
-
-	//Getter and Setters
+	//Getter and Setter
 	public int getGameID() {
 		return gameID;
 	}

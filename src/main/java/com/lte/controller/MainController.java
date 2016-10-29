@@ -2,7 +2,7 @@ package com.lte.controller;
 
 import javax.swing.JOptionPane;
 
-import com.lte.aiPar.AlgorithmusManager;
+import com.lte.aiPar.AlgorithmManager;
 import com.lte.db.DBconnection;
 import com.lte.gui.Controller0;
 import com.lte.gui.Controller1;
@@ -44,7 +44,7 @@ public class MainController {
 	private DBconnection connection;
 
 	// KI Manager
-	AlgorithmusManager algorithmManager;
+	AlgorithmManager algorithmManager;
 
 	/*
 	 * Constructor
@@ -133,8 +133,6 @@ public class MainController {
 	/***********************************
 	 ********* Reconstruction***********
 	 ***********************************/
-	
-
 	/* calls function "getSetInfos(GameID)" in DBconnection, creates an SetDB Array
 	 * 1 SetDB Object = Infos about 1 played Set
 	 * length of SetDB-Array = Number of played Sets in Game
@@ -147,7 +145,6 @@ public class MainController {
 	public GameDB[] getRecGameInfo() {
 		return connection.getGames();
 	}
-	
 	
 	
 	/*
@@ -166,9 +163,9 @@ public class MainController {
 			if (settings.getInterfaceType() == InterfaceManager.FILE_Type) {
 				interfaceManager = new FileIM(settings.getContactPath(), settings.getServerChar());
 			} else if (settings.getInterfaceType() == InterfaceManager.EVENT_TYPE) {
-				interfaceManager = new EventIM();
+				interfaceManager = new EventIM(settings.getCredentials());
 			} else if (settings.getInterfaceType() == InterfaceManager.EVENT_TYPE_JSON) {
-				interfaceManager = new EventIMJSON();
+				interfaceManager = new EventIMJSON(settings.getCredentials());
 			} else {
 				System.err.println("Interface konnte nicht korrekt zugeordnet und initialisiert werden!");
 				return false;

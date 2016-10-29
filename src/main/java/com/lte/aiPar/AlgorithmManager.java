@@ -8,9 +8,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import com.lte.models.Spielstand;
+import com.lte.models.GameScore;
 
-public class AlgorithmusManager {
+public class AlgorithmManager {
 
 	//************Klassenvariablen*******************************************
 		final ExecutorService service;
@@ -19,7 +19,7 @@ public class AlgorithmusManager {
 		int roundCounter = 0;
 		
 		//************Konstruktoren************************************************
-		public AlgorithmusManager() {
+		public AlgorithmManager() {
 			service = Executors.newFixedThreadPool(7); 
 				
 		}	
@@ -29,12 +29,24 @@ public class AlgorithmusManager {
 		//*************Methoden*****************************************************
 
 		//******Shutdown********************************
+		/**
+		 * Shuts thread pool down
+		 */
 		public void shutdown(){
 			service.shutdownNow();
 		}
 		
 		//******Alpha Beta**************************************
-		public int ParallelAlphaBeta(char[][] spielfeld, int algorithmusTiefe, char playerZeichen, char gegner) throws Exception{
+		/**
+		 * Multi threaded implementation of alpha beta algorithm to compute the next move
+		 * @param field current field for processing the next move
+		 * @param algorithmDepth algorithm depth for alpha beta algorithm
+		 * @param playerCharacter character of own player
+		 * @param opponent character of opponent
+		 * @return best move as integer
+		 * @throws Exception
+		 */
+		public int ParallelAlphaBeta(char[][] field, int algorithmDepth, char playerCharacter, char opponent) throws Exception{
 			
 			
 			//Laufzeitanalyse starten
@@ -45,61 +57,54 @@ public class AlgorithmusManager {
 			future.clear();
 			
 			//H�chstwert und Spalte
-			int hoechster = 0;
-			hoechster = -Integer.MAX_VALUE;
-
+			int highest = -1000000;
 			
 			//Neuen Spielstand aufbauen
-			Spielstand parAlgSpielstand = new Spielstand(spielfeld);
+			GameScore parAlgGameScore = new GameScore(field);
 			
 			//M�gliche Z�ge
-			ArrayList<Integer> zuege = new ArrayList<>();
-			zuege = parAlgSpielstand.moeglicheZuege();
+			ArrayList<Integer> moves = new ArrayList<>();
+			moves = parAlgGameScore.possibleMoves();
 			
 			//Die ersten Runden beschleunigen
 			roundCounter++;
-			if(zuege.size() < 7){
-				//Eingestellte Tiefe verwenden
-			}
-			else if(roundCounter >= 7){
-				algorithmusTiefe = 8;
-			}else
-			{
-				algorithmusTiefe = 6;
+
+			if(roundCounter <= 7){
+				algorithmDepth = 8;
 			}
 			
-			System.out.println(algorithmusTiefe);
+			System.out.println(algorithmDepth);
 			
 			//Pr�fe ob nur noch ein Zug vorhanden ist
-			if(zuege.size() == 1)
+			if(moves.size() == 1)
 			{
-				return zuege.get(0);
+				return moves.get(0);
 			}
 			
 			//Pr�fe ob in den n�chsten Zuegen gewonnen werden kann
-			SingleAlgorithmus simpleAlg = new SingleAlgorithmus(spielfeld, 4);
-			int simpleZug = simpleAlg.alphaBeta();
-			parAlgSpielstand.spiele(simpleZug, playerZeichen);
-			int eval = parAlgSpielstand.eval();
+			SingleAlgorithm simpleAlg = new SingleAlgorithm(field, 4);
+			int simpleMove = simpleAlg.alphaBeta();
+			parAlgGameScore.play(simpleMove, playerCharacter);
+			int eval = parAlgGameScore.eval();
 			if (eval > 95000) {
 				
 				final long timeEnd1 = System.currentTimeMillis(); 
 		        System.out.println("Laufzeit 4er: " + (timeEnd1 - timeStart) + " Millisek.");
-		        return simpleZug;
+		        return simpleMove;
 		        
 			}
 			else {
-				parAlgSpielstand.reDo(simpleZug);
+				parAlgGameScore.unDo(simpleMove);
 			}
 			
 			
 			//Spiele die ersten Z�ge und erzeuge neue Tasks
-			for (int i = 0; i < zuege.size(); i++) {
-				parAlgSpielstand.spiele(zuege.get(i), playerZeichen);
+			for (int i = 0; i < moves.size(); i++) {
+				parAlgGameScore.play(moves.get(i), playerCharacter);
 				
-				list.add(new Algorithmus(parAlgSpielstand.getSpielfeld(), algorithmusTiefe-1, playerZeichen, gegner));
+				list.add(new Algorithm(parAlgGameScore.getField(), algorithmDepth-1));
 
-				parAlgSpielstand.reDo(zuege.get(i));
+				parAlgGameScore.unDo(moves.get(i));
 			}
 			
 			
@@ -108,38 +113,38 @@ public class AlgorithmusManager {
 			
 			//H�chsten suchen
 			int counter = 0;
-			int spalte = 0;
-			ArrayList<Integer> ergebnisse = new ArrayList<>();
+			int column = 0;
+			ArrayList<Integer> results = new ArrayList<>();
 			
 			//In ArrayList �bertragen
 			for(Future obj : future){
-				ergebnisse.add((int)obj.get());
+				results.add((int)obj.get());
 			}
 			
 			//Pr�fe ob im n�chsten Zug verloren wird
 			//Ansonsten w�hle h�chsten als neue M�glichkeit
-			for (int i = 0; i < ergebnisse.size(); i++) {
+			for (int i = 0; i < results.size(); i++) {
 		    	
-			    if(ergebnisse.get(i) >= hoechster){
+			    if(results.get(i) >= highest){
 			    	
-			    	parAlgSpielstand.spiele(zuege.get(counter), 'X');
+			    	parAlgGameScore.play(moves.get(counter), 'X');
 			    	
-			    	if(parAlgSpielstand.eval() > -95000){
-			    	hoechster = ergebnisse.get(i);
-			    	spalte = zuege.get(counter);
+			    	if(parAlgGameScore.eval() > -95000){
+			    	highest = results.get(i);
+			    	column = moves.get(counter);
 			    	
 			    	}
 			    	else{
-			    		System.out.println("Gef�hrliche Stellung in Spalte erkannt: " + zuege.get(counter));
+			    		System.out.println("Gef�hrliche Stellung in Spalte erkannt: " + moves.get(counter));
 			    	}
-			    	parAlgSpielstand.reDo(zuege.get(counter));
+			    	parAlgGameScore.unDo(moves.get(counter));
 			    	}
 			    
 			    counter++;
 			  }
 			
-			if(hoechster == -Integer.MAX_VALUE){
-				spalte = zuege.get(0);
+			if(highest == -1000000){
+				column = moves.get(0);
 				System.out.println("Verloren");
 			}
 			
@@ -148,7 +153,7 @@ public class AlgorithmusManager {
 	        System.out.println("Laufzeit KI: " + (timeEnd2 - timeStart) + " Millisek.");
 			
 			//Spalte zur�ck geben
-			return spalte;
+			return column;
 		}
 		
 }
