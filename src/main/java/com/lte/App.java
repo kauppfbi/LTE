@@ -40,8 +40,7 @@ public class App extends Application {
 			
 			// FXMLLoader
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("./gui/views/layout0.fxml"));
-			Controller0 controller0 = new Controller0(controller);
-			loader.setController(controller0);
+			loader.setController(controller.getController0());
 			// Neues Layout in eine neue Scene laden und auf die Stage setzen
 			stage.setScene(new Scene((AnchorPane) loader.load()));
 			// set Icon
