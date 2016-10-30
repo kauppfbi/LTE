@@ -47,12 +47,12 @@ public class AlgorithmManager {
 		 * Multi threaded implementation of alpha beta algorithm to compute the next move
 		 * @param field current field for processing the next move
 		 * @param algorithmDepth algorithm depth for alpha beta algorithm
-		 * @param playerCharacter character of own player
+		 * @param playerByte character of own player
 		 * @param opponent character of opponent
 		 * @return best move as integer
 		 * @throws Exception
 		 */
-		public int ParallelAlphaBeta(char[][] field, int algorithmDepth, double calculationTime, char playerCharacter, char opponent) throws Exception{
+		public int ParallelAlphaBeta(byte[][] field, int algorithmDepth, double calculationTime, byte playerByte) throws Exception{
 			
 			
 			//Laufzeitanalyse starten
@@ -69,8 +69,7 @@ public class AlgorithmManager {
 			GameScore parAlgGameScore = new GameScore(field);
 			
 			//M�gliche Z�ge
-			int[] moves = new int[7];
-			moves = parAlgGameScore.possibleMoves();
+			byte[] moves = parAlgGameScore.possibleMoves();
 			
 			//Die ersten Runden beschleunigen
 			roundCounter++;
@@ -90,7 +89,7 @@ public class AlgorithmManager {
 			//Pr�fe ob in den n�chsten Zuegen gewonnen werden kann
 			SingleAlgorithm simpleAlg = new SingleAlgorithm(field, 4);
 			int simpleMove = simpleAlg.alphaBeta();
-			parAlgGameScore.play(simpleMove, playerCharacter);
+			parAlgGameScore.play(simpleMove, playerByte);
 			int eval = parAlgGameScore.eval();
 			if (eval > 95000) {
 				
@@ -107,7 +106,7 @@ public class AlgorithmManager {
 			//Spiele die ersten Z�ge und erzeuge neue Tasks
 			for (int i = 0; i < moves.length; i++) {
 				if(moves[i] == 99){break;}
-				parAlgGameScore.play(moves[i], playerCharacter);
+				parAlgGameScore.play(moves[i], playerByte);
 				
 				list.add(new Algorithm(parAlgGameScore.getField(), algorithmDepth-1));
 
@@ -147,7 +146,7 @@ public class AlgorithmManager {
 		    	
 			    if(results.get(i) >= highest){
 			    	
-			    	parAlgGameScore.play(moves[counter], 'X');
+			    	parAlgGameScore.play(moves[counter], (byte) 1);
 			    	
 			    	if(parAlgGameScore.eval() > -95000){
 			    	highest = results.get(i);
