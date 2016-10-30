@@ -9,6 +9,7 @@ import com.lte.interfaces.InterfaceManager;
 import com.lte.models.GameInfo;
 import com.lte.models.ServerMessage;
 import com.lte.models.Settings;
+import com.sun.org.apache.xerces.internal.impl.dv.DVFactoryException;
 import com.lte.models.GameScore;
 
 import javafx.application.Platform;
@@ -184,14 +185,15 @@ public class ThreadPlay extends Thread {
 				controller1.gameOver(currentGameScore.isWon(),currentGameScore.winWhere());
 			}
 		});
-
 		
-		//Ausgabe in Konsole zur Kontrolle
-		System.out.println("Winning Kombi");
-		int[][] woGewonnen = currentGameScore.winWhere();
-		for (int i = 0; i < woGewonnen.length; i++) {
-			System.out.print(woGewonnen[i][0] + " ");
-			System.out.println(woGewonnen[i][1]);
+		// - Gewinner in DB schreiben
+		if(currentGameScore.isWon() == 'O'){
+			connection.updateWinnerOfSet(gameInfo.getSetID(), gameInfo.getOpponentName());
+		}
+		else if(currentGameScore.isWon() == 'X'){
+			connection.updateWinnerOfSet(gameInfo.getSetID(), "LTE");
+		}else{
+			connection.updateWinnerOfSet(gameInfo.getSetID(), "Unentschieden");
 		}
 		
 		
