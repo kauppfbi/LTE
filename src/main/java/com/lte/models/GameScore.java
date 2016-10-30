@@ -28,8 +28,8 @@ public class GameScore {
 			
 			//Initialisiert jedes Feld im Spieldfeld mir CHAR 0
 			
-			for (int row = 0; row < 6; row++) {		
-				for (int column = 0; column < 7; column++) {
+			for (byte row = 0; row < 6; row++) {		
+				for (byte column = 0; column < 7; column++) {
 					field[column][row] = 0;
 				}
 				}
@@ -45,8 +45,8 @@ public class GameScore {
 			//Gebe das Spielfeld in der Konsole aus
 			//rown werden gedreht
 			
-		for (int row = 5; row > -1; row--) {		
-		for (int column = 0; column < 7; column++) {
+		for (byte row = 5; row > -1; row--) {		
+		for (byte column = 0; column < 7; column++) {
 			System.out.print(" " + field[column][row] + " ");
 		}
 		System.out.println("");
@@ -68,7 +68,7 @@ public class GameScore {
 			//Werfe eine Ausnahme, wenn der Spielzug nicht möglich ist
 			
 			//Werfe den Chip auf die unterste leere Position in der column
-			for (int row = 0; row < 7; row++) {
+			for (byte row = 0; row < 7; row++) {
 				if(row == 6){
 					//Es steht kein freier Slot mehr zur Verfügung
 					throw new IllegalArgumentException("column ist voll");
@@ -90,8 +90,8 @@ public class GameScore {
 		public byte[][] getField(){
 			byte[][] deepField = new byte[7][6];
 			
-			for (int row = 0; row < 6; row++) {		
-				for (int column = 0; column < 7; column++) {
+			for (byte row = 0; row < 6; row++) {		
+				for (byte column = 0; column < 7; column++) {
 					deepField[column][row] = field[column][row];
 				}
 				}
@@ -112,7 +112,7 @@ public class GameScore {
 			//Werfe eine Ausnahme, wenn der Spielzug nicht möglich ist
 			
 			//Werfe den Chip auf die unterste leere Position in der column
-			for (int row = 5; row > -1; row--) {
+			for (byte row = 5; row > -1; row--) {
 				if(row < -1){
 					//Es steht kein Zeichen mehr zur Verfügung
 					throw new IllegalArgumentException("column ist leer");
@@ -137,9 +137,9 @@ public class GameScore {
 		public byte[] possibleMoves(){
 				
 				byte[] moves = new byte[7];
-				int counter = 0;
+				byte counter = 0;
 					
-					for (int column = 0; column < 7; column++) {
+					for (byte column = 0; column < 7; column++) {
 							if(field[column][5] == 0){
 							moves[counter] = (byte) column;
 							counter++;
@@ -264,8 +264,8 @@ public class GameScore {
 			
 			
 			//horizantale Möglichkeiten (24)
-			for(int column = 0; column < 4; column++){
-				for(int row = 0; row < 6; row++){
+			for(byte column = 0; column < 4; column++){
+				for(byte row = 0; row < 6; row++){
 					if(field[column][row] == 0){break;}					
 					if(field[column][row] == 1 && field[column+1][row] == 1 &&  field[column+2][row] == 1 &&  field[column+3][row] == 1){return 1;}
 					if(field[column][row] == 2 && field[column+1][row] == 2 &&  field[column+2][row] == 2 &&  field[column+3][row] == 2){return 2;}
@@ -274,8 +274,8 @@ public class GameScore {
 			
 			
 			//Vertikale Möglichkeiten (24)
-			for(int column = 0; column < 7; column++){
-				for(int row = 0; row < 3; row++){
+			for(byte column = 0; column < 7; column++){
+				for(byte row = 0; row < 3; row++){
 					if(field[column][row] == 0){break;}
 						if(field[column][row] == 1 &&  field[column][row+1] == 1 &&  field[column][row+2] == 1 &&  field[column][row+3] == 1){return 1;}
 						if(field[column][row] == 2 &&  field[column][row+1] == 2 &&  field[column][row+2] == 2 &&  field[column][row+3] == 2){return 2;}
@@ -283,8 +283,8 @@ public class GameScore {
 			}
 			
 			//Unten Links -> Oben Rechts (12)
-			for (int column = 0; column < 4; column++) {
-				for (int row = 0; row < 3; row++) {
+			for (byte column = 0; column < 4; column++) {
+				for (byte row = 0; row < 3; row++) {
 					if(field[column][row] == 0){break;}
 					
 					if(field[column][row] == 1 && field[column+1][row+1] == 1 && field[column+2][row+2] == 1 && field[column+3][row+3] == 1){return 1;}
@@ -293,8 +293,8 @@ public class GameScore {
 			}
 			
 			//Oben Links -> Unten Rechts (12)
-			for (int column = 0; column < 4; column++) {
-				for (int row = 5; row > 2; row--) {
+			for (byte column = 0; column < 4; column++) {
+				for (byte row = 5; row > 2; row--) {
 					if(field[column][row] == 0){break;}
 					
 					if(field[column][row] == 1 && field[column+1][row-1] == 1 && field[column+2][row-2] == 1 && field[column+3][row-3] == 1){return 1;}
@@ -318,32 +318,32 @@ public class GameScore {
 			int ratingOverall = 0;
 			
 			//horizantale Möglichkeiten (24)
-			for(int column = 0; column < 4; column++){
-				for(int row = 0; row < 6; row++){
+			for(byte column = 0; column < 4; column++){
+				for(byte row = 0; row < 6; row++){
 					if(field[column][row] == 0){break;}
 					ratingOverall = ratingOverall + evalFunction(field[column][row], field[column+1][row], field[column+2][row], field[column+3][row]);
 				}
 			}
 			
 			//Vertikale Möglichkeiten (24)
-			for(int column = 0; column < 7; column++){
-				for(int row = 0; row < 3; row++){
+			for(byte column = 0; column < 7; column++){
+				for(byte row = 0; row < 3; row++){
 					if(field[column][row] == 0){break;}
 					ratingOverall = ratingOverall + evalFunction(field[column][row], field[column][row+1], field[column][row+2], field[column][row+3]);
 				}
 			}
 			
 			//Unten Links -> Oben Rechts (12)
-			for (int column = 0; column < 4; column++) {
-				for (int row = 0; row < 3; row++) {
+			for (byte column = 0; column < 4; column++) {
+				for (byte row = 0; row < 3; row++) {
 					if(field[column][row] == 0){break;}
 					ratingOverall = ratingOverall + evalFunction(field[column][row], field[column+1][row+1], field[column+2][row+2], field[column+3][row+3]);
 				}
 			}
 			
 			//Oben Links -> Unten Rechts (12)
-			for (int column = 0; column < 4; column++) {
-				for (int row = 5; row > 2; row--) {
+			for (byte column = 0; column < 4; column++) {
+				for (byte row = 5; row > 2; row--) {
 					ratingOverall = ratingOverall + evalFunction(field[column][row], field[column+1][row-1], field[column+2][row-2], field[column+3][row-3]);
 				}
 			}
@@ -362,8 +362,8 @@ public class GameScore {
 		 */
 		private int evalFunction(byte one, byte two, byte three, byte four){
 			int rating = 0;
-			int agent = 0;
-			int opponent = 0;
+			byte agent = 0;
+			byte opponent = 0;
 			
 			if(one == 1){agent++;}else if (one == 2) {opponent++;}
 			if(two == 1){agent++;}else if (two == 2) {opponent++;}
@@ -392,7 +392,7 @@ public class GameScore {
 		 */
 		public int getRow(int arraycolumn){
 			System.out.println("Array column " + arraycolumn);
-			for (int row = 5; row > -2; row--) {
+			for (byte row = 5; row > -2; row--) {
 				if(row == -1){
 					//column ist leer
 					throw new IllegalArgumentException("column ist leer");
