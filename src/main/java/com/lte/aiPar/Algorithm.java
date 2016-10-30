@@ -6,6 +6,11 @@ import java.util.concurrent.Callable;
 
 import com.lte.models.GameScore;
 
+/**
+ * The class Algorithm implements callable for multi threaded usage in AlgortihmManager. Call() returns the min value for the corresponding subtree of alpha beta. 
+ * @author Fabian Soelker
+ *
+ */
 public class Algorithm implements Callable<Integer>{
 	
 	//*********Klassenvariablen****************************

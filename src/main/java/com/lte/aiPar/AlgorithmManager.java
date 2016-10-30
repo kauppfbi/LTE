@@ -1,15 +1,24 @@
 package com.lte.aiPar;
 
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 import com.lte.models.GameScore;
+import com.sun.corba.se.impl.orbutil.threadpool.TimeoutException;
+import com.sun.javafx.print.Units;
 
+/**
+ * The AlgortihmManager coordinates the usage of different algorithms, tactics and algorithm depths. It represents the AI.
+ * @author Fabian Soelker
+ *
+ */
 public class AlgorithmManager {
 
 	//************Klassenvariablen*******************************************
@@ -46,7 +55,7 @@ public class AlgorithmManager {
 		 * @return best move as integer
 		 * @throws Exception
 		 */
-		public int ParallelAlphaBeta(char[][] field, int algorithmDepth, char playerCharacter, char opponent) throws Exception{
+		public int ParallelAlphaBeta(char[][] field, int algorithmDepth, double calculationTime, char playerCharacter, char opponent) throws Exception{
 			
 			
 			//Laufzeitanalyse starten
@@ -108,8 +117,21 @@ public class AlgorithmManager {
 			}
 			
 			
-//			//Invoke
-			future = service.invokeAll(list);
+			//Calc Time
+			calculationTime = (calculationTime * 1000) - 300;
+			if(calculationTime < 300){calculationTime = 300;}
+			
+			//Invoke + Timeout
+			try{
+				future = service.invokeAll(list, (long)calculationTime, TimeUnit.MILLISECONDS);
+			}
+			catch (InterruptedException e) {
+				SingleAlgorithm timeoutAlg = new SingleAlgorithm(field, 6);
+				int timeoutMove = timeoutAlg.alphaBeta();
+				System.out.println("Timeout!");
+				return timeoutMove;
+			}
+
 			
 			//H�chsten suchen
 			int counter = 0;

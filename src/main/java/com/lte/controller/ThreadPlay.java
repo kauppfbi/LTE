@@ -8,6 +8,7 @@ import com.lte.gui.Controller1;
 import com.lte.interfaces.InterfaceManager;
 import com.lte.models.GameInfo;
 import com.lte.models.ServerMessage;
+import com.lte.models.Settings;
 import com.lte.models.GameScore;
 
 import javafx.application.Platform;
@@ -23,6 +24,7 @@ public class ThreadPlay extends Thread {
 
 	// model(s)
 	private GameInfo gameInfo;
+	private Settings settings;
 
 	// DB "Manager"
 	private DBconnection connection;
@@ -31,13 +33,14 @@ public class ThreadPlay extends Thread {
 	AlgorithmManager algorithmManager;
 
 	public ThreadPlay(InterfaceManager interfaceManager, Controller1 controller1, GameInfo gameInfo,
-			DBconnection connection, AlgorithmManager algorithmManager) {
+			DBconnection connection, AlgorithmManager algorithmManager, Settings settings) {
 		this.interfaceManager = interfaceManager;
 		this.controller1 = controller1;
 		this.gameInfo = gameInfo;
 		this.connection = connection;
 		this.algorithmManager = algorithmManager;
 		timeStart = 0;
+		this.settings = settings;
 
 	}
 
@@ -134,7 +137,7 @@ public class ThreadPlay extends Thread {
 				System.out.println("Wir spielen");
 				try {
 					// berechne n�chsten Zug - KI gibt Spalte zur�ck
-					int nextMove = algorithmManager.ParallelAlphaBeta(currentGameScore.getField(), 10, 'X', 'O');
+					int nextMove = algorithmManager.ParallelAlphaBeta(currentGameScore.getField(), 10, settings.getCalculationTime(), 'X', 'O');
 
 					// sende n�chsten Zug an Server
 					interfaceManager.sendMove(nextMove);

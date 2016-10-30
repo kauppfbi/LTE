@@ -5,6 +5,11 @@ import java.util.ArrayList;
 
 import com.lte.models.GameScore;
 
+/**
+ * The class SingleAlgorithm implements a single threaded version of an alpha beta algorithm and can be used by the AlgortihmManager.
+ * @author Fabian Sölker
+ *
+ */
 public class SingleAlgorithm{
 	
 	//*********Klassenvariablen****************************

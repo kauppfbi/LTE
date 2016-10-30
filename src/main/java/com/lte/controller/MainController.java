@@ -124,7 +124,7 @@ public class MainController {
 		if (!successfull) {
 			JOptionPane.showInternalMessageDialog(null, "Interface wurde nicht erfolgreich initilisiert!");
 		} else{
-			ThreadPlay playingThread = new ThreadPlay(interfaceManager, controller1, gameInfo, connection, algorithmManager);
+			ThreadPlay playingThread = new ThreadPlay(interfaceManager, controller1, gameInfo, connection, algorithmManager, settings);
 			playingThread.start();
 		}
 	}
