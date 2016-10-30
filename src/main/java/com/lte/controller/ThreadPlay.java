@@ -74,12 +74,19 @@ public class ThreadPlay extends Thread {
 		}
 
 		// lade DB Controller
+		if(gameInfo.getSetID() == 0){
 		int ids[] = connection.startNewGame(gameInfo.getOpponentName(), String.valueOf(gameInfo.getNextPlayer()));
-
+		
 		// prepare gameInfo
 		gameInfo.setGameID(ids[0]);
 		gameInfo.setSetID(ids[1]);
 		gameInfo.setOpponentID(ids[2]);
+		}
+		else{
+			connection.createNewSet(gameInfo.getGameID(), gameInfo.getOwnPoints(), gameInfo.getOpponentPoints());
+			gameInfo.setSet(gameInfo.getSet() + 1);
+		}
+			
 
 		gameInfo.setGameInProgress(true);
 

@@ -291,14 +291,20 @@ public class Controller1 extends GUIController{
 			if (winningPlayer == 'X') {
 				int playerX = Integer.parseInt(ltePoints.getText());
 				ltePoints.setText(String.valueOf(playerX + 1));
+				controller.getGameInfo().setOwnPoints(playerX);
 			} else if (winningPlayer == 'O') {
 				int playerO = Integer.parseInt(opponentPoints.getText());
 				opponentPoints.setText(String.valueOf(playerO + 1));
+				controller.getGameInfo().setOpponentPoints(playerO);
 			}
 
 			// Satz um eines Hochz�hlen
 			int satz = Integer.parseInt(set.getText());
 			set.setText(String.valueOf(satz + 1));
+			controller.getGameInfo().setSet(satz);
+			
+			//Neuen Satz starten
+			controller.playSet();
 
 		} else if (result.get() == beenden) {
 			// TODO altes Controller Modell verwerfen und dem Agenten mitteilen
