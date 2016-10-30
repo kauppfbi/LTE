@@ -1,7 +1,6 @@
 package com.lte.aiPar;
 
 
-import java.util.ArrayList;
 import java.util.concurrent.Callable;
 
 import com.lte.models.GameScore;
@@ -15,7 +14,6 @@ public class Algorithm implements Callable<Integer>{
 	
 	//*********Klassenvariablen****************************
 	private int startDepth;
-	private int savedMove;
 	private GameScore bufferdGameScore;
 	
 	//********Konstruktoren********************************
@@ -41,8 +39,8 @@ public class Algorithm implements Callable<Integer>{
 	 */
 	private int max(int depth, int alpha, int beta) {
 		char isWon = bufferdGameScore.isWon();
-	    ArrayList<Integer> possibleMoves = bufferdGameScore.possibleMoves();
-	    if (depth == 0 || possibleMoves.size() == 0 || isWon != 'N'){
+	    int[] possibleMoves = bufferdGameScore.possibleMoves();
+	    if (depth == 0 || possibleMoves[0] == 99 || isWon != 'N'){
 	    	if(isWon != 'N'){
 	    		return (bufferdGameScore.eval() * ((depth + 1)) * 100);
 	    	}else{
@@ -50,17 +48,18 @@ public class Algorithm implements Callable<Integer>{
 	    	}
 	    }
 	    int maxValue = alpha;
-	    for (int i = 0; i < possibleMoves.size(); i++)
+	    for (int i = 0; i < possibleMoves.length; i++)
 	    {
+	    	if(possibleMoves[i] == 99){break;}
 	       try {
-			bufferdGameScore.play(possibleMoves.get(i), 'X');
+			bufferdGameScore.play(possibleMoves[i], 'X');
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	       int value = min(depth-1, maxValue, beta);
 	       try {
-			bufferdGameScore.unDo(possibleMoves.get(i));
+			bufferdGameScore.unDo(possibleMoves[i]);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -69,8 +68,6 @@ public class Algorithm implements Callable<Integer>{
 	          maxValue = value;
 	          if (maxValue >= beta)
 	             break;
-	          if (depth == startDepth)
-	             savedMove = possibleMoves.get(i);
 	       }
 	    }
 	    return maxValue;
@@ -86,8 +83,8 @@ public class Algorithm implements Callable<Integer>{
 	 */
 	 private int min(int depth, int alpha, int beta) {
 		char isWon = bufferdGameScore.isWon();
-	    ArrayList<Integer> possibleMoves = bufferdGameScore.possibleMoves();
-	    if (depth == 0 || possibleMoves.size() == 0 || isWon != 'N'){
+	    int[] possibleMoves = bufferdGameScore.possibleMoves();
+	    if (depth == 0 || possibleMoves[0] == 99 || isWon != 'N'){
 	    	if(isWon != 'N'){
 	    		return (bufferdGameScore.eval() * ((depth + 1)) * 100);
 	    	}else{
@@ -95,10 +92,11 @@ public class Algorithm implements Callable<Integer>{
 	    	}
 	    }
 	    int minValue = beta;
-	    for (int i = 0; i < possibleMoves.size(); i++)
+	    for (int i = 0; i < possibleMoves.length; i++)
 	    {
+	    	if(possibleMoves[i] == 99){break;}
 	    	try {
-				bufferdGameScore.play(possibleMoves.get(i), 'O');
+				bufferdGameScore.play(possibleMoves[i], 'O');
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -106,7 +104,7 @@ public class Algorithm implements Callable<Integer>{
 	    	
 	       int wert = max(depth-1, alpha, minValue);
 	       try {
-				bufferdGameScore.unDo(possibleMoves.get(i));
+				bufferdGameScore.unDo(possibleMoves[i]);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

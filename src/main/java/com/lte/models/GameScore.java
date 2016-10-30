@@ -134,14 +134,19 @@ public class GameScore {
 		 * Return possible moves for the current field of the game score
 		 * @return ArrayList<Integer> with possible moves
 		 */
-		public ArrayList<Integer> possibleMoves(){
+		public int[] possibleMoves(){
 				
-				ArrayList<Integer> moves = new ArrayList<>();
+				int[] moves = new int[7];
+				int counter = 0;
 					
 					for (int column = 0; column < 7; column++) {
 							if(field[column][5] == '.'){
-							moves.add(column);
+							moves[counter] = column;
+							counter++;
 						}
+					}
+					for (int i = counter; i < 7; i++) {
+						moves[i] = 99;
 					}
 				
 			
@@ -261,10 +266,9 @@ public class GameScore {
 			//horizantale Möglichkeiten (24)
 			for(int column = 0; column < 4; column++){
 				for(int row = 0; row < 6; row++){
-					if(field[column][row] == '.'){break;}
-					int rating = 0;
-					rating = evalFunction(field[column][row], field[column+1][row], field[column+2][row], field[column+3][row]);
-					if(rating == 100000){return 'X';}else if(rating == -100000){return 'O';}
+					if(field[column][row] == '.'){break;}					
+					if(field[column][row] == 'X' && field[column+1][row] == 'X' &&  field[column+2][row] == 'X' &&  field[column+3][row] == 'X'){return 'X';}
+					if(field[column][row] == 'O' && field[column+1][row] == 'O' &&  field[column+2][row] == 'O' &&  field[column+3][row] == 'O'){return 'O';}
 					}
 				}
 			
@@ -273,9 +277,8 @@ public class GameScore {
 			for(int column = 0; column < 7; column++){
 				for(int row = 0; row < 3; row++){
 					if(field[column][row] == '.'){break;}
-					int rating = 0;
-					rating = evalFunction(field[column][row], field[column][row+1], field[column][row+2], field[column][row+3]);
-						if(rating == 100000){return 'X';}else if(rating == -100000){return 'O';}
+						if(field[column][row] == 'X' &&  field[column][row+1] == 'X' &&  field[column][row+2] == 'X' &&  field[column][row+3] == 'X'){return 'X';}
+						if(field[column][row] == 'O' &&  field[column][row+1] == 'O' &&  field[column][row+2] == 'O' &&  field[column][row+3] == 'O'){return 'O';}
 				}
 			}
 			
@@ -283,18 +286,19 @@ public class GameScore {
 			for (int column = 0; column < 4; column++) {
 				for (int row = 0; row < 3; row++) {
 					if(field[column][row] == '.'){break;}
-					int rating = 0;
-					rating = evalFunction(field[column][row], field[column+1][row+1], field[column+2][row+2], field[column+3][row+3]);
-					if(rating == 100000){return 'X';}else if(rating == -100000){return 'O';}
+					
+					if(field[column][row] == 'X' && field[column+1][row+1] == 'X' && field[column+2][row+2] == 'X' && field[column+3][row+3] == 'X'){return 'X';}
+					if(field[column][row] == 'O' && field[column+1][row+1] == 'O' && field[column+2][row+2] == 'O' && field[column+3][row+3] == 'O'){return 'O';}
 				}
 			}
 			
 			//Oben Links -> Unten Rechts (12)
 			for (int column = 0; column < 4; column++) {
 				for (int row = 5; row > 2; row--) {
-					int rating = 0;
-					rating = evalFunction(field[column][row], field[column+1][row-1], field[column+2][row-2], field[column+3][row-3]);
-					if(rating == 100000){return 'X';}else if(rating == -100000){return 'O';}
+					if(field[column][row] == '.'){break;}
+					
+					if(field[column][row] == 'X' && field[column+1][row-1] == 'X' && field[column+2][row-2] == 'X' && field[column+3][row-3] == 'X'){return 'X';}
+					if(field[column][row] == 'O' && field[column+1][row-1] == 'O' && field[column+2][row-2] == 'O' && field[column+3][row-3] == 'O'){return 'O';}
 				}
 			}
 			
@@ -316,6 +320,7 @@ public class GameScore {
 			//horizantale Möglichkeiten (24)
 			for(int column = 0; column < 4; column++){
 				for(int row = 0; row < 6; row++){
+					if(field[column][row] == '.'){break;}
 					ratingOverall = ratingOverall + evalFunction(field[column][row], field[column+1][row], field[column+2][row], field[column+3][row]);
 				}
 			}
@@ -323,6 +328,7 @@ public class GameScore {
 			//Vertikale Möglichkeiten (24)
 			for(int column = 0; column < 7; column++){
 				for(int row = 0; row < 3; row++){
+					if(field[column][row] == '.'){break;}
 					ratingOverall = ratingOverall + evalFunction(field[column][row], field[column][row+1], field[column][row+2], field[column][row+3]);
 				}
 			}
@@ -330,6 +336,7 @@ public class GameScore {
 			//Unten Links -> Oben Rechts (12)
 			for (int column = 0; column < 4; column++) {
 				for (int row = 0; row < 3; row++) {
+					if(field[column][row] == '.'){break;}
 					ratingOverall = ratingOverall + evalFunction(field[column][row], field[column+1][row+1], field[column+2][row+2], field[column+3][row+3]);
 				}
 			}
