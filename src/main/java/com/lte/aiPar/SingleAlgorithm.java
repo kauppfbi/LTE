@@ -1,8 +1,6 @@
 package com.lte.aiPar;
 
 
-import java.util.ArrayList;
-
 import com.lte.models.GameScore;
 
 /**

@@ -136,7 +136,7 @@ public class AlgorithmManager {
 			ArrayList<Integer> results = new ArrayList<>();
 			
 			//In ArrayList �bertragen
-			for(Future obj : future){
+			for(Future<?> obj : future){
 				results.add((int)obj.get());
 			}
 			

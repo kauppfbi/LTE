@@ -2,18 +2,22 @@ package com.lte.controller;
 
 
 import com.lte.aiPar.AlgorithmManager;
-import com.lte.aiPar.SingleAlgorithm;
 import com.lte.db.DBconnection;
 import com.lte.gui.Controller1;
 import com.lte.interfaces.InterfaceManager;
 import com.lte.models.GameInfo;
 import com.lte.models.ServerMessage;
 import com.lte.models.Settings;
-import com.sun.org.apache.xerces.internal.impl.dv.DVFactoryException;
 import com.lte.models.GameScore;
 
 import javafx.application.Platform;
 
+/**
+ * The class ThreadPlay extends thread and represents a set against another AI. It communicates with the AI
+ * the chosen interface and the settings and GameInfo object. 
+ * @author Fabian Soelker
+ *
+ */
 public class ThreadPlay extends Thread {
 
 	// interface to server

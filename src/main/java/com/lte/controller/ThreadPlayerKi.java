@@ -10,8 +10,9 @@ import javafx.application.Platform;
 
 public class ThreadPlayerKi {
 
+	//**********************************//
 	// GUI controller
-	private Controller3 controller3;
+//	private Controller3 controller3;
 
 	// model(s)
 	private GameInfo gameInfo;
@@ -19,17 +20,16 @@ public class ThreadPlayerKi {
 
 	// KI Manager
 	AlgorithmManager algorithmManager;
-	private int playerMove;
+//	private int playerMove;
+//
+////**********************************//
+//	public ThreadPlayKi(Controller3 controller3, GameInfo gameInfo, AlgorithmManager algorithmManager, Settings settings) {
+//		this.controller3 = controller3;
+//		this.gameInfo = gameInfo;
+//		this.algorithmManager = algorithmManager;
+//		this.settings = settings;
 
-	public ThreadPlayKi(Controller3 controller3, GameInfo gameInfo, AlgorithmManager algorithmManager, Settings settings) {
-		this.controller3 = controller3;
-		this.gameInfo = gameInfo;
-		this.algorithmManager = algorithmManager;
-		this.settings = settings;
-
-	}
-
-
+	
 	public void play() {
 
 		System.out.println("Spielen läuft");
@@ -57,8 +57,8 @@ public class ThreadPlayerKi {
 					} else {
 
 						//!!! Hier Player input!!!
-						playerMove = 0;
-						currentGameScore.play(playerMove, (byte)2);
+//						playerMove = 0;
+//						currentGameScore.play(playerMove, (byte)2);
 						
 					}
 					// - Spiel entschieden/gewonnen
@@ -68,13 +68,13 @@ public class ThreadPlayerKi {
 
 
 					// visualisiere in GUI
-					int row = currentGameScore.getRow(playerMove);
+//					int row = currentGameScore.getRow(playerMove);
 
 					// Starte neuen Thread um JavaFx zu befuellen
 					Platform.runLater(new Runnable() {
 						@Override
 						public void run() {
-							controller3.fill(playerMove, row, 'O', false);
+//							controller3.fill(playerMove, row, 'O', false);
 						}
 					});
 
@@ -102,7 +102,7 @@ public class ThreadPlayerKi {
 					Platform.runLater(new Runnable() {
 						@Override
 						public void run() {
-							controller3.fill(nextMove, row, 'X', false);
+//							controller3.fill(nextMove, row, 'X', false);
 						}
 					});
 
@@ -126,7 +126,7 @@ public class ThreadPlayerKi {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				controller3.gameOver(currentGameScore.isWon(),currentGameScore.winWhere());
+//				controller3.gameOver(currentGameScore.isWon(),currentGameScore.winWhere());
 			}
 		});
 		
