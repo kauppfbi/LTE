@@ -3,17 +3,11 @@ package com.lte.gui;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.ListIterator;
 import java.util.Optional;
-
 import com.lte.controller.MainController;
 import com.lte.interfaces.CredentialsManager;
 import com.lte.interfaces.InterfaceManager;
 import com.lte.models.Settings;
-import com.lte.models.GameScore;
-
-import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -21,7 +15,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
-import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -37,8 +30,12 @@ import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.util.Pair;
 
+/**
+ * Class Controller1 manages the Game-Screen
+ * @author FelixH
+ *
+ */
 public class Controller1 extends GUIController{
 
 	// FXML Declarations
@@ -84,7 +81,6 @@ public class Controller1 extends GUIController{
 	@FXML
 	Text textKontaktpfad;
 
-	//TODO playerChoice auslesen
 	@FXML
 	ChoiceBox<String> playerChoice;
 
@@ -94,14 +90,12 @@ public class Controller1 extends GUIController{
 	private Settings settings;
 	final FileChooser fileChooser;
 
-	// TODO Datenhaltung optimieren --> Informationen aus Agenten!
 	String playerX = "defaultX";
 	String playerO = "defaultO";
 
 	public Controller1(MainController mainController) {
 		this.controller = mainController;
 		this.settings = mainController.getSettings();
-		
 		this.fileChooser = new FileChooser();
 	}
 
@@ -122,23 +116,25 @@ public class Controller1 extends GUIController{
 		this.settings = settings;
 	}
 
+	
+	/**
+	 * JavaFX initializations
+	 */
 	// *******FXML-Methoden************
 	@FXML
 	public void initialize() {
 
 		set.setText("0");
 
-		// Fixset des Punktstandes
+		//set points
 		ltePoints.setText("0");
 		opponentPoints.setText("0");
 
-		// Da standardmaessig Pusher ausgewaehlt ist, wird der Kontaktpfadbutton
-		// erstmal ausgegraut
+		// set fileSelect to disable
 		fileSelect.setDisable(true);
 
-		// ChoiceBox Initialisierung + ChangeListener
-		// Standardwert im Settings Objekt f�r Dateischnittstelle MUSS Pusher
-		// sein!
+		// ChoiceBox initialization + ChangeListener
+		// pusher is default
 		dataTrans.setItems(FXCollections.observableArrayList("Pusher", "Datei", "Pusher JSON"));
 		dataTrans.getSelectionModel().selectFirst();
 		ChangeListener<Number> listener = new ChangeListener<Number>() {
@@ -147,22 +143,19 @@ public class Controller1 extends GUIController{
 				if (dataTrans.getSelectionModel().getSelectedIndex() == 0) {
 					settings.setInterfaceType(InterfaceManager.EVENT_TYPE);
 					settings.setContactPath(null);
-					// Ausgrauen des Kontaktpfades
 					fileSelect.setDisable(true);
 				} else if (dataTrans.getSelectionModel().getSelectedIndex() == 1) {
 					settings.setInterfaceType(InterfaceManager.FILE_Type);
-					// Einblenden des Kontaktpfades
 					fileSelect.setDisable(false);
 				} else if (dataTrans.getSelectionModel().getSelectedIndex() == 2) {
 					settings.setInterfaceType(InterfaceManager.EVENT_TYPE_JSON);
-					// Ausgrauen des Kontaktpfades
 					fileSelect.setDisable(true);
 				}
 			}
 		};
 		dataTrans.getSelectionModel().selectedIndexProperty().addListener(listener);
 
-		// PlayerChoice Initialisierung + ChangeListener
+		// PlayerChoice initialization + ChangeListener
 		playerChoice.setItems(FXCollections.observableArrayList("X", "O"));
 		playerChoice.getSelectionModel().selectFirst();
 		ChangeListener<Number> listener1 = new ChangeListener<Number>() {
@@ -177,7 +170,7 @@ public class Controller1 extends GUIController{
 		};
 		playerChoice.getSelectionModel().selectedIndexProperty().addListener(listener1);
 
-		// TimeSpinner Initialisierung + ChangeListener
+		// TimeSpinner initialization + ChangeListener
 		timeSpinner.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(0.5, 10, 0.5, 0.1));
 		timeSpinner.setEditable(false);
 		ChangeListener<Number> listener2 = new ChangeListener<Number>() {
@@ -188,7 +181,7 @@ public class Controller1 extends GUIController{
 		};
 		timeSpinner.valueProperty().addListener(listener2);
 
-		// Initialisierung FileChooser
+		// initialization FileChooser
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Kontaktpfad w�hlen");
 
@@ -202,7 +195,11 @@ public class Controller1 extends GUIController{
 	}
 
 
-	// *******************Zur�ck zum Startbildschirm**********************
+	/**
+	 * Back to Screen0
+	 * @param event
+	 * @throws IOException
+	 */
 	@FXML
 	private void goToStartmenu(ActionEvent event) throws IOException {
 		Stage stage;
@@ -224,8 +221,10 @@ public class Controller1 extends GUIController{
 
 	}
 
-	// Button fileSelect: �ffnen eines Dateiexplorers zur Auswahl des jeweiligen
-	// Kontaktpfades - Felix
+	/**
+	 * DirectoryChooser for file-interface
+	 * @return String kontaktpfad
+	 */
 	@FXML
 	private String fileSelect() {
 		Stage mainStage = null;
@@ -239,11 +238,12 @@ public class Controller1 extends GUIController{
 		return kontaktpfad;
 	}
 
+	/**
+	 * starts the game set
+	 * @param event
+	 */
 	@FXML
 	private void startSet(ActionEvent event) {
-		// triggert Spielmethode des Agenten
-		// Logik liegt nun beim Agenten
-		// Gui visualisiert nur noch "passiv" auf Aufruf des Agenten
 		String interfaceType = settings.getInterfaceType();
 		if (interfaceType.equals(InterfaceManager.EVENT_TYPE)
 				|| interfaceType.equals(InterfaceManager.EVENT_TYPE_JSON)) {
@@ -252,7 +252,9 @@ public class Controller1 extends GUIController{
 		controller.playSet();
 	}
 	
-	//**********************Show Ready************************
+	/**
+	 * Client ist ready
+	 */
 	public void showReady(){
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Information");
@@ -261,10 +263,14 @@ public class Controller1 extends GUIController{
 		alert.show();
 	}
 
-	// *********************GAME OVER*************************
+	/**
+	 * gameOver-method shows the game-result and asks
+	 * for the next steps (play new set, ...)
+	 * 
+	 * @param winningPlayer
+	 * @param winningCombo
+	 */
 	public void gameOver(char winningPlayer, int[][] winningCombo) {
-		highlightWinning(winningCombo);
-		// private void gameOver(char winningPlayer, int[] winningCombo){
 		highlightWinning(winningCombo);
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Game Over");
@@ -284,10 +290,9 @@ public class Controller1 extends GUIController{
 		Optional<ButtonType> result = alert.showAndWait();
 
 		if (result.get() == weiter) {
-			// Steine wieder entfernen, sauberes Spielfeld
 			clearGrid();
 
-			// Gewinner bekommt einen Punkt
+			// Winner gets one point
 			if (winningPlayer == 'X') {
 				int playerX = Integer.parseInt(ltePoints.getText());
 				ltePoints.setText(String.valueOf(playerX + 1));
@@ -296,7 +301,7 @@ public class Controller1 extends GUIController{
 				opponentPoints.setText(String.valueOf(playerO + 1));
 			}
 
-			// Satz um eines Hochz�hlen
+			// raise set 
 			int satz = Integer.parseInt(set.getText());
 			set.setText(String.valueOf(satz + 1));
 
@@ -304,14 +309,12 @@ public class Controller1 extends GUIController{
 			// TODO altes Controller Modell verwerfen und dem Agenten mitteilen
 			// TODO ggf. Spiel zu Rekonstruieren speichern
 
-			// zur�ck zu Controller0/layout0
+			// back to Screen0
 			Stage stage;
-			// Referrenz zur aktuellen Stage herstellen
 			stage = (Stage) backToStart.getScene().getWindow();
 			// FXMLLoader
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/views/layout0.fxml"));
 			loader.setController(controller.getController0());
-			// Neues Layout in eine neue Scene laden und auf die Stage setzen
 			try {
 				stage.setScene(new Scene((AnchorPane) loader.load()));
 			} catch (IOException e) {
@@ -323,9 +326,8 @@ public class Controller1 extends GUIController{
 	}
 
 	/**
-	 * Fill-Methode bef�llt die Felder des gridPanes (= Spielfeld) von layout1
-	 * mit den geworfenen Steinen �bergabeparameter: int columnIndex, int
-	 * rowIndex, int player, (boolean?) game finished (true/false)
+	 * Shows the stones corresponding to their position in the field
+	 * 
 	 */
 
 	// ************************Fill-Methode***************************
@@ -349,7 +351,9 @@ public class Controller1 extends GUIController{
 		}
 	}
 
-	//clear GameGrid
+	/**
+	 * clears the field
+	 */
 	@FXML
 	public void clearGrid() {
 		Node node = gameGrid.getChildren().get(0);
@@ -358,13 +362,12 @@ public class Controller1 extends GUIController{
 		
 	}
 	
-	//highlight winning-combo
+	/**
+	 * highlights the winning-combo
+	 * @param woGewonnen
+	 */
 	public void highlightWinning(int[][] woGewonnen){
-		//int [4][2] --> 4 Steine mit jeweils x und y Pos.
-		//[0][0] = Spalte  --  [0][1] = Zeile usw.
-		//Methodenaufruf von woGewonnen!!! --> Fabi fragen
-		
-		//Durchiterieren des Arrays
+		//Get the positions from the array
 		for(int i = 0; i<=3; i++){
 			int column = woGewonnen[i][0];
 			int row = woGewonnen[i][1];
@@ -372,13 +375,16 @@ public class Controller1 extends GUIController{
 		}
 	}
 	
-	//Einfuegen der neuen Kreise der winning-combo
+	/**
+	 * changes color to highlight the winning-combo
+	 * @param column
+	 * @param row
+	 */
 	public void setHighlight(int column, int row){
 		//new Circle
 		Circle circle2 = new Circle();
 		circle2.setRadius(35.0);
 		
-		//Ueberschreiben des vorhandenen Kreises
 		circle2.setFill(Color.web("#FF0000", 0.8));
 		GridPane.setColumnIndex(circle2, column);
 		GridPane.setRowIndex(circle2, (5 - row));
@@ -386,6 +392,9 @@ public class Controller1 extends GUIController{
 		gameGrid.setHalignment(circle2, HPos.CENTER);
 	}
 	
+	/**
+	 * updates the Credentials
+	 */
 	private void updateCredentials(){
 		CredentialsManager credentialsManager = new CredentialsManager();
 		String [] defaultCredentials = credentialsManager.readCredentials();
@@ -402,6 +411,11 @@ public class Controller1 extends GUIController{
 		}
 		
 	}
+	
+	/**
+	 * closes the DB-Connection
+	 * @param event
+	 */
 	@FXML
 	public void exitApplication(ActionEvent event) {
 		try {

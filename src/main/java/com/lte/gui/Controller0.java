@@ -2,7 +2,6 @@ package com.lte.gui;
 
 import java.io.IOException;
 import java.sql.SQLException;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,6 +15,12 @@ import javafx.scene.image.ImageView;
 import com.lte.controller.MainController;
 import com.lte.models.*;
 
+
+/**
+ * Class Controller0 manages the first Screen
+ * @author FelixH
+ *
+ */
 public class Controller0 extends GUIController{
 	// FXML Declarations
 	@FXML
@@ -53,17 +58,42 @@ public class Controller0 extends GUIController{
 	// private ThreadReconstruct controller;
 	private Settings settings;
 	private GameInfo gameInfo;
-
+	
 	public Controller0(MainController mainController) {
 		this.controller = mainController;
 	}
+	
+	/*
+	 * Getter and Setter
+	 */
+	public Settings getSettings() {
+		return settings;
+	}
 
+	public void setSettings(Settings settings) {
+		this.settings = settings;
+	}
+
+	public GameInfo getGameInfo() {
+		return gameInfo;
+	}
+
+	public void setGameInfo(GameInfo gameInfo) {
+		this.gameInfo = gameInfo;
+	}
+
+	/**
+	 * buttonPressed event Handler
+	 * Changes Layout from Layout0 to Game-Screen
+	 * @param event
+	 * @throws IOException
+	 */
 	// *******************Switch von Welcome zu Game Screen********************
 	@FXML
 	public void buttonPressed(ActionEvent event) throws IOException {
 		Stage stage;
 		if (event.getSource() == toGame) {
-			// Team-Namen setzen
+			// Set team-names
 			//String nameX = playerX.getText();
 			String nameO = playerO.getValue();
 
@@ -74,7 +104,6 @@ public class Controller0 extends GUIController{
 			gameInfo = new GameInfo(nameO);
 			controller.setGameInfo(gameInfo);
 
-			// Referrenz zur aktuellen Stage herstellen
 			stage = (Stage) toGame.getScene().getWindow();
 
 			// set Icon
@@ -86,19 +115,22 @@ public class Controller0 extends GUIController{
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout1.fxml"));
 			loader.setController(controller.getController1());
 			
-			// Neues Layout in eine neue Scene laden und auf die Stage setzen
+			// set new layout
 			stage.setScene(new Scene((AnchorPane) loader.load()));
 
 			stage.show();
 		}
 	}
 
-	// *******************Switch von Welcome zum Rekonstruieren
-	// Screen********************
+	
+	/**
+	 * Change Screen from Screen0 to Reconstruction-Screen
+	 * @param event
+	 * @throws IOException
+	 */
 	public void reconstructGame(ActionEvent event) throws IOException {
 		Stage stage;
 		if (event.getSource() == reGame) {
-			// Referrenz zur aktuellen Stage herstellen
 			stage = (Stage) toGame.getScene().getWindow();
 
 			// set Icon
@@ -110,13 +142,16 @@ public class Controller0 extends GUIController{
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout2.fxml"));
 			loader.setController(controller.getController2());
 			
-			// Neues Layout in eine neue Scene laden und auf die Stage setzen
+			//set new layout
 			stage.setScene(new Scene((AnchorPane) loader.load()));
 			
 			stage.show();
 		}
 	}
 
+	/**
+	 * JavaFX initializations 
+	 */
 	@FXML
 	public void initialize() {
 		// Background Image
@@ -139,6 +174,10 @@ public class Controller0 extends GUIController{
 		PlayerVsPlayer.setToggleGroup(tgroup);
 	}
 	
+	/**
+	 * Close DB-Connection
+	 * @param event
+	 */
 	@FXML
 	public void exitApplication(ActionEvent event) {
 		try {
@@ -150,26 +189,4 @@ public class Controller0 extends GUIController{
 
 	    ((Stage)pane.getScene().getWindow()).close();
 	}
-	
-	
-	
-	/*
-	 * Getter and Setter
-	 */
-	public Settings getSettings() {
-		return settings;
-	}
-
-	public void setSettings(Settings settings) {
-		this.settings = settings;
-	}
-
-	public GameInfo getGameInfo() {
-		return gameInfo;
-	}
-
-	public void setGameInfo(GameInfo gameInfo) {
-		this.gameInfo = gameInfo;
-	}
-
 }
