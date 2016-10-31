@@ -2,6 +2,7 @@ package com.lte.gui;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
 import java.util.TreeMap;
 
 import com.lte.controller.MainController;
@@ -19,6 +20,7 @@ import javafx.geometry.HPos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -41,10 +43,7 @@ public class Controller2 {
 	Button pause;
 	
 	@FXML
-	Button next;
-	
-	@FXML
-	Button back;
+	Button stop;
 	
 	@FXML
 	Button play;
@@ -104,33 +103,77 @@ public class Controller2 {
 		Image image = new Image(file.toURI().toString());
 		imageView.setImage(image);
 		
-		//Pause, Next, Back default is disabled:
+		//Pause, Stop default is disabled:
 		pause.setDisable(true);
-		next.setDisable(true);
-		back.setDisable(true);
-		
+		stop.setDisable(true);
+				
 		threadReconstruct = new ThreadReconstruct(this, null);	
 	}
 	
 	
-	// *******************Zur�ck zum Startbildschirm**********************
+	// *******************Zurueck zum Startbildschirm**********************
 	@FXML
 	public void goToStartmenu(ActionEvent event) throws IOException{
-		Stage stage; 
-	    // Referrenz zur aktuellen Stage herstellen
-	    stage = (Stage) pane.getScene().getWindow();
-	    // FXMLLoader        
-	    FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
-		// Neues Layout in eine neue Scene laden und auf die Stage setzen
-		stage.setScene(new Scene((AnchorPane) loader.load()));
-		    
-		// erstellter Controller1 wird geladen und anschlie�end der Agent �bergeben
-		Controller0 controller0 = loader.<Controller0>getController();
-		controller0.setController(controller);
-		    
-		stage.show();    
-	 }
+		
+		// interrupt the Thread, if it was running
+		if(threadReconstruct.getState() == Thread.State.RUNNABLE || threadReconstruct.getState() == Thread.State.TIMED_WAITING){
+			synchronized(threadReconstruct){
+				threadReconstruct.interrupt();
+				play.setDisable(false);
+			}
+		}
+		
+		if(threadReconstruct.getState() != Thread.State.TERMINATED || threadReconstruct.getState() != Thread.State.NEW){
+			// alert: "Wirklich auf den Controller0 wechseln?"
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Zum Startmenu");
+			alert.setHeaderText("Wenn Sie nun zum Startmenu wechseln," + "\n" + "geht das aktuell rekonstruierte Spiel verloren!" + "\n\n" + "Trotzdem wechseln?");
+			
+			ButtonType change = new ButtonType("Wechseln");
+			ButtonType cancle = new ButtonType("Abbrechen");
 	
+			alert.getButtonTypes().setAll(change, cancle);
+	
+			Optional<ButtonType> result = alert.showAndWait();
+			
+			if(result.get() == change){
+				
+				synchronized(threadReconstruct){
+					threadReconstruct.stop();
+				}
+				
+				Stage stage; 
+			    // Referrenz zur aktuellen Stage herstellen
+			    stage = (Stage) pane.getScene().getWindow();
+			    // FXMLLoader        
+			    FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
+				// Neues Layout in eine neue Scene laden und auf die Stage setzen
+				stage.setScene(new Scene((AnchorPane) loader.load()));
+				    
+				// erstellter Controller1 wird geladen und anschlie�end der Agent �bergeben
+				Controller0 controller0 = loader.<Controller0>getController();
+				controller0.setController(controller);
+				    
+				stage.show();    
+			} else if(result.get() == cancle){
+				alert.close();
+			}
+		} else{
+			Stage stage; 
+		    // Referrenz zur aktuellen Stage herstellen
+		    stage = (Stage) pane.getScene().getWindow();
+		    // FXMLLoader        
+		    FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
+			// Neues Layout in eine neue Scene laden und auf die Stage setzen
+			stage.setScene(new Scene((AnchorPane) loader.load()));
+			    
+			// erstellter Controller1 wird geladen und anschlie�end der Agent �bergeben
+			Controller0 controller0 = loader.<Controller0>getController();
+			controller0.setController(controller);
+			    
+			stage.show();    
+		}
+	 }
 	
 	private int [] prepareRecTurns(){
 		//System.out.println("GameID:" + gameID);
@@ -165,20 +208,20 @@ public class Controller2 {
 	
 	@FXML
 	public void playRec(ActionEvent event){
-		//Next und Back disabled
-		//Pause enabled
-		//nextStep.setDisable(true);
-		//backStep.setDisable(true);
 		
 		pause.setDisable(false);
 		play.setDisable(true);
-//		next.setDisable(true);
-//		back.setDisable(true);
+		stop.setDisable(false);
+		gameChoice.setDisable(true);
+		setChoice.setDisable(true);
 
 
 		synchronized (threadReconstruct) {
 			if (threadReconstruct.getState() == Thread.State.NEW) {
-				clearGrid();
+				threadReconstruct.setRecTurns(prepareRecTurns());
+				threadReconstruct.start();
+			} else if (threadReconstruct.getState() == Thread.State.TERMINATED){
+				threadReconstruct = new ThreadReconstruct(this, null);
 				threadReconstruct.setRecTurns(prepareRecTurns());
 				threadReconstruct.start();
 			} else if (threadReconstruct.getState() == Thread.State.WAITING) {
@@ -213,12 +256,15 @@ public class Controller2 {
 		gameGrid.setHalignment(circle, HPos.CENTER);	
 	}
 
-	
-	
 	@FXML
 	public void pauseRec(ActionEvent event) {
+		
 		play.setDisable(false);
 		pause.setDisable(true);
+		stop.setDisable(false);
+		gameChoice.setDisable(true);
+		setChoice.setDisable(true);
+		
 		synchronized (threadReconstruct) {
 			System.out.println(threadReconstruct.getState());
 			if (threadReconstruct.getState() == Thread.State.RUNNABLE || threadReconstruct.getState() == Thread.State.TIMED_WAITING) {
@@ -229,9 +275,31 @@ public class Controller2 {
 		}	
 	}
 	
-	// Methode zum Befuellen der Choice Boxes und zum Anfuegen der ChangeListeners
-	public void getRecGameInfo(){
+	@FXML
+	/**
+	 * if button "Abbruch" is clicked<br>
+	 * sets the State of threadReconstruction to Terminated<br>
+	 * allows the user to select another game/set to reconstruct<br>
+	 * 
+	 * @param event
+	 */
+	public void stopAction(ActionEvent event){
+		
+		play.setDisable(true);
+		pause.setDisable(true);
+		stop.setDisable(true);
+		gameChoice.setDisable(false);
+		setChoice.setDisable(false);
+		
+		synchronized(threadReconstruct){
+			if(threadReconstruct.getState() != Thread.State.TERMINATED){
+				threadReconstruct.stop();
+			}
+		}
+	}
 	
+	// Methode zum Befuellen der Choice Boxes und zum Anfuegen der ChangeListeners
+	public void getRecGameInfo(){	
 		games = controller.getRecGameInfo();
 		// Shown content in gameChoiceBox, Game Info (opponentplayer und playtime)
 		ObservableList<String> gameInfo = FXCollections.observableArrayList();
@@ -286,9 +354,21 @@ public class Controller2 {
 					setNumber.add(i);
 				}
 				setChoice.setItems(setNumber);
+				setChoice.getSelectionModel().selectFirst();
+				clearGrid();
+				play.setDisable(false);
 			}
 		};
 		gameChoice.getSelectionModel().selectedIndexProperty().addListener(listenerGame);
+		
+		if(gameChoice.getItems() == null || setChoice.getItems() == null){
+			play.setDisable(true);
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Fehlermeldung");
+			alert.setHeaderText("Leider konnten keine rekonstruierbare Spiele gefunden werden!");
+			alert.setContentText("Spiele zuerst ein Spiel, um es anschliessend rekonstruieren zu koennen.");
+			alert.showAndWait();
+		}
 	}
 	
 	@FXML

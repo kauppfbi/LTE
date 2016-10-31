@@ -82,12 +82,7 @@
             <Font size="18.0" />
          </font>
       </Button>
-      <Button fx:id="next" layoutX="1114.0" layoutY="406.0" mnemonicParsing="false" text="Next">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Button>
-      <Button fx:id="back" layoutX="1185.0" layoutY="406.0" mnemonicParsing="false" text="Back">
+      <Button fx:id="stop" layoutX="1114.0" layoutY="406.0" mnemonicParsing="false" onAction="#stopAction" text="Abbruch">
          <font>
             <Font size="18.0" />
          </font>

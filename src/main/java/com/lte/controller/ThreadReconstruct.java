@@ -119,7 +119,6 @@ public class ThreadReconstruct extends Thread {
 					e1.printStackTrace();
 				}
 			}
-		} // for
+		}// for
 	}// run
-
 }// class
