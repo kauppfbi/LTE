@@ -1,8 +1,6 @@
 package com.lte.aiPar;
 
 
-import java.util.ArrayList;
-
 import com.lte.models.GameScore;
 
 /**
@@ -18,7 +16,7 @@ public class SingleAlgorithm{
 	private GameScore bufferdGameScore;
 	
 	//********Konstruktoren********************************
-	public SingleAlgorithm(char[][] field, int algorithmDepth){
+	public SingleAlgorithm(byte[][] field, int algorithmDepth){
 	
 	//Ereugen neuen Spielstand f�r den Algorithmus
 	this.bufferdGameScore = new GameScore(field);
@@ -35,7 +33,7 @@ public class SingleAlgorithm{
 	 */
 	public int alphaBeta(){ 
        
-		max(startDepth, -1000000, 1000000);
+		max((byte) startDepth, -1000000, 1000000);
 		
 		return savedMove;
 	}
@@ -48,23 +46,24 @@ public class SingleAlgorithm{
 	 * @param beta beta value of current alpha beta
 	 * @return
 	 */
-	private int max(int depth, int alpha, int beta) {
+	private int max(byte depth, int alpha, int beta) {
 	    if (depth == 0){
 	       return bufferdGameScore.eval();
 	    }
 	    int maxValue = alpha;
-	    ArrayList<Integer> possibleMoves = bufferdGameScore.possibleMoves();
-	    for (int i = 0; i < possibleMoves.size(); i++)
+	    byte[] possibleMoves = bufferdGameScore.possibleMoves();
+	    for (byte i = 0; i < possibleMoves.length; i++)
 	    {
+	    	if(possibleMoves[i] == 99){break;}
 	       try {
-			bufferdGameScore.play(possibleMoves.get(i), 'X');
+			bufferdGameScore.play(possibleMoves[i], (byte) 1);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	       int value = min(depth-1, maxValue, beta);
+	       int value = min((byte) (depth-1), maxValue, beta);
 	       try {
-			bufferdGameScore.unDo(possibleMoves.get(i));
+			bufferdGameScore.unDo(possibleMoves[i]);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -74,7 +73,7 @@ public class SingleAlgorithm{
 	          if (maxValue >= beta)
 	             break;
 	          if (depth == startDepth)
-	             savedMove = possibleMoves.get(i);
+	             savedMove = possibleMoves[i];
 	       }
 	    }
 	    return maxValue;
@@ -87,24 +86,26 @@ public class SingleAlgorithm{
 	 * @param beta beta value of current alpha beta
 	 * @return
 	 */
-	 private int min(int depth, int alpha, int beta) {
-	    if (depth == 0 || bufferdGameScore.possibleMoves().size() == 0){
+	 private int min(byte depth, int alpha, int beta) {
+		char isWon = bufferdGameScore.isWon();
+	    if (depth == 0 || bufferdGameScore.possibleMoves()[0] == 99 || isWon != 'N'){
 	    	return bufferdGameScore.eval();
 	    }
 	    int minValue = beta;
-	    ArrayList<Integer> possibleMoves = bufferdGameScore.possibleMoves();
-	    for (int i = 0; i < possibleMoves.size(); i++)
+	    byte[] possibleMoves = bufferdGameScore.possibleMoves();
+	    for (byte i = 0; i < possibleMoves.length; i++)
 	    {
+	    	if(possibleMoves[i] == 99){break;}
 	    	try {
-				bufferdGameScore.play(possibleMoves.get(i), 'O');
+				bufferdGameScore.play(possibleMoves[i], (byte) 2);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 	    	
-	       int value = max(depth-1, alpha, minValue);
+	       int value = max((byte) (depth-1), alpha, minValue);
 	       try {
-				bufferdGameScore.unDo(possibleMoves.get(i));
+				bufferdGameScore.unDo(possibleMoves[i]);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

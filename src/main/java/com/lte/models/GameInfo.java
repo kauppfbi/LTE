@@ -19,6 +19,9 @@ public class GameInfo {
 	
 	boolean gameInProgress;
 	char nextPlayer;
+	private int set;
+	private int ownPoints;
+	private int opponentPoints;
 
 	
 	public GameInfo(String opponentName) {
@@ -76,6 +79,36 @@ public class GameInfo {
 
 	public void setNextPlayer(char nextPlayer) {
 		this.nextPlayer = nextPlayer;
+	}
+
+
+	public int getSet() {
+		return set;
+	}
+
+
+	public void setSet(int turn) {
+		this.set = turn;
+	}
+
+
+	public int getOwnPoints() {
+		return ownPoints;
+	}
+
+
+	public void setOwnPoints(int ownPoints) {
+		this.ownPoints = ownPoints;
+	}
+
+
+	public int getOpponentPoints() {
+		return opponentPoints;
+	}
+
+
+	public void setOpponentPoints(int opponentPoints) {
+		this.opponentPoints = opponentPoints;
 	} 
 	
 	

@@ -2,7 +2,6 @@ package com.lte.controller;
 
 
 import com.lte.aiPar.AlgorithmManager;
-import com.lte.aiPar.SingleAlgorithm;
 import com.lte.db.DBconnection;
 import com.lte.gui.Controller1;
 import com.lte.interfaces.InterfaceManager;
@@ -13,6 +12,12 @@ import com.lte.models.GameScore;
 
 import javafx.application.Platform;
 
+/**
+ * The class ThreadPlay extends thread and represents a set against another AI. It communicates with the AI
+ * the chosen interface and the settings and GameInfo object. 
+ * @author Fabian Soelker
+ *
+ */
 public class ThreadPlay extends Thread {
 
 	// interface to server
@@ -73,12 +78,19 @@ public class ThreadPlay extends Thread {
 		}
 
 		// lade DB Controller
+		if(gameInfo.getSetID() == 0){
 		int ids[] = connection.startNewGame(gameInfo.getOpponentName(), String.valueOf(gameInfo.getNextPlayer()));
-
+		
 		// prepare gameInfo
 		gameInfo.setGameID(ids[0]);
 		gameInfo.setSetID(ids[1]);
 		gameInfo.setOpponentID(ids[2]);
+		}
+		else{
+			connection.createNewSet(gameInfo.getGameID(), gameInfo.getOwnPoints(), gameInfo.getOpponentPoints());
+			gameInfo.setSet(gameInfo.getSet() + 1);
+		}
+			
 
 		gameInfo.setGameInProgress(true);
 
@@ -107,7 +119,7 @@ public class ThreadPlay extends Thread {
 					}
 					int opponentMove = message.getOpponentMove();
 
-					currentGameScore.play(opponentMove, 'O');
+					currentGameScore.play(opponentMove, (byte) 2);
 
 					// visualisiere in GUI
 					int row = currentGameScore.getRow(opponentMove);
@@ -137,7 +149,7 @@ public class ThreadPlay extends Thread {
 				System.out.println("Wir spielen");
 				try {
 					// berechne n�chsten Zug - KI gibt Spalte zur�ck
-					int nextMove = algorithmManager.ParallelAlphaBeta(currentGameScore.getField(), 10, settings.getCalculationTime(), 'X', 'O');
+					int nextMove = algorithmManager.ParallelAlphaBeta(currentGameScore.getField(), 10, settings.getCalculationTime(), (byte) 1);
 
 					// sende n�chsten Zug an Server
 					interfaceManager.sendMove(nextMove);
@@ -145,7 +157,7 @@ public class ThreadPlay extends Thread {
 					final long timeEnd = System.currentTimeMillis(); 
 			        System.out.println("Antwortzeit: " + (timeEnd - timeStart) + " Millisek.");
 
-					currentGameScore.play(nextMove, 'X');
+					currentGameScore.play(nextMove, (byte) 1);
 
 					// visualisiere in GUI
 					int row = currentGameScore.getRow(nextMove);
@@ -184,14 +196,15 @@ public class ThreadPlay extends Thread {
 				controller1.gameOver(currentGameScore.isWon(),currentGameScore.winWhere());
 			}
 		});
-
 		
-		//Ausgabe in Konsole zur Kontrolle
-		System.out.println("Winning Kombi");
-		int[][] woGewonnen = currentGameScore.winWhere();
-		for (int i = 0; i < woGewonnen.length; i++) {
-			System.out.print(woGewonnen[i][0] + " ");
-			System.out.println(woGewonnen[i][1]);
+		// - Gewinner in DB schreiben
+		if(currentGameScore.isWon() == 'O'){
+			connection.updateWinnerOfSet(gameInfo.getSetID(), gameInfo.getOpponentName());
+		}
+		else if(currentGameScore.isWon() == 'X'){
+			connection.updateWinnerOfSet(gameInfo.getSetID(), "LTE");
+		}else{
+			connection.updateWinnerOfSet(gameInfo.getSetID(), "Unentschieden");
 		}
 		
 		

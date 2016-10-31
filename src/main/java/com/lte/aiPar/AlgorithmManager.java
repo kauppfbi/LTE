@@ -1,7 +1,6 @@
 package com.lte.aiPar;
 
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -9,10 +8,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
-
 import com.lte.models.GameScore;
-import com.sun.corba.se.impl.orbutil.threadpool.TimeoutException;
-import com.sun.javafx.print.Units;
+
 
 /**
  * The AlgortihmManager coordinates the usage of different algorithms, tactics and algorithm depths. It represents the AI.
@@ -50,12 +47,12 @@ public class AlgorithmManager {
 		 * Multi threaded implementation of alpha beta algorithm to compute the next move
 		 * @param field current field for processing the next move
 		 * @param algorithmDepth algorithm depth for alpha beta algorithm
-		 * @param playerCharacter character of own player
+		 * @param playerByte character of own player
 		 * @param opponent character of opponent
 		 * @return best move as integer
 		 * @throws Exception
 		 */
-		public int ParallelAlphaBeta(char[][] field, int algorithmDepth, double calculationTime, char playerCharacter, char opponent) throws Exception{
+		public int ParallelAlphaBeta(byte[][] field, int algorithmDepth, double calculationTime, byte playerByte) throws Exception{
 			
 			
 			//Laufzeitanalyse starten
@@ -72,8 +69,7 @@ public class AlgorithmManager {
 			GameScore parAlgGameScore = new GameScore(field);
 			
 			//M�gliche Z�ge
-			ArrayList<Integer> moves = new ArrayList<>();
-			moves = parAlgGameScore.possibleMoves();
+			byte[] moves = parAlgGameScore.possibleMoves();
 			
 			//Die ersten Runden beschleunigen
 			roundCounter++;
@@ -85,15 +81,15 @@ public class AlgorithmManager {
 			System.out.println(algorithmDepth);
 			
 			//Pr�fe ob nur noch ein Zug vorhanden ist
-			if(moves.size() == 1)
+			if(moves[1] == 99 && moves[0] != 99)
 			{
-				return moves.get(0);
+				return moves[0];
 			}
 			
 			//Pr�fe ob in den n�chsten Zuegen gewonnen werden kann
 			SingleAlgorithm simpleAlg = new SingleAlgorithm(field, 4);
 			int simpleMove = simpleAlg.alphaBeta();
-			parAlgGameScore.play(simpleMove, playerCharacter);
+			parAlgGameScore.play(simpleMove, playerByte);
 			int eval = parAlgGameScore.eval();
 			if (eval > 95000) {
 				
@@ -108,12 +104,13 @@ public class AlgorithmManager {
 			
 			
 			//Spiele die ersten Z�ge und erzeuge neue Tasks
-			for (int i = 0; i < moves.size(); i++) {
-				parAlgGameScore.play(moves.get(i), playerCharacter);
+			for (int i = 0; i < moves.length; i++) {
+				if(moves[i] == 99){break;}
+				parAlgGameScore.play(moves[i], playerByte);
 				
 				list.add(new Algorithm(parAlgGameScore.getField(), algorithmDepth-1));
 
-				parAlgGameScore.unDo(moves.get(i));
+				parAlgGameScore.unDo(moves[i]);
 			}
 			
 			
@@ -139,7 +136,7 @@ public class AlgorithmManager {
 			ArrayList<Integer> results = new ArrayList<>();
 			
 			//In ArrayList �bertragen
-			for(Future obj : future){
+			for(Future<?> obj : future){
 				results.add((int)obj.get());
 			}
 			
@@ -149,24 +146,24 @@ public class AlgorithmManager {
 		    	
 			    if(results.get(i) >= highest){
 			    	
-			    	parAlgGameScore.play(moves.get(counter), 'X');
+			    	parAlgGameScore.play(moves[counter], (byte) 1);
 			    	
 			    	if(parAlgGameScore.eval() > -95000){
 			    	highest = results.get(i);
-			    	column = moves.get(counter);
+			    	column = moves[counter];
 			    	
 			    	}
 			    	else{
-			    		System.out.println("Gef�hrliche Stellung in Spalte erkannt: " + moves.get(counter));
+			    		System.out.println("Gef�hrliche Stellung in Spalte erkannt: " + moves[counter]);
 			    	}
-			    	parAlgGameScore.unDo(moves.get(counter));
+			    	parAlgGameScore.unDo(moves[counter]);
 			    	}
 			    
 			    counter++;
 			  }
 			
 			if(highest == -1000000){
-				column = moves.get(0);
+				column = moves[0];
 				System.out.println("Verloren");
 			}
 			

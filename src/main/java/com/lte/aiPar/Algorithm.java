@@ -1,7 +1,6 @@
 package com.lte.aiPar;
 
 
-import java.util.ArrayList;
 import java.util.concurrent.Callable;
 
 import com.lte.models.GameScore;
@@ -15,11 +14,10 @@ public class Algorithm implements Callable<Integer>{
 	
 	//*********Klassenvariablen****************************
 	private int startDepth;
-	private int savedMove;
 	private GameScore bufferdGameScore;
 	
 	//********Konstruktoren********************************
-	public Algorithm(char[][] field, int algorithmDepth){
+	public Algorithm(byte[][] field, int algorithmDepth){
 	
 	//Ereuge neuen Spielstand f�r den Algorithmus
 	bufferdGameScore = new GameScore(field);
@@ -39,10 +37,10 @@ public class Algorithm implements Callable<Integer>{
 	 * @param beta beta value of current alpha beta
 	 * @return
 	 */
-	private int max(int depth, int alpha, int beta) {
+	private int max(byte depth, int alpha, int beta) {
 		char isWon = bufferdGameScore.isWon();
-	    ArrayList<Integer> possibleMoves = bufferdGameScore.possibleMoves();
-	    if (depth == 0 || possibleMoves.size() == 0 || isWon != 'N'){
+	    byte[] possibleMoves = bufferdGameScore.possibleMoves();
+	    if (depth == 0 || possibleMoves[0] == 99 || isWon != 'N'){
 	    	if(isWon != 'N'){
 	    		return (bufferdGameScore.eval() * ((depth + 1)) * 100);
 	    	}else{
@@ -50,17 +48,18 @@ public class Algorithm implements Callable<Integer>{
 	    	}
 	    }
 	    int maxValue = alpha;
-	    for (int i = 0; i < possibleMoves.size(); i++)
+	    for (byte i = 0; i < possibleMoves.length; i++)
 	    {
+	    	if(possibleMoves[i] == 99){break;}
 	       try {
-			bufferdGameScore.play(possibleMoves.get(i), 'X');
+			bufferdGameScore.play(possibleMoves[i], (byte) 1);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	       int value = min(depth-1, maxValue, beta);
+	       int value = min((byte) (depth-1), maxValue, beta);
 	       try {
-			bufferdGameScore.unDo(possibleMoves.get(i));
+			bufferdGameScore.unDo(possibleMoves[i]);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -69,8 +68,6 @@ public class Algorithm implements Callable<Integer>{
 	          maxValue = value;
 	          if (maxValue >= beta)
 	             break;
-	          if (depth == startDepth)
-	             savedMove = possibleMoves.get(i);
 	       }
 	    }
 	    return maxValue;
@@ -84,10 +81,10 @@ public class Algorithm implements Callable<Integer>{
 	 * @param beta beta value of current alpha beta
 	 * @return
 	 */
-	 private int min(int depth, int alpha, int beta) {
+	 private int min(byte depth, int alpha, int beta) {
 		char isWon = bufferdGameScore.isWon();
-	    ArrayList<Integer> possibleMoves = bufferdGameScore.possibleMoves();
-	    if (depth == 0 || possibleMoves.size() == 0 || isWon != 'N'){
+	    byte[] possibleMoves = bufferdGameScore.possibleMoves();
+	    if (depth == 0 || possibleMoves[0] == 99 || isWon != 'N'){
 	    	if(isWon != 'N'){
 	    		return (bufferdGameScore.eval() * ((depth + 1)) * 100);
 	    	}else{
@@ -95,18 +92,19 @@ public class Algorithm implements Callable<Integer>{
 	    	}
 	    }
 	    int minValue = beta;
-	    for (int i = 0; i < possibleMoves.size(); i++)
+	    for (byte i = 0; i < possibleMoves.length; i++)
 	    {
+	    	if(possibleMoves[i] == 99){break;}
 	    	try {
-				bufferdGameScore.play(possibleMoves.get(i), 'O');
+				bufferdGameScore.play(possibleMoves[i], (byte) 2);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 	    	
-	       int wert = max(depth-1, alpha, minValue);
+	       int wert = max((byte) (depth-1), alpha, minValue);
 	       try {
-				bufferdGameScore.unDo(possibleMoves.get(i));
+				bufferdGameScore.unDo(possibleMoves[i]);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -124,7 +122,7 @@ public class Algorithm implements Callable<Integer>{
 	@Override
 	public Integer call() throws Exception {
 
-			int min = min(startDepth, -1000000, 1000000);					
+			int min = min((byte) startDepth, -1000000, 1000000);					
 			return min;
 	}
 	
