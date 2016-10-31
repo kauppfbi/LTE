@@ -2,13 +2,11 @@ package com.lte.gui;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.TreeMap;
 import com.lte.controller.MainController;
 import com.lte.controller.ThreadReconstruct;
 import com.lte.models.GameDB;
 import com.lte.models.SetDB;
-
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -96,6 +94,9 @@ public class Controller2 extends GUIController{
 		this.controller = mainController;
 	}
 
+	/**
+	 * FXML initializations
+	 */
 	@FXML
 	public void initialize(){
 		//Background
@@ -105,7 +106,6 @@ public class Controller2 extends GUIController{
 	}
 	
 	
-	// *******************Zur�ck zum Startbildschirm**********************
 	/**
 	 * Go back to Screen0
 	 * @param event
@@ -142,7 +142,7 @@ public class Controller2 extends GUIController{
 		int[] recTurns = sets[recSetNumber].getReplayTurns();
 		System.out.println("RecTurns:" + recTurns);
 		
-		String pointsOpponent = String.valueOf(sets[recSetNumber].getPointsOpponent());
+		String pointsOpponent = String.valueOf(sets[recSetNumber].getPointsOpponent()); //saves the meta-information of the game
 		String pointsOwn = String.valueOf(sets[recSetNumber].getPointsOwn());
 		
 		String nameOpponent = games[gameID].getOpponentName() ;
@@ -151,8 +151,7 @@ public class Controller2 extends GUIController{
 		String numberAllSets = String.valueOf(games[gameID].getNumberOfSets());
 		String numberCurrentSet = String.valueOf(recSetNumber);
 		
-		//metaText.setText(nameOwn + " " + pointsOwn + " | " + pointsOpponent + " " + nameOpponent + "    " + numberCurrentSet + "/" + numberAllSets);
-		
+		//shows the meta-information of the game
 		metaPlayer0.setText(nameOwn);
 		metaPlayerX.setText(nameOpponent);
 		points0.setText(pointsOwn);
@@ -192,15 +191,6 @@ public class Controller2 extends GUIController{
 		gameGrid.getChildren().add(circle);
 		gameGrid.setHalignment(circle, HPos.CENTER);
 		
-	}
-
-	
-	
-	@FXML
-	public void pauseRec(ActionEvent event){
-		//Next und Back disabled to false
-		//nextStep.setDisable(false);
-		//backStep.setDisable(false);
 	}
 	
 	
@@ -279,6 +269,10 @@ public class Controller2 extends GUIController{
 		
 	}
 	
+	/**
+	 * Event for leaving the application
+	 * @param event
+	 */
 	@FXML
 	public void exitApplication(ActionEvent event) {
 		Platform.exit();

@@ -20,7 +20,7 @@ import com.lte.models.*;
 
 
 /**
- * Class Controller0 manages the first Screen
+ * Class Controller0 manages the first Screen of the application
  * @author FelixH
  *
  */
@@ -60,6 +60,7 @@ public class Controller0 extends GUIController{
 	private MainController controller;
 	private String errorPlayer;
 	private ToggleGroup tgroup;
+	
 	// private ThreadReconstruct controller;
 	private Settings settings;
 	private GameInfo gameInfo;
@@ -90,12 +91,13 @@ public class Controller0 extends GUIController{
 	/**
 	 * buttonPressed event Handler
 	 * Changes Layout from Layout0 to Game-Screen
+	 * Button "Weiter zum Spiel" fires this event
 	 * @param event
 	 * @throws IOException
 	 */
 	// *******************Switch von Welcome zu Game Screen********************
 	@FXML
-	public void buttonPressed(ActionEvent event) throws IOException {
+	public void toGame(ActionEvent event) throws IOException {
 		//Toggle toggle = tgroup.getSelectedToggle();
 		//System.out.println("Toggle = " + tgroup.);
 		
@@ -209,7 +211,10 @@ public class Controller0 extends GUIController{
 		PlayerVsPlayer.setToggleGroup(tgroup);
 	}
 
-	
+	/**
+	 * Event for leaving the application
+	 * @param event
+	 */
 	@FXML
 	public void exitApplication(ActionEvent event) {
 		Platform.exit();
