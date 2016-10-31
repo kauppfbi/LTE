@@ -57,6 +57,7 @@ public class Controller0 extends GUIController{
 	// non-FXML Declarations
 	private MainController controller;
 	private String errorPlayer;
+	private ToggleGroup tgroup;
 	// private ThreadReconstruct controller;
 	private Settings settings;
 	private GameInfo gameInfo;
@@ -93,6 +94,9 @@ public class Controller0 extends GUIController{
 	// *******************Switch von Welcome zu Game Screen********************
 	@FXML
 	public void buttonPressed(ActionEvent event) throws IOException {
+		Toggle toggle = tgroup.getSelectedToggle();
+		//System.out.println("Toggle = " + tgroup.);
+		
 		//Is one player-name empty?
 		if(playerX.getValue()==null || playerO.getValue()==null){
 			//Error-Message: Name is null!
@@ -196,7 +200,7 @@ public class Controller0 extends GUIController{
 		playerO.setEditable(true);
 		
 		//initialize ToggleGroup for RadioButtons
-		ToggleGroup tgroup = new ToggleGroup();
+		tgroup = new ToggleGroup();
 		AiVsAi.setToggleGroup(tgroup);
 		AiVsAi.setSelected(true);
 		AiVsPlayer.setToggleGroup(tgroup);

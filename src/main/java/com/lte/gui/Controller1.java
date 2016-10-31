@@ -206,7 +206,6 @@ public class Controller1 extends GUIController{
 	@FXML
 	private void goToStartmenu(ActionEvent event) throws IOException {
 		Stage stage;
-		// Referrenz zur aktuellen Stage herstellen
 		stage = (Stage) backToStart.getScene().getWindow();
 
 		// set Icon
@@ -217,7 +216,6 @@ public class Controller1 extends GUIController{
 		// FXMLLoader
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
 		loader.setController(controller.getController0());
-		// Neues Layout in eine neue Scene laden und auf die Stage setzen
 		stage.setScene(new Scene((AnchorPane) loader.load()));
 
 		stage.show();
