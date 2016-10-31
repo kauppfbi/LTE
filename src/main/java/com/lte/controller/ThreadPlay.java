@@ -198,10 +198,10 @@ public class ThreadPlay extends Thread {
 		});
 		
 		// - Gewinner in DB schreiben
-		if(currentGameScore.isWon() == 'O'){
+		if(currentGameScore.isWon() == 2){
 			connection.updateWinnerOfSet(gameInfo.getSetID(), gameInfo.getOpponentName());
 		}
-		else if(currentGameScore.isWon() == 'X'){
+		else if(currentGameScore.isWon() == 1){
 			connection.updateWinnerOfSet(gameInfo.getSetID(), "LTE");
 		}else{
 			connection.updateWinnerOfSet(gameInfo.getSetID(), "Unentschieden");

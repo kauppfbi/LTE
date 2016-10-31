@@ -47,11 +47,16 @@ public class SingleAlgorithm{
 	 * @return
 	 */
 	private int max(byte depth, int alpha, int beta) {
-	    if (depth == 0){
-	       return bufferdGameScore.eval();
+		byte isWon = bufferdGameScore.isWon();
+	    byte[] possibleMoves = bufferdGameScore.possibleMoves();
+	    if (depth == 0 || possibleMoves[0] == 99 || isWon != 0){
+	    	if(isWon != 'N'){
+	    		return (bufferdGameScore.eval() * ((depth + 1)) * 100);
+	    	}else{
+		    	return bufferdGameScore.eval();
+	    	}
 	    }
 	    int maxValue = alpha;
-	    byte[] possibleMoves = bufferdGameScore.possibleMoves();
 	    for (byte i = 0; i < possibleMoves.length; i++)
 	    {
 	    	if(possibleMoves[i] == 99){break;}
@@ -87,12 +92,16 @@ public class SingleAlgorithm{
 	 * @return
 	 */
 	 private int min(byte depth, int alpha, int beta) {
-		char isWon = bufferdGameScore.isWon();
-	    if (depth == 0 || bufferdGameScore.possibleMoves()[0] == 99 || isWon != 'N'){
-	    	return bufferdGameScore.eval();
-	    }
+			byte isWon = bufferdGameScore.isWon();
+		    byte[] possibleMoves = bufferdGameScore.possibleMoves();
+		    if (depth == 0 || possibleMoves[0] == 99 || isWon != 0){
+		    	if(isWon != 'N'){
+		    		return (bufferdGameScore.eval() * ((depth + 1)) * 100);
+		    	}else{
+			    	return bufferdGameScore.eval();
+		    	}
+		    }
 	    int minValue = beta;
-	    byte[] possibleMoves = bufferdGameScore.possibleMoves();
 	    for (byte i = 0; i < possibleMoves.length; i++)
 	    {
 	    	if(possibleMoves[i] == 99){break;}

@@ -1,9 +1,8 @@
 package com.lte.aiPar;
 
-
+import com.lte.models.GameScore;
 import java.util.concurrent.Callable;
 
-import com.lte.models.GameScore;
 
 /**
  * The class Algorithm implements callable for multi threaded usage in AlgortihmManager. Call() returns the min value for the corresponding subtree of alpha beta. 
@@ -38,9 +37,9 @@ public class Algorithm implements Callable<Integer>{
 	 * @return
 	 */
 	private int max(byte depth, int alpha, int beta) {
-		char isWon = bufferdGameScore.isWon();
+		byte isWon = bufferdGameScore.isWon();
 	    byte[] possibleMoves = bufferdGameScore.possibleMoves();
-	    if (depth == 0 || possibleMoves[0] == 99 || isWon != 'N'){
+	    if (depth == 0 || possibleMoves[0] == 99 || isWon != 0){
 	    	if(isWon != 'N'){
 	    		return (bufferdGameScore.eval() * ((depth + 1)) * 100);
 	    	}else{
@@ -82,9 +81,9 @@ public class Algorithm implements Callable<Integer>{
 	 * @return
 	 */
 	 private int min(byte depth, int alpha, int beta) {
-		char isWon = bufferdGameScore.isWon();
+		byte isWon = bufferdGameScore.isWon();
 	    byte[] possibleMoves = bufferdGameScore.possibleMoves();
-	    if (depth == 0 || possibleMoves[0] == 99 || isWon != 'N'){
+	    if (depth == 0 || possibleMoves[0] == 99 || isWon != 0){
 	    	if(isWon != 'N'){
 	    		return (bufferdGameScore.eval() * ((depth + 1)) * 100);
 	    	}else{

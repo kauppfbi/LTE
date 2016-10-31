@@ -270,13 +270,13 @@ public class Controller1 extends GUIController{
 	 * @param winningPlayer
 	 * @param winningCombo
 	 */
-	public void gameOver(char winningPlayer, int[][] winningCombo) {
+	public void gameOver(byte winningPlayer, int[][] winningCombo) {
 		highlightWinning(winningCombo);
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Game Over");
-		if (winningPlayer == 'X') {
+		if (winningPlayer == 1) {
 			alert.setHeaderText("Sie haben gewonnen!" + "\n" + "Was nun?");
-		} else if (winningPlayer == 'O') {
+		} else if (winningPlayer == 2) {
 			alert.setHeaderText("Sie haben verloren!" + "\n" + "Was nun?");
 		} else {
 			alert.setHeaderText("Unentschieden!" + "\n" + "Was nun?");
@@ -293,11 +293,11 @@ public class Controller1 extends GUIController{
 			clearGrid();
 
 			// Winner gets one point
-			if (winningPlayer == 'X') {
+			if (winningPlayer == 1) {
 				int playerX = Integer.parseInt(ltePoints.getText());
 				ltePoints.setText(String.valueOf(playerX + 1));
 				controller.getGameInfo().setOwnPoints(playerX);
-			} else if (winningPlayer == 'O') {
+			} else if (winningPlayer == 2) {
 				int playerO = Integer.parseInt(opponentPoints.getText());
 				opponentPoints.setText(String.valueOf(playerO + 1));
 				controller.getGameInfo().setOpponentPoints(playerO);

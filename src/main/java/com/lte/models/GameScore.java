@@ -90,11 +90,10 @@ public class GameScore {
 		public byte[][] getField(){
 			byte[][] deepField = new byte[7][6];
 			
-			for (byte row = 0; row < 6; row++) {		
-				for (byte column = 0; column < 7; column++) {
-					deepField[column][row] = field[column][row];
-				}
-				}
+			
+		    for (byte i = 0; i < 7; i++) {
+		        System.arraycopy(field[i], 0, deepField[i], 0, 6);
+		    }
 			
 			return deepField;
 		}
@@ -259,8 +258,8 @@ public class GameScore {
 		 * Returns if the current game score is won by one player
 		 * @return char 'N' for no winner. 1 for the own player and 2 for the opponent.
 		 */
-		public char isWon(){
-			char isGewonnen = 'N';
+		public byte isWon(){
+			byte isGewonnen = 0;
 			
 			
 			//horizantale Möglichkeiten (24)
