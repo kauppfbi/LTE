@@ -523,6 +523,36 @@ public class DBconnection {
 		return opponentsStats;
 
 	}
+	
+	/**
+	 * Method used to delete unfinished games if user aborts game
+	 * @param gameID
+	 */
+	public void deleteUnfinishedGame(int gameID) {
+		try {
+			stmt = con.createStatement();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("LOG: couldn't create statement");
+		}
+		
+		String sql = "DELETE FROM PUBLIC.GAMESET WHERE GAMEID = " + gameID + ";";
+		try {
+			stmt.executeQuery(sql);
+			System.out.println("LOG: deleted sets of specified game");
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("LOG: couldn't delete sets of specified game");
+		}
+		sql = "DELETE FROM PUBLIC.GAME WHERE GAMEID = " + gameID + ";";
+		try {
+			stmt.executeQuery(sql);
+			System.out.println("LOG: deleted game with specified id");
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("LOG: couldn't delete game with specified id");
+		}
+	}
 
 	/**
 	 * Inserts a new opponent into the database and checks if the opponent
