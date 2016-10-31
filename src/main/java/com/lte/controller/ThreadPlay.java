@@ -78,7 +78,7 @@ public class ThreadPlay extends Thread {
 		}
 
 		// lade DB Controller
-		if(gameInfo.getSetID() == 0){
+		if(gameInfo.getSetID() == -1){
 		int ids[] = connection.startNewGame(gameInfo.getOpponentName(), String.valueOf(gameInfo.getNextPlayer()));
 		
 		// prepare gameInfo
