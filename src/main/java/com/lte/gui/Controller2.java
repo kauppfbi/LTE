@@ -110,6 +110,9 @@ public class Controller2 {
 		threadReconstruct = new ThreadReconstruct(this, null);	
 	}
 	
+	// TODO onCloseRequest Thread Terminaten
+	// TODO Leiste und Infos weg
+	
 	
 	// *******************Zurueck zum Startbildschirm**********************
 	@FXML
@@ -123,7 +126,7 @@ public class Controller2 {
 			}
 		}
 		
-		if(threadReconstruct.getState() != Thread.State.TERMINATED || threadReconstruct.getState() != Thread.State.NEW){
+		if(threadReconstruct.getState() != Thread.State.TERMINATED){
 			// alert: "Wirklich auf den Controller0 wechseln?"
 			Alert alert = new Alert(AlertType.CONFIRMATION);
 			alert.setTitle("Zum Startmenu");
@@ -137,11 +140,9 @@ public class Controller2 {
 			Optional<ButtonType> result = alert.showAndWait();
 			
 			if(result.get() == change){
-				
 				synchronized(threadReconstruct){
 					threadReconstruct.stop();
 				}
-				
 				Stage stage; 
 			    // Referrenz zur aktuellen Stage herstellen
 			    stage = (Stage) pane.getScene().getWindow();
@@ -149,14 +150,14 @@ public class Controller2 {
 			    FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
 				// Neues Layout in eine neue Scene laden und auf die Stage setzen
 				stage.setScene(new Scene((AnchorPane) loader.load()));
-				    
 				// erstellter Controller1 wird geladen und anschlie�end der Agent �bergeben
 				Controller0 controller0 = loader.<Controller0>getController();
-				controller0.setController(controller);
-				    
+				controller0.setController(controller);  
 				stage.show();    
+				
 			} else if(result.get() == cancle){
 				alert.close();
+				pause.setDisable(true);
 			}
 		} else{
 			Stage stage; 
@@ -193,7 +194,7 @@ public class Controller2 {
 		String nameOwn = "LTE";
 		
 		String numberAllSets = String.valueOf(games[gameID].getNumberOfSets());
-		String numberCurrentSet = String.valueOf(recSetNumber);
+		String numberCurrentSet = String.valueOf(recSetNumber+1);
 		
 		//metaText.setText(nameOwn + " " + pointsOwn + " | " + pointsOpponent + " " + nameOpponent + "    " + numberCurrentSet + "/" + numberAllSets);
 		
@@ -356,6 +357,11 @@ public class Controller2 {
 				setChoice.setItems(setNumber);
 				setChoice.getSelectionModel().selectFirst();
 				clearGrid();
+				metaPlayer0.setText("");
+				metaPlayerX.setText("");
+				points0.setText("");
+				pointsX.setText("");
+				currentSet.setText("");
 				play.setDisable(false);
 			}
 		};
