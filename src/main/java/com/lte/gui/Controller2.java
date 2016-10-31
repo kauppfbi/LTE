@@ -111,6 +111,8 @@ public class Controller2 {
 	}
 	
 	// TODO onCloseRequest Thread Terminaten
+	// TODO choiceBox enablen nachdem ein Spiel einmal durchgelaufen ist
+	
 	
 	// *******************Zurueck zum Startbildschirm**********************
 	@FXML
