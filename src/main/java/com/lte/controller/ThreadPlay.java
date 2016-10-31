@@ -199,12 +199,12 @@ public class ThreadPlay extends Thread {
 		
 		// - Gewinner in DB schreiben
 		if(currentGameScore.isWon() == 2){
-			connection.updateWinnerOfSet(gameInfo.getSetID(), gameInfo.getOpponentName());
+			connection.updateWinnerOfSet(gameInfo.getSetID(), "O");
 		}
 		else if(currentGameScore.isWon() == 1){
-			connection.updateWinnerOfSet(gameInfo.getSetID(), "LTE");
+			connection.updateWinnerOfSet(gameInfo.getSetID(), "X");
 		}else{
-			connection.updateWinnerOfSet(gameInfo.getSetID(), "Unentschieden");
+			connection.updateWinnerOfSet(gameInfo.getSetID(), "U");
 		}
 		
 		
