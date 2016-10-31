@@ -9,6 +9,8 @@ import com.lte.interfaces.CredentialsManager;
 import com.lte.interfaces.InterfaceManager;
 import com.lte.models.GameInfo;
 import com.lte.models.Settings;
+
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -451,21 +453,8 @@ public class Controller1 extends GUIController{
 		
 	}
 	
-	/**
-	 * closes the DB-Connection
-	 * @param event
-	 */
 	@FXML
 	public void exitApplication(ActionEvent event) {
-		try {
-			controller.getConnection().stmt.close();
-			controller.getConnection().con.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		System.out.println("GameID: " + gameInfo.getGameID());
-		
-		((Stage)gameSet.getScene().getWindow()).close();
+		Platform.exit();
 	}
 }

@@ -775,4 +775,18 @@ public class DBconnection {
 
 		return number;
 	}
+
+	public void close() {
+		// Save file
+		try {
+			if (stmt != null) {
+				stmt.close();
+			}
+			if (con != null) {
+				con.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }
