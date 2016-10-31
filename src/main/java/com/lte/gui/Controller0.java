@@ -91,6 +91,7 @@ public class Controller0 extends GUIController{
 	// *******************Switch von Welcome zu Game Screen********************
 	@FXML
 	public void buttonPressed(ActionEvent event) throws IOException {
+		//if(playerX.getValue().length())
 		Stage stage;
 		if (event.getSource() == toGame) {
 			// Set team-names
