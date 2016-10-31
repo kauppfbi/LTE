@@ -251,6 +251,14 @@ public class Controller1 extends GUIController{
 			updateCredentials();
 		}
 		controller.playSet();
+		
+		//Disable settings during game
+		startGame.setDisable(true);
+		backToStart.setDisable(true);
+		timeSpinner.setDisable(true);
+		fileSelect.setDisable(true);
+		dataTrans.setDisable(true);
+		playerChoice.setDisable(true);
 	}
 	
 	/**
@@ -285,8 +293,9 @@ public class Controller1 extends GUIController{
 
 		ButtonType weiter = new ButtonType("Weiter spielen");
 		ButtonType beenden = new ButtonType("Beenden");
+		ButtonType changeSettings = new ButtonType("Einstellungen ändern");
 
-		alert.getButtonTypes().setAll(weiter, beenden);
+		alert.getButtonTypes().setAll(weiter, beenden, changeSettings);
 
 		Optional<ButtonType> result = alert.showAndWait();
 
@@ -329,6 +338,14 @@ public class Controller1 extends GUIController{
 			}
 
 			stage.show();
+		} else if (result.get() == changeSettings){
+			//enable Settings
+			startGame.setDisable(false);
+			backToStart.setDisable(false);
+			timeSpinner.setDisable(false);
+			fileSelect.setDisable(false);
+			dataTrans.setDisable(false);
+			playerChoice.setDisable(false);
 		}
 	}
 

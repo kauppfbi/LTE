@@ -41,8 +41,8 @@
          <font>
             <Font size="18.0" />
          </font></Text>
-		<Spinner fx:id="timeSpinner" layoutX="1026.0" layoutY="396.0" prefHeight="25.0" prefWidth="124.0" />
-		<Text fill="#62bdee" layoutX="852.0" layoutY="416.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Rechenzeit (Sek.) :" wrappingWidth="153.45705699920654">
+		<Spinner fx:id="timeSpinner" layoutX="1026.0" layoutY="433.0" prefHeight="25.0" prefWidth="124.0" />
+		<Text fill="#62bdee" layoutX="852.0" layoutY="453.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Rechenzeit (Sek.) :" wrappingWidth="153.45705699920654">
          <font>
             <Font size="18.0" />
          </font></Text>
@@ -102,7 +102,7 @@
             <Font size="18.0" />
          </font></Button>
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-      <Text fx:id="textKontaktpfad" fill="#62bdee" layoutX="853.0" layoutY="370.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="303.8574175834656" />
+      <Text fx:id="textKontaktpfad" fill="#62bdee" layoutX="853.0" layoutY="378.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="303.8574175834656" />
       <ChoiceBox fx:id="playerChoice" layoutX="1157.0" layoutY="273.0" prefHeight="25.0" prefWidth="50.0" />
 	</children>
 </AnchorPane>
