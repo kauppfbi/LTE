@@ -29,14 +29,14 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class Controller2 {
+	
+	// fxml declarations
 	@FXML
-	protected AnchorPane pane;
+	AnchorPane pane;
 	
 	@FXML
-	protected GridPane gameGrid;
+	GridPane gameGrid;
 	
-
-	// FXML Declarations
 	@FXML
 	Button pause;
 	

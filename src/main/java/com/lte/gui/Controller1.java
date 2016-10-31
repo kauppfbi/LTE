@@ -33,13 +33,13 @@ import javafx.stage.Stage;
 
 public class Controller1 {
 
+	// FXML Declarations
 	@FXML
-	protected AnchorPane pane;
+	AnchorPane pane;
 	
 	@FXML
-	protected GridPane gameGrid;
+	GridPane gameGrid;
 
-	// FXML Declarations
 	@FXML
 	Button fileSelect;
 
