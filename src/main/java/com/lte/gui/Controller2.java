@@ -104,28 +104,32 @@ public class Controller2 extends GUIController{
 	
 	
 	// *******************Zur�ck zum Startbildschirm**********************
+	/**
+	 * Go back to Screen0
+	 * @param event
+	 * @throws IOException
+	 */
 	@FXML
 	public void goToStartmenu(ActionEvent event) throws IOException{
 		Stage stage; 
 	    if(event.getSource() == backToStart){
-	    	// Referrenz zur aktuellen Stage herstellen
 	    	stage = (Stage) backToStart.getScene().getWindow();
 	        // FXMLLoader        
 	        FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
 	        loader.setController(controller.getController0());
-		    // Neues Layout in eine neue Scene laden und auf die Stage setzen
 		    stage.setScene(new Scene((AnchorPane) loader.load()));
 		    
 		    stage.show();    
 	    }
 	}
 	
+	/**
+	 * plays a recorded Game
+	 * calls the method replayTurn to show the stones
+	 * @param event
+	 */
 	@FXML
-	public void playRec(ActionEvent event){
-		//Next und Back disabled
-		//nextStep.setDisable(true);
-		//backStep.setDisable(true);
-		
+	public void playRec(ActionEvent event){	
 		System.out.println("GameID:" + gameID);
 		System.out.println("sets beim Spielen: " + sets[0].getSetID());
 		
@@ -162,7 +166,6 @@ public class Controller2 extends GUIController{
 		thread.start();
 	}
 	
-	// fills in the rec turns into the Gridpane
 	/**
 	 * fillRec method replays the turns of the selected set into the GridPane gameGrid<br>
 	 * fillRec is called by playRec-method<br>
@@ -199,7 +202,10 @@ public class Controller2 extends GUIController{
 	}
 	
 	
-	// Methode zum Befuellen der Choice Boxes und zum Anfuegen der ChangeListeners
+	/**
+	 * initialization of of ChoiceBoxes and ChangeListener
+	 * gets data from Database
+	 */
 	public void getRecGameInfo(){
 	
 		games = controller.getRecGameInfo();
@@ -215,12 +221,11 @@ public class Controller2 extends GUIController{
 			connection.put(i, gameID);
 		}
 
-		// Initialisiere die ChoiceBox mit den rekonstruierbaren Spielen!
-		// PlayerChoice Initialisierung + ChangeListener
+		// PlayerChoice initialization + ChangeListener
 		gameChoice.setItems(gameInfo);
 		gameChoice.getSelectionModel().selectFirst();
 		
-		// ohne "ChangeEvent" ist der erste Wert standardmaessig der ausgewaehlte Wert, bzw. GameID
+		// set first entry as default
 		gameID = gameChoice.getSelectionModel().getSelectedIndex();
 
 		//setChoice shows first entry without ChangeListener
@@ -261,7 +266,9 @@ public class Controller2 extends GUIController{
 		gameChoice.getSelectionModel().selectedIndexProperty().addListener(listenerGame);
 	}
 	
-	//clear GameGrid
+	/**
+	 * clears the field
+	 */
 	@FXML
 	public void clearGrid() {
 		Node node = gameGrid.getChildren().get(0);
@@ -270,6 +277,10 @@ public class Controller2 extends GUIController{
 		
 	}
 	
+	/**
+	 * closes the DB-Connetion when the Application is closed
+	 * @param event
+	 */
 	@FXML
 	public void exitApplication(ActionEvent event) {
 		try {

@@ -8,16 +8,15 @@ import com.lte.interfaces.InterfaceManager;
 /**
  * 
  * @author Florian & Fabian
+ * Object Settings: saves the current Game-information
  *
- *         Objekt Settings: speichert die aktuellen gespeicherten
- *         Spielinformationen
  */
 
 public class Settings {
 
 	private double calculationTime;
 	private String contactPath;
-	// Initialisiert mit Pusher, weil das Standard-ausgewaehlt ist im Controller1
+	// initialization with pusher-interface as the default interface
 	private String interfaceType;
 	private char serverChar;
 	private String [] credentials;
@@ -78,14 +77,13 @@ public class Settings {
 	}
 
 	/**
-	 * 
+	 * checks if the settings are completed
 	 * @return boolean, wheter all attributes are set
 	 */
 	public boolean isCompleted(){
 		boolean completed = false;
-		//Logik hier
-		//Wenn Pusher-Schnittstelle gew�hlt reichen, interfaceTyp und Rechenzeit -> �ber Konstruktor sichergestellt
-		//bei Dateischnittstelle m�ssen zus�tzlich contactPath und ServerChar besetzt werden
+		//Pusher-Interface: interfaceType and Calculating-Time
+		//File-Interface: InterfaceType, Calculating-Time, Contact-Path and ServerChar
 		if (interfaceType == InterfaceManager.EVENT_TYPE || interfaceType == InterfaceManager.EVENT_TYPE_JSON){
 			completed = true;
 		}
@@ -100,6 +98,9 @@ public class Settings {
 		return completed;
 	}
 
+	/**
+	 * toString method
+	 */
 	@Override
 	public String toString() {
 		return "Settings ===============\ncalculationTime=" + calculationTime + ", \ncontactPath=" + contactPath + ", \ninterfaceType="

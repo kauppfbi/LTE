@@ -1,5 +1,12 @@
 package  com.lte.models;
 
+/**
+ * GameInfo class
+ * Getter and Setter methods to get/set information
+ * of the current game
+ * @author FelixH
+ *
+ */
 public class GameInfo {
 	//DB ID's
 	private int gameID;
