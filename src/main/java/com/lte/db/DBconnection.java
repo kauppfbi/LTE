@@ -285,8 +285,8 @@ public class DBconnection {
 	 * @param pointsOpponent
 	 */
 	public void updateScoreOfGame(int gameID, int pointsOwn, int pointsOpponent, String winner) {
-		String sql = "UPDATE \"PUBLIC\".\"GAME\" SET (\"POINTSOWN\", \"POINTSOPPONENT\", \"WINNER\") = (" + pointsOwn
-				+ ", " + pointsOpponent + ", " + winner + ") WHERE \"GAMEID\" = " + gameID;
+		String sql = "UPDATE PUBLIC.GAME SET (POINTSOWN, POINTSOPPONENT, WINNER) = (" + pointsOwn
+				+ ", " + pointsOpponent + ", '" + winner + "') WHERE GAMEID = " + gameID;
 		try {
 			stmt.executeQuery(sql);
 			System.out.println("LOG: Set game score");
