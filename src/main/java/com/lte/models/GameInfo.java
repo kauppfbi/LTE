@@ -10,7 +10,7 @@ package  com.lte.models;
 public class GameInfo {
 	//DB ID's
 	private int gameID;
-	private int setID; 
+	private int setID = -1; 
 	private int opponentID;
 	
 	

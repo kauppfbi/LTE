@@ -7,6 +7,7 @@ import java.util.Optional;
 import com.lte.controller.MainController;
 import com.lte.interfaces.CredentialsManager;
 import com.lte.interfaces.InterfaceManager;
+import com.lte.models.GameInfo;
 import com.lte.models.Settings;
 
 import javafx.application.Platform;
@@ -90,6 +91,7 @@ public class Controller1 extends GUIController{
 	private MainController controller;
 	// private ThreadReconstruct controller;
 	private Settings settings;
+	private GameInfo gameInfo;
 	final FileChooser fileChooser;
 
 	String playerX = "defaultX";
@@ -99,6 +101,7 @@ public class Controller1 extends GUIController{
 		this.controller = mainController;
 		this.settings = mainController.getSettings();
 		this.fileChooser = new FileChooser();
+		this.gameInfo = mainController.getGameInfo();
 	}
 
 	// Getter and Setter
@@ -164,9 +167,9 @@ public class Controller1 extends GUIController{
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
 				System.out.println("Ausgewaehlter Player:" + playerChoice.getSelectionModel().getSelectedIndex());
 				if (playerChoice.getValue().equals("X")) {
-					settings.setServerChar('X');
-				} else if (playerChoice.getValue().equals("O")) {
 					settings.setServerChar('O');
+				} else if (playerChoice.getValue().equals("O")) {
+					settings.setServerChar('X');
 				}
 			}
 		};
@@ -255,7 +258,7 @@ public class Controller1 extends GUIController{
 	}
 	
 	/**
-	 * Client ist ready
+	 * Client is ready
 	 */
 	public void showReady(){
 		Alert alert = new Alert(AlertType.INFORMATION);
