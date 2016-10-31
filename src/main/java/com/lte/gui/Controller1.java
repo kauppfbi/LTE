@@ -323,6 +323,9 @@ public class Controller1 extends GUIController{
 
 		}if (result.get() == beenden) {
 			// TODO altes Controller Modell verwerfen und dem Agenten mitteilen
+			
+			//DB loeschen
+			controller.getConnection().deleteUnfinishedGame(controller.getGameInfo().getGameID());
 
 			// back to Screen0
 			Stage stage;
