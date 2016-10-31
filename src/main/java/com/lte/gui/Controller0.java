@@ -94,7 +94,7 @@ public class Controller0 extends GUIController{
 	// *******************Switch von Welcome zu Game Screen********************
 	@FXML
 	public void buttonPressed(ActionEvent event) throws IOException {
-		Toggle toggle = tgroup.getSelectedToggle();
+		//Toggle toggle = tgroup.getSelectedToggle();
 		//System.out.println("Toggle = " + tgroup.);
 		
 		//Is one player-name empty?
