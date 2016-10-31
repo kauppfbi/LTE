@@ -93,51 +93,61 @@ public class Controller0 extends GUIController{
 	// *******************Switch von Welcome zu Game Screen********************
 	@FXML
 	public void buttonPressed(ActionEvent event) throws IOException {
-		//Are the playerNames shorter than 10 characters?
-		if(playerX.getValue().length()<=9 && playerO.getValue().length()<=9){
-			Stage stage;
-			if (event.getSource() == toGame) {
-				// Set team-names
-				//String nameX = playerX.getText();
-				String nameO = playerO.getValue();
-		
-				// new Settings object
-				settings = new Settings();
-				controller.setSettings(settings);
-				// pass opponennt name
-				gameInfo = new GameInfo(nameO);
-				controller.setGameInfo(gameInfo);
-		
-				stage = (Stage) toGame.getScene().getWindow();
-		
-				// set Icon
-				File file = new File("files/images/icon.png");
-				Image image = new Image(file.toURI().toString());
-				stage.getIcons().add(image);
-		
-				// FXMLLoader
-				FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout1.fxml"));
-				loader.setController(controller.getController1());
-				
-				// set new layout
-				stage.setScene(new Scene((AnchorPane) loader.load()));
-		
-				stage.show();
-			}
+		//Is one player-name empty?
+		if(playerX.getValue()==null || playerO.getValue()==null){
+			//Error-Message: Name is null!
+			Alert alert2 = new Alert(AlertType.WARNING);
+			alert2.setTitle("Information");
+			alert2.setHeaderText("Spielername leer!");
+			alert2.setContentText("Ein Spielername wurde nicht gesetzt!");
+			alert2.show();
 		}else{
-			//Which PlayerName is too long?
-			if(playerX.getValue().length()>9){
-				errorPlayer = "Spieler 1";
-			}else{
-				errorPlayer = "Spieler 2";
-			}
+			//Are the playerNames shorter than 10 characters?
+			if(playerX.getValue().length()<=9 && playerO.getValue().length()<=9){
+				Stage stage;
+				if (event.getSource() == toGame) {
+					// Set team-names
+					//String nameX = playerX.getText();
+					String nameO = playerO.getValue();
 			
-			//Error-Message: Names are too long!
-			Alert alert = new Alert(AlertType.WARNING);
-			alert.setTitle("Information");
-			alert.setHeaderText("Spielername von "+errorPlayer+" zu lang!");
-			alert.setContentText("Die Spielernamen dürfen nicht länger als 9 Zeichen sein!");
-			alert.show();
+					// new Settings object
+					settings = new Settings();
+					controller.setSettings(settings);
+					// pass opponennt name
+					gameInfo = new GameInfo(nameO);
+					controller.setGameInfo(gameInfo);
+			
+					stage = (Stage) toGame.getScene().getWindow();
+			
+					// set Icon
+					File file = new File("files/images/icon.png");
+					Image image = new Image(file.toURI().toString());
+					stage.getIcons().add(image);
+			
+					// FXMLLoader
+					FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout1.fxml"));
+					loader.setController(controller.getController1());
+					
+					// set new layout
+					stage.setScene(new Scene((AnchorPane) loader.load()));
+			
+					stage.show();
+				}
+			}else{
+				//Which PlayerName is too long?
+				if(playerX.getValue().length()>9){
+					errorPlayer = "Spieler 1";
+				}else{
+					errorPlayer = "Spieler 2";
+				}
+				
+				//Error-Message: Names are too long!
+				Alert alert = new Alert(AlertType.WARNING);
+				alert.setTitle("Information");
+				alert.setHeaderText("Spielername von "+errorPlayer+" zu lang!");
+				alert.setContentText("Die Spielernamen dürfen nicht länger als 9 Zeichen sein!");
+				alert.show();
+			}
 		}
 	}
 
