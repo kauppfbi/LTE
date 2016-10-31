@@ -75,7 +75,7 @@ public class AlgorithmManager {
 			roundCounter++;
 
 			if(roundCounter <= 7){
-				algorithmDepth = 12;
+				algorithmDepth = 8;
 			}
 			
 			System.out.println(algorithmDepth);

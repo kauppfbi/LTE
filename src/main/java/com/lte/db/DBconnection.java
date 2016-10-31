@@ -267,7 +267,7 @@ public class DBconnection {
 	 * @param winner
 	 */
 	public void updateWinnerOfSet(int setID, String winner) {
-		String sql = "UPDATE \"PUBLIC\".\"GAMESET\" SET (\"WINNER\") = (" + winner + ") WHERE \"SETID\" = " + setID;
+		String sql = "UPDATE \"PUBLIC\".\"GAMESET\" SET \"WINNER\" = '" + winner + "' WHERE \"SETID\" = " + setID;
 		try {
 			stmt.executeQuery(sql);
 			System.out.println("LOG: Updated winner of last set");
@@ -285,8 +285,8 @@ public class DBconnection {
 	 * @param pointsOpponent
 	 */
 	public void updateScoreOfGame(int gameID, int pointsOwn, int pointsOpponent, String winner) {
-		String sql = "UPDATE \"PUBLIC\".\"GAME\" SET (\"POINTSOWN\", \"POINTSOPPONENT\", \"WINNER\") = (" + pointsOwn
-				+ ", " + pointsOpponent + ", " + winner + ") WHERE \"GAMEID\" = " + gameID;
+		String sql = "UPDATE PUBLIC.GAME SET (POINTSOWN, POINTSOPPONENT, WINNER) = (" + pointsOwn
+				+ ", " + pointsOpponent + ", '" + winner + "') WHERE GAMEID = " + gameID;
 		try {
 			stmt.executeQuery(sql);
 			System.out.println("LOG: Set game score");
@@ -522,6 +522,51 @@ public class DBconnection {
 
 		return opponentsStats;
 
+	}
+	
+	/**
+	 * Method returns all existing opponent names to show in option box on UI
+	 * @return String array with all names
+	 */
+	public String[] getOpponentNames() {
+		try {
+			stmt = con.createStatement();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("LOG: couldn't create statement");
+		}
+		
+		int totalOpponents = 0;
+		String[] names = new String[1];
+		names[0] = "";
+		int counter = 0;
+		
+		String sql = "SELECT OPPONENTNAME FROM \"PUBLIC\".\"OPPONENT\" ORDER BY OPPONENTNAME ASC";
+		PreparedStatement stmt2;
+		
+		try {
+			stmt2 = con.prepareStatement(sql, ResultSet.TYPE_SCROLL_SENSITIVE,
+					ResultSet.CONCUR_UPDATABLE);
+			ResultSet res = stmt2.executeQuery();
+			
+			if (res.next()) {
+				System.out.println("LOG: got all opponent names");
+				res.last();
+				totalOpponents = res.getRow();
+				names = new String[totalOpponents];
+				res.beforeFirst();
+			}
+			
+			while (res.next()) {
+				names[counter] = res.getString(0);
+				counter++;
+			}
+			
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+			System.out.println("LOG: couldn't get opponent names");
+		}
+		return names;
 	}
 	
 	/**

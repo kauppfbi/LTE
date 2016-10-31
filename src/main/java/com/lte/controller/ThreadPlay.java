@@ -78,7 +78,7 @@ public class ThreadPlay extends Thread {
 		}
 
 		// lade DB Controller
-		if(gameInfo.getSetID() == 0){
+		if(gameInfo.getSetID() == -1){
 		int ids[] = connection.startNewGame(gameInfo.getOpponentName(), String.valueOf(gameInfo.getNextPlayer()));
 		
 		// prepare gameInfo
@@ -87,8 +87,8 @@ public class ThreadPlay extends Thread {
 		gameInfo.setOpponentID(ids[2]);
 		}
 		else{
-			connection.createNewSet(gameInfo.getGameID(), gameInfo.getOwnPoints(), gameInfo.getOpponentPoints());
-			gameInfo.setSet(gameInfo.getSet() + 1);
+			gameInfo.setSetID(connection.createNewSet(gameInfo.getGameID(), gameInfo.getOwnPoints(), gameInfo.getOpponentPoints()));
+			
 		}
 			
 
@@ -199,12 +199,12 @@ public class ThreadPlay extends Thread {
 		
 		// - Gewinner in DB schreiben
 		if(currentGameScore.isWon() == 2){
-			connection.updateWinnerOfSet(gameInfo.getSetID(), gameInfo.getOpponentName());
+			connection.updateWinnerOfSet(gameInfo.getSetID(), "O");
 		}
 		else if(currentGameScore.isWon() == 1){
-			connection.updateWinnerOfSet(gameInfo.getSetID(), "LTE");
+			connection.updateWinnerOfSet(gameInfo.getSetID(), "X");
 		}else{
-			connection.updateWinnerOfSet(gameInfo.getSetID(), "Unentschieden");
+			connection.updateWinnerOfSet(gameInfo.getSetID(), "U");
 		}
 		
 		
