@@ -111,8 +111,6 @@ public class Controller2 {
 	}
 	
 	// TODO onCloseRequest Thread Terminaten
-	// TODO Leiste und Infos weg
-	
 	
 	// *******************Zurueck zum Startbildschirm**********************
 	@FXML
