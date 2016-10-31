@@ -29,7 +29,13 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class Controller2 {
+	@FXML
+	protected AnchorPane pane;
 	
+	@FXML
+	protected GridPane gameGrid;
+	
+
 	// FXML Declarations
 	@FXML
 	Button pause;
@@ -62,9 +68,6 @@ public class Controller2 {
 	Text metaText;
 	
 	@FXML
-	GridPane gameGrid;
-	
-	@FXML
 	Text metaPlayer0;
 	
 	@FXML
@@ -80,12 +83,12 @@ public class Controller2 {
 	Text currentSet;
 	
 	// non-FXML Declarations
-	private MainController controller;	
 	private ThreadReconstruct threadReconstruct;
 	private SetDB[] sets;
 	private GameDB[] games;
 	private int gameID;
-	
+	private MainController controller;
+
 	// Getter and Setter
 	public MainController getController() {
 		return controller;
@@ -94,7 +97,6 @@ public class Controller2 {
 	public void setController(MainController controller) {
 		this.controller = controller;
 	}
-	
 	@FXML
 	public void initialize(){
 		//Background
@@ -107,9 +109,7 @@ public class Controller2 {
 		next.setDisable(true);
 		back.setDisable(true);
 		
-		threadReconstruct = new ThreadReconstruct(this, null);
-		
-		
+		threadReconstruct = new ThreadReconstruct(this, null);	
 	}
 	
 	
@@ -117,21 +117,20 @@ public class Controller2 {
 	@FXML
 	public void goToStartmenu(ActionEvent event) throws IOException{
 		Stage stage; 
-	    if(event.getSource()==backToStart){
-	    	// Referrenz zur aktuellen Stage herstellen
-	    	stage = (Stage) backToStart.getScene().getWindow();
-	        // FXMLLoader        
-	        FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
-		    // Neues Layout in eine neue Scene laden und auf die Stage setzen
-		    stage.setScene(new Scene((AnchorPane) loader.load()));
+	    // Referrenz zur aktuellen Stage herstellen
+	    stage = (Stage) pane.getScene().getWindow();
+	    // FXMLLoader        
+	    FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
+		// Neues Layout in eine neue Scene laden und auf die Stage setzen
+		stage.setScene(new Scene((AnchorPane) loader.load()));
 		    
-		    // erstellter Controller1 wird geladen und anschlie�end der Agent �bergeben
-		    Controller0 controller0 = loader.<Controller0>getController();
-		    controller0.setController(controller);
+		// erstellter Controller1 wird geladen und anschlie�end der Agent �bergeben
+		Controller0 controller0 = loader.<Controller0>getController();
+		controller0.setController(controller);
 		    
-		    stage.show();    
-	    }
-	}
+		stage.show();    
+	 }
+	
 	
 	private int [] prepareRecTurns(){
 		//System.out.println("GameID:" + gameID);
@@ -292,12 +291,13 @@ public class Controller2 {
 		gameChoice.getSelectionModel().selectedIndexProperty().addListener(listenerGame);
 	}
 	
-	//clear GameGrid
 	@FXML
-	private void clearGrid() {
+	/**
+	 * clearGrid Methodes cleans the gameGrid
+	 */
+	public void clearGrid() {
 		Node node = gameGrid.getChildren().get(0);
 	    gameGrid.getChildren().clear();
 	    gameGrid.getChildren().add(0,node);
-		
 	}
 }

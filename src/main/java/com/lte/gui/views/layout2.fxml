@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.lte.gui.Controller2">
+<AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.lte.gui.Controller2">
    <children>
       <ImageView fx:id="imageView" fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true" />
       <GridPane fx:id="gameGrid" alignment="BOTTOM_LEFT" gridLinesVisible="true" layoutX="100.0" layoutY="153.0" prefHeight="499.0" prefWidth="672.0" AnchorPane.leftAnchor="95.0" AnchorPane.topAnchor="165.0">

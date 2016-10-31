@@ -49,12 +49,19 @@ public class Controller0 {
 	@FXML
 	RadioButton PlayerVsPlayer;
 	
-	// non-FXML Declarations
-	private MainController controller;
-	// private ThreadReconstruct controller;
+	// non-fxml declarations
 	private Settings settings;
 	private GameInfo gameInfo;
+	private MainController controller;
 
+	// Getter and Setter
+	public MainController getController() {
+		return controller;
+	}
+
+	public void setController(MainController controller) {
+		this.controller = controller;
+	}
 	
 
 
@@ -99,8 +106,7 @@ public class Controller0 {
 		}
 	}
 
-	// *******************Switch von Welcome zum Rekonstruieren
-	// Screen********************
+	// Zu Rekonstruieren switchen
 	public void reconstructGame(ActionEvent event) throws IOException {
 		Stage stage;
 		if (event.getSource() == reGame) {
@@ -165,16 +171,6 @@ public class Controller0 {
 	/*
 	 * Getter and Setter
 	 */
-
-
-	public MainController getController() {
-		return controller;
-	}
-
-	public void setController(MainController controller) {
-		this.controller = controller;
-	}
-
 	public Settings getSettings() {
 		return settings;
 	}

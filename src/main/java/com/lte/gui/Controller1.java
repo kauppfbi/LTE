@@ -2,7 +2,6 @@ package com.lte.gui;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.ListIterator;
 import java.util.Optional;
 
@@ -10,9 +9,6 @@ import com.lte.controller.MainController;
 import com.lte.interfaces.CredentialsManager;
 import com.lte.interfaces.InterfaceManager;
 import com.lte.models.Settings;
-import com.lte.models.GameScore;
-
-import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -20,7 +16,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
-import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -35,9 +30,14 @@ import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.util.Pair;
 
 public class Controller1 {
+
+	@FXML
+	protected AnchorPane pane;
+	
+	@FXML
+	protected GridPane gameGrid;
 
 	// FXML Declarations
 	@FXML
@@ -68,9 +68,6 @@ public class Controller1 {
 	Spinner<Double> timeSpinner;
 
 	@FXML
-	GridPane gameGrid;
-
-	@FXML
 	Button backToStart;
 
 	@FXML
@@ -83,15 +80,10 @@ public class Controller1 {
 	@FXML
 	ChoiceBox<String> playerChoice;
 
-	// non-FXML Declarations
-	private MainController controller;
 	// private ThreadReconstruct controller;
 	private Settings settings;
 	final FileChooser fileChooser = new FileChooser();
-
-	// TODO Datenhaltung optimieren --> Informationen aus Agenten!
-	String playerX = "defaultX";
-	String playerO = "defaultO";
+	private MainController controller;
 
 	// Getter and Setter
 	public MainController getController() {
@@ -101,7 +93,12 @@ public class Controller1 {
 	public void setController(MainController controller) {
 		this.controller = controller;
 	}
+	
+	// TODO Datenhaltung optimieren --> Informationen aus Agenten!
+	String playerX = "defaultX";
+	String playerO = "defaultO";
 
+	// Getter Setter
 	public Settings getSettings() {
 		return settings;
 	}
@@ -192,7 +189,7 @@ public class Controller1 {
 	private void goToStartmenu(ActionEvent event) throws IOException {
 		Stage stage;
 		// Referrenz zur aktuellen Stage herstellen
-		stage = (Stage) backToStart.getScene().getWindow();
+		stage = (Stage) pane.getScene().getWindow();
 
 		// set Icon
 		File file = new File("files/images/icon.png");
@@ -345,16 +342,6 @@ public class Controller1 {
 	public void initialize2() {
 		namePlayerX.setText("LTE");
 		namePlayerO.setText(controller.getGameInfo().getOpponentName());
-
-	}
-
-	//clear GameGrid
-	@FXML
-	public void clearGrid() {
-		Node node = gameGrid.getChildren().get(0);
-	    gameGrid.getChildren().clear();
-	    gameGrid.getChildren().add(0,node);
-		
 	}
 	
 	//highlight winning-combo
@@ -400,5 +387,15 @@ public class Controller1 {
 			credentialsManager.setCredentials(selectedCredentials);
 		}
 		
+	}
+	
+	@FXML
+	/**
+	 * clearGrid Methodes cleans the gameGrid
+	 */
+	public void clearGrid() {
+		Node node = gameGrid.getChildren().get(0);
+	    gameGrid.getChildren().clear();
+	    gameGrid.getChildren().add(0,node);
 	}
 }
