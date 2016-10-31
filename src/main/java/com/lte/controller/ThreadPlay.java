@@ -189,6 +189,27 @@ public class ThreadPlay extends Thread {
 		System.out.println("Message: " + message.getWinner() + " hat gewonnen");
 		System.out.println("KI: Spieler " + currentGameScore.isWon() + " hat gewonnen");
 		
+		// - Gewinner in DB schreiben + Punkte hochzaehhlen
+		if(currentGameScore.isWon() == 2){
+			connection.updateWinnerOfSet(gameInfo.getSetID(), "O");
+			gameInfo.setOpponentPoints(gameInfo.getOpponentPoints() + 1);
+		}
+		else if(currentGameScore.isWon() == 1){
+			connection.updateWinnerOfSet(gameInfo.getSetID(), "X");
+			gameInfo.setOwnPoints(gameInfo.getOwnPoints() + 1);
+		}else{
+			connection.updateWinnerOfSet(gameInfo.getSetID(), "U");
+		}
+		
+		
+		//Prüfen ob Game zu Ende und in DB schreiben
+		if(gameInfo.getOwnPoints() == 3){
+		connection.updateScoreOfGame(gameInfo.getGameID(), gameInfo.getOwnPoints(), gameInfo.getOpponentPoints(), "X");
+		}
+		if(gameInfo.getOpponentPoints() == 3){
+		connection.updateScoreOfGame(gameInfo.getGameID(), gameInfo.getOwnPoints(), gameInfo.getOpponentPoints(), "O");
+		}
+		
 		// - Rückgabe der gewonnen Kombination aus dem Spieldstand int[4][1] ->
 		Platform.runLater(new Runnable() {
 			@Override
@@ -196,17 +217,5 @@ public class ThreadPlay extends Thread {
 				controller1.gameOver(currentGameScore.isWon(),currentGameScore.winWhere());
 			}
 		});
-		
-		// - Gewinner in DB schreiben
-		if(currentGameScore.isWon() == 2){
-			connection.updateWinnerOfSet(gameInfo.getSetID(), "O");
-		}
-		else if(currentGameScore.isWon() == 1){
-			connection.updateWinnerOfSet(gameInfo.getSetID(), "X");
-		}else{
-			connection.updateWinnerOfSet(gameInfo.getSetID(), "U");
-		}
-		
-		
 	}
 }

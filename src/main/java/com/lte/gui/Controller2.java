@@ -8,6 +8,8 @@ import com.lte.controller.MainController;
 import com.lte.controller.ThreadReconstruct;
 import com.lte.models.GameDB;
 import com.lte.models.SetDB;
+
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -277,19 +279,8 @@ public class Controller2 extends GUIController{
 		
 	}
 	
-	/**
-	 * closes the DB-Connetion when the Application is closed
-	 * @param event
-	 */
 	@FXML
 	public void exitApplication(ActionEvent event) {
-		try {
-			controller.getConnection().stmt.close();
-			controller.getConnection().con.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		((Stage)pane.getScene().getWindow()).close();
+		Platform.exit();
 	}
 }

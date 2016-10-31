@@ -9,6 +9,8 @@ import com.lte.interfaces.CredentialsManager;
 import com.lte.interfaces.InterfaceManager;
 import com.lte.models.GameInfo;
 import com.lte.models.Settings;
+
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -250,6 +252,9 @@ public class Controller1 extends GUIController{
 				|| interfaceType.equals(InterfaceManager.EVENT_TYPE_JSON)) {
 			updateCredentials();
 		}
+		set.setText(String.valueOf(gameInfo.getSet() + 1));
+		gameInfo.setSet(gameInfo.getSet() + 1);
+		
 		controller.playSet();
 		
 		//Disable settings during game
@@ -281,6 +286,19 @@ public class Controller1 extends GUIController{
 	 */
 	public void gameOver(byte winningPlayer, int[][] winningCombo) {
 		highlightWinning(winningCombo);
+		
+		// Winner gets one point
+		if (winningPlayer == 1) {
+			int playerX = Integer.parseInt(ltePoints.getText());
+			ltePoints.setText(String.valueOf(playerX + 1));
+		} else if (winningPlayer == 2) {
+			int playerO = Integer.parseInt(opponentPoints.getText());
+			opponentPoints.setText(String.valueOf(playerO + 1));
+		}
+		
+		//Satz fue Anzeige hochzahlen
+		set.setText(String.valueOf(gameInfo.getSet()));
+		
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Game Over");
 		if (winningPlayer == 1) {
@@ -290,7 +308,8 @@ public class Controller1 extends GUIController{
 		} else {
 			alert.setHeaderText("Unentschieden!" + "\n" + "Was nun?");
 		}
-
+		
+		if(!(controller.getGameInfo().getOwnPoints() == 3 || controller.getGameInfo().getOpponentPoints() == 3)){
 		ButtonType weiter = new ButtonType("Weiter spielen");
 		ButtonType beenden = new ButtonType("Beenden");
 		ButtonType changeSettings = new ButtonType("Einstellungen ändern");
@@ -301,29 +320,19 @@ public class Controller1 extends GUIController{
 
 		if (result.get() == weiter) {
 			clearGrid();
-
-			// Winner gets one point
-			if (winningPlayer == 1) {
-				int playerX = Integer.parseInt(ltePoints.getText());
-				ltePoints.setText(String.valueOf(playerX + 1));
-				controller.getGameInfo().setOwnPoints(playerX);
-			} else if (winningPlayer == 2) {
-				int playerO = Integer.parseInt(opponentPoints.getText());
-				opponentPoints.setText(String.valueOf(playerO + 1));
-				controller.getGameInfo().setOpponentPoints(playerO);
-			}
-
-			// raise set 
-			int satz = Integer.parseInt(set.getText());
-			set.setText(String.valueOf(satz + 1));
-			controller.getGameInfo().setSet(satz);
+			
+			//Satz printen
+			set.setText(String.valueOf(gameInfo.getSet() + 1));
+			gameInfo.setSet(gameInfo.getSet() + 1);
 			
 			//Neuen Satz starten
 			controller.playSet();
 
-		} else if (result.get() == beenden) {
+		}if (result.get() == beenden) {
 			// TODO altes Controller Modell verwerfen und dem Agenten mitteilen
-			// TODO ggf. Spiel zu Rekonstruieren speichern
+			
+			//DB loeschen
+			controller.getConnection().deleteUnfinishedGame(controller.getGameInfo().getGameID());
 
 			// back to Screen0
 			Stage stage;
@@ -347,6 +356,32 @@ public class Controller1 extends GUIController{
 			dataTrans.setDisable(false);
 			playerChoice.setDisable(false);
 		}
+		}
+		else{
+		ButtonType beenden = new ButtonType("Beenden");
+
+		alert.getButtonTypes().setAll(beenden);
+
+		Optional<ButtonType> result = alert.showAndWait();
+
+		if (result.get() == beenden) {
+			// TODO ggf. Spiel zu Rekonstruieren speichern
+			
+			// back to Screen0
+			Stage stage;
+			stage = (Stage) backToStart.getScene().getWindow();
+			// FXMLLoader
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/views/layout0.fxml"));
+			loader.setController(controller.getController0());
+			try {
+				stage.setScene(new Scene((AnchorPane) loader.load()));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			stage.show();
+		}
+		}	
 	}
 
 	/**
@@ -436,21 +471,8 @@ public class Controller1 extends GUIController{
 		
 	}
 	
-	/**
-	 * closes the DB-Connection
-	 * @param event
-	 */
 	@FXML
 	public void exitApplication(ActionEvent event) {
-		try {
-			controller.getConnection().stmt.close();
-			controller.getConnection().con.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		System.out.println("GameID: " + gameInfo.getGameID());
-		
-		((Stage)gameSet.getScene().getWindow()).close();
+		Platform.exit();
 	}
 }

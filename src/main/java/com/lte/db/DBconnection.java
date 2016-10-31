@@ -193,9 +193,9 @@ public class DBconnection {
 			System.out.println("LOG: SQL Error");
 		}
 
-		if (lastStartingPlayer == "X") {
+		if (lastStartingPlayer.equals("X")) {
 			newStartingPlayer = "O";
-		} else if (lastStartingPlayer == "O") {
+		} else if (lastStartingPlayer.equals("O")) {
 			newStartingPlayer = "X";
 		}
 
@@ -774,5 +774,19 @@ public class DBconnection {
 		}
 
 		return number;
+	}
+
+	public void close() {
+		// Save file
+		try {
+			if (stmt != null) {
+				stmt.close();
+			}
+			if (con != null) {
+				con.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 }

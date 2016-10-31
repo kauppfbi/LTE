@@ -2,6 +2,8 @@ package com.lte.gui;
 
 import java.io.IOException;
 import java.sql.SQLException;
+
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -206,20 +208,10 @@ public class Controller0 extends GUIController{
 		AiVsPlayer.setToggleGroup(tgroup);
 		PlayerVsPlayer.setToggleGroup(tgroup);
 	}
+
 	
-	/**
-	 * Close DB-Connection
-	 * @param event
-	 */
 	@FXML
 	public void exitApplication(ActionEvent event) {
-		try {
-			controller.getConnection().stmt.close();
-			controller.getConnection().con.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-	    ((Stage)pane.getScene().getWindow()).close();
+		Platform.exit();
 	}
 }

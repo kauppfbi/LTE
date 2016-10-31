@@ -2,6 +2,7 @@ package com.lte;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 
 import com.lte.controller.MainController;
 import com.lte.db.DBconnection;
@@ -59,5 +60,11 @@ public class App extends Application {
 	// Main-Methode, launched das Layout
 	public static void main(String[] args) {
 		launch(args);
+	}
+	
+	@Override
+	public void stop(){
+	    System.out.println("Close App, shutdown DB!");
+		connection.close();
 	}
 }
