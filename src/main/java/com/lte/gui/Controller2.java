@@ -38,7 +38,7 @@ import javafx.stage.Stage;
  * @author FelixH
  *
  */
-public class Controller2 extends GUIController{
+public class Controller2 {
 	
 	// FXML Declarations
 	@FXML

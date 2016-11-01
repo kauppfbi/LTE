@@ -24,7 +24,7 @@ import com.lte.models.*;
  * @author FelixH
  *
  */
-public class Controller0 extends GUIController{
+public class Controller0 {
 	// FXML Declarations
 	@FXML
 	AnchorPane pane;
