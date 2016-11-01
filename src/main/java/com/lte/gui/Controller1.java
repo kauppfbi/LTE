@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 import com.lte.controller.MainController;
+import com.lte.features.CredentialsInputDialog;
 import com.lte.interfaces.CredentialsManager;
 import com.lte.interfaces.InterfaceManager;
 import com.lte.models.GameInfo;
