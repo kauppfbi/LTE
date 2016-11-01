@@ -247,6 +247,11 @@ public class Controller2 {
 		}
 	}
 	
+	/**
+	 * called when Reconstruct-Thread of current Set finished<br>
+	 * disables navigation buttons (play, pause, stop)<br>
+	 * enables Choice-Boxes and allows user to select new game/set<br>
+	 */
 	public void playRecFinished(){
 		play.setDisable(true);
 		pause.setDisable(true);
