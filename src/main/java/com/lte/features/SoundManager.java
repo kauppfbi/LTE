@@ -27,7 +27,16 @@ public class SoundManager {
 		});
 	}
 	
-	public void pause(){
-		mediaPlayer.pause();
+	public MediaPlayer.Status playPause(){
+		if(mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING){
+			mediaPlayer.pause();
+			return MediaPlayer.Status.PAUSED;
+		} else if (mediaPlayer.getStatus() == MediaPlayer.Status.PAUSED){
+			mediaPlayer.play();
+			return MediaPlayer.Status.PLAYING;
+		} else {
+			System.err.println("Unknown MediaPlayer-Status!");
+			return null;
+		}
 	}
 }
