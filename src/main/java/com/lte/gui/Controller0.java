@@ -60,7 +60,6 @@ public class Controller0 extends GUIController{
 	private MainController controller;
 	private String errorPlayer;
 	private ToggleGroup tgroup;
-	// private ThreadReconstruct controller;
 	private Settings settings;
 	private GameInfo gameInfo;
 	

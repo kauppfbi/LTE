@@ -26,7 +26,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.scene.text.Text;
@@ -43,7 +42,7 @@ public class Controller1 extends GUIController{
 
 	// FXML Declarations
 	@FXML 
-	Pane gameSet;
+	AnchorPane pane;
 	
 	@FXML
 	Button fileSelect;
@@ -89,7 +88,6 @@ public class Controller1 extends GUIController{
 
 	// non-FXML Declarations
 	private MainController controller;
-	// private ThreadReconstruct controller;
 	private Settings settings;
 	private GameInfo gameInfo;
 	final FileChooser fileChooser;
@@ -287,7 +285,7 @@ public class Controller1 extends GUIController{
 	public void gameOver(byte winningPlayer, int[][] winningCombo) {
 		highlightWinning(winningCombo);
 		
-		// Winner gets one point
+		// Winner gets +1 Set-Point
 		if (winningPlayer == 1) {
 			int playerX = Integer.parseInt(ltePoints.getText());
 			ltePoints.setText(String.valueOf(playerX + 1));
@@ -296,9 +294,10 @@ public class Controller1 extends GUIController{
 			opponentPoints.setText(String.valueOf(playerO + 1));
 		}
 		
-		//Satz fue Anzeige hochzahlen
+		// Set-Number +1
 		set.setText(String.valueOf(gameInfo.getSet()));
 		
+		// Alert-Dialog (Confirmation-Options: Go on with next Set || exit to Startmenu)
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Game Over");
 		if (winningPlayer == 1) {
@@ -321,11 +320,11 @@ public class Controller1 extends GUIController{
 		if (result.get() == weiter) {
 			clearGrid();
 			
-			//Satz printen
+			// print Set
 			set.setText(String.valueOf(gameInfo.getSet() + 1));
 			gameInfo.setSet(gameInfo.getSet() + 1);
 			
-			//Neuen Satz starten
+			// start new Set
 			controller.playSet();
 
 		}if (result.get() == beenden) {
@@ -338,7 +337,7 @@ public class Controller1 extends GUIController{
 			Stage stage;
 			stage = (Stage) backToStart.getScene().getWindow();
 			// FXMLLoader
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/views/layout0.fxml"));
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
 			loader.setController(controller.getController0());
 			try {
 				stage.setScene(new Scene((AnchorPane) loader.load()));
@@ -371,7 +370,7 @@ public class Controller1 extends GUIController{
 			Stage stage;
 			stage = (Stage) backToStart.getScene().getWindow();
 			// FXMLLoader
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/views/layout0.fxml"));
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
 			loader.setController(controller.getController0());
 			try {
 				stage.setScene(new Scene((AnchorPane) loader.load()));
@@ -388,8 +387,6 @@ public class Controller1 extends GUIController{
 	 * Shows the stones corresponding to their position in the field
 	 * 
 	 */
-
-	// ************************Fill-Methode***************************
 	public void fill(int columnIndex, int rowIndex, char player, boolean endGame) {
 		// player 0 = red, player 1 = yellow
 		Circle circle = new Circle();
