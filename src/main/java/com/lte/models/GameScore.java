@@ -1,7 +1,5 @@
 package  com.lte.models;
 
-import java.util.ArrayList;
-
 public class GameScore {
 
 	//************Klassenvariablen*******************************************
