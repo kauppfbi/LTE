@@ -118,7 +118,6 @@ public class Controller2 {
 	// TODO onCloseRequest Thread Terminaten
 	// TODO choiceBox enablen nachdem ein Spiel einmal durchgelaufen ist
 	
-	// *******************Back to Startmenu**********************
 	/**
 	 * Go back to Screen0
 	 * @param event
@@ -246,6 +245,14 @@ public class Controller2 {
 				threadReconstruct.notify();
 			}
 		}
+	}
+	
+	public void playRecFinished(){
+		play.setDisable(true);
+		pause.setDisable(true);
+		stop.setDisable(true);
+		gameChoice.setDisable(false);
+		setChoice.setDisable(false);
 	}
 	
 	

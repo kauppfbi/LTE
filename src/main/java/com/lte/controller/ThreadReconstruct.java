@@ -110,18 +110,15 @@ public class ThreadReconstruct extends Thread{
 				}
 			});
 			
+			// usually try: 1sec TIMED_WAIT | if pause: interruption causes Thread to WAIT 
 			try {
-				// problem: Thread does not lose the ownership of the monitor...
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				Thread.currentThread().interrupt();
 			}
-			//end of run()
-			
+		}//for
+		
+		controller2.playRecFinished();
 	}//run
 }//class
-
-	
-}
