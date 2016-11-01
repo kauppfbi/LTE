@@ -156,7 +156,7 @@ public class Controller2 extends GUIController{
 				}
 				
 				Stage stage; 
-			    stage = (Stage) pane.getScene().getWindow();
+			    stage = (Stage) backToStart.getScene().getWindow();
 			    // FXMLLoader             
 		        FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
 		        loader.setController(controller.getController0());
@@ -171,7 +171,7 @@ public class Controller2 extends GUIController{
 		} else{
 			Stage stage; 
 		    // Referrenz zur aktuellen Stage herstellen
-		    stage = (Stage) pane.getScene().getWindow();
+		    stage = (Stage) backToStart.getScene().getWindow();
 		    // FXMLLoader               
 	        FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
 	        loader.setController(controller.getController0());
@@ -395,7 +395,7 @@ public class Controller2 extends GUIController{
 		gameChoice.getSelectionModel().selectedIndexProperty().addListener(listenerGame);
 		
 		// if there is no game in DB
-		if(gameChoice.getItems() == null || setChoice.getItems() == null){
+		if(gameChoice.getItems().isEmpty()){
 			play.setDisable(true);
 			Alert alert = new Alert(AlertType.INFORMATION);
 			alert.setTitle("Fehlermeldung");
