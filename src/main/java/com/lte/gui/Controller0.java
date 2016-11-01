@@ -56,6 +56,9 @@ public class Controller0 {
 	@FXML
 	RadioButton PlayerVsPlayer;
 	
+	@FXML
+	Button goToScreen3;
+	
 	// non-FXML Declarations
 	private MainController controller;
 	private String errorPlayer;
@@ -87,6 +90,27 @@ public class Controller0 {
 
 	public void setGameInfo(GameInfo gameInfo) {
 		this.gameInfo = gameInfo;
+	}
+	
+	//Nur zum Testen - wieder loeschen!
+	@FXML
+	public void goToScreen3(ActionEvent event) throws IOException{
+		Stage stage;
+		stage = (Stage) goToScreen3.getScene().getWindow();
+		
+		// set Icon
+		File file = new File("files/images/icon.png");
+		Image image = new Image(file.toURI().toString());
+		stage.getIcons().add(image);
+
+		// FXMLLoader
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout3.fxml"));
+		loader.setController(controller.getController3());
+		
+		// set new layout
+		stage.setScene(new Scene((AnchorPane) loader.load()));
+
+		stage.show();
 	}
 
 	/**

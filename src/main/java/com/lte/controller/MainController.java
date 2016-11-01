@@ -7,6 +7,7 @@ import com.lte.db.DBconnection;
 import com.lte.gui.Controller0;
 import com.lte.gui.Controller1;
 import com.lte.gui.Controller2;
+import com.lte.gui.Controller3;
 import com.lte.interfaces.EventIM;
 import com.lte.interfaces.EventIMJSON;
 import com.lte.interfaces.FileIM;
@@ -35,6 +36,7 @@ public class MainController {
 	private Controller0 controller0;
 	private Controller1 controller1;
 	private Controller2 controller2;
+	private Controller3 controller3;
 
 	// model(s)
 	private Settings settings;
@@ -88,6 +90,15 @@ public class MainController {
 			return controller2;
 		}else {
 		return controller2;
+		}
+	}
+	
+	public Controller3 getController3() {
+		if (controller3 == null){
+			this.controller3 = new Controller3(this);
+			return controller3;
+		}else {
+		return controller3;
 		}
 	}
 

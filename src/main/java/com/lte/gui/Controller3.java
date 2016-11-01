@@ -4,9 +4,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 import com.lte.controller.MainController;
-import com.lte.interfaces.InterfaceManager;
+
 import com.lte.models.GameInfo;
 import com.lte.models.Settings;
+
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -24,6 +26,7 @@ import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -308,4 +311,26 @@ public class Controller3{
 		gameGrid.getChildren().add(circle2);
 		gameGrid.setHalignment(circle2, HPos.CENTER);
 	}
+	
+	/**
+	 * Event for leaving the application
+	 * @param event
+	 */
+	@FXML
+	public void exitApplication(ActionEvent event) {
+		Platform.exit();
+	}
+	
+	/**
+	 * Mouse Event to let the User select the row
+	 * to throw the stone
+	 * @param e
+	 */
+	@FXML
+	private void mouseEntered(MouseEvent e) {
+        Node source = (Node)e.getSource() ;
+        Integer colIndex = GridPane.getColumnIndex(source);
+        Integer rowIndex = GridPane.getRowIndex(source);
+        System.out.printf("Mouse entered cell [%d, %d]%n", colIndex.intValue(), rowIndex.intValue());
+    }
 }

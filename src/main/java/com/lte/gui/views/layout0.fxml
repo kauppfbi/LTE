@@ -57,5 +57,6 @@
             <Font size="16.0" />
          </font>
       </RadioButton>
+      <Button fx:id="goToScreen3" layoutX="70.0" layoutY="69.0" mnemonicParsing="false" onAction="#goToScreen3" text="goToScreen3" />
    </children>
 </AnchorPane>
