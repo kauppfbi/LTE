@@ -117,6 +117,7 @@ public class Controller2 {
 	@FXML
 	public void initialize(){
 		muteButton.setGraphic(new ImageView(speakerImages.get("speaker1")));
+		muteButton.setStyle("-fx-background-color: transparent;");
 		
 		//Background
 		File file = new File("files/images/gameplay.png");

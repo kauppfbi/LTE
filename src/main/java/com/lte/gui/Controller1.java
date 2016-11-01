@@ -139,6 +139,7 @@ public class Controller1 {
 	@FXML
 	public void initialize() {
 		muteButton.setGraphic(new ImageView(speakerImages.get("speaker1")));
+		muteButton.setStyle("-fx-background-color: transparent;");
 		
 		set.setText("0");
 
