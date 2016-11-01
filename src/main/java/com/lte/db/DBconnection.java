@@ -558,13 +558,13 @@ public class DBconnection {
 			}
 			
 			while (res.next()) {
-				names[counter] = res.getString(0);
+				names[counter] = res.getString(1);
 				counter++;
 			}
 			
 		} catch (SQLException e1) {
 			e1.printStackTrace();
-			System.out.println("LOG: couldn't get opponent names");
+			System.out.println("LOG: couldn't get opponent names or create array");
 		}
 		return names;
 	}
