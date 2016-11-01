@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import com.lte.controller.MainController;
 import com.lte.db.DBconnection;
 import com.lte.gui.Controller0;
+import com.lte.gui.Controller2;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -30,7 +31,7 @@ public class App extends Application {
 
 	public void start(Stage stage) throws IOException {
 		this.stage = stage;
-		this.stage.setTitle("4 gewinnt!");
+		this.stage.setTitle("4 Gewinnt!");
 
 		try {
 			// initialize DB
@@ -38,7 +39,6 @@ public class App extends Application {
 			
 			//Main Controller
 			MainController controller = new MainController(connection);
-			
 			// FXMLLoader
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("./gui/views/layout0.fxml"));
 			loader.setController(controller.getController0());

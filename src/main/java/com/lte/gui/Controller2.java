@@ -17,6 +17,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
@@ -32,6 +33,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  * Class Controller2 manages the Reconstruction-Screen
@@ -116,7 +118,6 @@ public class Controller2 {
 	}
 	
 	// TODO onCloseRequest Thread Terminaten
-	// TODO choiceBox enablen nachdem ein Spiel einmal durchgelaufen ist
 	
 	/**
 	 * Go back to Screen0
@@ -311,7 +312,7 @@ public class Controller2 {
 		}	
 	}
 	
-	@FXML
+	
 	/**
 	 * if button "Abbruch" is clicked<br>
 	 * sets the State of threadReconstruction to TERMINATED<br>
@@ -319,6 +320,7 @@ public class Controller2 {
 	 * 
 	 * @param event
 	 */
+	@FXML
 	public void stopAction(ActionEvent event){
 		
 		play.setDisable(true);
@@ -405,7 +407,6 @@ public class Controller2 {
 			}
 		};
 		gameChoice.getSelectionModel().selectedIndexProperty().addListener(listenerGame);
-		System.out.println("Hallo");
 		
 		// if there is no game in DB
 		if(gameChoice.getItems().isEmpty()){
@@ -425,8 +426,7 @@ public class Controller2 {
 	public void clearGrid() {
 		Node node = gameGrid.getChildren().get(0);
 	    gameGrid.getChildren().clear();
-	    gameGrid.getChildren().add(0,node);
-		
+	    gameGrid.getChildren().add(0,node);	
 	}
 	
 	@FXML
