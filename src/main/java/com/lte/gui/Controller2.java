@@ -393,6 +393,7 @@ public class Controller2 {
 			}
 		};
 		gameChoice.getSelectionModel().selectedIndexProperty().addListener(listenerGame);
+		System.out.println("Hallo");
 		
 		// if there is no game in DB
 		if(gameChoice.getItems().isEmpty()){

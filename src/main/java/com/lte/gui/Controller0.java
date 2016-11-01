@@ -174,10 +174,14 @@ public class Controller0 {
 			
 			// FXMLLoader
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout2.fxml"));
-			loader.setController(controller.getController2());
-			
+			Controller2 controller2 = controller.getController2();
+			loader.setController(controller2);
+
 			//set new layout
 			stage.setScene(new Scene((AnchorPane) loader.load()));
+			
+			// load recent Games
+			controller2.getRecGameInfo();
 			
 			stage.show();
 		}
