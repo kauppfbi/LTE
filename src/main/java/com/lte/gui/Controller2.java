@@ -3,12 +3,12 @@ package com.lte.gui;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.TreeMap;
 import com.lte.controller.MainController;
 import com.lte.controller.ThreadReconstruct;
 import com.lte.models.GameDB;
 import com.lte.models.SetDB;
-
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -21,11 +21,11 @@ import javafx.geometry.HPos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
@@ -36,17 +36,23 @@ import javafx.stage.Stage;
  * @author FelixH
  *
  */
-public class Controller2 extends GUIController{
+public class Controller2 {
 	
 	// FXML Declarations
 	@FXML
-	Pane pane;
+	AnchorPane pane;
+	
+	@FXML
+	GridPane gameGrid;
 	
 	@FXML
 	Button pause;
 	
 	@FXML
 	Button play;
+	
+	@FXML
+	Button stop;
 	
 	@FXML
 	Button backToStart;
@@ -67,9 +73,6 @@ public class Controller2 extends GUIController{
 	Text metaText;
 	
 	@FXML
-	GridPane gameGrid;
-	
-	@FXML
 	Text metaPlayer0;
 	
 	@FXML
@@ -86,7 +89,7 @@ public class Controller2 extends GUIController{
 	
 	// non-FXML Declarations
 	private MainController controller;	
-	private ThreadReconstruct thread;
+	private ThreadReconstruct threadReconstruct;
 	private SetDB[] sets;
 	private GameDB[] games;
 	private int gameID;
@@ -96,16 +99,26 @@ public class Controller2 extends GUIController{
 		this.controller = mainController;
 	}
 
+	/**
+	 * FXML initializations
+	 */
 	@FXML
 	public void initialize(){
 		//Background
 		File file = new File("files/images/gameplay.png");
 		Image image = new Image(file.toURI().toString());
 		imageView.setImage(image);
+		
+		//Pause, Stop default is disabled:
+		pause.setDisable(true);
+		stop.setDisable(true);
+				
+		threadReconstruct = new ThreadReconstruct(this, null);	
 	}
 	
+	// TODO onCloseRequest Thread Terminaten
+	// TODO choiceBox enablen nachdem ein Spiel einmal durchgelaufen ist
 	
-	// *******************Zur�ck zum Startbildschirm**********************
 	/**
 	 * Go back to Screen0
 	 * @param event
@@ -113,65 +126,131 @@ public class Controller2 extends GUIController{
 	 */
 	@FXML
 	public void goToStartmenu(ActionEvent event) throws IOException{
-		Stage stage; 
-	    if(event.getSource() == backToStart){
-	    	stage = (Stage) backToStart.getScene().getWindow();
-	        // FXMLLoader        
+		
+		// interrupt the Thread, if it was running
+		if(threadReconstruct.getState() == Thread.State.RUNNABLE || threadReconstruct.getState() == Thread.State.TIMED_WAITING){
+			synchronized(threadReconstruct){
+				threadReconstruct.interrupt();
+				play.setDisable(false);
+			}
+		}
+		
+		// Show Alert, if Rec-Game isn't finished jet
+		if(threadReconstruct.getState() != Thread.State.TERMINATED){
+
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Zum Startmenu");
+			alert.setHeaderText("Wenn Sie nun zum Startmenu wechseln," + "\n" + "geht das aktuell rekonstruierte Spiel verloren!" + "\n\n" + "Trotzdem wechseln?");
+			
+			ButtonType change = new ButtonType("Wechseln");
+			ButtonType cancle = new ButtonType("Abbrechen");
+	
+			alert.getButtonTypes().setAll(change, cancle);
+	
+			Optional<ButtonType> result = alert.showAndWait();
+			
+			if(result.get() == change){
+				
+				synchronized(threadReconstruct){
+					threadReconstruct.stop();
+				}
+				
+				Stage stage; 
+			    stage = (Stage) backToStart.getScene().getWindow();
+			    // FXMLLoader             
+		        FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
+		        loader.setController(controller.getController0());
+			    stage.setScene(new Scene((AnchorPane) loader.load()));  
+				stage.show();
+				
+			} else if(result.get() == cancle){
+				alert.close();
+				pause.setDisable(true);
+			}
+		// Just switch the View, if Rec-Game is terminated	
+		} else{
+			Stage stage; 
+		    // Referrenz zur aktuellen Stage herstellen
+		    stage = (Stage) backToStart.getScene().getWindow();
+		    // FXMLLoader               
 	        FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
 	        loader.setController(controller.getController0());
 		    stage.setScene(new Scene((AnchorPane) loader.load()));
-		    
-		    stage.show();    
-	    }
+			stage.show();    
+		}
 	}
 	
 	/**
-	 * plays a recorded Game
-	 * calls the method replayTurn to show the stones
-	 * @param event
+	 * sets the current Set-Meta-Information on the Screen<br>
+	 * returns the reconstruct Turns of the current Set<br>
+	 * 
+	 * @return
 	 */
-	@FXML
-	public void playRec(ActionEvent event){	
-		System.out.println("GameID:" + gameID);
-		System.out.println("sets beim Spielen: " + sets[0].getSetID());
+	private int [] prepareRecTurns(){
+		//System.out.println("GameID:" + gameID);
+		//System.out.println("sets beim Spielen: " + sets[0].getSetID());
 		
 		int recSetNumber = setChoice.getSelectionModel().getSelectedIndex();
-		System.out.println("Setnumber:" + recSetNumber);
-		System.out.println("SetID: " + sets[recSetNumber].getSetID());
+		//System.out.println("Setnumber:" + recSetNumber);
+		//System.out.println("SetID: " + sets[recSetNumber].getSetID());
 		
 		int[] recTurns = sets[recSetNumber].getReplayTurns();
-		System.out.println("RecTurns:" + recTurns);
+		//System.out.println("RecTurns:" + recTurns);
 		
-		String pointsOpponent = String.valueOf(sets[recSetNumber].getPointsOpponent());
+		String pointsOpponent = String.valueOf(sets[recSetNumber].getPointsOpponent()); //saves the meta-information of the game
 		String pointsOwn = String.valueOf(sets[recSetNumber].getPointsOwn());
 		
 		String nameOpponent = games[gameID].getOpponentName() ;
 		String nameOwn = "LTE";
 		
 		String numberAllSets = String.valueOf(games[gameID].getNumberOfSets());
-		String numberCurrentSet = String.valueOf(recSetNumber);
+		String numberCurrentSet = String.valueOf(recSetNumber+1);
 		
-		//metaText.setText(nameOwn + " " + pointsOwn + " | " + pointsOpponent + " " + nameOpponent + "    " + numberCurrentSet + "/" + numberAllSets);
-		
+		//shows the meta-information of the game
 		metaPlayer0.setText(nameOwn);
 		metaPlayerX.setText(nameOpponent);
 		points0.setText(pointsOwn);
 		pointsX.setText(pointsOpponent);
 		currentSet.setText(numberCurrentSet+" / "+numberAllSets);
 		
-		// fillRec runs in Thread
-		for(int i = 0; i < 3; i++){
-			System.out.println(recTurns[i]);
-		}
-		
-		thread =  new ThreadReconstruct(this, recTurns);
-		thread.start();
+		return recTurns;
 	}
 	
 	/**
-	 * fillRec method replays the turns of the selected set into the GridPane gameGrid<br>
-	 * fillRec is called by playRec-method<br>
-	 * playRec-method listens to Button "Play"<br>
+	 * is called by the "Play" button<br>
+	 * sets the Reconstruct-Thread on RUNNABLE<br>
+	 * calls prepareRecTurns() to give the Reconstruct-Thread the recTurns<br>
+	 * 
+	 * @param event
+	 */
+	@FXML
+	public void playRec(ActionEvent event){
+		
+		pause.setDisable(false);
+		play.setDisable(true);
+		stop.setDisable(false);
+		gameChoice.setDisable(true);
+		setChoice.setDisable(true);
+
+
+		synchronized (threadReconstruct) {
+			if (threadReconstruct.getState() == Thread.State.NEW) {
+				threadReconstruct.setRecTurns(prepareRecTurns());
+				threadReconstruct.start();
+			} else if (threadReconstruct.getState() == Thread.State.TERMINATED){
+				threadReconstruct = new ThreadReconstruct(this, null);
+				threadReconstruct.setRecTurns(prepareRecTurns());
+				threadReconstruct.start();
+			} else if (threadReconstruct.getState() == Thread.State.WAITING) {
+				threadReconstruct.notify();
+			}
+		}
+	}
+	
+	
+	/**
+	 * shows the turns of the selected set in GridPane gameGrid<br>
+	 * is called by the Reconstruct-Thread<br>
 	 * 
 	 * @param recTurns
 	 */
@@ -191,22 +270,60 @@ public class Controller2 extends GUIController{
 		GridPane.setRowIndex(circle, (5 - rowIndex));
 		gameGrid.getChildren().add(circle);
 		gameGrid.setHalignment(circle, HPos.CENTER);
-		
 	}
 
 	
-	
+	/**
+	 * is called by the "pause" button <br>
+	 * sets the currently running Reconstruct-Thread to WAIT by interrupting it<br>
+	 * 
+	 * @param event
+	 */
 	@FXML
-	public void pauseRec(ActionEvent event){
-		//Next und Back disabled to false
-		//nextStep.setDisable(false);
-		//backStep.setDisable(false);
+	public void pauseRec(ActionEvent event) {
+		
+		play.setDisable(false);
+		pause.setDisable(true);
+		stop.setDisable(false);
+		gameChoice.setDisable(true);
+		setChoice.setDisable(true);
+		
+		synchronized (threadReconstruct) {
+			System.out.println(threadReconstruct.getState());
+			if (threadReconstruct.getState() == Thread.State.RUNNABLE || threadReconstruct.getState() == Thread.State.TIMED_WAITING) {
+				threadReconstruct.interrupt();
+			} else {
+				threadReconstruct.notify();
+			}
+		}	
 	}
 	
+	@FXML
+	/**
+	 * if button "Abbruch" is clicked<br>
+	 * sets the State of threadReconstruction to TERMINATED<br>
+	 * allows the user to select another game/set to reconstruct<br>
+	 * 
+	 * @param event
+	 */
+	public void stopAction(ActionEvent event){
+		
+		play.setDisable(true);
+		pause.setDisable(true);
+		stop.setDisable(true);
+		gameChoice.setDisable(false);
+		setChoice.setDisable(false);
+		
+		synchronized(threadReconstruct){
+			if(threadReconstruct.getState() != Thread.State.TERMINATED){
+				threadReconstruct.stop();
+			}
+		}
+	}
 	
 	/**
-	 * initialization of of ChoiceBoxes and ChangeListener
-	 * gets data from Database
+	 * initialization of of ChoiceBoxes and ChangeListener<br>
+	 * gets data from Database<br>
 	 */
 	public void getRecGameInfo(){
 	
@@ -262,10 +379,30 @@ public class Controller2 extends GUIController{
 				for(int i = 1; i <= sets.length; i++){
 					setNumber.add(i);
 				}
+				
 				setChoice.setItems(setNumber);
+				setChoice.getSelectionModel().selectFirst();
+				clearGrid();
+				metaPlayer0.setText("");
+				metaPlayerX.setText("");
+				points0.setText("");
+				pointsX.setText("");
+				currentSet.setText("");
+				play.setDisable(false);
 			}
 		};
 		gameChoice.getSelectionModel().selectedIndexProperty().addListener(listenerGame);
+		System.out.println("Hallo");
+		
+		// if there is no game in DB
+		if(gameChoice.getItems().isEmpty()){
+			play.setDisable(true);
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Fehlermeldung");
+			alert.setHeaderText("Leider konnten keine rekonstruierbare Spiele gefunden werden!");
+			alert.setContentText("Spiele zuerst ein Spiel, um es anschliessend rekonstruieren zu koennen.");
+			alert.showAndWait();
+		}
 	}
 	
 	/**
@@ -279,6 +416,10 @@ public class Controller2 extends GUIController{
 		
 	}
 	
+	/**
+	 * Event for leaving the application
+	 * @param event
+	 */
 	@FXML
 	public void exitApplication(ActionEvent event) {
 		Platform.exit();

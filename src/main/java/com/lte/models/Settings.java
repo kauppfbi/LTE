@@ -35,6 +35,8 @@ public class Settings {
 		this.serverChar = 'n';
 	}
 
+	
+	//Getter and Setter methods
 	public double getCalculationTime() {
 		return calculationTime;
 	}
@@ -76,6 +78,7 @@ public class Settings {
 		this.credentials = credentials;
 	}
 
+	
 	/**
 	 * checks if the settings are completed
 	 * @return boolean, wheter all attributes are set

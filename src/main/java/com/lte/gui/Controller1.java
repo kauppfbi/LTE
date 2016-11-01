@@ -2,14 +2,12 @@ package com.lte.gui;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.Optional;
 import com.lte.controller.MainController;
 import com.lte.interfaces.CredentialsManager;
 import com.lte.interfaces.InterfaceManager;
 import com.lte.models.GameInfo;
 import com.lte.models.Settings;
-
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -26,7 +24,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.scene.text.Text;
@@ -36,14 +33,15 @@ import javafx.stage.Stage;
 
 /**
  * Class Controller1 manages the Game-Screen
+ * It´s the main part of the application and shows among other things the game-field
  * @author FelixH
  *
  */
-public class Controller1 extends GUIController{
+public class Controller1 {
 
 	// FXML Declarations
 	@FXML 
-	Pane gameSet;
+	AnchorPane pane;
 	
 	@FXML
 	Button fileSelect;
@@ -89,6 +87,7 @@ public class Controller1 extends GUIController{
 
 	// non-FXML Declarations
 	private MainController controller;
+	
 	// private ThreadReconstruct controller;
 	private Settings settings;
 	private GameInfo gameInfo;
@@ -125,7 +124,6 @@ public class Controller1 extends GUIController{
 	/**
 	 * JavaFX initializations
 	 */
-	// *******FXML-Methoden************
 	@FXML
 	public void initialize() {
 
@@ -208,7 +206,6 @@ public class Controller1 extends GUIController{
 	@FXML
 	private void goToStartmenu(ActionEvent event) throws IOException {
 		Stage stage;
-		// Referrenz zur aktuellen Stage herstellen
 		stage = (Stage) backToStart.getScene().getWindow();
 
 		// set Icon
@@ -219,7 +216,6 @@ public class Controller1 extends GUIController{
 		// FXMLLoader
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
 		loader.setController(controller.getController0());
-		// Neues Layout in eine neue Scene laden und auf die Stage setzen
 		stage.setScene(new Scene((AnchorPane) loader.load()));
 
 		stage.show();
@@ -233,10 +229,10 @@ public class Controller1 extends GUIController{
 	@FXML
 	private String fileSelect() {
 		Stage mainStage = null;
-		DirectoryChooser directoryChooser = new DirectoryChooser();
+		DirectoryChooser directoryChooser = new DirectoryChooser(); //new directoryChooser
 		directoryChooser.setTitle("Verzeichnis des Kontaktpfades w�hlen!");
 		File selectedFile = directoryChooser.showDialog(mainStage);
-		String kontaktpfad = selectedFile.getPath();
+		String kontaktpfad = selectedFile.getPath(); //contact-path for FileInterface
 		settings.setContactPath(kontaktpfad);
 		textKontaktpfad.setText(kontaktpfad);
 		System.out.println("Kontaktpfad: " + kontaktpfad);
@@ -257,11 +253,19 @@ public class Controller1 extends GUIController{
 		set.setText(String.valueOf(gameInfo.getSet() + 1));
 		gameInfo.setSet(gameInfo.getSet() + 1);
 		
-		controller.playSet();
+		controller.playSet(); //triggers play-method
+		
+		//Disable settings during game
+		startGame.setDisable(true);
+		backToStart.setDisable(true);
+		timeSpinner.setDisable(true);
+		fileSelect.setDisable(true);
+		dataTrans.setDisable(true);
+		playerChoice.setDisable(true);
 	}
 	
 	/**
-	 * Client is ready
+	 * Client shows that it is ready to play the set
 	 */
 	public void showReady(){
 		Alert alert = new Alert(AlertType.INFORMATION);
@@ -279,9 +283,9 @@ public class Controller1 extends GUIController{
 	 * @param winningCombo
 	 */
 	public void gameOver(byte winningPlayer, int[][] winningCombo) {
-		highlightWinning(winningCombo);
+		highlightWinning(winningCombo); //highlights the winning-combo
 		
-		// Winner gets one point
+		// Winner gets +1 Set-Point
 		if (winningPlayer == 1) {
 			int playerX = Integer.parseInt(ltePoints.getText());
 			ltePoints.setText(String.valueOf(playerX + 1));
@@ -290,11 +294,14 @@ public class Controller1 extends GUIController{
 			opponentPoints.setText(String.valueOf(playerO + 1));
 		}
 		
-		//Satz fue Anzeige hochzahlen
+
+		//Change the number of the set
+		// Set-Number +1
 		set.setText(String.valueOf(gameInfo.getSet()));
 		
+		// Alert-Dialog (Confirmation-Options: Go on with next Set || exit to Startmenu)
 		Alert alert = new Alert(AlertType.CONFIRMATION);
-		alert.setTitle("Game Over");
+		alert.setTitle("Game Over"); //Ask the user what the next steps are
 		if (winningPlayer == 1) {
 			alert.setHeaderText("Sie haben gewonnen!" + "\n" + "Was nun?");
 		} else if (winningPlayer == 2) {
@@ -306,32 +313,34 @@ public class Controller1 extends GUIController{
 		if(!(controller.getGameInfo().getOwnPoints() == 3 || controller.getGameInfo().getOpponentPoints() == 3)){
 		ButtonType weiter = new ButtonType("Weiter spielen");
 		ButtonType beenden = new ButtonType("Beenden");
+		ButtonType changeSettings = new ButtonType("Einstellungen ändern");
 
-		alert.getButtonTypes().setAll(weiter, beenden);
+		alert.getButtonTypes().setAll(weiter, beenden, changeSettings);
 
 		Optional<ButtonType> result = alert.showAndWait();
 
 		if (result.get() == weiter) {
 			clearGrid();
 			
-			//Satz printen
+			//update set
 			set.setText(String.valueOf(gameInfo.getSet() + 1));
 			gameInfo.setSet(gameInfo.getSet() + 1);
 			
-			//Neuen Satz starten
+
+			// start new Set
 			controller.playSet();
 
 		}if (result.get() == beenden) {
 			// TODO altes Controller Modell verwerfen und dem Agenten mitteilen
 			
-			//DB loeschen
+			//DB: delete unfinished game
 			controller.getConnection().deleteUnfinishedGame(controller.getGameInfo().getGameID());
 
 			// back to Screen0
 			Stage stage;
 			stage = (Stage) backToStart.getScene().getWindow();
 			// FXMLLoader
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/views/layout0.fxml"));
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
 			loader.setController(controller.getController0());
 			try {
 				stage.setScene(new Scene((AnchorPane) loader.load()));
@@ -340,43 +349,25 @@ public class Controller1 extends GUIController{
 			}
 
 			stage.show();
+		} else if (result.get() == changeSettings){
+			//enable Settings
+			startGame.setDisable(false);
+			backToStart.setDisable(false);
+			timeSpinner.setDisable(false);
+			fileSelect.setDisable(false);
+			dataTrans.setDisable(false);
+			playerChoice.setDisable(false);
 		}
 		}
-		else{
-		ButtonType beenden = new ButtonType("Beenden");
-
-		alert.getButtonTypes().setAll(beenden);
-
-		Optional<ButtonType> result = alert.showAndWait();
-
-		if (result.get() == beenden) {
-			// TODO ggf. Spiel zu Rekonstruieren speichern
-			
-			// back to Screen0
-			Stage stage;
-			stage = (Stage) backToStart.getScene().getWindow();
-			// FXMLLoader
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/views/layout0.fxml"));
-			loader.setController(controller.getController0());
-			try {
-				stage.setScene(new Scene((AnchorPane) loader.load()));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-			stage.show();
-		}
-		}	
 	}
 
+	
 	/**
 	 * Shows the stones corresponding to their position in the field
 	 * 
 	 */
-
-	// ************************Fill-Methode***************************
+	// ************************Fill-Method***************************
 	public void fill(int columnIndex, int rowIndex, char player, boolean endGame) {
-		// player 0 = red, player 1 = yellow
 		Circle circle = new Circle();
 		circle.setRadius(35.0);
 
@@ -400,9 +391,9 @@ public class Controller1 extends GUIController{
 	 */
 	@FXML
 	public void clearGrid() {
-		Node node = gameGrid.getChildren().get(0);
-	    gameGrid.getChildren().clear();
-	    gameGrid.getChildren().add(0,node);
+		Node node = gameGrid.getChildren().get(0); //saves gameGrid as a node
+	    gameGrid.getChildren().clear(); //clears the Grid
+	    gameGrid.getChildren().add(0,node); //adds the node
 		
 	}
 	
@@ -456,6 +447,10 @@ public class Controller1 extends GUIController{
 		
 	}
 	
+	/**
+	 * Event for leaving the application
+	 * @param event
+	 */
 	@FXML
 	public void exitApplication(ActionEvent event) {
 		Platform.exit();
