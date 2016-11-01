@@ -77,8 +77,7 @@ public class Controller0 {
 		this.controller = mainController;
 		this.soundManager = controller.getSoundManager();
 		soundManager.play();
-		
-		speakerImages = controller.getSpeakerImages();
+		this.speakerImages = controller.getSpeakerImages();
 	}
 	
 	/*
