@@ -2,14 +2,12 @@ package com.lte.gui;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.Optional;
 import com.lte.controller.MainController;
 import com.lte.interfaces.CredentialsManager;
 import com.lte.interfaces.InterfaceManager;
 import com.lte.models.GameInfo;
 import com.lte.models.Settings;
-
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -35,6 +33,7 @@ import javafx.stage.Stage;
 
 /**
  * Class Controller1 manages the Game-Screen
+ * It´s the main part of the application and shows among other things the game-field
  * @author FelixH
  *
  */
@@ -88,6 +87,8 @@ public class Controller1 {
 
 	// non-FXML Declarations
 	private MainController controller;
+	
+	// private ThreadReconstruct controller;
 	private Settings settings;
 	private GameInfo gameInfo;
 	final FileChooser fileChooser;
@@ -123,7 +124,6 @@ public class Controller1 {
 	/**
 	 * JavaFX initializations
 	 */
-	// *******FXML-Methoden************
 	@FXML
 	public void initialize() {
 
@@ -229,10 +229,10 @@ public class Controller1 {
 	@FXML
 	private String fileSelect() {
 		Stage mainStage = null;
-		DirectoryChooser directoryChooser = new DirectoryChooser();
+		DirectoryChooser directoryChooser = new DirectoryChooser(); //new directoryChooser
 		directoryChooser.setTitle("Verzeichnis des Kontaktpfades w�hlen!");
 		File selectedFile = directoryChooser.showDialog(mainStage);
-		String kontaktpfad = selectedFile.getPath();
+		String kontaktpfad = selectedFile.getPath(); //contact-path for FileInterface
 		settings.setContactPath(kontaktpfad);
 		textKontaktpfad.setText(kontaktpfad);
 		System.out.println("Kontaktpfad: " + kontaktpfad);
@@ -253,7 +253,7 @@ public class Controller1 {
 		set.setText(String.valueOf(gameInfo.getSet() + 1));
 		gameInfo.setSet(gameInfo.getSet() + 1);
 		
-		controller.playSet();
+		controller.playSet(); //triggers play-method
 		
 		//Disable settings during game
 		startGame.setDisable(true);
@@ -265,7 +265,7 @@ public class Controller1 {
 	}
 	
 	/**
-	 * Client is ready
+	 * Client shows that it is ready to play the set
 	 */
 	public void showReady(){
 		Alert alert = new Alert(AlertType.INFORMATION);
@@ -283,7 +283,7 @@ public class Controller1 {
 	 * @param winningCombo
 	 */
 	public void gameOver(byte winningPlayer, int[][] winningCombo) {
-		highlightWinning(winningCombo);
+		highlightWinning(winningCombo); //highlights the winning-combo
 		
 		// Winner gets +1 Set-Point
 		if (winningPlayer == 1) {
@@ -294,12 +294,14 @@ public class Controller1 {
 			opponentPoints.setText(String.valueOf(playerO + 1));
 		}
 		
+
+		//Change the number of the set
 		// Set-Number +1
 		set.setText(String.valueOf(gameInfo.getSet()));
 		
 		// Alert-Dialog (Confirmation-Options: Go on with next Set || exit to Startmenu)
 		Alert alert = new Alert(AlertType.CONFIRMATION);
-		alert.setTitle("Game Over");
+		alert.setTitle("Game Over"); //Ask the user what the next steps are
 		if (winningPlayer == 1) {
 			alert.setHeaderText("Sie haben gewonnen!" + "\n" + "Was nun?");
 		} else if (winningPlayer == 2) {
@@ -320,17 +322,18 @@ public class Controller1 {
 		if (result.get() == weiter) {
 			clearGrid();
 			
-			// print Set
+			//update set
 			set.setText(String.valueOf(gameInfo.getSet() + 1));
 			gameInfo.setSet(gameInfo.getSet() + 1);
 			
+
 			// start new Set
 			controller.playSet();
 
 		}if (result.get() == beenden) {
 			// TODO altes Controller Modell verwerfen und dem Agenten mitteilen
 			
-			//DB loeschen
+			//DB: delete unfinished game
 			controller.getConnection().deleteUnfinishedGame(controller.getGameInfo().getGameID());
 
 			// back to Screen0
@@ -356,39 +359,15 @@ public class Controller1 {
 			playerChoice.setDisable(false);
 		}
 		}
-		else{
-		ButtonType beenden = new ButtonType("Beenden");
-
-		alert.getButtonTypes().setAll(beenden);
-
-		Optional<ButtonType> result = alert.showAndWait();
-
-		if (result.get() == beenden) {
-			// TODO ggf. Spiel zu Rekonstruieren speichern
-			
-			// back to Screen0
-			Stage stage;
-			stage = (Stage) backToStart.getScene().getWindow();
-			// FXMLLoader
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
-			loader.setController(controller.getController0());
-			try {
-				stage.setScene(new Scene((AnchorPane) loader.load()));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-			stage.show();
-		}
-		}	
 	}
 
+	
 	/**
 	 * Shows the stones corresponding to their position in the field
 	 * 
 	 */
+	// ************************Fill-Method***************************
 	public void fill(int columnIndex, int rowIndex, char player, boolean endGame) {
-		// player 0 = red, player 1 = yellow
 		Circle circle = new Circle();
 		circle.setRadius(35.0);
 
@@ -412,9 +391,9 @@ public class Controller1 {
 	 */
 	@FXML
 	public void clearGrid() {
-		Node node = gameGrid.getChildren().get(0);
-	    gameGrid.getChildren().clear();
-	    gameGrid.getChildren().add(0,node);
+		Node node = gameGrid.getChildren().get(0); //saves gameGrid as a node
+	    gameGrid.getChildren().clear(); //clears the Grid
+	    gameGrid.getChildren().add(0,node); //adds the node
 		
 	}
 	
@@ -468,6 +447,10 @@ public class Controller1 {
 		
 	}
 	
+	/**
+	 * Event for leaving the application
+	 * @param event
+	 */
 	@FXML
 	public void exitApplication(ActionEvent event) {
 		Platform.exit();

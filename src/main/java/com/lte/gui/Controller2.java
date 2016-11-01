@@ -5,12 +5,10 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Optional;
 import java.util.TreeMap;
-
 import com.lte.controller.MainController;
 import com.lte.controller.ThreadReconstruct;
 import com.lte.models.GameDB;
 import com.lte.models.SetDB;
-
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -103,6 +101,9 @@ public class Controller2 {
 		this.controller = mainController;
 	}
 
+	/**
+	 * FXML initializations
+	 */
 	@FXML
 	public void initialize(){
 		//Background
@@ -197,7 +198,7 @@ public class Controller2 {
 		int[] recTurns = sets[recSetNumber].getReplayTurns();
 		//System.out.println("RecTurns:" + recTurns);
 		
-		String pointsOpponent = String.valueOf(sets[recSetNumber].getPointsOpponent());
+		String pointsOpponent = String.valueOf(sets[recSetNumber].getPointsOpponent()); //saves the meta-information of the game
 		String pointsOwn = String.valueOf(sets[recSetNumber].getPointsOwn());
 		
 		String nameOpponent = games[gameID].getOpponentName() ;
@@ -206,8 +207,7 @@ public class Controller2 {
 		String numberAllSets = String.valueOf(games[gameID].getNumberOfSets());
 		String numberCurrentSet = String.valueOf(recSetNumber+1);
 		
-		//metaText.setText(nameOwn + " " + pointsOwn + " | " + pointsOpponent + " " + nameOpponent + "    " + numberCurrentSet + "/" + numberAllSets);
-		
+		//shows the meta-information of the game
 		metaPlayer0.setText(nameOwn);
 		metaPlayerX.setText(nameOpponent);
 		points0.setText(pointsOwn);
@@ -284,9 +284,9 @@ public class Controller2 {
 		GridPane.setRowIndex(circle, (5 - rowIndex));
 		gameGrid.getChildren().add(circle);
 		gameGrid.setHalignment(circle, HPos.CENTER);
-		
 	}
 
+	
 	/**
 	 * is called by the "pause" button <br>
 	 * sets the currently running Reconstruct-Thread to WAIT by interrupting it<br>
@@ -429,6 +429,10 @@ public class Controller2 {
 	    gameGrid.getChildren().add(0,node);	
 	}
 	
+	/**
+	 * Event for leaving the application
+	 * @param event
+	 */
 	@FXML
 	public void exitApplication(ActionEvent event) {
 		Platform.exit();

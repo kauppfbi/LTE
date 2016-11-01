@@ -29,6 +29,7 @@ public class GameInfo {
 	}
 
 	
+	//Getter and Setter methods
 	public int getGameID() {
 		return gameID;
 	}
