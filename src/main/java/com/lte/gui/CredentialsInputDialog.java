@@ -3,13 +3,10 @@ package com.lte.gui;
 import java.util.Optional;
 
 import javafx.geometry.Insets;
-
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 
 public class CredentialsInputDialog {
@@ -26,12 +23,6 @@ public class CredentialsInputDialog {
 		dialog = new Dialog<String[]>();
 		dialog.setTitle("App Credentials");
 		dialog.setHeaderText("Please insert App Credentials.");
-
-		// Set the icon (must be included in the project).
-//		File file = new File("files/images/icon.png");
-//		ImageView image = new ImageView(file.toURI().toString());
-//		image.autosize();
-//		dialog.setGraphic(image);
 
 		// Set the button types.
 		ButtonType confirmType = new ButtonType("Confirm");

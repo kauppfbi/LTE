@@ -97,10 +97,6 @@ public class FileIM implements InterfaceManager {
 			// Das Dokument erstellen
 			SAXBuilder builder = new SAXBuilder();
 			doc = builder.build(f);
-			XMLOutputter fmt = new XMLOutputter();
-
-			// komplettes Dokument ausgeben
-			// fmt.output(doc, System.out);
 
 			// Wurzelelement holen
 			Element root = doc.getRootElement();
