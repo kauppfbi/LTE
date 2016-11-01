@@ -214,6 +214,14 @@ public class Controller0 {
 		AiVsAi.setSelected(true);
 		AiVsPlayer.setToggleGroup(tgroup);
 		PlayerVsPlayer.setToggleGroup(tgroup);
+		
+		//load opponent-player names in comboBox
+		String[] opponentNamesArray = controller.getConnection().getOpponentNames();
+		System.out.println("OpponentNames= " + opponentNamesArray[1]);
+		for(int i=0; i<opponentNamesArray.length; i++){
+			playerO.getItems().add(opponentNamesArray[i]);
+		}
+		
 	}
 
 	/**
