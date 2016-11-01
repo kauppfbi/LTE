@@ -1,7 +1,7 @@
 package com.lte.gui;
 
 import java.io.IOException;
-import java.sql.SQLException;
+import java.util.HashMap;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.media.MediaPlayer.Status;
 import javafx.stage.Stage;
 import java.io.File;
 import javafx.scene.control.*;
@@ -16,6 +17,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import com.lte.controller.MainController;
+import com.lte.features.SoundManager;
 import com.lte.models.*;
 
 
@@ -56,11 +58,16 @@ public class Controller0 {
 	@FXML
 	RadioButton PlayerVsPlayer;
 	
+	@FXML
+	Button muteButton;
+	
 	// non-FXML Declarations
 	private MainController controller;
 	private String errorPlayer;
 	private ToggleGroup tgroup;
-
+	private SoundManager soundManager;
+	private HashMap<String, Image> speakerImages;
+	
 	
 	// private ThreadReconstruct controller;
 	private Settings settings;
@@ -68,6 +75,10 @@ public class Controller0 {
 	
 	public Controller0(MainController mainController) {
 		this.controller = mainController;
+		this.soundManager = controller.getSoundManager();
+		soundManager.play();
+		
+		speakerImages = controller.getSpeakerImages();
 	}
 	
 	/*
@@ -196,6 +207,9 @@ public class Controller0 {
 	 */
 	@FXML
 	public void initialize() {
+		muteButton.setGraphic(new ImageView(speakerImages.get("speaker")));
+
+		
 		// Background Image
 		File file = new File("files/images/Screen0.png");
 		Image image = new Image(file.toURI().toString());
@@ -216,6 +230,18 @@ public class Controller0 {
 		PlayerVsPlayer.setToggleGroup(tgroup);
 	}
 
+	@FXML
+	private void mute(ActionEvent event){
+		Status status = soundManager.playPause();
+		if (status != null) {
+			if (status == Status.PAUSED) {
+				muteButton.setGraphic(new ImageView(speakerImages.get("speaker-mute")));
+			} else if (status == Status.PLAYING) {
+				muteButton.setGraphic(new ImageView(speakerImages.get("speaker")));
+			}
+		}
+	}
+	
 	/**
 	 * Event for leaving the application
 	 * @param event
