@@ -1,9 +1,13 @@
 package com.lte.controller;
 
+import java.io.File;
+import java.util.HashMap;
+
 import javax.swing.JOptionPane;
 
 import com.lte.aiPar.AlgorithmManager;
 import com.lte.db.DBconnection;
+import com.lte.features.SoundManager;
 import com.lte.gui.Controller0;
 import com.lte.gui.Controller1;
 import com.lte.gui.Controller2;
@@ -15,6 +19,8 @@ import com.lte.models.GameDB;
 import com.lte.models.GameInfo;
 import com.lte.models.SetDB;
 import com.lte.models.Settings;
+
+import javafx.scene.image.Image;
 
 /**
  * main controller; coordinates data exchange and communication between all
@@ -46,11 +52,39 @@ public class MainController {
 	// KI Manager
 	AlgorithmManager algorithmManager;
 
+	private HashMap<String, Image> speakerImages;
+
+	private SoundManager soundManager;
+
 	/*
 	 * Constructor
 	 */
 	public MainController(DBconnection connection) {
 		this.connection = connection;
+		this.soundManager = new SoundManager();
+		initSpeakerImages();
+	}
+
+	private void initSpeakerImages() {
+		speakerImages = new HashMap<String, Image>();
+		File fileButton; 
+		Image imageButton; 
+		
+		fileButton = new File("files/images/speaker.png");
+		imageButton = new Image(fileButton.toURI().toString());
+		speakerImages.put("speaker", imageButton);
+		
+		fileButton = new File("files/images/speaker-mute.png");
+		imageButton = new Image(fileButton.toURI().toString());
+		speakerImages.put("speaker-mute", imageButton);
+
+		fileButton = new File("files/images/speaker1.png");
+		imageButton = new Image(fileButton.toURI().toString());
+		speakerImages.put("speaker1", imageButton);
+		
+		fileButton = new File("files/images/speaker1-mute.png");
+		imageButton = new Image(fileButton.toURI().toString());
+		speakerImages.put("speaker1-mute", imageButton);
 	}
 
 	/*
@@ -174,5 +208,13 @@ public class MainController {
 		} else {
 			return false;
 		}
+	}
+
+	public HashMap<String, Image> getSpeakerImages() {
+		return speakerImages;
+	}
+
+	public SoundManager getSoundManager() {
+		return soundManager;
 	}
 }
