@@ -116,7 +116,12 @@ public class Controller2 {
 	 */
 	@FXML
 	public void initialize(){
-		muteButton.setGraphic(new ImageView(speakerImages.get("speaker1")));
+		Status status = soundManager.getStatus();
+			if (status == Status.PAUSED) {
+				muteButton.setGraphic(new ImageView(speakerImages.get("speaker1-mute")));
+			} else if (status == Status.PLAYING) {
+				muteButton.setGraphic(new ImageView(speakerImages.get("speaker1")));
+			}
 		muteButton.setStyle("-fx-background-color: transparent;");
 		
 		//Background

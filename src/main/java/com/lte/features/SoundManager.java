@@ -5,6 +5,7 @@ import java.io.File;
 import javafx.application.Platform;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaPlayer.Status;
 
 public class SoundManager {
 	String path;
@@ -38,5 +39,9 @@ public class SoundManager {
 			System.err.println("Unknown MediaPlayer-Status!");
 			return null;
 		}
+	}
+
+	public Status getStatus() {
+		return mediaPlayer.getStatus();
 	}
 }
