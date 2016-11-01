@@ -24,7 +24,7 @@ import com.lte.models.*;
  * @author FelixH
  *
  */
-public class Controller0 extends GUIController{
+public class Controller0 {
 	// FXML Declarations
 	@FXML
 	AnchorPane pane;
@@ -60,6 +60,7 @@ public class Controller0 extends GUIController{
 	private MainController controller;
 	private String errorPlayer;
 	private ToggleGroup tgroup;
+
 	
 	// private ThreadReconstruct controller;
 	private Settings settings;
@@ -177,10 +178,14 @@ public class Controller0 extends GUIController{
 			
 			// FXMLLoader
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout2.fxml"));
-			loader.setController(controller.getController2());
-			
+			Controller2 controller2 = controller.getController2();
+			loader.setController(controller2);
+
 			//set new layout
 			stage.setScene(new Scene((AnchorPane) loader.load()));
+			
+			// load recent Games
+			controller2.getRecGameInfo();
 			
 			stage.show();
 		}

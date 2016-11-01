@@ -24,7 +24,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.scene.text.Text;
@@ -38,11 +37,11 @@ import javafx.stage.Stage;
  * @author FelixH
  *
  */
-public class Controller1 extends GUIController{
+public class Controller1 {
 
 	// FXML Declarations
 	@FXML 
-	Pane gameSet;
+	AnchorPane pane;
 	
 	@FXML
 	Button fileSelect;
@@ -286,7 +285,7 @@ public class Controller1 extends GUIController{
 	public void gameOver(byte winningPlayer, int[][] winningCombo) {
 		highlightWinning(winningCombo); //highlights the winning-combo
 		
-		// Winner gets one point
+		// Winner gets +1 Set-Point
 		if (winningPlayer == 1) {
 			int playerX = Integer.parseInt(ltePoints.getText());
 			ltePoints.setText(String.valueOf(playerX + 1));
@@ -295,9 +294,12 @@ public class Controller1 extends GUIController{
 			opponentPoints.setText(String.valueOf(playerO + 1));
 		}
 		
+
 		//Change the number of the set
+		// Set-Number +1
 		set.setText(String.valueOf(gameInfo.getSet()));
 		
+		// Alert-Dialog (Confirmation-Options: Go on with next Set || exit to Startmenu)
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Game Over"); //Ask the user what the next steps are
 		if (winningPlayer == 1) {
@@ -324,7 +326,8 @@ public class Controller1 extends GUIController{
 			set.setText(String.valueOf(gameInfo.getSet() + 1));
 			gameInfo.setSet(gameInfo.getSet() + 1);
 			
-			//start new set
+
+			// start new Set
 			controller.playSet();
 
 		}if (result.get() == beenden) {
@@ -337,7 +340,7 @@ public class Controller1 extends GUIController{
 			Stage stage;
 			stage = (Stage) backToStart.getScene().getWindow();
 			// FXMLLoader
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/views/layout0.fxml"));
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
 			loader.setController(controller.getController0());
 			try {
 				stage.setScene(new Scene((AnchorPane) loader.load()));
@@ -355,7 +358,7 @@ public class Controller1 extends GUIController{
 			dataTrans.setDisable(false);
 			playerChoice.setDisable(false);
 		}
-		}	
+		}
 	}
 
 	
