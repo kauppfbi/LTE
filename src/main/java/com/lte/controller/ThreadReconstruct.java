@@ -120,5 +120,6 @@ public class ThreadReconstruct extends Thread {
 				}
 			}
 		}// for
+		controller2.playRecFinished();
 	}// run
 }
