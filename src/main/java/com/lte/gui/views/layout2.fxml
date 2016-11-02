@@ -80,6 +80,6 @@
       <Button fx:id="stop" layoutX="1113.0" layoutY="406.0" mnemonicParsing="false" onAction="#stopAction" >
       </Button>
    </children>
-   <Button fx:id="muteButton" layoutX="1100" layoutY="50.0" mnemonicParsing="false" onAction="#mute">
+   <Button fx:id="muteButton" layoutX="1200" layoutY="70.0" mnemonicParsing="false" onAction="#mute">
 		</Button>
 </AnchorPane>

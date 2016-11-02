@@ -72,7 +72,7 @@
 				<Font size="16.0" />
 			</font>
 		</RadioButton>
-		<Button fx:id="muteButton" layoutX="1100" layoutY="50.0" mnemonicParsing="false" onAction="#mute">
+		<Button fx:id="muteButton" layoutX="1200" layoutY="70.0" mnemonicParsing="false" onAction="#mute">
 		</Button>
 	</children>
 </AnchorPane>
