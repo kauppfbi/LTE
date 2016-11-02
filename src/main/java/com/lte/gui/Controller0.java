@@ -56,9 +56,6 @@ public class Controller0 {
 	@FXML
 	RadioButton PlayerVsPlayer;
 	
-	@FXML
-	Button goToScreen3;
-	
 	// non-FXML Declarations
 	private MainController controller;
 	private String errorPlayer;
@@ -92,26 +89,8 @@ public class Controller0 {
 		this.gameInfo = gameInfo;
 	}
 	
-	//Nur zum Testen - wieder loeschen!
-	@FXML
-	public void goToScreen3(ActionEvent event) throws IOException{
-		Stage stage;
-		stage = (Stage) goToScreen3.getScene().getWindow();
-		
-		// set Icon
-		File file = new File("files/images/icon.png");
-		Image image = new Image(file.toURI().toString());
-		stage.getIcons().add(image);
-
-		// FXMLLoader
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout3.fxml"));
-		loader.setController(controller.getController3());
-		
-		// set new layout
-		stage.setScene(new Scene((AnchorPane) loader.load()));
-
-		stage.show();
-	}
+	
+	
 
 	/**
 	 * buttonPressed event Handler
@@ -122,10 +101,7 @@ public class Controller0 {
 	 */
 	// *******************Switch von Welcome zu Game Screen********************
 	@FXML
-	public void toGame(ActionEvent event) throws IOException {
-		//Toggle toggle = tgroup.getSelectedToggle();
-		//System.out.println("Toggle = " + tgroup.);
-		
+	public void toGame(ActionEvent event) throws IOException {		
 		//Is one player-name empty?
 		if(playerX.getValue()==null || playerO.getValue()==null){
 			//Error-Message: Name is null!
@@ -138,7 +114,7 @@ public class Controller0 {
 			//Are the playerNames shorter than 10 characters?
 			if(playerX.getValue().length()<=9 && playerO.getValue().length()<=9){
 				Stage stage;
-				if (event.getSource() == toGame) {
+				if (event.getSource() == toGame && AiVsAi.isSelected()==true) {
 					// Set team-names
 					//String nameX = playerX.getText();
 					String nameO = playerO.getValue();
@@ -163,7 +139,37 @@ public class Controller0 {
 					
 					// set new layout
 					stage.setScene(new Scene((AnchorPane) loader.load()));
-			
+					stage.show();
+				} else if(event.getSource() == toGame && AiVsPlayer.isSelected()==true){
+					stage = (Stage) toGame.getScene().getWindow();
+					
+					// set Icon
+					File file = new File("files/images/icon.png");
+					Image image = new Image(file.toURI().toString());
+					stage.getIcons().add(image);
+
+					// FXMLLoader
+					FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout3.fxml"));
+					loader.setController(controller.getController3());
+					
+					// set new layout
+					stage.setScene(new Scene((AnchorPane) loader.load()));
+
+					stage.show();
+				}else if(event.getSource() == toGame && PlayerVsPlayer.isSelected()==true) {
+					stage = (Stage) toGame.getScene().getWindow();
+					
+					// set Icon
+					File file = new File("files/images/icon.png");
+					Image image = new Image(file.toURI().toString());
+					stage.getIcons().add(image);
+
+					// FXMLLoader
+					FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout4.fxml"));
+					loader.setController(controller.getController4());
+					
+					// set new layout
+					stage.setScene(new Scene((AnchorPane) loader.load()));
 					stage.show();
 				}
 			}else{

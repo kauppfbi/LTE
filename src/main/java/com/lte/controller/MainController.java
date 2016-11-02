@@ -8,6 +8,7 @@ import com.lte.gui.Controller0;
 import com.lte.gui.Controller1;
 import com.lte.gui.Controller2;
 import com.lte.gui.Controller3;
+import com.lte.gui.Controller4;
 import com.lte.interfaces.EventIM;
 import com.lte.interfaces.EventIMJSON;
 import com.lte.interfaces.FileIM;
@@ -37,6 +38,7 @@ public class MainController {
 	private Controller1 controller1;
 	private Controller2 controller2;
 	private Controller3 controller3;
+	private Controller4 controller4;
 
 	// model(s)
 	private Settings settings;
@@ -99,6 +101,15 @@ public class MainController {
 			return controller3;
 		}else {
 		return controller3;
+		}
+	}
+	
+	public Controller4 getController4() {
+		if (controller4 == null){
+			this.controller4 = new Controller4(this);
+			return controller4;
+		}else {
+		return controller4;
 		}
 	}
 

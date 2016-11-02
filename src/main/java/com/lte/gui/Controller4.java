@@ -4,14 +4,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 import com.lte.controller.MainController;
-
 import com.lte.models.GameInfo;
 import com.lte.models.Settings;
-import com.sun.corba.se.pept.transport.EventHandler;
+import com.sun.org.apache.xerces.internal.util.SynchronizedSymbolTable;
 
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,8 +19,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -37,27 +34,26 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 /**
- * Class for Screen3
- * AI vs. User
+ * Controller4 Class for Player-Player
  * @author FelixH
  *
- *TODO: Einbindung der KI, Nach dem Wurf des Spielers muss KI initialisiert werden <br>
- *KI sollte ebenfalls rowHigh1 - rowHigh7 beim Wurf eines Steines hochzählen, damit der Player<br>
- *nicht die Würfe der KI überschreiben kann. <br>
- *Außerdem müssen die Würfe des Players an KI übergeben werden
  *
- *Siegmustererkennung!
+ *TODO: Siegmustererkennung!
+ *Line155: Uebernahme des GegnerNamen funktioniert noch nicht, ebenso in Con3
+ *Außerdem wird Name1 ncoh auf default LTE gelassen
+ *Selbiger Fehler sollte ggf auch für unser Hauptprogramm KI-KI angepasst werden
+ *Siegmustererkennung muss RadioButtons wieder freigeben
+ *Logik für gewonnene Sätze?!
  *
+ *
+ *Problem: nach ein paar geworfenen Steinen -> back to Startmenu -> wieder auf Screen4 -> keine Steine können mehr geworfen werden
  *
  */
-public class Controller3{
-
+public class Controller4 {
+	
 	//FXML Declarations
 	@FXML 
 	Pane gameSet;
-
-	@FXML
-	Button startGame;
 
 	@FXML
 	Text ltePoints;
@@ -73,9 +69,6 @@ public class Controller3{
 
 	@FXML
 	Text set;
-
-	@FXML
-	Spinner<Double> timeSpinner;
 
 	@FXML
 	GridPane gameGrid;
@@ -107,8 +100,15 @@ public class Controller3{
 	@FXML
 	ImageView row7;
 	
+	@FXML
+	RadioButton radioPlayer1;
+	
+	@FXML
+	RadioButton radioPlayer2;
+	
 	// non-FXML Declarations
 	private MainController controller;
+	private ToggleGroup tgroup;
 	// private ThreadReconstruct controller;
 	private Settings settings;
 	private GameInfo gameInfo;
@@ -122,7 +122,10 @@ public class Controller3{
 	int rowHigh6 = 0;
 	int rowHigh7 = 0;
 	
-	public Controller3(MainController mainController) {
+	//Initial Player
+	char player = 'X';
+	
+	public Controller4(MainController mainController) {
 		this.controller = mainController;
 		this.settings = mainController.getSettings();
 		this.gameInfo = mainController.getGameInfo();
@@ -159,17 +162,6 @@ public class Controller3{
 		ltePoints.setText("0");
 		opponentPoints.setText("0");
 
-		// TimeSpinner initialization + ChangeListener
-		timeSpinner.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(0.5, 10, 0.5, 0.1));
-		timeSpinner.setEditable(false);
-		ChangeListener<Number> listener2 = new ChangeListener<Number>() {
-			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
-				System.out.println(timeSpinner.getValue());
-				settings.setCalculationTime(timeSpinner.getValue());
-			}
-		};
-		timeSpinner.valueProperty().addListener(listener2);
-
 		// Background Image
 		File file = new File("files/images/gameplay.png");
 		Image image = new Image(file.toURI().toString());
@@ -188,6 +180,12 @@ public class Controller3{
 		row5.setImage(image2);
 		row6.setImage(image2);
 		row7.setImage(image2);
+		
+		//RadioButton ToggleGroup
+		tgroup = new ToggleGroup();
+		radioPlayer1.setToggleGroup(tgroup);
+		radioPlayer1.setSelected(true);
+		radioPlayer2.setToggleGroup(tgroup);
 	}
 	
 	/**
@@ -197,6 +195,15 @@ public class Controller3{
 	 */
 	@FXML
 	private void goToStartmenu(ActionEvent event) throws IOException {
+		//set rowHigh back to zero
+		int rowHigh1 = 0;
+		int rowHigh2 = 0;
+		int rowHigh3 = 0;
+		int rowHigh4 = 0;
+		int rowHigh5 = 0;
+		int rowHigh6 = 0;
+		int rowHigh7 = 0;		
+		
 		Stage stage;
 		stage = (Stage) backToStart.getScene().getWindow();
 
@@ -212,16 +219,6 @@ public class Controller3{
 
 		stage.show();
 
-	}
-	
-	/**
-	 * starts the game set
-	 * @param event
-	 */
-	@FXML
-	private void startSet(ActionEvent event) {
-		//Spiel starten
-		controller.playSet();
 	}
 	
 	
@@ -380,42 +377,75 @@ public class Controller3{
 	private void mouseClicked(MouseEvent e) {
 		//fill(int columnIndex, int rowIndex, char player, boolean endGame)
 		Node node = (Node) e.getSource();
-		System.out.println("Node: "+ node.getId());
 		if(node.getId().equals("row1")){
 			if(rowHigh1<=5){
-				fill(0,rowHigh1,'X',false);
+				fill(0,rowHigh1,player,false);
 				rowHigh1++;
+				changePlayer();
 			}
 		}else if(node.getId().equals("row2")){
 			if(rowHigh2<=5){
-				fill(1,rowHigh2,'X',false);
+				fill(1,rowHigh2,player,false);
 				rowHigh2++;
+				changePlayer();
 			}
 		}else if (node.getId().equals("row3")){
 			if(rowHigh3<=5){
-				fill(2,rowHigh3,'X',false);
+				fill(2,rowHigh3,player,false);
 				rowHigh3++;
+				changePlayer();
 			}
 		}else if (node.getId().equals("row4")){
 			if(rowHigh4<=5){
-				fill(3,rowHigh4,'X',false);
+				fill(3,rowHigh4,player,false);
 				rowHigh4++;
+				changePlayer();
 			}
 		}else if (node.getId().equals("row5")){
 			if(rowHigh5<=5){
-				fill(4,rowHigh5,'X',false);
+				fill(4,rowHigh5,player,false);
 				rowHigh5++;
+				changePlayer();
 			}
 		}else if(node.getId().equals("row6")){
 			if(rowHigh6<=5){
-				fill(5,rowHigh6,'X',false);
+				fill(5,rowHigh6,player,false);
 				rowHigh6++;
+				changePlayer();
 			}
 		}else if(node.getId().equals("row7")){
 			if(rowHigh7<=5){
-				fill(6,rowHigh7,'X',false);
+				fill(6,rowHigh7,player,false);
 				rowHigh7++;
+				changePlayer();
 			}
 		}
     }
+	
+	/**
+	 * changes the Player
+	 */
+	private void changePlayer(){
+		if(player == 'X'){
+			player = 'O';
+		}else if(player == 'O'){
+			player = 'X';
+		}
+	}
+	
+	/**
+	 * fixes the player choice
+	 */
+	@FXML
+	private void fixPlayerChoice(){
+		if(radioPlayer1.isSelected()==true){
+			player = 'X';
+		}else if(radioPlayer2.isSelected()==true){
+			player = 'O';
+		}
+		
+		//Disable RadioButtons
+		radioPlayer1.setDisable(true);
+		radioPlayer2.setDisable(true);
+	}
 }
