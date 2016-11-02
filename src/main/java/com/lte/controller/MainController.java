@@ -15,6 +15,7 @@ import com.lte.interfaces.EventIM;
 import com.lte.interfaces.EventIMJSON;
 import com.lte.interfaces.FileIM;
 import com.lte.interfaces.InterfaceManager;
+import com.lte.models.DBscoreboard;
 import com.lte.models.GameDB;
 import com.lte.models.GameInfo;
 import com.lte.models.SetDB;
@@ -158,6 +159,10 @@ public class MainController {
 
 	public void setGameInfo(GameInfo gameInfo) {
 		this.gameInfo = gameInfo;
+	}
+	
+	public DBscoreboard[] getScoreBoardInfo(){
+		return connection.getScoreboard();
 	}
 
 	/*

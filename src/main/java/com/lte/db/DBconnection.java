@@ -504,10 +504,11 @@ public class DBconnection {
 					index = names.indexOf(opponentName);
 					// create object
 					opponentStats.setOpponentName(opponentName);
-					if (res.getString(4).equals("X")) {
+					String winner = res.getString(4);
+					if (winner.equals("X")) {
 						opponentStats.setLoses(1);
 						opponentStats.setWins(0);
-					} else if (res.getString(4).equals("O")) {
+					} else if (winner.equals("O")) {
 						opponentStats.setWins(1);
 						opponentStats.setLoses(0);
 					}
