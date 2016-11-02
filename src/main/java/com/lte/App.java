@@ -2,12 +2,9 @@ package com.lte;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.SQLException;
 
 import com.lte.controller.MainController;
 import com.lte.db.DBconnection;
-import com.lte.gui.Controller0;
-import com.lte.gui.Controller2;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
