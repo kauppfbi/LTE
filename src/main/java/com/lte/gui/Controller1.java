@@ -174,7 +174,7 @@ public class Controller1 {
 		playerChoice.getSelectionModel().selectedIndexProperty().addListener(listener1);
 
 		// TimeSpinner initialization + ChangeListener
-		timeSpinner.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(0.5, 10, 0.5, 0.1));
+		timeSpinner.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(2, 10, 0.5, 0.1));
 		timeSpinner.setEditable(false);
 		ChangeListener<Number> listener2 = new ChangeListener<Number>() {
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
