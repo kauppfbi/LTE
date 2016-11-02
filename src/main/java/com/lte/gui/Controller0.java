@@ -66,7 +66,7 @@ public class Controller0 {
 	private String errorPlayer;
 	private ToggleGroup tgroup;
 	private SoundManager soundManager;
-	private HashMap<String, Image> speakerImages;
+	private HashMap<String, Image> images;
 	
 	
 	// private ThreadReconstruct controller;
@@ -77,7 +77,7 @@ public class Controller0 {
 		this.controller = mainController;
 		this.soundManager = controller.getSoundManager();
 		soundManager.play();
-		this.speakerImages = controller.getSpeakerImages();
+		this.images = controller.getImages();
 	}
 	
 	/*
@@ -206,7 +206,7 @@ public class Controller0 {
 	 */
 	@FXML
 	public void initialize() {
-		muteButton.setGraphic(new ImageView(speakerImages.get("speaker")));
+		muteButton.setGraphic(new ImageView(images.get("speaker")));
 		muteButton.setStyle("-fx-background-color: transparent;");
 		
 		// Background Image
@@ -242,9 +242,9 @@ public class Controller0 {
 		Status status = soundManager.playPause();
 		if (status != null) {
 			if (status == Status.PAUSED) {
-				muteButton.setGraphic(new ImageView(speakerImages.get("speaker-mute")));
+				muteButton.setGraphic(new ImageView(images.get("speaker-mute")));
 			} else if (status == Status.PLAYING) {
-				muteButton.setGraphic(new ImageView(speakerImages.get("speaker")));
+				muteButton.setGraphic(new ImageView(images.get("speaker")));
 			}
 		}
 	}

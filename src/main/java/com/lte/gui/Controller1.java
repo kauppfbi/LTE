@@ -101,7 +101,7 @@ public class Controller1 {
 	private GameInfo gameInfo;
 	final FileChooser fileChooser;
 	private SoundManager soundManager;
-	private HashMap<String, Image> speakerImages;
+	private HashMap<String, Image> images;
 
 	String playerX = "defaultX";
 	String playerO = "defaultO";
@@ -112,7 +112,7 @@ public class Controller1 {
 		this.fileChooser = new FileChooser();
 		this.gameInfo = mainController.getGameInfo();
 		this.soundManager = controller.getSoundManager();		
-		this.speakerImages = controller.getSpeakerImages();
+		this.images = controller.getImages();
 	}
 
 	// Getter and Setter
@@ -140,9 +140,9 @@ public class Controller1 {
 	public void initialize() {
 		Status status = soundManager.getStatus();
 		if (status == Status.PAUSED) {
-			muteButton.setGraphic(new ImageView(speakerImages.get("speaker1-mute")));
+			muteButton.setGraphic(new ImageView(images.get("speaker1-mute")));
 		} else if (status == Status.PLAYING) {
-			muteButton.setGraphic(new ImageView(speakerImages.get("speaker1")));
+			muteButton.setGraphic(new ImageView(images.get("speaker1")));
 		}
 		muteButton.setStyle("-fx-background-color: transparent;");
 		
@@ -221,9 +221,9 @@ public class Controller1 {
 		Status status = soundManager.playPause();
 		if (status != null) {
 			if (status == Status.PAUSED) {
-				muteButton.setGraphic(new ImageView(speakerImages.get("speaker1-mute")));
+				muteButton.setGraphic(new ImageView(images.get("speaker1-mute")));
 			} else if (status == Status.PLAYING) {
-				muteButton.setGraphic(new ImageView(speakerImages.get("speaker1")));
+				muteButton.setGraphic(new ImageView(images.get("speaker1")));
 			}
 		}
 	}

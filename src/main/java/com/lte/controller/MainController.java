@@ -52,7 +52,7 @@ public class MainController {
 	// KI Manager
 	AlgorithmManager algorithmManager;
 
-	private HashMap<String, Image> speakerImages;
+	private HashMap<String, Image> images;
 
 	private SoundManager soundManager;
 
@@ -62,29 +62,29 @@ public class MainController {
 	public MainController(DBconnection connection) {
 		this.connection = connection;
 		this.soundManager = new SoundManager();
-		initSpeakerImages();
+		initImages();
 	}
 
-	private void initSpeakerImages() {
-		speakerImages = new HashMap<String, Image>();
+	private void initImages() {
+		images = new HashMap<String, Image>();
 		File fileButton; 
 		Image imageButton; 
 		
 		fileButton = new File("files/images/speaker.png");
 		imageButton = new Image(fileButton.toURI().toString());
-		speakerImages.put("speaker", imageButton);
+		images.put("speaker", imageButton);
 		
 		fileButton = new File("files/images/speaker-mute.png");
 		imageButton = new Image(fileButton.toURI().toString());
-		speakerImages.put("speaker-mute", imageButton);
+		images.put("speaker-mute", imageButton);
 
 		fileButton = new File("files/images/speaker1.png");
 		imageButton = new Image(fileButton.toURI().toString());
-		speakerImages.put("speaker1", imageButton);
+		images.put("speaker1", imageButton);
 		
 		fileButton = new File("files/images/speaker1-mute.png");
 		imageButton = new Image(fileButton.toURI().toString());
-		speakerImages.put("speaker1-mute", imageButton);
+		images.put("speaker1-mute", imageButton);
 	}
 
 	/*
@@ -210,8 +210,8 @@ public class MainController {
 		}
 	}
 
-	public HashMap<String, Image> getSpeakerImages() {
-		return speakerImages;
+	public HashMap<String, Image> getImages() {
+		return images;
 	}
 
 	public SoundManager getSoundManager() {

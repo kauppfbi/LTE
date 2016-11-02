@@ -102,13 +102,13 @@ public class Controller2 {
 	private GameDB[] games;
 	private int gameID;
 	private SoundManager soundManager;
-	private HashMap<String, Image> speakerImages;
+	private HashMap<String, Image> images;
 	
 	
 	public Controller2(MainController mainController) {
 		this.controller = mainController;
 		this.soundManager = controller.getSoundManager();		
-		this.speakerImages = controller.getSpeakerImages();
+		this.images = controller.getImages();
 	}
 
 	/**
@@ -118,9 +118,9 @@ public class Controller2 {
 	public void initialize(){
 		Status status = soundManager.getStatus();
 			if (status == Status.PAUSED) {
-				muteButton.setGraphic(new ImageView(speakerImages.get("speaker1-mute")));
+				muteButton.setGraphic(new ImageView(images.get("speaker1-mute")));
 			} else if (status == Status.PLAYING) {
-				muteButton.setGraphic(new ImageView(speakerImages.get("speaker1")));
+				muteButton.setGraphic(new ImageView(images.get("speaker1")));
 			}
 		muteButton.setStyle("-fx-background-color: transparent;");
 		
@@ -141,9 +141,9 @@ public class Controller2 {
 		Status status = soundManager.playPause();
 		if (status != null) {
 			if (status == Status.PAUSED) {
-				muteButton.setGraphic(new ImageView(speakerImages.get("speaker1-mute")));
+				muteButton.setGraphic(new ImageView(images.get("speaker1-mute")));
 			} else if (status == Status.PLAYING) {
-				muteButton.setGraphic(new ImageView(speakerImages.get("speaker1")));
+				muteButton.setGraphic(new ImageView(images.get("speaker1")));
 			}
 		}
 	}
