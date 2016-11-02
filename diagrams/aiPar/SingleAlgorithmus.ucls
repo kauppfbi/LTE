@@ -2,9 +2,9 @@
 <class-diagram version="1.1.11" icons="true" automaticImage="JPEG" always-add-relationships="false" 
   generalizations="true" realizations="true" associations="true" dependencies="false" nesting-relationships="true" 
   router="FAN">  
-  <class id="1" language="java" name="com.lte.aiPar.SingleAlgorithmus" project="LTE" 
-    file="/LTE/src/main/java/com/lte/aiPar/SingleAlgorithmus.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="461" y="211"/>    
+  <class id="1" language="java" name="com.lte.aiPar.SingleAlgorithm" project="LTE" 
+    file="/LTE/src/main/java/com/lte/aiPar/SingleAlgorithm.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="189" width="182" x="327" y="30"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
