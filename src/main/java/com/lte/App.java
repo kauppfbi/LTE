@@ -17,7 +17,7 @@ import javafx.stage.Stage;
  * @author kauppfbi
  *
  */
-public class App extends Application {
+public class App extends Application{
 
 	// Stage ist der Au�encontainer, unique
 	private Stage stage;
