@@ -30,10 +30,6 @@ public class FileIM implements InterfaceManager {
 		this.filename = "spieler" + player + "2server.txt";
 	}
 
-	@Override
-	public ServerMessage getLastMessage() {
-		return serverMessage;
-	}
 
 	@Override
 	public ServerMessage receiveMessage() {

@@ -12,9 +12,6 @@ public interface InterfaceManager {
 	public static final String EVENT_TYPE_JSON = "event-json";
 	public static final String FILE_Type = "file";
 		
-	public ServerMessage getLastMessage();
-
-	//public void setLastMessage(ServerMessage lastMessage);
 
 	public ServerMessage receiveMessage ();
 	

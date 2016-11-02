@@ -68,11 +68,6 @@ public class EventIM implements InterfaceManager{
 			e.printStackTrace();
 		}
 	}
-	
-	@Override
-	public ServerMessage getLastMessage() {
-		return serverMessage;
-	}
 
 
 	@Override
