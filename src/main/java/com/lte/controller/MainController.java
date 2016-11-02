@@ -85,6 +85,20 @@ public class MainController {
 		fileButton = new File("files/images/speaker1-mute.png");
 		imageButton = new Image(fileButton.toURI().toString());
 		images.put("speaker1-mute", imageButton);
+		
+		fileButton = new File("files/images/play.png");
+		imageButton = new Image(fileButton.toURI().toString());
+		images.put("play", imageButton);
+		
+		fileButton = new File("files/images/pause.png");
+		imageButton = new Image(fileButton.toURI().toString());
+		images.put("pause", imageButton);
+		
+		fileButton = new File("files/images/stop.png");
+		imageButton = new Image(fileButton.toURI().toString());
+		images.put("stop", imageButton);
+		
+		
 	}
 
 	/*
