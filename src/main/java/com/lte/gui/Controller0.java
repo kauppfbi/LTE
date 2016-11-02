@@ -222,6 +222,8 @@ public class Controller0 {
 		}
 		playerO.getSelectionModel().selectFirst();
 		
+		System.out.println(controller.getScoreBoardInfo()[1].getOpponentName());
+		
 	}
 
 	/**
