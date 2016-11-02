@@ -7,6 +7,7 @@ import com.lte.controller.MainController;
 
 import com.lte.models.GameInfo;
 import com.lte.models.Settings;
+import com.sun.corba.se.pept.transport.EventHandler;
 
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -77,6 +78,27 @@ public class Controller3{
 	@FXML
 	ImageView imageView;
 	
+	@FXML
+	ImageView row1;
+	
+	@FXML
+	ImageView row2;
+	
+	@FXML
+	ImageView row3;
+	
+	@FXML
+	ImageView row4;
+	
+	@FXML
+	ImageView row5;
+	
+	@FXML
+	ImageView row6;
+	
+	@FXML
+	ImageView row7;
+	
 	// non-FXML Declarations
 	private MainController controller;
 	// private ThreadReconstruct controller;
@@ -137,7 +159,18 @@ public class Controller3{
 		imageView.setImage(image);
 		
 		namePlayerX.setText("LTE");
-		namePlayerO.setText(controller.getGameInfo().getOpponentName());
+		//namePlayerO.setText(controller.getGameInfo().getOpponentName());
+		
+		//imageView to let the player choose the row to throw stones
+		File file2 = new File("files/images/Pfeil_unten_bearbeitet.png");
+		Image image2 = new Image(file2.toURI().toString());
+		row1.setImage(image2);
+		row2.setImage(image2);
+		row3.setImage(image2);
+		row4.setImage(image2);
+		row5.setImage(image2);
+		row6.setImage(image2);
+		row7.setImage(image2);
 	}
 	
 	/**
@@ -322,15 +355,30 @@ public class Controller3{
 	}
 	
 	/**
-	 * Mouse Event to let the User select the row
-	 * to throw the stone
+	 * Mouse Event to let the User select the row<br>
+	 * to throw the stone<br>
 	 * @param e
 	 */
 	@FXML
-	private void mouseEntered(MouseEvent e) {
-        Node source = (Node)e.getSource() ;
-        Integer colIndex = GridPane.getColumnIndex(source);
-        Integer rowIndex = GridPane.getRowIndex(source);
-        System.out.printf("Mouse entered cell [%d, %d]%n", colIndex.intValue(), rowIndex.intValue());
+	private void mouseClicked(MouseEvent e) {
+		//fill(int columnIndex, int rowIndex, char player, boolean endGame)
+		Node node = (Node) e.getSource();
+		System.out.println("Node: "+ node.getId());
+		if(node.getId()=="row1"){
+			fill(0,0,'X',false);
+		}else if(node.getId()=="row2"){
+			fill(0,1,'X',false);
+		}else if (node.getId()=="row3"){
+			fill(0,2,'X',false);
+		}else if (node.getId()=="row4"){
+			fill(0,3,'X',false);
+		}else if (node.getId()=="row5"){
+			fill(0,4,'X',false);
+		}else if(node.getId()=="row6"){
+			fill(0,5,'X',false);
+		}else if(node.getId()=="row7"){
+			fill(0,6,'X',false);
+		}
+		
     }
 }
