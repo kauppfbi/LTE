@@ -200,8 +200,7 @@ public class Controller2 {
 			}
 		// Just switch the View, if Rec-Game is terminated	
 		} else{
-			Stage stage; 
-		    // Referrenz zur aktuellen Stage herstellen
+			Stage stage;
 		    stage = (Stage) backToStart.getScene().getWindow();
 		    // FXMLLoader               
 	        FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));

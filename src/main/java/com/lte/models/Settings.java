@@ -8,7 +8,7 @@ import com.lte.interfaces.InterfaceManager;
 /**
  * 
  * @author Florian & Fabian
- * Object Settings: saves the current Game-information
+ * Object Settings: saves the settings for the current Game
  *
  */
 
