@@ -1,8 +1,6 @@
 package com.lte.gui;
 
 import java.io.IOException;
-import java.sql.SQLException;
-
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -216,7 +214,7 @@ public class Controller0 {
 		PlayerVsPlayer.setToggleGroup(tgroup);
 		
 		//load opponent-player names in comboBox
-		String[] opponentNamesArray = controller.getConnection().getOpponentNames();
+		String[] opponentNamesArray = controller.getOpponentNames();
 		for(int i=0; i<opponentNamesArray.length; i++){
 			playerO.getItems().add(opponentNamesArray[i]);
 		}

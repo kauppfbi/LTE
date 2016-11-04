@@ -330,11 +330,11 @@ public class Controller1 {
 			// start new Set
 			controller.playSet();
 
-		}if (result.get() == beenden) {
-			// TODO altes Controller Modell verwerfen und dem Agenten mitteilen
-			
+		} if (result.get() == beenden) {			
 			//DB: delete unfinished game
-			controller.getConnection().deleteUnfinishedGame(controller.getGameInfo().getGameID());
+			if(!controller.deleteUnfinishedGame()){
+				System.err.println("Deleting unfinished Game in DB was not sucessfully!");
+			}
 
 			// back to Screen0
 			Stage stage;
