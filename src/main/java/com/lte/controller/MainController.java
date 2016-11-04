@@ -50,6 +50,8 @@ public class MainController {
 	// KI Manager
 	AlgorithmManager algorithmManager;
 
+	//Player KI
+	private ThreadPlayerKi threadPlayerKi;
 	/*
 	 * Constructor
 	 */
@@ -133,6 +135,10 @@ public class MainController {
 	public void setGameInfo(GameInfo gameInfo) {
 		this.gameInfo = gameInfo;
 	}
+	
+	public void setThreadPlayerKiNull() {
+		threadPlayerKi = null;
+	}
 
 	/*
 	 * public methods <-- called by GUI-Controllers
@@ -149,6 +155,17 @@ public class MainController {
 			ThreadPlay playingThread = new ThreadPlay(interfaceManager, controller1, gameInfo, connection, algorithmManager, settings);
 			playingThread.start();
 		}
+	}
+	
+	/***********************************
+	 ********* Playing Player KI 
+	 * @return *****************
+	 ***********************************/
+	public int playTurn(int column){
+		if(threadPlayerKi == null){
+			threadPlayerKi = new ThreadPlayerKi(controller3, gameInfo, algorithmManager, settings);
+		}
+			return threadPlayerKi.playTurn(column);
 	}
 	
 	
