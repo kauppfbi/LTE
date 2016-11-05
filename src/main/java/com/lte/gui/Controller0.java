@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -47,7 +49,19 @@ public class Controller0 {
 	ImageView imageView;
 	
 	@FXML
-	ListView<String> scoreBoard;
+	TableView<DBscoreboard> scoreBoard;
+	
+	@FXML
+	TableColumn<DBscoreboard, String> opponentName;
+	
+	@FXML
+	TableColumn<DBscoreboard, Integer> opponentScore;
+	
+	@FXML
+	TableColumn<DBscoreboard, Integer> opponentWins;
+
+	@FXML
+	TableColumn<DBscoreboard, Integer> opponentLoses;
 
 	@FXML
 	RadioButton AiVsAi;
@@ -240,6 +254,8 @@ public class Controller0 {
 			playerO.getItems().add(opponentNamesArray[i]);
 		}
 		playerO.getSelectionModel().selectFirst();
+		
+		DBscoreboard[] info = controller.getScoreBoardInfo();
 		
 	}
 
