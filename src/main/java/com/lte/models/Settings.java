@@ -30,7 +30,7 @@ public class Settings {
 
 	public Settings(){
 		//default values
-		this.calculationTime = 0.5;
+		this.calculationTime = 2.0;
 		this.interfaceType = InterfaceManager.EVENT_TYPE;
 		this.serverChar = 'n';
 	}

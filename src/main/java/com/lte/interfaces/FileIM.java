@@ -12,7 +12,6 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
-import org.jdom2.output.XMLOutputter;
 
 public class FileIM implements InterfaceManager {
 
@@ -30,10 +29,6 @@ public class FileIM implements InterfaceManager {
 		this.filename = "spieler" + player + "2server.txt";
 	}
 
-	@Override
-	public ServerMessage getLastMessage() {
-		return serverMessage;
-	}
 
 	@Override
 	public ServerMessage receiveMessage() {

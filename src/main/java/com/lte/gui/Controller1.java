@@ -174,7 +174,7 @@ public class Controller1 {
 		playerChoice.getSelectionModel().selectedIndexProperty().addListener(listener1);
 
 		// TimeSpinner initialization + ChangeListener
-		timeSpinner.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(0.5, 10, 0.5, 0.1));
+		timeSpinner.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(2, 10, 0.5, 0.1));
 		timeSpinner.setEditable(false);
 		ChangeListener<Number> listener2 = new ChangeListener<Number>() {
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
@@ -330,11 +330,11 @@ public class Controller1 {
 			// start new Set
 			controller.playSet();
 
-		}if (result.get() == beenden) {
-			// TODO altes Controller Modell verwerfen und dem Agenten mitteilen
-			
+		} if (result.get() == beenden) {			
 			//DB: delete unfinished game
-			controller.getConnection().deleteUnfinishedGame(controller.getGameInfo().getGameID());
+			if(!controller.deleteUnfinishedGame()){
+				System.err.println("Deleting unfinished Game in DB was not sucessfully!");
+			}
 
 			// back to Screen0
 			Stage stage;
