@@ -105,4 +105,6 @@
       <Text fx:id="textKontaktpfad" fill="#62bdee" layoutX="853.0" layoutY="378.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="303.8574175834656" />
       <ChoiceBox fx:id="playerChoice" layoutX="1157.0" layoutY="273.0" prefHeight="25.0" prefWidth="50.0" />
 	</children>
+	<Button fx:id="muteButton" layoutX="1200" layoutY="70.0" mnemonicParsing="false" onAction="#mute">
+		</Button>
 </AnchorPane>

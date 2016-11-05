@@ -5,7 +5,6 @@ import java.io.IOException;
 
 import com.lte.controller.MainController;
 import com.lte.db.DBconnection;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -18,7 +17,7 @@ import javafx.stage.Stage;
  * @author kauppfbi
  *
  */
-public class App extends Application {
+public class App extends Application{
 
 	// Stage ist der Au�encontainer, unique
 	private Stage stage;

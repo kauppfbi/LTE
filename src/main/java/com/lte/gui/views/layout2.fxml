@@ -32,10 +32,8 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
       </GridPane>
-      <Button fx:id="pause" layoutX="1033.0" layoutY="406.0" mnemonicParsing="false" onAction="#pauseRec" text="Pause">
-         <font>
-            <Font size="18.0" />
-         </font></Button>
+      <Button fx:id="pause" layoutX="1033.0" layoutY="406.0" mnemonicParsing="false" onAction="#pauseRec">
+        </Button>
       <Button fx:id="backToStart" layoutX="1068.0" layoutY="657.0" mnemonicParsing="false" onAction="#goToStartmenu" text="Zurück zum Startmenu">
          <font>
             <Font size="18.0" />
@@ -77,15 +75,11 @@
             <Font size="36.0" />
          </font>
       </Text>
-      <Button fx:id="play" layoutX="966.0" layoutY="406.0" mnemonicParsing="false" onAction="#playRec" text="Play">
-         <font>
-            <Font size="18.0" />
-         </font>
+      <Button fx:id="play" layoutX="966.0" layoutY="406.0" mnemonicParsing="false" onAction="#playRec" >
       </Button>
-      <Button fx:id="stop" layoutX="1113.0" layoutY="406.0" mnemonicParsing="false" onAction="#stopAction" text="Abbruch">
-         <font>
-            <Font size="18.0" />
-         </font>
+      <Button fx:id="stop" layoutX="1113.0" layoutY="406.0" mnemonicParsing="false" onAction="#stopAction" >
       </Button>
    </children>
+   <Button fx:id="muteButton" layoutX="1200" layoutY="70.0" mnemonicParsing="false" onAction="#mute">
+		</Button>
 </AnchorPane>

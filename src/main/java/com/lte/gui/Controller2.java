@@ -3,10 +3,12 @@ package com.lte.gui;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Optional;
 import java.util.TreeMap;
 import com.lte.controller.MainController;
 import com.lte.controller.ThreadReconstruct;
+import com.lte.features.SoundManager;
 import com.lte.models.GameDB;
 import com.lte.models.SetDB;
 import javafx.application.Platform;
@@ -27,6 +29,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.media.MediaPlayer.Status;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
@@ -89,16 +92,23 @@ public class Controller2 {
 	@FXML
 	Text currentSet;
 	
+	@FXML
+	Button muteButton;
+	
 	// non-FXML Declarations
 	private MainController controller;	
 	private ThreadReconstruct threadReconstruct;
 	private SetDB[] sets;
 	private GameDB[] games;
 	private int gameID;
+	private SoundManager soundManager;
+	private HashMap<String, Image> images;
 	
 	
 	public Controller2(MainController mainController) {
 		this.controller = mainController;
+		this.soundManager = controller.getSoundManager();		
+		this.images = controller.getImages();
 	}
 
 	/**
@@ -106,6 +116,21 @@ public class Controller2 {
 	 */
 	@FXML
 	public void initialize(){
+		play.setGraphic(new ImageView(images.get("play")));
+		play.setStyle("-fx-background-color: transparent;");
+		pause.setGraphic(new ImageView(images.get("pause")));
+		pause.setStyle("-fx-background-color: transparent;");
+		stop.setGraphic(new ImageView(images.get("stop")));
+		stop.setStyle("-fx-background-color: transparent;");
+				
+		Status status = soundManager.getStatus();
+			if (status == Status.PAUSED) {
+				muteButton.setGraphic(new ImageView(images.get("speaker1-mute")));
+			} else if (status == Status.PLAYING) {
+				muteButton.setGraphic(new ImageView(images.get("speaker1")));
+			}
+		muteButton.setStyle("-fx-background-color: transparent;");
+		
 		//Background
 		File file = new File("files/images/gameplay.png");
 		Image image = new Image(file.toURI().toString());
@@ -116,6 +141,18 @@ public class Controller2 {
 		stop.setDisable(true);
 				
 		threadReconstruct = new ThreadReconstruct(this, null);	
+	}
+	
+	@FXML
+	private void mute(ActionEvent event){
+		Status status = soundManager.playPause();
+		if (status != null) {
+			if (status == Status.PAUSED) {
+				muteButton.setGraphic(new ImageView(images.get("speaker1-mute")));
+			} else if (status == Status.PLAYING) {
+				muteButton.setGraphic(new ImageView(images.get("speaker1")));
+			}
+		}
 	}
 	
 	// TODO onCloseRequest Thread Terminaten

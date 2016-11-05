@@ -1,12 +1,14 @@
 package com.lte.gui;
 
 import java.io.IOException;
+import java.util.HashMap;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.media.MediaPlayer.Status;
 import javafx.stage.Stage;
 import java.io.File;
 import javafx.scene.control.*;
@@ -14,6 +16,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import com.lte.controller.MainController;
+import com.lte.features.SoundManager;
 import com.lte.models.*;
 
 
@@ -54,11 +57,16 @@ public class Controller0 {
 	@FXML
 	RadioButton PlayerVsPlayer;
 	
+	@FXML
+	Button muteButton;
+	
 	// non-FXML Declarations
 	private MainController controller;
 	private String errorPlayer;
 	private ToggleGroup tgroup;
-
+	private SoundManager soundManager;
+	private HashMap<String, Image> images;
+	
 	
 	// private ThreadReconstruct controller;
 	private Settings settings;
@@ -66,6 +74,9 @@ public class Controller0 {
 	
 	public Controller0(MainController mainController) {
 		this.controller = mainController;
+		this.soundManager = controller.getSoundManager();
+		soundManager.play();
+		this.images = controller.getImages();
 	}
 	
 	/*
@@ -194,6 +205,15 @@ public class Controller0 {
 	 */
 	@FXML
 	public void initialize() {
+		Status status = soundManager.getStatus();
+		System.out.println(status);
+		if (status == Status.PAUSED) {
+			muteButton.setGraphic(new ImageView(images.get("speaker-mute")));
+		} else if (status == Status.PLAYING || status == Status.UNKNOWN) {
+			muteButton.setGraphic(new ImageView(images.get("speaker")));
+		}
+		muteButton.setStyle("-fx-background-color: transparent;");
+		
 		// Background Image
 		File file = new File("files/images/Screen0.png");
 		Image image = new Image(file.toURI().toString());
@@ -214,16 +234,28 @@ public class Controller0 {
 		PlayerVsPlayer.setToggleGroup(tgroup);
 		
 		//load opponent-player names in comboBox
-		String[] opponentNamesArray = controller.getOpponentNames();
-		for(int i=0; i<opponentNamesArray.length; i++){
-			playerO.getItems().add(opponentNamesArray[i]);
-		}
-		playerO.getSelectionModel().selectFirst();
-		
-		System.out.println(controller.getScoreBoardInfo()[1].getOpponentName());
+//		String[] opponentNamesArray = controller.getOpponentNames();
+//		for(int i=0; i<opponentNamesArray.length; i++){
+//			playerO.getItems().add(opponentNamesArray[i]);
+//		}
+//		playerO.getSelectionModel().selectFirst();
+//		
+//		System.out.println(controller.getScoreBoardInfo()[1].getOpponentName());
 		
 	}
 
+	@FXML
+	private void mute(ActionEvent event){
+		Status status = soundManager.playPause();
+		if (status != null) {
+			if (status == Status.PAUSED) {
+				muteButton.setGraphic(new ImageView(images.get("speaker-mute")));
+			} else if (status == Status.PLAYING) {
+				muteButton.setGraphic(new ImageView(images.get("speaker")));
+			}
+		}
+	}
+	
 	/**
 	 * Event for leaving the application
 	 * @param event

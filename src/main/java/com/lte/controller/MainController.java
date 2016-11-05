@@ -1,8 +1,13 @@
 package com.lte.controller;
 
+import java.io.File;
+import java.util.HashMap;
+
 import javax.swing.JOptionPane;
+
 import com.lte.aiPar.AlgorithmManager;
 import com.lte.db.DBconnection;
+import com.lte.features.SoundManager;
 import com.lte.gui.Controller0;
 import com.lte.gui.Controller1;
 import com.lte.gui.Controller2;
@@ -15,6 +20,8 @@ import com.lte.models.GameDB;
 import com.lte.models.GameInfo;
 import com.lte.models.SetDB;
 import com.lte.models.Settings;
+
+import javafx.scene.image.Image;
 
 /**
  * main controller; coordinates data exchange and communication between all
@@ -44,30 +51,68 @@ public class MainController {
 	private DBconnection connection;
 
 	// KI Manager
-	private AlgorithmManager algorithmManager;
-	
-	//threads
-	private ThreadPlay playingThread;
+	AlgorithmManager algorithmManager;
 
-	/**
-	 * default constructor<br>
-	 * needs a DBconnection object as parameter
-	 * @param connection
+	private HashMap<String, Image> images;
+
+	private SoundManager soundManager;
+
+	/*
+	 * Constructor
 	 */
 	public MainController(DBconnection connection) {
 		this.connection = connection;
+		this.soundManager = new SoundManager();
+		initImages();
+	}
+
+	private void initImages() {
+		images = new HashMap<String, Image>();
+		File fileButton; 
+		Image imageButton; 
+		
+		fileButton = new File("files/images/speaker.png");
+		imageButton = new Image(fileButton.toURI().toString());
+		images.put("speaker", imageButton);
+		
+		fileButton = new File("files/images/speaker-mute.png");
+		imageButton = new Image(fileButton.toURI().toString());
+		images.put("speaker-mute", imageButton);
+
+		fileButton = new File("files/images/speaker1.png");
+		imageButton = new Image(fileButton.toURI().toString());
+		images.put("speaker1", imageButton);
+		
+		fileButton = new File("files/images/speaker1-mute.png");
+		imageButton = new Image(fileButton.toURI().toString());
+		images.put("speaker1-mute", imageButton);
+		
+		fileButton = new File("files/images/play.png");
+		imageButton = new Image(fileButton.toURI().toString());
+		images.put("play", imageButton);
+		
+		fileButton = new File("files/images/pause.png");
+		imageButton = new Image(fileButton.toURI().toString());
+		images.put("pause", imageButton);
+		
+		fileButton = new File("files/images/stop.png");
+		imageButton = new Image(fileButton.toURI().toString());
+		images.put("stop", imageButton);
+		
+		
 	}
 
 	/*
 	 * Getter and Setter
 	 */
-	/**
-	 * This method provides a object-recycling-function.<br>
-	 * In case of a scene change to scene0/layout0, the controller-object can be used again.<br>
-	 * If the mainController did not instantiate a object yet, the method call its constructor and returns the new object.
-	 * 
-	 * @return Controller0-Object (GUI-Controller for scene0)
-	 */
+	public InterfaceManager getInterfaceManager() {
+		return interfaceManager;
+	}
+
+	public void setInterfaceManager(InterfaceManager interfaceManager) {
+		this.interfaceManager = interfaceManager;
+	}
+
 	public Controller0 getController0() {
 		if (controller0 == null){
 			this.controller0 = new Controller0(this);
@@ -77,13 +122,6 @@ public class MainController {
 		}
 	}
 
-	/**
-	 * This method provides a object-recycling-function.<br>
-	 * In case of a scene change to scene1/layout1, the controller-object can be used again.<br>
-	 * If the mainController did not instantiate a object yet, the method call its constructor and returns the new object.
-	 * 
-	 * @return Controller1-Object (GUI-Controller for scene1)
-	 */
 	public Controller1 getController1() {
 		if (controller1 == null){
 			this.controller1 = new Controller1(this);
@@ -93,13 +131,6 @@ public class MainController {
 		}
 	}
 
-	/**
-	 * This method provides a object-recycling-function.<br>
-	 * In case of a scene change to scene2/layout2, the controller-object can be used again.<br>
-	 * If the mainController did not instantiate a object yet, the method call its constructor and returns the new object.
-	 * 
-	 * @return Controller2-Object (GUI-Controller for scene2)
-	 */
 	public Controller2 getController2() {
 		if (controller2 == null){
 			this.controller2 = new Controller2(this);
@@ -108,6 +139,11 @@ public class MainController {
 		return controller2;
 		}
 	}
+
+	public DBconnection getConnection() {
+		return connection;
+	}
+
 
 	public Settings getSettings() {
 		return settings;
@@ -128,77 +164,41 @@ public class MainController {
 	public DBscoreboard[] getScoreBoardInfo(){
 		return connection.getScoreboard();
 	}
+
 	/*
 	 * public methods <-- called by GUI-Controllers
 	 */
 	
-	/**
-	 * This method is called by Controller1, triggered by a User-Action.<br>
-	 * It initializes the interface and instantiates a new Thread which takes over the communication between the modules. 
-	 */
+	/***********************************
+	 ********* Playing *****************
+	 ***********************************/
 	public void playSet(){
 		boolean successfull = initializeInterface();
 		if (!successfull) {
 			JOptionPane.showInternalMessageDialog(null, "Interface wurde nicht erfolgreich initilisiert!");
 		} else{
-			playingThread = new ThreadPlay(interfaceManager, controller1, gameInfo, connection, algorithmManager, settings);
+			ThreadPlay playingThread = new ThreadPlay(interfaceManager, controller1, gameInfo, connection, algorithmManager, settings);
 			playingThread.start();
 		}
 	}
 	
-	/**
-	 * Conducts DB Query.
-	 * @param GameID
-	 * @return Array of SetDB-Objects (meta-information for every Set in DB, which is connected to the game with the transfered gaemID)
-	 */
+	
+	/***********************************
+	 ********* Reconstruction***********
+	 ***********************************/
+	/* calls function "getSetInfos(GameID)" in DBconnection, creates an SetDB Array
+	 * 1 SetDB Object = Infos about 1 played Set
+	 * length of SetDB-Array = Number of played Sets in Game
+	*/
 	public SetDB[] getRecSetInfo(int GameID) {
-		if (isConnectionFree()){
-			return connection.getSetInfos(GameID);	
-		} else {
-			return null;
-		}
+		return connection.getSetInfos(GameID);	
 	}
 	
-	/**
-	 * Conducts DB Query.
-	 * 
-	 * @return Array of GameDB-Objects (meta-information for every game in DB)
-	 */
+	// get gameinfo for choice in reconstruction:
 	public GameDB[] getRecGameInfo() {
-		if (isConnectionFree()) {
-			return connection.getGames();
-		} else {
-			return null;
-		}
+		return connection.getGames();
 	}
-
-	/**
-	 * Conducts DB Query.
-	 * 
-	 * @return Array of Strings, filled with opponent names
-	 */
-	public String[] getOpponentNames() {
-		if (isConnectionFree()) {
-
-			return connection.getOpponentNames();
-		} else {
-			return null;
-		}
-	}
-
-	/**
-	 * Method deletes uncompleted DB entries, if game is aborted by user.
-	 * 
-	 * @return true, if query was successfully
-	 */
-	public boolean deleteUnfinishedGame() {
-		if (isConnectionFree()) {
-			connection.deleteUnfinishedGame(gameInfo.getGameID());
-			return true;
-		} else {
-			return false;
-		}
-	}
+	
 	
 	/*
 	 * private methods - helping methods
@@ -206,9 +206,9 @@ public class MainController {
 
 	/**
 	 * checks completeness of settings-object; if it is complete, the interface
-	 * InterfaceManager is automatically instantiated
+	 * InterfaceManager is automatically instanciated
 	 * 
-	 * @return true if interface was initialized successfully
+	 * @return true if interface was initilaized successfully
 	 */
 	private boolean initializeInterface() {
 		System.out.println(settings);
@@ -228,23 +228,12 @@ public class MainController {
 			return false;
 		}
 	}
-	
 
-	/**
-	 * This method evaluates, if the dbConnection object can be used.<br>
-	 * This method should be used before calling DB-methods to avoid SQL-Exceptions.
-	 * @return true, if the connection-Object can be used without problems.
-	 */
-	private boolean isConnectionFree (){
-		if (playingThread == null){
-			return true;
-		} else {
-			if(playingThread.getState() == Thread.State.NEW || playingThread.getState() == Thread.State.TERMINATED){
-				return true;
-			} else {
-				return false;
-			}
-		}
-	
+	public HashMap<String, Image> getImages() {
+		return images;
+	}
+
+	public SoundManager getSoundManager() {
+		return soundManager;
 	}
 }
