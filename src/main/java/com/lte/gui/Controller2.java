@@ -298,6 +298,7 @@ public class Controller2 {
 	}
 	
 	
+	
 	/**
 	 * shows the turns of the selected set in GridPane gameGrid<br>
 	 * is called by the Reconstruct-Thread<br>

@@ -49,77 +49,81 @@ public class ThreadReconstruct extends Thread {
 		int rowIndex4 = 0;
 		int rowIndex5 = 0;
 		int rowIndex6 = 0;
-
-		for (int i = 1; i < recTurns.length; i++) {
-
-			int columnIndex = recTurns[i];
-			int rowIndex = 0;
-			int color = 0;
-
-			switch (recTurns[i]) {
-			case 0:
-				rowIndex = rowIndex0;
-				rowIndex0++;
-				break;
-			case 1:
-				rowIndex = rowIndex1;
-				rowIndex1++;
-				break;
-			case 2:
-				rowIndex = rowIndex2;
-				rowIndex2++;
-				break;
-			case 3:
-				rowIndex = rowIndex3;
-				rowIndex3++;
-				break;
-			case 4:
-				rowIndex = rowIndex4;
-				rowIndex4++;
-				break;
-			case 5:
-				rowIndex = rowIndex5;
-				rowIndex5++;
-				break;
-			case 6:
-				rowIndex = rowIndex6;
-				rowIndex6++;
-				break;
-			default:
-				break;
-			}
-
-			// logic for color select
-			if (recTurns[0] == 0) {
-				recTurns[0] = 1;
-				// blue
-				color = 0;
-			} else if (recTurns[0] == 1) {
-				recTurns[0] = 0;
-				// green
-				color = 1;
-			}
-
-			final int fRowIndex = rowIndex;
-			final int fColor = color;
-
-			Platform.runLater(new Runnable() {
-				@Override
-				public void run() {
-					controller2.replayTurn(columnIndex, fRowIndex, fColor);
+		
+		if(recTurns == null){
+			controller2.playRecFinished();
+		} else {
+			for (int i = 1; i < recTurns.length; i++) {
+	
+				int columnIndex = recTurns[i];
+				int rowIndex = 0;
+				int color = 0;
+	
+				switch (recTurns[i]) {
+				case 0:
+					rowIndex = rowIndex0;
+					rowIndex0++;
+					break;
+				case 1:
+					rowIndex = rowIndex1;
+					rowIndex1++;
+					break;
+				case 2:
+					rowIndex = rowIndex2;
+					rowIndex2++;
+					break;
+				case 3:
+					rowIndex = rowIndex3;
+					rowIndex3++;
+					break;
+				case 4:
+					rowIndex = rowIndex4;
+					rowIndex4++;
+					break;
+				case 5:
+					rowIndex = rowIndex5;
+					rowIndex5++;
+					break;
+				case 6:
+					rowIndex = rowIndex6;
+					rowIndex6++;
+					break;
+				default:
+					break;
 				}
-			});
-
-			try {
-				this.wait(1000);
-			} catch (InterruptedException e) {
+	
+				// logic for color select
+				if (recTurns[0] == 0) {
+					recTurns[0] = 1;
+					// blue
+					color = 0;
+				} else if (recTurns[0] == 1) {
+					recTurns[0] = 0;
+					// green
+					color = 1;
+				}
+	
+				final int fRowIndex = rowIndex;
+				final int fColor = color;
+	
+				Platform.runLater(new Runnable() {
+					@Override
+					public void run() {
+						controller2.replayTurn(columnIndex, fRowIndex, fColor);
+					}
+				});
+	
 				try {
-					this.wait();
-				} catch (InterruptedException e1) {
-					e1.printStackTrace();
+					this.wait(1000);
+				} catch (InterruptedException e) {
+					try {
+						this.wait();
+					} catch (InterruptedException e1) {
+						e1.printStackTrace();
+					}
 				}
-			}
-		}// for
-		controller2.playRecFinished();
+			}// for
+			controller2.playRecFinished();
+		}//else
 	}// run
 }
