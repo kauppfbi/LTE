@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 import java.io.File;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import com.lte.controller.MainController;
@@ -255,7 +256,33 @@ public class Controller0 {
 		}
 		playerO.getSelectionModel().selectFirst();
 		
-		DBscoreboard[] info = controller.getScoreBoardInfo();
+		//DBscoreboard[] info = controller.getScoreBoardInfo();
+
+
+		ObservableList<DBscoreboard> tableData = FXCollections.observableArrayList(										
+										new DBscoreboard("Flo", 1, 1, 1),
+										new DBscoreboard("Fabi", 2, 2, 2)
+		);
+		opponentName.setCellValueFactory(
+				new PropertyValueFactory<DBscoreboard,String>("opponentName")
+		);
+		opponentScore.setCellValueFactory(
+			    new PropertyValueFactory<DBscoreboard,Integer>("score")
+		);
+		opponentWins.setCellValueFactory(
+				new PropertyValueFactory<DBscoreboard,Integer>("wins")
+		);
+		opponentLoses.setCellValueFactory(
+				new PropertyValueFactory<DBscoreboard,Integer>("wins")
+		);
+
+
+		scoreBoard.setItems(tableData);
+//      opponentName.setCellValueFactory(cellData -> cellData.);
+//      lastNameColumn.setCellValueFactory(cellData -> cellData.getValue().lastNameProperty());
+//		for(int i = 0; i < 1 ;i++){
+//			System.out.println(info[i].getScore());
+//		}
 		
 	}
 

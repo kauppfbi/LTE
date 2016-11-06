@@ -61,10 +61,10 @@
 		</Button>
       <TableView fx:id="scoreBoard" layoutX="78.0" layoutY="327.0" prefHeight="350.0" prefWidth="600.0">
         <columns>
-            <TableColumn fx:id="opponentName" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" text="Name" />
-            <TableColumn fx:id="opponentScore" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" text="Punkte" />
-          <TableColumn fx:id="opponentWins" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" text="Siege" />
-          <TableColumn fx:id="opponentLoses" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" text="Niederlagen" />
+            <TableColumn fx:id="opponentName" editable="false" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" text="Name" />
+            <TableColumn fx:id="opponentScore" editable="false" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" text="Punkte" />
+          <TableColumn fx:id="opponentWins" editable="false" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" text="Siege" />
+          <TableColumn fx:id="opponentLoses" editable="false" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" text="Niederlagen" />
         </columns>
       </TableView>
 	</children>
