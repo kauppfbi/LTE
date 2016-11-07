@@ -1,21 +1,26 @@
 package com.lte.gui;
 
 import java.io.IOException;
-import java.sql.SQLException;
+import java.util.HashMap;
 
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.media.MediaPlayer.Status;
 import javafx.stage.Stage;
 import java.io.File;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import com.lte.controller.MainController;
+import com.lte.features.SoundManager;
 import com.lte.models.*;
 
 
@@ -45,7 +50,19 @@ public class Controller0 {
 	ImageView imageView;
 	
 	@FXML
-	ListView<String> scoreBoard;
+	TableView<DBscoreboard> scoreBoard;
+	
+	@FXML
+	TableColumn<DBscoreboard, String> opponentName;
+	
+	@FXML
+	TableColumn<DBscoreboard, Integer> opponentScore;
+	
+	@FXML
+	TableColumn<DBscoreboard, Integer> opponentWins;
+
+	@FXML
+	TableColumn<DBscoreboard, Integer> opponentLoses;
 
 	@FXML
 	RadioButton AiVsAi;
@@ -56,11 +73,16 @@ public class Controller0 {
 	@FXML
 	RadioButton PlayerVsPlayer;
 	
+	@FXML
+	Button muteButton;
+	
 	// non-FXML Declarations
 	private MainController controller;
 	private String errorPlayer;
 	private ToggleGroup tgroup;
-
+	private SoundManager soundManager;
+	private HashMap<String, Image> images;
+	
 	
 	// private ThreadReconstruct controller;
 	private Settings settings;
@@ -68,6 +90,9 @@ public class Controller0 {
 	
 	public Controller0(MainController mainController) {
 		this.controller = mainController;
+		this.soundManager = controller.getSoundManager();
+		soundManager.play();
+		this.images = controller.getImages();
 	}
 	
 	/*
@@ -245,6 +270,15 @@ public class Controller0 {
 	 */
 	@FXML
 	public void initialize() {
+		Status status = soundManager.getStatus();
+		System.out.println(status);
+		if (status == Status.PAUSED) {
+			muteButton.setGraphic(new ImageView(images.get("speaker-mute")));
+		} else if (status == Status.PLAYING || status == Status.UNKNOWN) {
+			muteButton.setGraphic(new ImageView(images.get("speaker")));
+		}
+		muteButton.setStyle("-fx-background-color: transparent;");
+		
 		// Background Image
 		File file = new File("files/images/Screen0.png");
 		Image image = new Image(file.toURI().toString());
@@ -272,8 +306,53 @@ public class Controller0 {
 		}
 		playerO.getSelectionModel().selectFirst();
 		
+		DBscoreboard[] info = controller.getScoreBoardInfo();
+
+
+		ObservableList<DBscoreboard> tableData = FXCollections.observableArrayList(
+				//new DBscoreboard("Flo", 1, 1, 1),
+				//new DBscoreboard("Fabi", 2, 2, 2)		
+		);
+		
+		for(int i = 0; i < info.length; i++){
+			tableData.add(info[i]);
+		}
+
+		opponentName.setCellValueFactory(
+				new PropertyValueFactory<DBscoreboard,String>("opponentName")
+		);
+		opponentScore.setCellValueFactory(
+			    new PropertyValueFactory<DBscoreboard,Integer>("score")
+		);
+		opponentWins.setCellValueFactory(
+				new PropertyValueFactory<DBscoreboard,Integer>("wins")
+		);
+		opponentLoses.setCellValueFactory(
+				new PropertyValueFactory<DBscoreboard,Integer>("loses")
+		);
+
+
+		scoreBoard.setItems(tableData);
+//      opponentName.setCellValueFactory(cellData -> cellData.);
+//      lastNameColumn.setCellValueFactory(cellData -> cellData.getValue().lastNameProperty());
+//		for(int i = 0; i < 1 ;i++){
+//			System.out.println(info[i].getScore());
+//		}
+		
 	}
 
+	@FXML
+	private void mute(ActionEvent event){
+		Status status = soundManager.playPause();
+		if (status != null) {
+			if (status == Status.PAUSED) {
+				muteButton.setGraphic(new ImageView(images.get("speaker-mute")));
+			} else if (status == Status.PLAYING) {
+				muteButton.setGraphic(new ImageView(images.get("speaker")));
+			}
+		}
+	}
+	
 	/**
 	 * Event for leaving the application
 	 * @param event

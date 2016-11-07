@@ -1,9 +1,13 @@
 package com.lte.controller;
 
+import java.io.File;
+import java.util.HashMap;
+
 import javax.swing.JOptionPane;
 
 import com.lte.aiPar.AlgorithmManager;
 import com.lte.db.DBconnection;
+import com.lte.features.SoundManager;
 import com.lte.gui.Controller0;
 import com.lte.gui.Controller1;
 import com.lte.gui.Controller2;
@@ -13,10 +17,13 @@ import com.lte.interfaces.EventIM;
 import com.lte.interfaces.EventIMJSON;
 import com.lte.interfaces.FileIM;
 import com.lte.interfaces.InterfaceManager;
+import com.lte.models.DBscoreboard;
 import com.lte.models.GameDB;
 import com.lte.models.GameInfo;
 import com.lte.models.SetDB;
 import com.lte.models.Settings;
+
+import javafx.scene.image.Image;
 
 /**
  * main controller; coordinates data exchange and communication between all
@@ -50,14 +57,57 @@ public class MainController {
 	// KI Manager
 	AlgorithmManager algorithmManager;
 
+
 	//Player KI //PlayerPlayer
 	private ThreadPlayerKi threadPlayerKi;
 	private ThreadPlayerPlayer threadPlayerPlayer;
+	private HashMap<String, Image> images;
+	private SoundManager soundManager;
+
+
 	/*
 	 * Constructor
 	 */
 	public MainController(DBconnection connection) {
 		this.connection = connection;
+		this.soundManager = new SoundManager();
+		initImages();
+	}
+
+	private void initImages() {
+		images = new HashMap<String, Image>();
+		File fileButton; 
+		Image imageButton; 
+		
+		fileButton = new File("files/images/speaker.png");
+		imageButton = new Image(fileButton.toURI().toString());
+		images.put("speaker", imageButton);
+		
+		fileButton = new File("files/images/speaker-mute.png");
+		imageButton = new Image(fileButton.toURI().toString());
+		images.put("speaker-mute", imageButton);
+
+		fileButton = new File("files/images/speaker1.png");
+		imageButton = new Image(fileButton.toURI().toString());
+		images.put("speaker1", imageButton);
+		
+		fileButton = new File("files/images/speaker1-mute.png");
+		imageButton = new Image(fileButton.toURI().toString());
+		images.put("speaker1-mute", imageButton);
+		
+		fileButton = new File("files/images/play.png");
+		imageButton = new Image(fileButton.toURI().toString());
+		images.put("play", imageButton);
+		
+		fileButton = new File("files/images/pause.png");
+		imageButton = new Image(fileButton.toURI().toString());
+		images.put("pause", imageButton);
+		
+		fileButton = new File("files/images/stop.png");
+		imageButton = new Image(fileButton.toURI().toString());
+		images.put("stop", imageButton);
+		
+		
 	}
 
 	/*
@@ -135,6 +185,10 @@ public class MainController {
 
 	public void setGameInfo(GameInfo gameInfo) {
 		this.gameInfo = gameInfo;
+	}
+	
+	public DBscoreboard[] getScoreBoardInfo(){
+		return connection.getScoreboard();
 	}
 	
 	public void setThreadPlayerKiNull() {
@@ -229,5 +283,13 @@ public class MainController {
 		} else {
 			return false;
 		}
+	}
+
+	public HashMap<String, Image> getImages() {
+		return images;
+	}
+
+	public SoundManager getSoundManager() {
+		return soundManager;
 	}
 }

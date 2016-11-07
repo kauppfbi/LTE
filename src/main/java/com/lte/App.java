@@ -5,7 +5,6 @@ import java.io.IOException;
 
 import com.lte.controller.MainController;
 import com.lte.db.DBconnection;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -18,7 +17,7 @@ import javafx.stage.Stage;
  * @author kauppfbi
  *
  */
-public class App extends Application {
+public class App extends Application{
 
 	// Stage ist der Au�encontainer, unique
 	private Stage stage;
@@ -28,7 +27,7 @@ public class App extends Application {
 
 	public void start(Stage stage) throws IOException {
 		this.stage = stage;
-		this.stage.setTitle("4 gewinnt!");
+		this.stage.setTitle("4 Gewinnt!");
 
 		try {
 			// initialize DB
@@ -36,7 +35,6 @@ public class App extends Application {
 			
 			//Main Controller
 			MainController controller = new MainController(connection);
-			
 			// FXMLLoader
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("./gui/views/layout0.fxml"));
 			loader.setController(controller.getController0());

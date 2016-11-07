@@ -3,10 +3,12 @@ package com.lte.gui;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Optional;
 import java.util.TreeMap;
 import com.lte.controller.MainController;
 import com.lte.controller.ThreadReconstruct;
+import com.lte.features.SoundManager;
 import com.lte.models.GameDB;
 import com.lte.models.SetDB;
 import javafx.application.Platform;
@@ -15,6 +17,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
@@ -26,10 +29,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.media.MediaPlayer.Status;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  * Class Controller2 manages the Reconstruction-Screen
@@ -87,16 +92,23 @@ public class Controller2 {
 	@FXML
 	Text currentSet;
 	
+	@FXML
+	Button muteButton;
+	
 	// non-FXML Declarations
 	private MainController controller;	
 	private ThreadReconstruct threadReconstruct;
 	private SetDB[] sets;
 	private GameDB[] games;
 	private int gameID;
+	private SoundManager soundManager;
+	private HashMap<String, Image> images;
 	
 	
 	public Controller2(MainController mainController) {
 		this.controller = mainController;
+		this.soundManager = controller.getSoundManager();		
+		this.images = controller.getImages();
 	}
 
 	/**
@@ -104,6 +116,21 @@ public class Controller2 {
 	 */
 	@FXML
 	public void initialize(){
+		play.setGraphic(new ImageView(images.get("play")));
+		play.setStyle("-fx-background-color: transparent;");
+		pause.setGraphic(new ImageView(images.get("pause")));
+		pause.setStyle("-fx-background-color: transparent;");
+		stop.setGraphic(new ImageView(images.get("stop")));
+		stop.setStyle("-fx-background-color: transparent;");
+				
+		Status status = soundManager.getStatus();
+			if (status == Status.PAUSED) {
+				muteButton.setGraphic(new ImageView(images.get("speaker1-mute")));
+			} else if (status == Status.PLAYING) {
+				muteButton.setGraphic(new ImageView(images.get("speaker1")));
+			}
+		muteButton.setStyle("-fx-background-color: transparent;");
+		
 		//Background
 		File file = new File("files/images/gameplay.png");
 		Image image = new Image(file.toURI().toString());
@@ -116,8 +143,19 @@ public class Controller2 {
 		threadReconstruct = new ThreadReconstruct(this, null);	
 	}
 	
+	@FXML
+	private void mute(ActionEvent event){
+		Status status = soundManager.playPause();
+		if (status != null) {
+			if (status == Status.PAUSED) {
+				muteButton.setGraphic(new ImageView(images.get("speaker1-mute")));
+			} else if (status == Status.PLAYING) {
+				muteButton.setGraphic(new ImageView(images.get("speaker1")));
+			}
+		}
+	}
+	
 	// TODO onCloseRequest Thread Terminaten
-	// TODO choiceBox enablen nachdem ein Spiel einmal durchgelaufen ist
 	
 	/**
 	 * Go back to Screen0
@@ -246,6 +284,20 @@ public class Controller2 {
 		}
 	}
 	
+	/**
+	 * called when Reconstruct-Thread of current Set finished<br>
+	 * disables navigation buttons (play, pause, stop)<br>
+	 * enables Choice-Boxes and allows user to select new game/set<br>
+	 */
+	public void playRecFinished(){
+		play.setDisable(true);
+		pause.setDisable(true);
+		stop.setDisable(true);
+		gameChoice.setDisable(false);
+		setChoice.setDisable(false);
+	}
+	
+	
 	
 	/**
 	 * shows the turns of the selected set in GridPane gameGrid<br>
@@ -297,7 +349,7 @@ public class Controller2 {
 		}	
 	}
 	
-	@FXML
+	
 	/**
 	 * if button "Abbruch" is clicked<br>
 	 * sets the State of threadReconstruction to TERMINATED<br>
@@ -305,6 +357,7 @@ public class Controller2 {
 	 * 
 	 * @param event
 	 */
+	@FXML
 	public void stopAction(ActionEvent event){
 		
 		play.setDisable(true);
@@ -391,7 +444,6 @@ public class Controller2 {
 			}
 		};
 		gameChoice.getSelectionModel().selectedIndexProperty().addListener(listenerGame);
-		System.out.println("Hallo");
 		
 		// if there is no game in DB
 		if(gameChoice.getItems().isEmpty()){
@@ -411,8 +463,7 @@ public class Controller2 {
 	public void clearGrid() {
 		Node node = gameGrid.getChildren().get(0);
 	    gameGrid.getChildren().clear();
-	    gameGrid.getChildren().add(0,node);
-		
+	    gameGrid.getChildren().add(0,node);	
 	}
 	
 	/**

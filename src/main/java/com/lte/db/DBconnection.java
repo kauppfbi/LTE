@@ -443,7 +443,7 @@ public class DBconnection {
 		DBscoreboard[] opponentsStats = null;
 
 		// Get unique number of opponents for opponentsStats array size
-		String sql = "SELECT DISTINCT COUNT(OPPONENTNAME) FROM PUBLIC.OPPONENT";
+		String sql = "SELECT COUNT(DISTINCT(OPPONENTID)) FROM PUBLIC.OPPONENT RIGHT JOIN PUBLIC.GAME ON OPPONENT.OPPONENTID = GAME.OPPONENTID";
 		try {
 			ResultSet res = stmt.executeQuery(sql);
 			System.out.println("LOG: Got unique number of opponents");
@@ -504,10 +504,11 @@ public class DBconnection {
 					index = names.indexOf(opponentName);
 					// create object
 					opponentStats.setOpponentName(opponentName);
-					if (res.getString(4).equals("X")) {
+					String winner = res.getString(4);
+					if (winner.equals("X")) {
 						opponentStats.setLoses(1);
 						opponentStats.setWins(0);
-					} else if (res.getString(4).equals("O")) {
+					} else if (winner.equals("O")) {
 						opponentStats.setWins(1);
 						opponentStats.setLoses(0);
 					}
