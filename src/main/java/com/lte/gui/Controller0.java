@@ -260,18 +260,12 @@ public class Controller0 {
 
 
 		ObservableList<DBscoreboard> tableData = FXCollections.observableArrayList(
-				new DBscoreboard("Flo", 1, 1, 1),
-				new DBscoreboard("Fabi", 2, 2, 2)
-				
-);
+				//new DBscoreboard("Flo", 1, 1, 1),
+				//new DBscoreboard("Fabi", 2, 2, 2)		
+		);
 		
 		for(int i = 0; i < info.length; i++){
-			// tableData.add(info[i]);
-			System.out.println();
-			System.out.println(info[i].getOpponentName());
-			System.out.println(info[i].getScore());
-			System.out.println(info[i].getLoses());
-			System.out.println(info[i].getWins());
+			tableData.add(info[i]);
 		}
 
 		opponentName.setCellValueFactory(
@@ -284,7 +278,7 @@ public class Controller0 {
 				new PropertyValueFactory<DBscoreboard,Integer>("wins")
 		);
 		opponentLoses.setCellValueFactory(
-				new PropertyValueFactory<DBscoreboard,Integer>("wins")
+				new PropertyValueFactory<DBscoreboard,Integer>("loses")
 		);
 
 

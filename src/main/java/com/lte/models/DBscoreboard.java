@@ -1,15 +1,13 @@
 package com.lte.models;
 
-import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 
 public class DBscoreboard {
-	private StringProperty opponentName;
-	private IntegerProperty score;
-	private IntegerProperty wins;
-	private IntegerProperty loses;
+	private SimpleStringProperty opponentName;
+	private SimpleIntegerProperty score;
+	private SimpleIntegerProperty wins;
+	private SimpleIntegerProperty loses;
 	
 	/*
 	 * empty default constructor
@@ -30,24 +28,24 @@ public class DBscoreboard {
 		return opponentName.get();
 	}
 	public void setOpponentName(String opponentName) {
-		this.opponentName.set(opponentName);;
+		this.opponentName = new SimpleStringProperty(opponentName);
 	}
 	public int getScore() {
 		return score.get();
 	}
 	public void setScore(int score) {
-		this.score.set(score);;
+		this.score = new SimpleIntegerProperty(score);
 	}
 	public int getWins() {
 		return wins.get();
 	}
 	public void setWins(int wins) {
-		this.wins.set(wins);;
+		this.wins = new SimpleIntegerProperty(wins);
 	}
 	public int getLoses() {
 		return loses.get();
 	}
 	public void setLoses(int loses) {
-		this.loses.set(loses);;
+		this.loses = new SimpleIntegerProperty(loses);
 	}
 }
