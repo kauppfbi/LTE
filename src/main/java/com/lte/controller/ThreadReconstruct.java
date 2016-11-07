@@ -1,15 +1,11 @@
 package com.lte.controller;
 
 import com.lte.gui.Controller2;
-
 import javafx.application.Platform;
 
 /**
  * ThreadReconstruct coordinates the Reconstruction of Games/Sets<br>
- * Main Activities are:<br>
- * - loading played Games into GameID<br>
- * - loading played Sets into SetID<br>
- * => coordinate communication between GUI and DB!
+ * It creates a thread to coordinate the reconstruction Turns<br>
  * 
  * @author Florian
  *
@@ -20,6 +16,7 @@ public class ThreadReconstruct extends Thread {
 	private int[] recTurns;
 
 	/**
+	 * constructor<br>
 	 * 
 	 * @param controller2
 	 * @param recTurns
@@ -35,10 +32,11 @@ public class ThreadReconstruct extends Thread {
 
 	@Override
 	/**
-	 * fillRec method replays the turns of the selected set into the GridPane
-	 * gameGrid<br>
-	 * fillRec is called by playRec-method in Controller2<br>
-	 * playRec-method listens to Button "Play"<br>
+	 * Creates a Thread for each reconstructed Set<br>
+	 * Reconstructs the Turns form recTurn-Array<br<
+	 * calls the replayTurn-Method of Controller2 to visualize the Turn<br>
+	 * allows User-interaction (stop,play,pause)<br>
+	 * 
 	 */
 	public synchronized void run() {
 
