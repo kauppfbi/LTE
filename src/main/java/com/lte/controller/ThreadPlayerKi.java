@@ -82,7 +82,7 @@ public class ThreadPlayerKi {
 			}
 
 			// ***** KI spielt Zug *****
-			if (gameInfo.getNextPlayer() == 'X') {
+			if (gameInfo.getNextPlayer() == 'X' && currentGameScore.isWon() == 0) {
 				System.out.println("KI spielt");
 				try {
 					

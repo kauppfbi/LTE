@@ -16,6 +16,7 @@ public class GameInfo {
 	
 	//other attributes
 	private String opponentName;
+	private String ownName;
 	
 	boolean gameInProgress;
 	char nextPlayer;
@@ -28,6 +29,10 @@ public class GameInfo {
 		this.opponentName = opponentName;
 	}
 
+	public GameInfo(String opponentName, String ownName) {
+		this.opponentName = opponentName;
+		this.ownName = ownName;
+	}
 	
 	//Getter and Setter methods
 	public int getGameID() {
@@ -110,6 +115,14 @@ public class GameInfo {
 
 	public void setOpponentPoints(int opponentPoints) {
 		this.opponentPoints = opponentPoints;
+	}
+
+	public String getOwnName() {
+		return ownName;
+	}
+
+	public void setOwnName(String ownName) {
+		this.ownName = ownName;
 	} 
 	
 	

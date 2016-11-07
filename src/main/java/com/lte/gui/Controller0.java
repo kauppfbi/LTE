@@ -116,13 +116,12 @@ public class Controller0 {
 				Stage stage;
 				if (event.getSource() == toGame && AiVsAi.isSelected()==true) {
 					// Set team-names
-					//String nameX = playerX.getText();
 					String nameO = playerO.getValue();
 			
 					// new Settings object
 					settings = new Settings();
 					controller.setSettings(settings);
-					// pass opponennt name
+					// pass playernames
 					gameInfo = new GameInfo(nameO);
 					controller.setGameInfo(gameInfo);
 			
@@ -141,7 +140,6 @@ public class Controller0 {
 					stage.setScene(new Scene((AnchorPane) loader.load()));
 					stage.show();
 				} else if(event.getSource() == toGame && AiVsPlayer.isSelected()==true){
-					//String nameX = playerX.getText();
 					String nameO = playerO.getValue();
 			
 					// new Settings object
@@ -167,14 +165,15 @@ public class Controller0 {
 
 					stage.show();
 				}else if(event.getSource() == toGame && PlayerVsPlayer.isSelected()==true) {
-					//String nameX = playerX.getText();
+					//setNames
 					String nameO = playerO.getValue();
+					String nameX = playerX.getValue();
 			
 					// new Settings object
 					settings = new Settings();
 					controller.setSettings(settings);
 					// pass opponennt name
-					gameInfo = new GameInfo(nameO);
+					gameInfo = new GameInfo(nameO, nameX);
 					controller.setGameInfo(gameInfo);
 					
 					stage = (Stage) toGame.getScene().getWindow();
@@ -252,8 +251,9 @@ public class Controller0 {
 		imageView.setImage(image);
 		
 		//name playerX default LTE
-		playerX.setEditable(true);
+		playerX.setEditable(false);
 		playerX.setValue("LTE");
+		
 		
 		//set playerO editable
 		playerO.setEditable(true);
@@ -281,5 +281,29 @@ public class Controller0 {
 	@FXML
 	public void exitApplication(ActionEvent event) {
 		Platform.exit();
+	}
+	
+	/**
+	 * ComboBox Player X editable
+	 */
+	@FXML
+	public void playerPlayerSelected(){
+		playerX.setEditable(true);
+	}
+	
+	/**
+	 * ComboBox Player X editable false
+	 */
+	@FXML
+	public void kiKiSelected(){
+		playerX.setEditable(false);
+	}
+	
+	/**
+	 * ComboBox Player X editable false
+	 */
+	@FXML
+	public void playerKiSelected(){
+		playerX.setEditable(false);
 	}
 }

@@ -42,17 +42,17 @@
       <ComboBox fx:id="playerX" layoutX="418.0" layoutY="212.0" prefWidth="150.0" />
       <ComboBox fx:id="playerO" layoutX="705.0" layoutY="212.0" prefWidth="150.0" />
       <ListView fx:id="scoreBoard" layoutX="47.0" layoutY="326.0" prefHeight="353.0" prefWidth="609.0" />
-      <RadioButton fx:id="AiVsAi" layoutX="855.0" layoutY="348.0" mnemonicParsing="false" text="KI vs. KI">
+      <RadioButton fx:id="AiVsAi" layoutX="855.0" layoutY="348.0" mnemonicParsing="false" onAction="#kiKiSelected" text="KI vs. KI">
          <font>
             <Font size="16.0" />
          </font>
       </RadioButton>
-      <RadioButton fx:id="AiVsPlayer" layoutX="855.0" layoutY="382.0" mnemonicParsing="false" text="KI vs. User">
+      <RadioButton fx:id="AiVsPlayer" layoutX="855.0" layoutY="382.0" mnemonicParsing="false" onAction="#playerKiSelected" text="KI vs. User">
          <font>
             <Font size="16.0" />
          </font>
       </RadioButton>
-      <RadioButton fx:id="PlayerVsPlayer" layoutX="855.0" layoutY="420.0" mnemonicParsing="false" text="User vs. User">
+      <RadioButton fx:id="PlayerVsPlayer" layoutX="855.0" layoutY="420.0" mnemonicParsing="false" onAction="#playerPlayerSelected" text="User vs. User">
          <font>
             <Font size="16.0" />
          </font>

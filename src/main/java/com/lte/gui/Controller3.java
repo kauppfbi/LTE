@@ -22,8 +22,10 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -107,8 +109,15 @@ public class Controller3{
 	@FXML
 	ImageView row7;
 	
+	@FXML
+	RadioButton radioKi;
+	
+	@FXML
+	RadioButton radioPlayer;
+	
 	// non-FXML Declarations
 	private MainController controller;
+	ToggleGroup tgroup;
 	// private ThreadReconstruct controller;
 	private Settings settings;
 	private GameInfo gameInfo;
@@ -188,6 +197,24 @@ public class Controller3{
 		row5.setImage(image2);
 		row6.setImage(image2);
 		row7.setImage(image2);
+		
+		//RadioButton ToggleGroup
+		tgroup = new ToggleGroup();
+		radioKi.setToggleGroup(tgroup);
+		radioKi.setSelected(true);
+		radioPlayer.setToggleGroup(tgroup);
+		
+		//ImageViews default disabled
+		row1.setDisable(true);
+		row2.setDisable(true);
+		row3.setDisable(true);
+		row4.setDisable(true);
+		row5.setDisable(true);
+		row6.setDisable(true);
+		row7.setDisable(true);
+		
+		//set Player name
+		namePlayerO.setText(controller.getGameInfo().getOpponentName());
 	}
 	
 	/**
@@ -197,6 +224,17 @@ public class Controller3{
 	 */
 	@FXML
 	private void goToStartmenu(ActionEvent event) throws IOException {
+		controller.setThreadPlayerKiNull();
+		
+		//Integer Stones per column -> hight of the row
+		rowHigh0 = 0;
+		rowHigh1 = 0;
+		rowHigh2 = 0;
+		rowHigh3 = 0;
+		rowHigh4 = 0;
+		rowHigh5 = 0;
+		rowHigh6 = 0;
+		
 		Stage stage;
 		stage = (Stage) backToStart.getScene().getWindow();
 
@@ -220,11 +258,31 @@ public class Controller3{
 	 */
 	@FXML
 	private void startSet(ActionEvent event) {
-		//Spiel starten
-		controller.getGameInfo().setNextPlayer('O');
+		//RadioButton
+		if(radioKi.isSelected()==true){
+			controller.getGameInfo().setNextPlayer('X');
+			int nextMove = controller.playTurnKi(0);
+			fill(nextMove, getRow(nextMove), 'X', false);
+		}else if(radioPlayer.isSelected()==true){
+			controller.getGameInfo().setNextPlayer('O');
+		}
+		
 		
 		set.setText(String.valueOf(gameInfo.getSet() + 1));
 		gameInfo.setSet(gameInfo.getSet() + 1);
+		
+		//Buttons enabled
+		row1.setDisable(false);
+		row2.setDisable(false);
+		row3.setDisable(false);
+		row4.setDisable(false);
+		row5.setDisable(false);
+		row6.setDisable(false);
+		row7.setDisable(false);
+		
+		//PlayerChoice disabled
+		radioKi.setDisable(true);
+		radioPlayer.setDisable(true);
 	}
 	
 	
@@ -237,6 +295,17 @@ public class Controller3{
 	 */
 	public void gameOver(byte winningPlayer, int[][] winningCombo) {
 		highlightWinning(winningCombo); //highlights the winning-combo
+		
+		// Winner gets one point
+		if (winningPlayer == 1) {
+			int playerX = Integer.parseInt(ltePoints.getText());
+			ltePoints.setText(String.valueOf(playerX + 1));
+			controller.getGameInfo().setOwnPoints(controller.getGameInfo().getOwnPoints()+1);
+		} else if (winningPlayer == 2) {
+			int playerO = Integer.parseInt(opponentPoints.getText());
+			opponentPoints.setText(String.valueOf(playerO + 1));
+			controller.getGameInfo().setOpponentPoints(controller.getGameInfo().getOpponentPoints()+1);
+		}
 				
 		// Alert-Dialog (Confirmation-Options: Go on with next Set || exit to Startmenu)
 		Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -252,25 +321,13 @@ public class Controller3{
 		if(!(controller.getGameInfo().getOwnPoints() == 3 || controller.getGameInfo().getOpponentPoints() == 3)){
 		ButtonType weiter = new ButtonType("Weiter spielen");
 		ButtonType beenden = new ButtonType("Beenden");
-		ButtonType changeSettings = new ButtonType("Einstellungen ändern");
 
-		alert.getButtonTypes().setAll(weiter, beenden, changeSettings);
+		alert.getButtonTypes().setAll(weiter, beenden);
 
 		Optional<ButtonType> result = alert.showAndWait();
 
 		if (result.get() == weiter) {
 			clearGrid();
-			
-// Winner gets one point
-			if (winningPlayer == 1) {
-				int playerX = Integer.parseInt(ltePoints.getText());
-				ltePoints.setText(String.valueOf(playerX + 1));
-				controller.getGameInfo().setOwnPoints(playerX);
-			} else if (winningPlayer == 2) {
-				int playerO = Integer.parseInt(opponentPoints.getText());
-				opponentPoints.setText(String.valueOf(playerO + 1));
-				controller.getGameInfo().setOpponentPoints(playerO);
-			}
 
 			// raise set 
 			int satz = Integer.parseInt(set.getText());

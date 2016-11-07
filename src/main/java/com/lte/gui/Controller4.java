@@ -186,6 +186,20 @@ public class Controller4 {
 		radioPlayer1.setToggleGroup(tgroup);
 		radioPlayer1.setSelected(true);
 		radioPlayer2.setToggleGroup(tgroup);
+		
+		//set Player name
+		namePlayerO.setText(controller.getGameInfo().getOpponentName());
+		namePlayerX.setText(controller.getGameInfo().getOwnName());
+		System.out.println(controller.getGameInfo().getOwnName());
+		
+		//ImageViews default disabled
+		row1.setDisable(true);
+		row2.setDisable(true);
+		row3.setDisable(true);
+		row4.setDisable(true);
+		row5.setDisable(true);
+		row6.setDisable(true);
+		row7.setDisable(true);
 	}
 	
 	/**
@@ -195,7 +209,16 @@ public class Controller4 {
 	 */
 	@FXML
 	private void goToStartmenu(ActionEvent event) throws IOException {
+		controller.setThreadPlayerPlayerNull();
 		
+		//Integer Stones per column -> hight of the row
+		rowHigh0 = 0;
+		rowHigh1 = 0;
+		rowHigh2 = 0;
+		rowHigh3 = 0;
+		rowHigh4 = 0;
+		rowHigh5 = 0;
+		rowHigh6 = 0;
 		
 		Stage stage;
 		stage = (Stage) backToStart.getScene().getWindow();
@@ -456,5 +479,14 @@ public class Controller4 {
 		//Disable RadioButtons
 		radioPlayer1.setDisable(true);
 		radioPlayer2.setDisable(true);
+		
+		//ImageViews default disabled
+		row1.setDisable(false);
+		row2.setDisable(false);
+		row3.setDisable(false);
+		row4.setDisable(false);
+		row5.setDisable(false);
+		row6.setDisable(false);
+		row7.setDisable(false);
 	}
 }
