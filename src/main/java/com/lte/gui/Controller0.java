@@ -256,13 +256,24 @@ public class Controller0 {
 		}
 		playerO.getSelectionModel().selectFirst();
 		
-		//DBscoreboard[] info = controller.getScoreBoardInfo();
+		DBscoreboard[] info = controller.getScoreBoardInfo();
 
 
-		ObservableList<DBscoreboard> tableData = FXCollections.observableArrayList(										
-										new DBscoreboard("Flo", 1, 1, 1),
-										new DBscoreboard("Fabi", 2, 2, 2)
-		);
+		ObservableList<DBscoreboard> tableData = FXCollections.observableArrayList(
+				new DBscoreboard("Flo", 1, 1, 1),
+				new DBscoreboard("Fabi", 2, 2, 2)
+				
+);
+		
+		for(int i = 0; i < info.length; i++){
+			// tableData.add(info[i]);
+			System.out.println();
+			System.out.println(info[i].getOpponentName());
+			System.out.println(info[i].getScore());
+			System.out.println(info[i].getLoses());
+			System.out.println(info[i].getWins());
+		}
+
 		opponentName.setCellValueFactory(
 				new PropertyValueFactory<DBscoreboard,String>("opponentName")
 		);
