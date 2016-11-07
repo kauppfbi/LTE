@@ -114,16 +114,16 @@ public class Controller4 {
 	private GameInfo gameInfo;
 	
 	//Integer Stones per column -> hight of the row
-	int rowHigh1 = 0;
-	int rowHigh2 = 0;
-	int rowHigh3 = 0;
-	int rowHigh4 = 0;
-	int rowHigh5 = 0;
-	int rowHigh6 = 0;
-	int rowHigh7 = 0;
+	private int rowHigh0 = 0;
+	private int rowHigh1 = 0;
+	private int rowHigh2 = 0;
+	private int rowHigh3 = 0;
+	private int rowHigh4 = 0;
+	private int rowHigh5 = 0;
+	private int rowHigh6 = 0;
 	
 	//Initial Player
-	char player = 'X';
+	//char player = 'X';
 	
 	public Controller4(MainController mainController) {
 		this.controller = mainController;
@@ -195,14 +195,7 @@ public class Controller4 {
 	 */
 	@FXML
 	private void goToStartmenu(ActionEvent event) throws IOException {
-		//set rowHigh back to zero
-		int rowHigh1 = 0;
-		int rowHigh2 = 0;
-		int rowHigh3 = 0;
-		int rowHigh4 = 0;
-		int rowHigh5 = 0;
-		int rowHigh6 = 0;
-		int rowHigh7 = 0;		
+		
 		
 		Stage stage;
 		stage = (Stage) backToStart.getScene().getWindow();
@@ -220,6 +213,7 @@ public class Controller4 {
 		stage.show();
 
 	}
+	
 	
 	
 	/**
@@ -267,8 +261,19 @@ public class Controller4 {
 			set.setText(String.valueOf(satz + 1));
 			controller.getGameInfo().setSet(satz);
 			
-			//Neuen Satz starten
-			controller.playSet();
+			//Neues Spiel
+			controller.setThreadPlayerPlayerNull();
+			
+			//Zeilen zurücksetzen
+			rowHigh0 = 0;
+			rowHigh1 = 0;
+			rowHigh2 = 0;
+			rowHigh3 = 0;
+			rowHigh4 = 0;
+			rowHigh5 = 0;
+			rowHigh6 = 0;
+			
+			//
 
 		} else if (result.get() == beenden) {
 			// TODO altes Controller Modell verwerfen und dem Agenten mitteilen
@@ -315,6 +320,15 @@ public class Controller4 {
 			gameGrid.getChildren().add(circle);
 			gameGrid.setHalignment(circle, HPos.CENTER);
 		}
+		if(columnIndex == 0){rowHigh0++;}
+		else if(columnIndex == 1){rowHigh1++;}
+		else if(columnIndex == 2){rowHigh2++;}
+		else if(columnIndex == 3){rowHigh3++;}
+		else if(columnIndex == 4){rowHigh4++;}
+		else if(columnIndex == 5){rowHigh5++;}
+		else if(columnIndex == 6){rowHigh6++;}
+		
+		System.out.println(rowHigh0 + " " + rowHigh1 + " " + rowHigh2 + " " + rowHigh3 + " " + rowHigh4 + " " + rowHigh5 + " " + rowHigh6);
 	}
 	
 	
@@ -377,61 +391,56 @@ public class Controller4 {
 	private void mouseClicked(MouseEvent e) {
 		//fill(int columnIndex, int rowIndex, char player, boolean endGame)
 		Node node = (Node) e.getSource();
+		System.out.println("Node: "+ node.getId());
 		if(node.getId().equals("row1")){
-			if(rowHigh1<=5){
-				fill(0,rowHigh1,player,false);
-				rowHigh1++;
-				changePlayer();
+			if(rowHigh0<=5){
+				fill(0,rowHigh0,gameInfo.getNextPlayer(),false);
+				controller.playTurnPlayerPlayer(0);
 			}
 		}else if(node.getId().equals("row2")){
-			if(rowHigh2<=5){
-				fill(1,rowHigh2,player,false);
-				rowHigh2++;
-				changePlayer();
+			if(rowHigh1<=5){
+				fill(1,rowHigh1,gameInfo.getNextPlayer(),false);
+				controller.playTurnPlayerPlayer(1);
 			}
 		}else if (node.getId().equals("row3")){
-			if(rowHigh3<=5){
-				fill(2,rowHigh3,player,false);
-				rowHigh3++;
-				changePlayer();
+			if(rowHigh2<=5){
+				fill(2,rowHigh2,gameInfo.getNextPlayer(),false);
+				controller.playTurnPlayerPlayer(2);
 			}
 		}else if (node.getId().equals("row4")){
-			if(rowHigh4<=5){
-				fill(3,rowHigh4,player,false);
-				rowHigh4++;
-				changePlayer();
+			if(rowHigh3<=5){
+				fill(3,rowHigh3,gameInfo.getNextPlayer(),false);
+				controller.playTurnPlayerPlayer(3);
 			}
 		}else if (node.getId().equals("row5")){
-			if(rowHigh5<=5){
-				fill(4,rowHigh5,player,false);
-				rowHigh5++;
-				changePlayer();
+			if(rowHigh4<=5){
+				fill(4,rowHigh4,gameInfo.getNextPlayer(),false);
+				controller.playTurnPlayerPlayer(4);
 			}
 		}else if(node.getId().equals("row6")){
-			if(rowHigh6<=5){
-				fill(5,rowHigh6,player,false);
-				rowHigh6++;
-				changePlayer();
+			if(rowHigh5<=5){
+				fill(5,rowHigh5,gameInfo.getNextPlayer(),false);
+				controller.playTurnPlayerPlayer(5);
 			}
 		}else if(node.getId().equals("row7")){
-			if(rowHigh7<=5){
-				fill(6,rowHigh7,player,false);
-				rowHigh7++;
-				changePlayer();
+			if(rowHigh6<=5){
+				fill(6,rowHigh6,gameInfo.getNextPlayer(),false);
+				controller.playTurnPlayerPlayer(6);
 			}
 		}
     }
 	
-	/**
-	 * changes the Player
-	 */
-	private void changePlayer(){
-		if(player == 'X'){
-			player = 'O';
-		}else if(player == 'O'){
-			player = 'X';
-		}
+	private int getRow(int column){
+		if(column == 0){return rowHigh0;}
+		if(column == 1){return rowHigh1;}
+		if(column == 2){return rowHigh2;}
+		if(column == 3){return rowHigh3;}
+		if(column == 4){return rowHigh4;}
+		if(column == 5){return rowHigh5;}
+		if(column == 6){return rowHigh6;}
+		return 0;
 	}
+	
 	
 	/**
 	 * fixes the player choice
@@ -439,9 +448,9 @@ public class Controller4 {
 	@FXML
 	private void fixPlayerChoice(){
 		if(radioPlayer1.isSelected()==true){
-			player = 'X';
+			gameInfo.setNextPlayer('X');
 		}else if(radioPlayer2.isSelected()==true){
-			player = 'O';
+			gameInfo.setNextPlayer('O');
 		}
 		
 		//Disable RadioButtons

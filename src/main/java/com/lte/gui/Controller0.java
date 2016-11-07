@@ -167,6 +167,16 @@ public class Controller0 {
 
 					stage.show();
 				}else if(event.getSource() == toGame && PlayerVsPlayer.isSelected()==true) {
+					//String nameX = playerX.getText();
+					String nameO = playerO.getValue();
+			
+					// new Settings object
+					settings = new Settings();
+					controller.setSettings(settings);
+					// pass opponennt name
+					gameInfo = new GameInfo(nameO);
+					controller.setGameInfo(gameInfo);
+					
 					stage = (Stage) toGame.getScene().getWindow();
 					
 					// set Icon

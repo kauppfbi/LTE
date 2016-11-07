@@ -50,8 +50,9 @@ public class MainController {
 	// KI Manager
 	AlgorithmManager algorithmManager;
 
-	//Player KI
+	//Player KI //PlayerPlayer
 	private ThreadPlayerKi threadPlayerKi;
+	private ThreadPlayerPlayer threadPlayerPlayer;
 	/*
 	 * Constructor
 	 */
@@ -139,6 +140,10 @@ public class MainController {
 	public void setThreadPlayerKiNull() {
 		threadPlayerKi = null;
 	}
+	
+	public void setThreadPlayerPlayerNull() {
+		threadPlayerPlayer = null;
+	}
 
 	/*
 	 * public methods <-- called by GUI-Controllers
@@ -161,11 +166,22 @@ public class MainController {
 	 ********* Playing Player KI 
 	 * @return *****************
 	 ***********************************/
-	public int playTurn(int column){
+	public int playTurnKi(int column){
 		if(threadPlayerKi == null){
-			threadPlayerKi = new ThreadPlayerKi(controller3, gameInfo, algorithmManager, settings);
+			threadPlayerKi = new ThreadPlayerKi(controller3, gameInfo, algorithmManager, settings, connection);
 		}
 			return threadPlayerKi.playTurn(column);
+	}
+	
+	/***********************************
+	 ********* Playing Player Player 
+	 * @return *****************
+	 ***********************************/
+	public int playTurnPlayerPlayer(int column){
+		if(threadPlayerPlayer == null){
+			threadPlayerPlayer = new ThreadPlayerPlayer(controller4, gameInfo);
+		}
+			return threadPlayerPlayer.playTurn(column);
 	}
 	
 	

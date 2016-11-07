@@ -222,6 +222,9 @@ public class Controller3{
 	private void startSet(ActionEvent event) {
 		//Spiel starten
 		controller.getGameInfo().setNextPlayer('O');
+		
+		set.setText(String.valueOf(gameInfo.getSet() + 1));
+		gameInfo.setSet(gameInfo.getSet() + 1);
 	}
 	
 	
@@ -233,9 +236,11 @@ public class Controller3{
 	 * @param winningCombo
 	 */
 	public void gameOver(byte winningPlayer, int[][] winningCombo) {
-		highlightWinning(winningCombo);
+		highlightWinning(winningCombo); //highlights the winning-combo
+				
+		// Alert-Dialog (Confirmation-Options: Go on with next Set || exit to Startmenu)
 		Alert alert = new Alert(AlertType.CONFIRMATION);
-		alert.setTitle("Game Over");
+		alert.setTitle("Game Over"); //Ask the user what the next steps are
 		if (winningPlayer == 1) {
 			alert.setHeaderText("Die KI hat gewonnen!" + "\n" + "Was nun?");
 		} else if (winningPlayer == 2) {
@@ -243,18 +248,20 @@ public class Controller3{
 		} else {
 			alert.setHeaderText("Unentschieden!" + "\n" + "Was nun?");
 		}
-
+		
+		if(!(controller.getGameInfo().getOwnPoints() == 3 || controller.getGameInfo().getOpponentPoints() == 3)){
 		ButtonType weiter = new ButtonType("Weiter spielen");
 		ButtonType beenden = new ButtonType("Beenden");
+		ButtonType changeSettings = new ButtonType("Einstellungen ändern");
 
-		alert.getButtonTypes().setAll(weiter, beenden);
+		alert.getButtonTypes().setAll(weiter, beenden, changeSettings);
 
 		Optional<ButtonType> result = alert.showAndWait();
 
 		if (result.get() == weiter) {
 			clearGrid();
-
-			// Winner gets one point
+			
+// Winner gets one point
 			if (winningPlayer == 1) {
 				int playerX = Integer.parseInt(ltePoints.getText());
 				ltePoints.setText(String.valueOf(playerX + 1));
@@ -284,17 +291,18 @@ public class Controller3{
 			
 			//
 
-		} else if (result.get() == beenden) {
+		}if (result.get() == beenden) {
 			// TODO altes Controller Modell verwerfen und dem Agenten mitteilen
-			controller.setThreadPlayerKiNull();
+			controller.setThreadPlayerPlayerNull();
 			
-			// TODO ggf. Spiel zu Rekonstruieren speichern
+			//DB: delete unfinished game
+			controller.getConnection().deleteUnfinishedGame(controller.getGameInfo().getGameID());
 
 			// back to Screen0
 			Stage stage;
 			stage = (Stage) backToStart.getScene().getWindow();
 			// FXMLLoader
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/views/layout0.fxml"));
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
 			loader.setController(controller.getController0());
 			try {
 				stage.setScene(new Scene((AnchorPane) loader.load()));
@@ -304,17 +312,17 @@ public class Controller3{
 
 			stage.show();
 		}
+		}
 	}
 	
 	
 	/**
 	 * Shows the stones corresponding to their position in the field
-	 * @throws InterruptedException 
 	 * 
 	 */
 
 	// ************************Fill-Methode***************************
-	public void fill(int columnIndex, int rowIndex, char player, boolean endGame) throws InterruptedException {
+	public void fill(int columnIndex, int rowIndex, char player, boolean endGame) {
 		// player 0 = red, player 1 = yellow
 		Circle circle = new Circle();
 		circle.setRadius(35.0);
@@ -401,50 +409,50 @@ public class Controller3{
 	 * @throws InterruptedException 
 	 */
 	@FXML
-	private void mouseClicked(MouseEvent e) throws InterruptedException {
+	private void mouseClicked(MouseEvent e) {
 		//fill(int columnIndex, int rowIndex, char player, boolean endGame)
 		Node node = (Node) e.getSource();
 		System.out.println("Node: "+ node.getId());
 		if(node.getId().equals("row1")){
 			if(rowHigh0<=5){
 				fill(0,rowHigh0,'O',false);
-				int nextMove = controller.playTurn(0);
+				int nextMove = controller.playTurnKi(0);
 				fill(nextMove, getRow(nextMove), 'X', false);
 			}
 		}else if(node.getId().equals("row2")){
 			if(rowHigh1<=5){
 				fill(1,rowHigh1,'O',false);
-				int nextMove = controller.playTurn(1);
+				int nextMove = controller.playTurnKi(1);
 				fill(nextMove, getRow(nextMove), 'X', false);
 			}
 		}else if (node.getId().equals("row3")){
 			if(rowHigh2<=5){
 				fill(2,rowHigh2,'O',false);
-				int nextMove = controller.playTurn(2);
+				int nextMove = controller.playTurnKi(2);
 				fill(nextMove, getRow(nextMove), 'X', false);
 			}
 		}else if (node.getId().equals("row4")){
 			if(rowHigh3<=5){
 				fill(3,rowHigh3,'O',false);
-				int nextMove = controller.playTurn(3);
+				int nextMove = controller.playTurnKi(3);
 				fill(nextMove, getRow(nextMove), 'X', false);
 			}
 		}else if (node.getId().equals("row5")){
 			if(rowHigh4<=5){
 				fill(4,rowHigh4,'O',false);
-				int nextMove = controller.playTurn(4);
+				int nextMove = controller.playTurnKi(4);
 				fill(nextMove, getRow(nextMove), 'X', false);
 			}
 		}else if(node.getId().equals("row6")){
 			if(rowHigh5<=5){
 				fill(5,rowHigh5,'O',false);
-				int nextMove = controller.playTurn(5);
+				int nextMove = controller.playTurnKi(5);
 				fill(nextMove, getRow(nextMove), 'X', false);
 			}
 		}else if(node.getId().equals("row7")){
 			if(rowHigh6<=5){
 				fill(6,rowHigh6,'O',false);
-				int nextMove = controller.playTurn(6);
+				int nextMove = controller.playTurnKi(6);
 				fill(nextMove, getRow(nextMove), 'X', false);
 			}
 		}

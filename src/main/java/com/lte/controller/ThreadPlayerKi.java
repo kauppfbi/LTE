@@ -1,6 +1,7 @@
 package com.lte.controller;
 
 import com.lte.aiPar.AlgorithmManager;
+import com.lte.db.DBconnection;
 import com.lte.gui.Controller3;
 import com.lte.models.GameInfo;
 import com.lte.models.GameScore;
@@ -18,6 +19,9 @@ public class ThreadPlayerKi {
 	private GameInfo gameInfo;
 	private Settings settings;
 	private GameScore currentGameScore;
+	
+	// DB "Manager"
+	private DBconnection connection;
 
 	// KI Manager
 	AlgorithmManager algorithmManager;
@@ -25,10 +29,11 @@ public class ThreadPlayerKi {
 	private int nextMove;
 //
 ////**********************************//
-	public ThreadPlayerKi(Controller3 controller3, GameInfo gameInfo, AlgorithmManager algorithmManager, Settings settings) {
+	public ThreadPlayerKi(Controller3 controller3, GameInfo gameInfo, AlgorithmManager algorithmManager, Settings settings, DBconnection connectionInput) {
 		this.controller3 = controller3;
 		this.gameInfo = gameInfo;
 		this.settings = settings;
+		this.connection = connectionInput;
 		
 		System.out.println("Spielen läuft");
 
@@ -39,6 +44,20 @@ public class ThreadPlayerKi {
 		
 		this.algorithmManager = new AlgorithmManager();
 		System.out.println("KI geladen");
+		
+		// lade DB Controller
+		if(gameInfo.getSetID() == -1){
+		int ids[] = connection.startNewGame(gameInfo.getOpponentName(), String.valueOf(gameInfo.getNextPlayer()));
+		
+		// prepare gameInfo
+		gameInfo.setGameID(ids[0]);
+		gameInfo.setSetID(ids[1]);
+		gameInfo.setOpponentID(ids[2]);
+		}
+		else{
+			gameInfo.setSetID(connection.createNewSet(gameInfo.getGameID(), gameInfo.getOwnPoints(), gameInfo.getOpponentPoints()));
+			
+		}
 	}
 
 	
@@ -52,7 +71,8 @@ public class ThreadPlayerKi {
 
 						currentGameScore.play(column, (byte)2);
 
-					// visualisiere in GUI -> Controller3 bei onClick
+						// Log turn in DB
+						connection.pushTurn(gameInfo.getGameID(), gameInfo.getSetID(), "O", column);
 
 					gameInfo.setNextPlayer('X');
 
@@ -70,6 +90,9 @@ public class ThreadPlayerKi {
 					nextMove = algorithmManager.ParallelAlphaBeta(currentGameScore.getField(), 10, settings.getCalculationTime(), (byte) 1);
 
 					currentGameScore.play(nextMove, (byte) 1);
+					
+					// log turn in DB
+					connection.pushTurn(gameInfo.getGameID(), gameInfo.getSetID(), "X", nextMove);
 
 					gameInfo.setNextPlayer('O');
 					currentGameScore.print();
@@ -85,6 +108,26 @@ public class ThreadPlayerKi {
 		
 		// TODO Zuordnung von X/O zu Teamnamen
 		System.out.println("KI: " + currentGameScore.isWon() + " hat gewonnen");
+		
+		// - Gewinner in DB schreiben + Punkte hochzaehhlen
+		if(currentGameScore.isWon() == 2){
+			connection.updateWinnerOfSet(gameInfo.getSetID(), "O");
+			gameInfo.setOpponentPoints(gameInfo.getOpponentPoints() + 1);
+		}
+		else if(currentGameScore.isWon() == 1){
+			connection.updateWinnerOfSet(gameInfo.getSetID(), "X");
+			gameInfo.setOwnPoints(gameInfo.getOwnPoints() + 1);
+		}else{
+			connection.updateWinnerOfSet(gameInfo.getSetID(), "U");
+		}
+		
+		//Prüfen ob Game zu Ende und in DB schreiben
+		if(gameInfo.getOwnPoints() == 3){
+		connection.updateScoreOfGame(gameInfo.getGameID(), gameInfo.getOwnPoints(), gameInfo.getOpponentPoints(), "X");
+		}
+		if(gameInfo.getOpponentPoints() == 3){
+		connection.updateScoreOfGame(gameInfo.getGameID(), gameInfo.getOwnPoints(), gameInfo.getOpponentPoints(), "O");
+		}
 		
 		// - Rückgabe der gewonnen Kombination aus dem Spieldstand int[4][1] ->
 		Platform.runLater(new Runnable() {
