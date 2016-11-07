@@ -4,7 +4,7 @@
   router="FAN">  
   <class id="1" language="java" name="com.lte.interfaces.FileIM" project="LTE" 
     file="/LTE/src/main/java/com/lte/interfaces/FileIM.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="225" width="194" x="383" y="102"/>    
+    <position height="207" width="194" x="172" y="81"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
