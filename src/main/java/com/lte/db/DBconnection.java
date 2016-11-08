@@ -582,7 +582,15 @@ public class DBconnection {
 			System.out.println("LOG: couldn't create statement");
 		}
 		
-		String sql = "DELETE FROM PUBLIC.GAMESET WHERE GAMEID = " + gameID + ";";
+		String sql = "DELETE FROM PUBLIC.TURN WHERE GAMEID = " + gameID + ";";
+		try {
+			stmt.executeQuery(sql);
+			System.out.println("LOG: deleted turns of specified game");
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("LOG: couldn't delete turns of specified game");
+		}
+		sql = "DELETE FROM PUBLIC.GAMESET WHERE GAMEID = " + gameID + ";";
 		try {
 			stmt.executeQuery(sql);
 			System.out.println("LOG: deleted sets of specified game");
