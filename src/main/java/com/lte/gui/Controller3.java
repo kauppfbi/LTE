@@ -294,8 +294,9 @@ public class Controller3{
 	 * 
 	 * @param winningPlayer
 	 * @param winningCombo
+	 * @throws IOException 
 	 */
-	public void gameOver(byte winningPlayer, int[][] winningCombo) {
+	public void gameOver(byte winningPlayer, int[][] winningCombo) throws IOException {
 		highlightWinning(winningCombo); //highlights the winning-combo
 		
 		// Winner gets one point
@@ -352,25 +353,33 @@ public class Controller3{
 			//
 
 		}if (result.get() == beenden) {
-			// TODO altes Controller Modell verwerfen und dem Agenten mitteilen
-			controller.setThreadPlayerPlayerNull();
 			
 			//DB: delete unfinished game
 			if(!(controller.getGameInfo().getOwnPoints() == 3 || controller.getGameInfo().getOpponentPoints() == 3)){
 			controller.getConnection().deleteUnfinishedGame(controller.getGameInfo().getGameID());
 			}
 			
-			// back to Screen0
+			//Integer Stones per column -> hight of the row
+			rowHigh0 = 0;
+			rowHigh1 = 0;
+			rowHigh2 = 0;
+			rowHigh3 = 0;
+			rowHigh4 = 0;
+			rowHigh5 = 0;
+			rowHigh6 = 0;
+			
 			Stage stage;
 			stage = (Stage) backToStart.getScene().getWindow();
+
+			// set Icon
+			File file = new File("files/images/icon.png");
+			Image image = new Image(file.toURI().toString());
+			stage.getIcons().add(image);
+
 			// FXMLLoader
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
 			loader.setController(controller.getController0());
-			try {
-				stage.setScene(new Scene((AnchorPane) loader.load()));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			stage.setScene(new Scene((AnchorPane) loader.load()));
 
 			stage.show();
 		}
@@ -385,17 +394,27 @@ public class Controller3{
 		if (result.get() == beenden) {
 			controller.setThreadPlayerKiNull();
 			
-			// back to Screen0
+			//Integer Stones per column -> hight of the row
+			rowHigh0 = 0;
+			rowHigh1 = 0;
+			rowHigh2 = 0;
+			rowHigh3 = 0;
+			rowHigh4 = 0;
+			rowHigh5 = 0;
+			rowHigh6 = 0;
+			
 			Stage stage;
 			stage = (Stage) backToStart.getScene().getWindow();
+
+			// set Icon
+			File file = new File("files/images/icon.png");
+			Image image = new Image(file.toURI().toString());
+			stage.getIcons().add(image);
+
 			// FXMLLoader
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/views/layout0.fxml"));
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
 			loader.setController(controller.getController0());
-			try {
-				stage.setScene(new Scene((AnchorPane) loader.load()));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			stage.setScene(new Scene((AnchorPane) loader.load()));
 
 			stage.show();
 		}

@@ -1,5 +1,7 @@
 package com.lte.controller;
 
+import java.io.IOException;
+
 import com.lte.aiPar.AlgorithmManager;
 import com.lte.db.DBconnection;
 import com.lte.gui.Controller3;
@@ -144,7 +146,12 @@ public class ThreadPlayerKi {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				controller3.gameOver(currentGameScore.isWon(),currentGameScore.winWhere());
+				try {
+					controller3.gameOver(currentGameScore.isWon(),currentGameScore.winWhere());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 		
