@@ -12,6 +12,8 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.media.MediaPlayer.Status;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+
 import java.io.File;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
@@ -158,7 +160,7 @@ public class Controller0 {
 			
 					// FXMLLoader
 					FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout1.fxml"));
-					loader.setController(controller.getController1());
+					loader.setController(controller.getOrCreateController1());
 					
 					// set new layout
 					stage.setScene(new Scene((AnchorPane) loader.load()));
@@ -182,7 +184,7 @@ public class Controller0 {
 
 					// FXMLLoader
 					FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout3.fxml"));
-					loader.setController(controller.getController3());
+					loader.setController(controller.getOrCreateController3());
 					
 					// set new layout
 					stage.setScene(new Scene((AnchorPane) loader.load()));
@@ -209,7 +211,7 @@ public class Controller0 {
 
 					// FXMLLoader
 					FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout4.fxml"));
-					loader.setController(controller.getController4());
+					loader.setController(controller.getOrCreateController4());
 					
 					// set new layout
 					stage.setScene(new Scene((AnchorPane) loader.load()));
@@ -251,7 +253,7 @@ public class Controller0 {
 			
 			// FXMLLoader
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout2.fxml"));
-			Controller2 controller2 = controller.getController2();
+			Controller2 controller2 = controller.getOrCreateController2();
 			loader.setController(controller2);
 
 			//set new layout
@@ -305,7 +307,8 @@ public class Controller0 {
 		}
 		playerO.getSelectionModel().selectFirst();
 		
-		DBscoreboard[] info = controller.getScoreBoardInfo();
+		try {
+			DBscoreboard[] info = controller.getScoreBoardInfo();
 
 
 		ObservableList<DBscoreboard> tableData = FXCollections.observableArrayList(
@@ -332,6 +335,9 @@ public class Controller0 {
 
 
 		scoreBoard.setItems(tableData);
+		} catch(NullPointerException e){
+			System.out.println("DB hat inkonsistente Daten...");
+		}
 //      opponentName.setCellValueFactory(cellData -> cellData.);
 //      lastNameColumn.setCellValueFactory(cellData -> cellData.getValue().lastNameProperty());
 //		for(int i = 0; i < 1 ;i++){
@@ -357,7 +363,7 @@ public class Controller0 {
 	 * @param event
 	 */
 	@FXML
-	public void exitApplication(ActionEvent event) {
+	public void exitApplication(WindowEvent event) {
 		Platform.exit();
 	}
 	

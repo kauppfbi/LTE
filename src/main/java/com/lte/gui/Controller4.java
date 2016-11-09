@@ -32,6 +32,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  * Controller4 Class for Player-Player
@@ -230,7 +231,7 @@ public class Controller4 {
 
 		// FXMLLoader
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
-		loader.setController(controller.getController0());
+		loader.setController(controller.getOrCreateController0());
 		stage.setScene(new Scene((AnchorPane) loader.load()));
 
 		stage.show();
@@ -307,7 +308,7 @@ public class Controller4 {
 			stage = (Stage) backToStart.getScene().getWindow();
 			// FXMLLoader
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/views/layout0.fxml"));
-			loader.setController(controller.getController0());
+			loader.setController(controller.getOrCreateController0());
 			try {
 				stage.setScene(new Scene((AnchorPane) loader.load()));
 			} catch (IOException e) {
@@ -488,5 +489,9 @@ public class Controller4 {
 		row5.setDisable(false);
 		row6.setDisable(false);
 		row7.setDisable(false);
+	}
+	
+	public void exitApplication(WindowEvent event){
+		Platform.exit();
 	}
 }

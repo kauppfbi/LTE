@@ -197,7 +197,7 @@ public class Controller2 {
 			    stage = (Stage) backToStart.getScene().getWindow();
 			    // FXMLLoader             
 		        FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
-		        loader.setController(controller.getController0());
+		        loader.setController(controller.getOrCreateController0());
 			    stage.setScene(new Scene((AnchorPane) loader.load()));  
 				stage.show();
 				
@@ -211,7 +211,7 @@ public class Controller2 {
 		    stage = (Stage) backToStart.getScene().getWindow();
 		    // FXMLLoader               
 	        FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
-	        loader.setController(controller.getController0());
+	        loader.setController(controller.getOrCreateController0());
 		    stage.setScene(new Scene((AnchorPane) loader.load()));
 			stage.show();    
 		}
@@ -471,7 +471,10 @@ public class Controller2 {
 	 * @param event
 	 */
 	@FXML
-	public void exitApplication(ActionEvent event) {
+	public void exitApplication(WindowEvent event) {
+		synchronized(threadReconstruct){
+			threadReconstruct.stop();
+		}
 		Platform.exit();
 	}
 }

@@ -6,11 +6,14 @@ import java.io.IOException;
 import com.lte.controller.MainController;
 import com.lte.db.DBconnection;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  * main class which starts all components and controllers
@@ -37,13 +40,39 @@ public class App extends Application{
 			MainController controller = new MainController(connection);
 			// FXMLLoader
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("./gui/views/layout0.fxml"));
-			loader.setController(controller.getController0());
+			loader.setController(controller.getOrCreateController0());
 			// Neues Layout in eine neue Scene laden und auf die Stage setzen
 			stage.setScene(new Scene((AnchorPane) loader.load()));
 			// set Icon
 			File file = new File("files/images/icon.png");
 			Image image = new Image(file.toURI().toString());
 			stage.getIcons().add(image);
+			
+			stage.setOnCloseRequest(
+				new EventHandler<WindowEvent>(){
+					public void handle(WindowEvent event) {
+						System.out.println("Stage geschlossen, handler aufgerufen");
+						if(controller.getController0() != null){
+							controller.getController0().exitApplication(event);
+						}
+						if(controller.getController2() != null){
+							controller.getController2().exitApplication(event);
+						}
+						if(controller.getController3() != null){
+							controller.getController3().exitApplication(event);
+						}
+						if(controller.getController4() != null){
+							controller.getController4().exitApplication(event);
+						}
+						if(controller.getController1() != null){
+							System.out.println("ctr.1");
+							controller.getController1().exitApplication(event);
+						}
+
+						
+					}
+				}
+			);
 			
 			stage.show();
 

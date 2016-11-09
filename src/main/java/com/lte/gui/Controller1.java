@@ -34,6 +34,7 @@ import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  * Class Controller1 manages the Game-Screen
@@ -95,8 +96,6 @@ public class Controller1 {
 
 	// non-FXML Declarations
 	private MainController controller;
-	
-	// private ThreadReconstruct controller;
 	private Settings settings;
 	private GameInfo gameInfo;
 	final FileChooser fileChooser;
@@ -235,6 +234,8 @@ public class Controller1 {
 	 */
 	@FXML
 	private void goToStartmenu(ActionEvent event) throws IOException {
+		// TODO: don't save the current game/set, if it isn't finished
+		
 		Stage stage;
 		stage = (Stage) backToStart.getScene().getWindow();
 
@@ -245,11 +246,10 @@ public class Controller1 {
 
 		// FXMLLoader
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
-		loader.setController(controller.getController0());
+		loader.setController(controller.getOrCreateController0());
 		stage.setScene(new Scene((AnchorPane) loader.load()));
 
 		stage.show();
-
 	}
 
 	/**
@@ -375,7 +375,7 @@ public class Controller1 {
 			stage = (Stage) backToStart.getScene().getWindow();
 			// FXMLLoader
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
-			loader.setController(controller.getController0());
+			loader.setController(controller.getOrCreateController0());
 			try {
 				stage.setScene(new Scene((AnchorPane) loader.load()));
 			} catch (IOException e) {
@@ -391,6 +391,7 @@ public class Controller1 {
 			fileSelect.setDisable(false);
 			dataTrans.setDisable(false);
 			playerChoice.setDisable(false);
+			clearGrid();
 		}
 		}
 	}
@@ -486,8 +487,11 @@ public class Controller1 {
 	 * @param event
 	 */
 	@FXML
-	public void exitApplication(ActionEvent event) {
+	public void exitApplication(WindowEvent event) {
 		controller.getConnection().deleteUnfinishedGame(controller.getGameInfo().getGameID());
+		// TODO: @Fabian Soelker: Durch den untenstehenden Aufruf wird der Thread nicht beendet und läuft immer weiter, selbst wenn die KI schon lange gestoppt ist...
+		controller.getPlayingThread().stop();
+		System.out.println("controller1 exit completed");
 		Platform.exit();
 	}
 }

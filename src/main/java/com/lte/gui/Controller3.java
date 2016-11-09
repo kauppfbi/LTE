@@ -37,6 +37,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  * Class for Screen3
@@ -245,7 +246,7 @@ public class Controller3{
 
 		// FXMLLoader
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
-		loader.setController(controller.getController0());
+		loader.setController(controller.getOrCreateController0());
 		stage.setScene(new Scene((AnchorPane) loader.load()));
 
 		stage.show();
@@ -360,7 +361,7 @@ public class Controller3{
 			stage = (Stage) backToStart.getScene().getWindow();
 			// FXMLLoader
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
-			loader.setController(controller.getController0());
+			loader.setController(controller.getOrCreateController0());
 			try {
 				stage.setScene(new Scene((AnchorPane) loader.load()));
 			} catch (IOException e) {
@@ -524,5 +525,12 @@ public class Controller3{
 		if(column == 5){return rowHigh5;}
 		if(column == 6){return rowHigh6;}
 		return 0;
+	}
+	
+	public void exitApplication(WindowEvent event){
+		controller.getConnection().deleteUnfinishedGame(controller.getGameInfo().getGameID());
+		// TODO: @Fabian Soelker: Bitte den ThreadPlayerKi so gestalten, dass ich ihn durch den Aufruf von thread.stop() terminieren kann!
+		// controller.getThreadPlayerKi().stop();
+		Platform.exit();
 	}
 }
