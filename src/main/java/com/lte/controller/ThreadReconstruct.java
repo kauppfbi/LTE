@@ -147,7 +147,6 @@ public class ThreadReconstruct extends Thread {
 					controller2.highlightWinning(gameScore.winWhere());
 				}
 			});
-			
 			controller2.playRecFinished();
 		}//else
 	}// run

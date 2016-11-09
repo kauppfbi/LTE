@@ -521,7 +521,6 @@ public class Controller1 {
 	@FXML
 	public void exitApplication(WindowEvent event) {
 		controller.getConnection().deleteUnfinishedGame(controller.getGameInfo().getGameID());
-		// TODO: @Fabian Soelker: Durch den untenstehenden Aufruf wird der Thread nicht beendet und läuft immer weiter, selbst wenn die KI schon lange gestoppt ist...
 		controller.getPlayingThread().stop();
 		System.out.println("controller1 exit completed");
 		Platform.exit();
