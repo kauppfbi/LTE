@@ -304,6 +304,9 @@ public class Controller3{
 			int playerO = Integer.parseInt(opponentPoints.getText());
 			opponentPoints.setText(String.valueOf(playerO + 1));
 		}
+		
+		//Satz fue Anzeige hochzahlen
+		set.setText(String.valueOf(gameInfo.getSet()));
 				
 		// Alert-Dialog (Confirmation-Options: Go on with next Set || exit to Startmenu)
 		Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -360,6 +363,31 @@ public class Controller3{
 			stage = (Stage) backToStart.getScene().getWindow();
 			// FXMLLoader
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
+			loader.setController(controller.getController0());
+			try {
+				stage.setScene(new Scene((AnchorPane) loader.load()));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			stage.show();
+		}
+		}
+		else{
+		ButtonType beenden = new ButtonType("Beenden");
+
+		alert.getButtonTypes().setAll(beenden);
+
+		Optional<ButtonType> result = alert.showAndWait();
+
+		if (result.get() == beenden) {
+			// TODO ggf. Spiel zu Rekonstruieren speichern
+			
+			// back to Screen0
+			Stage stage;
+			stage = (Stage) backToStart.getScene().getWindow();
+			// FXMLLoader
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/views/layout0.fxml"));
 			loader.setController(controller.getController0());
 			try {
 				stage.setScene(new Scene((AnchorPane) loader.load()));

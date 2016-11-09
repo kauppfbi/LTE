@@ -393,6 +393,32 @@ public class Controller1 {
 			playerChoice.setDisable(false);
 		}
 		}
+		else{
+		ButtonType beenden = new ButtonType("Beenden");
+
+		alert.getButtonTypes().setAll(beenden);
+
+		Optional<ButtonType> result = alert.showAndWait();
+
+		if (result.get() == beenden) {
+			// TODO ggf. Spiel zu Rekonstruieren speichern
+			
+			// back to Screen0
+			Stage stage;
+			stage = (Stage) backToStart.getScene().getWindow();
+			// FXMLLoader
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/views/layout0.fxml"));
+			loader.setController(controller.getController0());
+			try {
+				stage.setScene(new Scene((AnchorPane) loader.load()));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			stage.show();
+		}
+		}
+		
 	}
 
 	
