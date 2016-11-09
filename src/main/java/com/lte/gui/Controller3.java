@@ -285,6 +285,9 @@ public class Controller3{
 		//PlayerChoice disabled
 		radioKi.setDisable(true);
 		radioPlayer.setDisable(true);
+		
+		//startButton disabled
+		startGame.setDisable(true);
 	}
 	
 	
@@ -349,8 +352,6 @@ public class Controller3{
 			rowHigh4 = 0;
 			rowHigh5 = 0;
 			rowHigh6 = 0;
-			
-			//
 
 		}if (result.get() == beenden) {
 			
