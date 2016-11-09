@@ -169,7 +169,7 @@ public class Controller3{
 		opponentPoints.setText("0");
 
 		// TimeSpinner initialization + ChangeListener
-		timeSpinner.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(0.5, 10, 0.5, 0.1));
+		timeSpinner.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(0.1, 10, 2, 0.1));
 		timeSpinner.setEditable(false);
 		ChangeListener<Number> listener2 = new ChangeListener<Number>() {
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
