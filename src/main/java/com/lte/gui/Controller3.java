@@ -569,8 +569,6 @@ public class Controller3{
 	 */
 	public void exitApplication(WindowEvent event){
 		controller.getConnection().deleteUnfinishedGame(controller.getGameInfo().getGameID());
-		// TODO: @Fabian Soelker: Bitte den ThreadPlayerKi so gestalten, dass ich ihn durch den Aufruf von thread.stop() terminieren kann!
-		// controller.getThreadPlayerKi().stop();
 		Platform.exit();
 	}
 }

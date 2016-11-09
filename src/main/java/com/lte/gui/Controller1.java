@@ -326,7 +326,7 @@ public class Controller1 {
 		}
 		
 
-		//Change the number of the set
+		// Change the number of the set
 		// Set-Number +1
 		set.setText(String.valueOf(gameInfo.getSet()));
 		
@@ -342,90 +342,87 @@ public class Controller1 {
 		}
 		
 		if(!(controller.getGameInfo().getOwnPoints() == 3 || controller.getGameInfo().getOpponentPoints() == 3)){
-		ButtonType weiter = new ButtonType("Weiter spielen");
-		ButtonType beenden = new ButtonType("Beenden");
-		ButtonType changeSettings = new ButtonType("Einstellungen ändern");
-
-		alert.getButtonTypes().setAll(weiter, beenden, changeSettings);
-
-		Optional<ButtonType> result = alert.showAndWait();
-
-		if (result.get() == weiter) {
-			clearGrid();
-			
-			//update set
-			set.setText(String.valueOf(gameInfo.getSet() + 1));
-			gameInfo.setSet(gameInfo.getSet() + 1);
-			
-
-			// start new Set
-			controller.playSet();
-
-		} if (result.get() == beenden) {			
-			//DB: delete unfinished game
-			if(!(controller.getGameInfo().getOwnPoints() == 3 || controller.getGameInfo().getOpponentPoints() == 3)){
-			controller.getConnection().deleteUnfinishedGame(controller.getGameInfo().getGameID());
+			ButtonType weiter = new ButtonType("Weiter spielen");
+			ButtonType beenden = new ButtonType("Beenden");
+			ButtonType changeSettings = new ButtonType("Einstellungen ändern");
+	
+			alert.getButtonTypes().setAll(weiter, beenden, changeSettings);
+	
+			Optional<ButtonType> result = alert.showAndWait();
+	
+			if (result.get() == weiter) {
+				clearGrid();
+				
+				//update set
+				set.setText(String.valueOf(gameInfo.getSet() + 1));
+				gameInfo.setSet(gameInfo.getSet() + 1);
+				
+	
+				// start new Set
+				controller.playSet();
+	
+			} if (result.get() == beenden) {			
+				//DB: delete unfinished game
+				if(!(controller.getGameInfo().getOwnPoints() == 3 || controller.getGameInfo().getOpponentPoints() == 3)){
+				controller.getConnection().deleteUnfinishedGame(controller.getGameInfo().getGameID());
+				}
+				
+				if(!controller.deleteUnfinishedGame()){
+					System.err.println("Deleting unfinished Game in DB was not sucessfully!");
+				}
+	
+				Stage stage;
+				stage = (Stage) backToStart.getScene().getWindow();
+	
+				// set Icon
+				File file = new File("files/images/icon.png");
+				Image image = new Image(file.toURI().toString());
+				stage.getIcons().add(image);
+	
+				// FXMLLoader
+				FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
+				loader.setController(controller.getOrCreateController0());
+				try {
+					stage.setScene(new Scene((AnchorPane) loader.load()));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				stage.show();
+			} else if (result.get() == changeSettings){
+				//enable Settings
+				startGame.setDisable(false);
+				backToStart.setDisable(false);
+				timeSpinner.setDisable(false);
+				fileSelect.setDisable(false);
+				dataTrans.setDisable(false);
+				playerChoice.setDisable(false);
+				clearGrid();
 			}
-			
-			if(!controller.deleteUnfinishedGame()){
-				System.err.println("Deleting unfinished Game in DB was not sucessfully!");
-			}
-
-			Stage stage;
-			stage = (Stage) backToStart.getScene().getWindow();
-
-			// set Icon
-			File file = new File("files/images/icon.png");
-			Image image = new Image(file.toURI().toString());
-			stage.getIcons().add(image);
-
-			// FXMLLoader
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
-			loader.setController(controller.getOrCreateController0());
-			try {
+		// If one of the players has won three sets, the game gets saved in the DB	
+		} else{
+			ButtonType beenden = new ButtonType("Beenden");
+			alert.getButtonTypes().setAll(beenden);
+			Optional<ButtonType> result = alert.showAndWait();
+	
+			if (result.get() == beenden) {
+				// TODO ggf. Spiel zu Rekonstruieren speichern
+				
+				Stage stage;
+				stage = (Stage) backToStart.getScene().getWindow();
+	
+				// set Icon
+				File file = new File("files/images/icon.png");
+				Image image = new Image(file.toURI().toString());
+				stage.getIcons().add(image);
+	
+				// FXMLLoader
+				FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
+				loader.setController(controller.getController0());
 				stage.setScene(new Scene((AnchorPane) loader.load()));
-			} catch (IOException e) {
-				e.printStackTrace();
+	
+				stage.show();
 			}
-			stage.show();
-		} else if (result.get() == changeSettings){
-			//enable Settings
-			startGame.setDisable(false);
-			backToStart.setDisable(false);
-			timeSpinner.setDisable(false);
-			fileSelect.setDisable(false);
-			dataTrans.setDisable(false);
-			playerChoice.setDisable(false);
-			clearGrid();
 		}
-		}
-		else{
-		ButtonType beenden = new ButtonType("Beenden");
-
-		alert.getButtonTypes().setAll(beenden);
-
-		Optional<ButtonType> result = alert.showAndWait();
-
-		if (result.get() == beenden) {
-			// TODO ggf. Spiel zu Rekonstruieren speichern
-			
-			Stage stage;
-			stage = (Stage) backToStart.getScene().getWindow();
-
-			// set Icon
-			File file = new File("files/images/icon.png");
-			Image image = new Image(file.toURI().toString());
-			stage.getIcons().add(image);
-
-			// FXMLLoader
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
-			loader.setController(controller.getController0());
-			stage.setScene(new Scene((AnchorPane) loader.load()));
-
-			stage.show();
-		}
-		}
-		
 	}
 
 	

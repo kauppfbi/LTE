@@ -105,10 +105,19 @@ public class Controller2 {
 	private HashMap<String, Image> images;
 	
 	
+	/**
+	 * constructor for the Controller2<br>
+	 * creates a new and empty thread for reconstruction<br>
+	 * 
+	 * @param mainController
+	 */
 	public Controller2(MainController mainController) {
 		this.controller = mainController;
 		this.soundManager = controller.getSoundManager();		
 		this.images = controller.getImages();
+		
+		// create a thread for reconstruction
+		threadReconstruct = new ThreadReconstruct(this, null);	
 	}
 
 	/**
@@ -139,8 +148,6 @@ public class Controller2 {
 		//Pause, Stop default is disabled:
 		pause.setDisable(true);
 		stop.setDisable(true);
-				
-		threadReconstruct = new ThreadReconstruct(this, null);	
 	}
 	
 	@FXML
@@ -155,10 +162,9 @@ public class Controller2 {
 		}
 	}
 	
-	// TODO onCloseRequest Thread Terminaten
-	
 	/**
-	 * Go back to Screen0
+	 * Go back to Screen0 and close any running threadReconstruction<br>
+	 * 
 	 * @param event
 	 * @throws IOException
 	 */
@@ -400,18 +406,22 @@ public class Controller2 {
 		gameID = gameChoice.getSelectionModel().getSelectedIndex();
 
 		//setChoice shows first entry without ChangeListener
-		gameID = gameChoice.getSelectionModel().getSelectedIndex();// testing purpose
 		System.out.println("Rekonstruierbares Spiel: (Index, gameID)" + gameID + ", " + connection.get(gameID));// for setChoice
 		System.out.println("gameID beim konfigurieren: " + gameID);
 		sets = controller.getRecSetInfo(gameID);
-		System.out.println("sets beim konfigurieren: " + sets[0].getSetID());
 		ObservableList<Integer> setNumber = FXCollections.observableArrayList();// setNumber ObservableList gets filled with the number of played Sets
 		for(int i = 1; i <= sets.length; i++){
 			setNumber.add(i);
 		}
 		setChoice.setItems(setNumber);
 		setChoice.getSelectionModel().selectFirst();
+
 		
+		ChangeListener<Number> listenerSet = new ChangeListener<Number>() {
+			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
+				clearGrid();
+			}
+		};
 		
 		ChangeListener<Number> listenerGame = new ChangeListener<Number>() {
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
@@ -444,6 +454,7 @@ public class Controller2 {
 			}
 		};
 		gameChoice.getSelectionModel().selectedIndexProperty().addListener(listenerGame);
+		setChoice.getSelectionModel().selectedIndexProperty().addListener(listenerSet);
 		
 		// if there is no game in DB
 		if(gameChoice.getItems().isEmpty()){
@@ -465,19 +476,6 @@ public class Controller2 {
 	    gameGrid.getChildren().clear();
 	    gameGrid.getChildren().add(0,node);	
 	}
-	
-	/**
-	 * Event for leaving the application
-	 * @param event
-	 */
-	@FXML
-	public void exitApplication(WindowEvent event) {
-		synchronized(threadReconstruct){
-			threadReconstruct.stop();
-		}
-		Platform.exit();
-	}
-
 	
 	/**
 	 * highlights the winning-combo
@@ -507,5 +505,17 @@ public class Controller2 {
 		GridPane.setRowIndex(circle2, (5 - row));
 		gameGrid.getChildren().add(circle2);
 		gameGrid.setHalignment(circle2, HPos.CENTER);
+	}
+	
+	/**
+	 * Event for leaving the application
+	 * @param event
+	 */
+	@FXML
+	public void exitApplication(WindowEvent event) {
+		synchronized(threadReconstruct){
+			threadReconstruct.stop();
+		}
+		Platform.exit();
 	}
 }

@@ -51,7 +51,6 @@ public class App extends Application{
 			stage.setOnCloseRequest(
 				new EventHandler<WindowEvent>(){
 					public void handle(WindowEvent event) {
-						System.out.println("Stage geschlossen, handler aufgerufen");
 						if(controller.getController0() != null){
 							controller.getController0().exitApplication(event);
 						}
