@@ -261,10 +261,12 @@ public class Controller3{
 		//RadioButton
 		if(radioKi.isSelected()==true){
 			controller.getGameInfo().setNextPlayer('X');
+			controller.getGameInfo().setStartingPlayer('X');
 			int nextMove = controller.playTurnKi(0);
 			fill(nextMove, getRow(nextMove), 'X', false);
 		}else if(radioPlayer.isSelected()==true){
 			controller.getGameInfo().setNextPlayer('O');
+			controller.getGameInfo().setStartingPlayer('O');
 		}
 		
 		
@@ -381,7 +383,7 @@ public class Controller3{
 		Optional<ButtonType> result = alert.showAndWait();
 
 		if (result.get() == beenden) {
-			// TODO ggf. Spiel zu Rekonstruieren speichern
+			controller.setThreadPlayerKiNull();
 			
 			// back to Screen0
 			Stage stage;

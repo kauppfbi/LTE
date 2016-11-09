@@ -129,6 +129,17 @@ public class ThreadPlayerKi {
 		connection.updateScoreOfGame(gameInfo.getGameID(), gameInfo.getOwnPoints(), gameInfo.getOpponentPoints(), "O");
 		}
 		
+		//Spieler für Beginn der nächsten Runde bestimmen
+		if(gameInfo.getStartingPlayer() == 'X'){
+			gameInfo.setNextPlayer('O');
+			gameInfo.setStartingPlayer('O');
+		}
+		else if(gameInfo.getStartingPlayer() == 'O'){
+			gameInfo.setNextPlayer('X');
+			gameInfo.setStartingPlayer('X');
+		}
+		
+		
 		// - Rückgabe der gewonnen Kombination aus dem Spieldstand int[4][1] ->
 		Platform.runLater(new Runnable() {
 			@Override

@@ -472,8 +472,10 @@ public class Controller4 {
 	private void fixPlayerChoice(){
 		if(radioPlayer1.isSelected()==true){
 			gameInfo.setNextPlayer('X');
+			gameInfo.setStartingPlayer('X');
 		}else if(radioPlayer2.isSelected()==true){
 			gameInfo.setNextPlayer('O');
+			gameInfo.setStartingPlayer('O');
 		}
 		
 		//Disable RadioButtons

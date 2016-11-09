@@ -23,6 +23,7 @@ public class GameInfo {
 	private int set;
 	private int ownPoints;
 	private int opponentPoints;
+	private char startingPlayer;
 
 	
 	public GameInfo(String opponentName) {
@@ -123,6 +124,14 @@ public class GameInfo {
 
 	public void setOwnName(String ownName) {
 		this.ownName = ownName;
+	}
+
+	public char getStartingPlayer() {
+		return startingPlayer;
+	}
+
+	public void setStartingPlayer(char startingPlayer) {
+		this.startingPlayer = startingPlayer;
 	} 
 	
 	
