@@ -1,6 +1,8 @@
 package com.lte.controller;
 
 import com.lte.gui.Controller2;
+import com.lte.models.GameScore;
+
 import javafx.application.Platform;
 
 /**
@@ -14,6 +16,7 @@ public class ThreadReconstruct extends Thread {
 
 	private Controller2 controller2;
 	private int[] recTurns;
+	private GameScore gameScore;
 
 	/**
 	 * constructor<br>
@@ -24,6 +27,8 @@ public class ThreadReconstruct extends Thread {
 	public ThreadReconstruct(Controller2 controller2, int[] recTurns) {
 		this.controller2 = controller2;
 		this.recTurns = recTurns;
+		this.gameScore = new GameScore();
+		this.gameScore.initialize();
 	}
 
 	public void setRecTurns(int[] recTurns) {
@@ -95,10 +100,23 @@ public class ThreadReconstruct extends Thread {
 					recTurns[0] = 1;
 					// blue
 					color = 0;
+					try {
+						gameScore.play(columnIndex, (byte) 1);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
 				} else if (recTurns[0] == 1) {
 					recTurns[0] = 0;
 					// green
 					color = 1;
+					try {
+						gameScore.play(columnIndex, (byte) 2);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 	
 				final int fRowIndex = rowIndex;
@@ -120,7 +138,16 @@ public class ThreadReconstruct extends Thread {
 						e1.printStackTrace();
 					}
 				}
-			}// for
+			}
+			// for
+			// - Rückgabe der gewonnen Kombination aus dem Spieldstand int[4][1] ->
+			Platform.runLater(new Runnable() {
+				@Override
+				public void run() {
+					controller2.highlightWinning(gameScore.winWhere());
+				}
+			});
+			
 			controller2.playRecFinished();
 		}//else
 	}// run

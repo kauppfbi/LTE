@@ -252,9 +252,9 @@ public class Controller4 {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Game Over");
 		if (winningPlayer == 1) {
-			alert.setHeaderText("Sie haben gewonnen!" + "\n" + "Was nun?");
+			alert.setHeaderText(gameInfo.getOwnName() + " hat gewonnen" + "\n" + "Was nun?");
 		} else if (winningPlayer == 2) {
-			alert.setHeaderText("Sie haben verloren!" + "\n" + "Was nun?");
+			alert.setHeaderText(gameInfo.getOpponentName() + " hat gewonnen" + "\n" + "Was nun?");
 		} else {
 			alert.setHeaderText("Unentschieden!" + "\n" + "Was nun?");
 		}
@@ -300,18 +300,33 @@ public class Controller4 {
 			//
 
 		} else if (result.get() == beenden) {
-			// TODO altes Controller Modell verwerfen und dem Agenten mitteilen
-			// TODO ggf. Spiel zu Rekonstruieren speichern
 
-			// back to Screen0
+			controller.setThreadPlayerPlayerNull();
+			
+			//Integer Stones per column -> hight of the row
+			rowHigh0 = 0;
+			rowHigh1 = 0;
+			rowHigh2 = 0;
+			rowHigh3 = 0;
+			rowHigh4 = 0;
+			rowHigh5 = 0;
+			rowHigh6 = 0;
+			
 			Stage stage;
 			stage = (Stage) backToStart.getScene().getWindow();
+
+			// set Icon
+			File file = new File("files/images/icon.png");
+			Image image = new Image(file.toURI().toString());
+			stage.getIcons().add(image);
+
 			// FXMLLoader
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/views/layout0.fxml"));
-			loader.setController(controller.getOrCreateController0());
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
+			loader.setController(controller.getController0());
 			try {
 				stage.setScene(new Scene((AnchorPane) loader.load()));
 			} catch (IOException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
@@ -473,8 +488,10 @@ public class Controller4 {
 	private void fixPlayerChoice(){
 		if(radioPlayer1.isSelected()==true){
 			gameInfo.setNextPlayer('X');
+			gameInfo.setStartingPlayer('X');
 		}else if(radioPlayer2.isSelected()==true){
 			gameInfo.setNextPlayer('O');
+			gameInfo.setStartingPlayer('O');
 		}
 		
 		//Disable RadioButtons
@@ -490,8 +507,8 @@ public class Controller4 {
 		row6.setDisable(false);
 		row7.setDisable(false);
 	}
-	
 	public void exitApplication(WindowEvent event){
 		Platform.exit();
 	}
 }
+

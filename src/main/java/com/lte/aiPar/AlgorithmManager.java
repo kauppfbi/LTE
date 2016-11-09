@@ -74,8 +74,16 @@ public class AlgorithmManager {
 			//Die ersten Runden beschleunigen
 			roundCounter++;
 
-			if(roundCounter <= 7){
+			if(roundCounter <= 7 && calculationTime >= 600){
 				algorithmDepth = 8;
+			}
+			else if(calculationTime >= 400){
+				algorithmDepth = 8;
+			}
+			else if(calculationTime < 400){
+				SingleAlgorithm simpleAlg = new SingleAlgorithm(field, 6);
+				int simpleMove = simpleAlg.alphaBeta();
+				return simpleMove;
 			}
 			
 			System.out.println(algorithmDepth);

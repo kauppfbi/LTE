@@ -1,5 +1,7 @@
 package com.lte.controller;
 
+import java.io.IOException;
+
 import com.lte.aiPar.AlgorithmManager;
 import com.lte.db.DBconnection;
 import com.lte.gui.Controller3;
@@ -129,11 +131,27 @@ public class ThreadPlayerKi {
 		connection.updateScoreOfGame(gameInfo.getGameID(), gameInfo.getOwnPoints(), gameInfo.getOpponentPoints(), "O");
 		}
 		
+		//Spieler für Beginn der nächsten Runde bestimmen
+		if(gameInfo.getStartingPlayer() == 'X'){
+			gameInfo.setNextPlayer('O');
+			gameInfo.setStartingPlayer('O');
+		}
+		else if(gameInfo.getStartingPlayer() == 'O'){
+			gameInfo.setNextPlayer('X');
+			gameInfo.setStartingPlayer('X');
+		}
+		
+		
 		// - Rückgabe der gewonnen Kombination aus dem Spieldstand int[4][1] ->
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				controller3.gameOver(currentGameScore.isWon(),currentGameScore.winWhere());
+				try {
+					controller3.gameOver(currentGameScore.isWon(),currentGameScore.winWhere());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 		

@@ -477,4 +477,35 @@ public class Controller2 {
 		}
 		Platform.exit();
 	}
+
+	
+	/**
+	 * highlights the winning-combo
+	 * @param woGewonnen
+	 */
+	public void highlightWinning(int[][] woGewonnen){
+		//Get the positions from the array
+		for(int i = 0; i<=3; i++){
+			int column = woGewonnen[i][0];
+			int row = woGewonnen[i][1];
+			setHighlight(column, row);
+		}
+	}
+	
+	/**
+	 * changes color to highlight the winning-combo
+	 * @param column
+	 * @param row
+	 */
+	public void setHighlight(int column, int row){
+		//new Circle
+		Circle circle2 = new Circle();
+		circle2.setRadius(35.0);
+		
+		circle2.setFill(Color.web("#FF0000", 0.8));
+		GridPane.setColumnIndex(circle2, column);
+		GridPane.setRowIndex(circle2, (5 - row));
+		gameGrid.getChildren().add(circle2);
+		gameGrid.setHalignment(circle2, HPos.CENTER);
+	}
 }

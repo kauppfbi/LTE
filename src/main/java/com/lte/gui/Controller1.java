@@ -311,8 +311,9 @@ public class Controller1 {
 	 * 
 	 * @param winningPlayer
 	 * @param winningCombo
+	 * @throws IOException 
 	 */
-	public void gameOver(byte winningPlayer, int[][] winningCombo) {
+	public void gameOver(byte winningPlayer, int[][] winningCombo) throws IOException {
 		highlightWinning(winningCombo); //highlights the winning-combo
 		
 		// Winner gets +1 Set-Point
@@ -370,9 +371,14 @@ public class Controller1 {
 				System.err.println("Deleting unfinished Game in DB was not sucessfully!");
 			}
 
-			// back to Screen0
 			Stage stage;
 			stage = (Stage) backToStart.getScene().getWindow();
+
+			// set Icon
+			File file = new File("files/images/icon.png");
+			Image image = new Image(file.toURI().toString());
+			stage.getIcons().add(image);
+
 			// FXMLLoader
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
 			loader.setController(controller.getOrCreateController0());
@@ -381,7 +387,6 @@ public class Controller1 {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-
 			stage.show();
 		} else if (result.get() == changeSettings){
 			//enable Settings
@@ -394,6 +399,33 @@ public class Controller1 {
 			clearGrid();
 		}
 		}
+		else{
+		ButtonType beenden = new ButtonType("Beenden");
+
+		alert.getButtonTypes().setAll(beenden);
+
+		Optional<ButtonType> result = alert.showAndWait();
+
+		if (result.get() == beenden) {
+			// TODO ggf. Spiel zu Rekonstruieren speichern
+			
+			Stage stage;
+			stage = (Stage) backToStart.getScene().getWindow();
+
+			// set Icon
+			File file = new File("files/images/icon.png");
+			Image image = new Image(file.toURI().toString());
+			stage.getIcons().add(image);
+
+			// FXMLLoader
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
+			loader.setController(controller.getController0());
+			stage.setScene(new Scene((AnchorPane) loader.load()));
+
+			stage.show();
+		}
+		}
+		
 	}
 
 	

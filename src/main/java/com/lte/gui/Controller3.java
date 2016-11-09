@@ -159,7 +159,6 @@ public class Controller3{
 	/**
 	 * JavaFX initializations
 	 */
-	// *******FXML-Methoden************
 	@FXML
 	public void initialize() {
 
@@ -246,7 +245,7 @@ public class Controller3{
 
 		// FXMLLoader
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
-		loader.setController(controller.getOrCreateController0());
+		loader.setController(controller.getController0());
 		stage.setScene(new Scene((AnchorPane) loader.load()));
 
 		stage.show();
@@ -262,10 +261,12 @@ public class Controller3{
 		//RadioButton
 		if(radioKi.isSelected()==true){
 			controller.getGameInfo().setNextPlayer('X');
+			controller.getGameInfo().setStartingPlayer('X');
 			int nextMove = controller.playTurnKi(0);
 			fill(nextMove, getRow(nextMove), 'X', false);
 		}else if(radioPlayer.isSelected()==true){
 			controller.getGameInfo().setNextPlayer('O');
+			controller.getGameInfo().setStartingPlayer('O');
 		}
 		
 		
@@ -293,8 +294,9 @@ public class Controller3{
 	 * 
 	 * @param winningPlayer
 	 * @param winningCombo
+	 * @throws IOException 
 	 */
-	public void gameOver(byte winningPlayer, int[][] winningCombo) {
+	public void gameOver(byte winningPlayer, int[][] winningCombo) throws IOException {
 		highlightWinning(winningCombo); //highlights the winning-combo
 		
 		// Winner gets one point
@@ -305,6 +307,9 @@ public class Controller3{
 			int playerO = Integer.parseInt(opponentPoints.getText());
 			opponentPoints.setText(String.valueOf(playerO + 1));
 		}
+		
+		//Satz fue Anzeige hochzahlen
+		set.setText(String.valueOf(gameInfo.getSet()));
 				
 		// Alert-Dialog (Confirmation-Options: Go on with next Set || exit to Startmenu)
 		Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -348,25 +353,68 @@ public class Controller3{
 			//
 
 		}if (result.get() == beenden) {
-			// TODO altes Controller Modell verwerfen und dem Agenten mitteilen
-			controller.setThreadPlayerPlayerNull();
 			
 			//DB: delete unfinished game
 			if(!(controller.getGameInfo().getOwnPoints() == 3 || controller.getGameInfo().getOpponentPoints() == 3)){
 			controller.getConnection().deleteUnfinishedGame(controller.getGameInfo().getGameID());
 			}
 			
-			// back to Screen0
+			//Integer Stones per column -> hight of the row
+			rowHigh0 = 0;
+			rowHigh1 = 0;
+			rowHigh2 = 0;
+			rowHigh3 = 0;
+			rowHigh4 = 0;
+			rowHigh5 = 0;
+			rowHigh6 = 0;
+			
 			Stage stage;
 			stage = (Stage) backToStart.getScene().getWindow();
+
+			// set Icon
+			File file = new File("files/images/icon.png");
+			Image image = new Image(file.toURI().toString());
+			stage.getIcons().add(image);
+
 			// FXMLLoader
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
-			loader.setController(controller.getOrCreateController0());
-			try {
-				stage.setScene(new Scene((AnchorPane) loader.load()));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			loader.setController(controller.getController0());
+			stage.setScene(new Scene((AnchorPane) loader.load()));
+
+			stage.show();
+		}
+		}
+		else{
+		ButtonType beenden = new ButtonType("Beenden");
+
+		alert.getButtonTypes().setAll(beenden);
+
+		Optional<ButtonType> result = alert.showAndWait();
+
+		if (result.get() == beenden) {
+			controller.setThreadPlayerKiNull();
+			
+			//Integer Stones per column -> hight of the row
+			rowHigh0 = 0;
+			rowHigh1 = 0;
+			rowHigh2 = 0;
+			rowHigh3 = 0;
+			rowHigh4 = 0;
+			rowHigh5 = 0;
+			rowHigh6 = 0;
+			
+			Stage stage;
+			stage = (Stage) backToStart.getScene().getWindow();
+
+			// set Icon
+			File file = new File("files/images/icon.png");
+			Image image = new Image(file.toURI().toString());
+			stage.getIcons().add(image);
+
+			// FXMLLoader
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
+			loader.setController(controller.getController0());
+			stage.setScene(new Scene((AnchorPane) loader.load()));
 
 			stage.show();
 		}
@@ -378,8 +426,6 @@ public class Controller3{
 	 * Shows the stones corresponding to their position in the field
 	 * 
 	 */
-
-	// ************************Fill-Methode***************************
 	public void fill(int columnIndex, int rowIndex, char player, boolean endGame) {
 		// player 0 = red, player 1 = yellow
 		Circle circle = new Circle();
@@ -417,8 +463,7 @@ public class Controller3{
 	public void clearGrid() {
 		Node node = gameGrid.getChildren().get(0);
 	    gameGrid.getChildren().clear();
-	    gameGrid.getChildren().add(0,node);
-		
+	    gameGrid.getChildren().add(0,node);	
 	}
 	
 	/**
@@ -449,16 +494,6 @@ public class Controller3{
 		GridPane.setRowIndex(circle2, (5 - row));
 		gameGrid.getChildren().add(circle2);
 		gameGrid.setHalignment(circle2, HPos.CENTER);
-	}
-	
-	/**
-	 * Event for leaving the application
-	 * @param event
-	 */
-	@FXML
-	public void exitApplication(ActionEvent event) {
-		controller.getConnection().deleteUnfinishedGame(controller.getGameInfo().getGameID());
-		Platform.exit();
 	}
 	
 	/**
@@ -527,6 +562,11 @@ public class Controller3{
 		return 0;
 	}
 	
+	
+	/**
+	 * Event for leaving the application
+	 * @param event
+	 */
 	public void exitApplication(WindowEvent event){
 		controller.getConnection().deleteUnfinishedGame(controller.getGameInfo().getGameID());
 		// TODO: @Fabian Soelker: Bitte den ThreadPlayerKi so gestalten, dass ich ihn durch den Aufruf von thread.stop() terminieren kann!
@@ -534,3 +574,4 @@ public class Controller3{
 		Platform.exit();
 	}
 }
+
