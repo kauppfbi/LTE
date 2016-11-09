@@ -521,7 +521,9 @@ public class Controller1 {
 	@FXML
 	public void exitApplication(WindowEvent event) {
 		controller.getConnection().deleteUnfinishedGame(controller.getGameInfo().getGameID());
-		controller.getPlayingThread().stop();
+		if(controller.getPlayingThread() != null){
+			controller.getPlayingThread().stop();
+		}
 		System.out.println("controller1 exit completed");
 		Platform.exit();
 	}
