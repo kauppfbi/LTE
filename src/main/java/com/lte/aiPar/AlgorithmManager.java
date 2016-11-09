@@ -81,7 +81,7 @@ public class AlgorithmManager {
 			if(roundCounter <= 7 && calculationTime >= 600){
 				algorithmDepth = 8;
 			}
-			else if(calculationTime < 600 || calculationTime > 200){
+			else if(calculationTime < 600 && calculationTime > 200){
 				algorithmDepth = 8;
 			}
 			else if(calculationTime <= 200){
