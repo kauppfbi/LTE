@@ -42,7 +42,7 @@ public class Controller0 {
 	Button reGame;
 
 	@FXML
-	ComboBox<String> playerX;
+	TextField playerX;
 
 	@FXML
 	ComboBox<String> playerO;
@@ -129,7 +129,7 @@ public class Controller0 {
 	@FXML
 	public void toGame(ActionEvent event) throws IOException {		
 		//Is one player-name empty?
-		if(playerX.getValue()==null || playerO.getValue()==null){
+		if(playerX.getText()==null || playerO.getValue()==null){
 			//Error-Message: Name is null!
 			Alert alert2 = new Alert(AlertType.WARNING);
 			alert2.setTitle("Information");
@@ -138,7 +138,7 @@ public class Controller0 {
 			alert2.show();
 		}else{
 			//Are the playerNames shorter than 10 characters?
-			if(playerX.getValue().length()<=9 && playerO.getValue().length()<=9){
+			if(playerX.getText().length()<=9 && playerO.getValue().length()<=9){
 				Stage stage;
 				if (event.getSource() == toGame && AiVsAi.isSelected()==true) {
 					// Set team-names
@@ -193,7 +193,7 @@ public class Controller0 {
 				}else if(event.getSource() == toGame && PlayerVsPlayer.isSelected()==true) {
 					//setNames
 					String nameO = playerO.getValue();
-					String nameX = playerX.getValue();
+					String nameX = playerX.getText();
 			
 					// new Settings object
 					settings = new Settings();
@@ -219,7 +219,7 @@ public class Controller0 {
 				}
 			}else{
 				//Which PlayerName is too long?
-				if(playerX.getValue().length()>9){
+				if(playerX.getText().length()>9){
 					errorPlayer = "Spieler 1";
 				}else{
 					errorPlayer = "Spieler 2";
@@ -287,7 +287,7 @@ public class Controller0 {
 		
 		//name playerX default LTE
 		playerX.setEditable(false);
-		playerX.setValue("LTE");
+		playerX.setText("LTE");
 		
 		
 		//set playerO editable
