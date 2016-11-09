@@ -362,6 +362,10 @@ public class Controller1 {
 
 		} if (result.get() == beenden) {			
 			//DB: delete unfinished game
+			if(!(controller.getGameInfo().getOwnPoints() == 3 || controller.getGameInfo().getOpponentPoints() == 3)){
+			controller.getConnection().deleteUnfinishedGame(controller.getGameInfo().getGameID());
+			}
+			
 			if(!controller.deleteUnfinishedGame()){
 				System.err.println("Deleting unfinished Game in DB was not sucessfully!");
 			}
@@ -483,6 +487,7 @@ public class Controller1 {
 	 */
 	@FXML
 	public void exitApplication(ActionEvent event) {
+		controller.getConnection().deleteUnfinishedGame(controller.getGameInfo().getGameID());
 		Platform.exit();
 	}
 }

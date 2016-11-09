@@ -300,11 +300,9 @@ public class Controller3{
 		if (winningPlayer == 1) {
 			int playerX = Integer.parseInt(ltePoints.getText());
 			ltePoints.setText(String.valueOf(playerX + 1));
-			controller.getGameInfo().setOwnPoints(controller.getGameInfo().getOwnPoints()+1);
 		} else if (winningPlayer == 2) {
 			int playerO = Integer.parseInt(opponentPoints.getText());
 			opponentPoints.setText(String.valueOf(playerO + 1));
-			controller.getGameInfo().setOpponentPoints(controller.getGameInfo().getOpponentPoints()+1);
 		}
 				
 		// Alert-Dialog (Confirmation-Options: Go on with next Set || exit to Startmenu)
@@ -353,8 +351,10 @@ public class Controller3{
 			controller.setThreadPlayerPlayerNull();
 			
 			//DB: delete unfinished game
+			if(!(controller.getGameInfo().getOwnPoints() == 3 || controller.getGameInfo().getOpponentPoints() == 3)){
 			controller.getConnection().deleteUnfinishedGame(controller.getGameInfo().getGameID());
-
+			}
+			
 			// back to Screen0
 			Stage stage;
 			stage = (Stage) backToStart.getScene().getWindow();
@@ -456,6 +456,7 @@ public class Controller3{
 	 */
 	@FXML
 	public void exitApplication(ActionEvent event) {
+		controller.getConnection().deleteUnfinishedGame(controller.getGameInfo().getGameID());
 		Platform.exit();
 	}
 	
