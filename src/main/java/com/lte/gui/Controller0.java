@@ -127,9 +127,9 @@ public class Controller0 {
 	 */
 	// *******************Switch von Welcome zu Game Screen********************
 	@FXML
-	public void toGame(ActionEvent event) throws IOException {		
+	public void toGame(ActionEvent event) throws IOException {				
 		//Is one player-name empty?
-		if(playerX.getText()==null || playerO.getValue()==null){
+		if(playerX.getText().isEmpty()==true || playerO.getValue().isEmpty()==true){
 			//Error-Message: Name is null!
 			Alert alert2 = new Alert(AlertType.WARNING);
 			alert2.setTitle("Information");
