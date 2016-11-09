@@ -292,7 +292,6 @@ public class GameScore {
 			//Oben Links -> Unten Rechts (12)
 			for (byte column = 0; column < 4; column++) {
 				for (byte row = 5; row > 2; row--) {
-					if(field[column][row] == 0){break;}
 					
 					if(field[column][row] == 1 && field[column+1][row-1] == 1 && field[column+2][row-2] == 1 && field[column+3][row-3] == 1){return 1;}
 					if(field[column][row] == 2 && field[column+1][row-1] == 2 && field[column+2][row-2] == 2 && field[column+3][row-3] == 2){return 2;}
