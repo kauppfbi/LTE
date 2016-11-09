@@ -168,9 +168,6 @@ public class Controller4 {
 		Image image = new Image(file.toURI().toString());
 		imageView.setImage(image);
 		
-		namePlayerX.setText("LTE");
-		//namePlayerO.setText(controller.getGameInfo().getOpponentName());
-		
 		//imageView to let the player choose the row to throw stones
 		File file2 = new File("files/images/Pfeil_unten_bearbeitet.png");
 		Image image2 = new Image(file2.toURI().toString());
