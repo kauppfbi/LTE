@@ -402,6 +402,7 @@ public class MainController {
 			if(playingThread.getState() == Thread.State.NEW || playingThread.getState() == Thread.State.TERMINATED){
 				return true;
 			} else {
+				System.err.println("DB Connection belegt!");
 				return false;
 			}
 		}
