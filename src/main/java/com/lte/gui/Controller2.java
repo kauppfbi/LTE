@@ -395,18 +395,19 @@ public class Controller2 {
 			int gameID = games[i].getGameID();
 			System.out.println(gameID);
 			gameInfo.add(games[i].getOpponentName().concat(" | ").concat(games[i].getPlayTime()));
+			// i is index (position in the gameChoice-Box) - gameID is the gameID to this game
 			connection.put(i, gameID);
 		}
 
 		// PlayerChoice initialization + ChangeListener
 		gameChoice.setItems(gameInfo);
+		// set first entry as default
 		gameChoice.getSelectionModel().selectFirst();
 		
-		// set first entry as default
-		gameID = connection.get(gameID);
+		gameID = connection.get(gameChoice.getSelectionModel().getSelectedIndex());
 
 		//setChoice shows first entry without ChangeListener
-		System.out.println("Rekonstruierbares Spiel: (Index, gameID)" + gameID + ", " + connection.get(gameID));// for setChoice
+		System.out.println("Rekonstruierbares Spiel: (gameID, Index)   :" + gameID + ", " + gameChoice.getSelectionModel().getSelectedIndex());// for setChoice
 		System.out.println("gameID beim konfigurieren: " + gameID);
 		sets = controller.getRecSetInfo(gameID);
 		ObservableList<Integer> setNumber = FXCollections.observableArrayList();// setNumber ObservableList gets filled with the number of played Sets
