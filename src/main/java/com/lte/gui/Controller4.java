@@ -528,9 +528,12 @@ public class Controller4 {
 		radioPlayer2.setDisable(true);
 
 		gameInfo.setGameInProgress(true);
-
 	}
 	
+	/**
+	 * Event for leaving the application
+	 * @param event
+	 */
 	public void exitApplication(){
 		Platform.exit();
 	}

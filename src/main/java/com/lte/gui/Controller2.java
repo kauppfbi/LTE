@@ -101,6 +101,7 @@ public class Controller2 {
 	private SetDB[] sets;
 	private GameDB[] games;
 	private int gameID;
+	private int gameIndex;
 	private SoundManager soundManager;
 	private HashMap<String, Image> images;
 	
@@ -243,10 +244,10 @@ public class Controller2 {
 		String pointsOpponent = String.valueOf(sets[recSetNumber].getPointsOpponent()); //saves the meta-information of the game
 		String pointsOwn = String.valueOf(sets[recSetNumber].getPointsOwn());
 		
-		String nameOpponent = games[gameID].getOpponentName() ;
+		String nameOpponent = games[gameIndex].getOpponentName() ;
 		String nameOwn = "LTE";
 		
-		String numberAllSets = String.valueOf(games[gameID].getNumberOfSets());
+		String numberAllSets = String.valueOf(games[gameIndex].getNumberOfSets());
 		String numberCurrentSet = String.valueOf(recSetNumber+1);
 		
 		//shows the meta-information of the game
@@ -302,8 +303,6 @@ public class Controller2 {
 		gameChoice.setDisable(false);
 		setChoice.setDisable(false);
 	}
-	
-	
 	
 	/**
 	 * shows the turns of the selected set in GridPane gameGrid<br>
@@ -395,18 +394,20 @@ public class Controller2 {
 			int gameID = games[i].getGameID();
 			System.out.println(gameID);
 			gameInfo.add(games[i].getOpponentName().concat(" | ").concat(games[i].getPlayTime()));
+			// i is index (position in the gameChoice-Box) - gameID is the gameID to this game
 			connection.put(i, gameID);
 		}
 
 		// PlayerChoice initialization + ChangeListener
 		gameChoice.setItems(gameInfo);
+		// set first entry as default
 		gameChoice.getSelectionModel().selectFirst();
 		
-		// set first entry as default
-		gameID = connection.get(gameID);
+		gameIndex = gameChoice.getSelectionModel().getSelectedIndex();
+		gameID = connection.get(gameIndex);
 
 		//setChoice shows first entry without ChangeListener
-		System.out.println("Rekonstruierbares Spiel: (Index, gameID)" + gameID + ", " + connection.get(gameID));// for setChoice
+		System.out.println("Rekonstruierbares Spiel: (gameID, Index)   :" + gameID + ", " + gameChoice.getSelectionModel().getSelectedIndex());// for setChoice
 		System.out.println("gameID beim konfigurieren: " + gameID);
 		sets = controller.getRecSetInfo(gameID);
 		ObservableList<Integer> setNumber = FXCollections.observableArrayList();// setNumber ObservableList gets filled with the number of played Sets
