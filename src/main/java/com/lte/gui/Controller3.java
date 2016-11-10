@@ -282,6 +282,7 @@ public class Controller3 {
 	 */
 	@FXML
 	private void startSet(ActionEvent event) {
+		
 		// RadioButton
 		if (radioKi.isSelected() == true) {
 			controller.getGameInfo().setNextPlayer('X');
@@ -311,6 +312,14 @@ public class Controller3 {
 
 		// startButton disabled
 		startGame.setDisable(true);
+		
+		for (int i = 0; i < 7; i++) {
+			for (int j = 0; j < 6; j++) {
+				addListener(i, j);
+			}
+		}
+		
+		controller.getGameInfo().setGameInProgress(true);
 	}
 
 	/**
@@ -510,7 +519,7 @@ public class Controller3 {
 	 * clears the field
 	 */
 	@FXML
-	public void clearGrid() {
+	private void clearGrid() {
 		Node node = gameGrid.getChildren().get(0);
 
 	    gameGrid.getChildren().clear();
@@ -528,7 +537,7 @@ public class Controller3 {
 	 * 
 	 * @param woGewonnen
 	 */
-	public void highlightWinning(int[][] woGewonnen) {
+	private void highlightWinning(int[][] woGewonnen) {
 		// Get the positions from the array
 		for (int i = 0; i <= 3; i++) {
 			int column = woGewonnen[i][0];
@@ -543,7 +552,7 @@ public class Controller3 {
 	 * @param column
 	 * @param row
 	 */
-	public void setHighlight(int column, int row) {
+	private void setHighlight(int column, int row) {
 		// new Circle
 		Circle circle2 = new Circle();
 		circle2.setRadius(35.0);
@@ -641,7 +650,9 @@ public class Controller3 {
 		Pane pane = new Pane();
 		pane.setOnMouseClicked(e -> {
 			if (controller.getGameInfo().isGameInProgress()) {
-				System.out.println("Column:");
+				fill(colIndex, getRow(colIndex), 'O', false);
+				int nextMove = controller.playTurnKi(colIndex);
+				fill(nextMove, getRow(nextMove), 'X', false);
 			}
 		});
 
