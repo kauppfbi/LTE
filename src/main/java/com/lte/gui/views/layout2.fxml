@@ -40,7 +40,7 @@
          </font></Button>
       <ChoiceBox fx:id="gameChoice" layoutX="966.0" layoutY="238.0" prefHeight="25.0" prefWidth="204.0" />
       <ChoiceBox fx:id="setChoice" layoutX="966.0" layoutY="306.0" prefHeight="25.0" prefWidth="204.0" />
-      <Text fx:id="metaPlayer0" fill="#68c1ed" layoutX="150.0" layoutY="105.0" strokeType="OUTSIDE" strokeWidth="0.0">
+      <Text fx:id="metaPlayerO" fill="#68c1ed" layoutX="150.0" layoutY="105.0" strokeType="OUTSIDE" strokeWidth="0.0">
          <font>
             <Font size="36.0" />
          </font>
@@ -50,12 +50,12 @@
             <Font size="36.0" />
          </font>
       </Text>
-      <Text fx:id="points0" fill="#68c1ed" layoutX="335.0" layoutY="104.0" strokeType="OUTSIDE" strokeWidth="0.0">
+      <Text fx:id="pointsX" fill="#68c1ed" layoutX="335.0" layoutY="104.0" strokeType="OUTSIDE" strokeWidth="0.0">
          <font>
             <Font size="36.0" />
          </font>
       </Text>
-      <Text fx:id="pointsX" fill="#68c1ed" layoutX="458.0" layoutY="104.0" strokeType="OUTSIDE" strokeWidth="0.0">
+      <Text fx:id="pointsO" fill="#68c1ed" layoutX="458.0" layoutY="104.0" strokeType="OUTSIDE" strokeWidth="0.0">
          <font>
             <Font size="36.0" />
          </font>

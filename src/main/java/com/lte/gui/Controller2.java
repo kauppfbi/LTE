@@ -78,13 +78,13 @@ public class Controller2 {
 	Text metaText;
 	
 	@FXML
-	Text metaPlayer0;
+	Text metaPlayerO;
 	
 	@FXML
 	Text metaPlayerX;
 	
 	@FXML
-	Text points0;
+	Text pointsO;
 	
 	@FXML
 	Text pointsX;
@@ -251,10 +251,10 @@ public class Controller2 {
 		String numberCurrentSet = String.valueOf(recSetNumber+1);
 		
 		//shows the meta-information of the game
-		metaPlayer0.setText(nameOwn);
+		metaPlayerO.setText(nameOwn);
 		metaPlayerX.setText(nameOpponent);
-		points0.setText(pointsOwn);
-		pointsX.setText(pointsOpponent);
+		pointsX.setText(pointsOwn);
+		pointsO.setText(pointsOpponent);
 		currentSet.setText(numberCurrentSet+" / "+numberAllSets);
 		
 		return recTurns;
@@ -302,6 +302,15 @@ public class Controller2 {
 		stop.setDisable(true);
 		gameChoice.setDisable(false);
 		setChoice.setDisable(false);
+		int set = setChoice.getSelectionModel().getSelectedIndex();
+		String winner = sets[set].getWinner();
+		System.out.println(winner);
+		if(winner.equals("X")){
+			pointsX.setText(String.valueOf((Integer.parseInt(pointsX.getText()) + 1)));
+		} else {
+			pointsO.setText(pointsO.getText() + 1);
+		}
+		
 	}
 	
 	/**
@@ -421,13 +430,15 @@ public class Controller2 {
 		ChangeListener<Number> listenerSet = new ChangeListener<Number>() {
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
 				clearGrid();
+				play.setDisable(false);
 			}
 		};
 		
 		ChangeListener<Number> listenerGame = new ChangeListener<Number>() {
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
 				
-				gameID = gameChoice.getSelectionModel().getSelectedIndex();
+				gameIndex = gameChoice.getSelectionModel().getSelectedIndex();
+				gameID = connection.get(gameIndex);
 				
 				// testing purpose
 				System.out.println("Rekonstruierbares Spiel: (Index, gameID)" + gameID + ", " + connection.get(gameID));
@@ -446,9 +457,9 @@ public class Controller2 {
 				setChoice.setItems(setNumber);
 				setChoice.getSelectionModel().selectFirst();
 				clearGrid();
-				metaPlayer0.setText("");
+				metaPlayerO.setText("");
 				metaPlayerX.setText("");
-				points0.setText("");
+				pointsO.setText("");
 				pointsX.setText("");
 				currentSet.setText("");
 				play.setDisable(false);
