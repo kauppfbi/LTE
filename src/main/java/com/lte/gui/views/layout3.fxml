@@ -97,13 +97,6 @@
             <Font size="16.0" />
          </font>
       </Text>
-      <ImageView fx:id="row1" fitHeight="53.0" fitWidth="59.0" layoutX="115.0" layoutY="147.0" onMouseClicked="#mouseClicked" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="row2" fitHeight="53.0" fitWidth="59.0" layoutX="208.0" layoutY="147.0" onMouseClicked="#mouseClicked" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="row3" fitHeight="53.0" fitWidth="59.0" layoutX="306.0" layoutY="147.0" onMouseClicked="#mouseClicked" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="row4" fitHeight="53.0" fitWidth="59.0" layoutX="402.0" layoutY="147.0" onMouseClicked="#mouseClicked" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="row5" fitHeight="53.0" fitWidth="59.0" layoutX="497.0" layoutY="147.0" onMouseClicked="#mouseClicked" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="row7" fitHeight="53.0" fitWidth="59.0" layoutX="692.0" layoutY="147.0" onMouseClicked="#mouseClicked" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="row6" fitHeight="53.0" fitWidth="59.0" layoutX="596.0" layoutY="147.0" onMouseClicked="#mouseClicked" pickOnBounds="true" preserveRatio="true" />
       <Text fill="#62bdee" layoutX="852.0" layoutY="426.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Wer soll beginnen?">
          <font>
             <Font size="18.0" />
