@@ -221,7 +221,12 @@ public class Controller1 {
 	 */
 	@FXML
 	private void goToStartmenu(ActionEvent event) throws IOException {
-		// TODO: don't save the current game/set, if it isn't finished
+
+		// DB: delete unfinished game
+		if (!(controller.getGameInfo().getOwnPoints() == 3
+				|| controller.getGameInfo().getOpponentPoints() == 3)) {
+			controller.getConnection().deleteUnfinishedGame(controller.getGameInfo().getGameID());
+		}
 		
 		Stage stage;
 		stage = (Stage) backToStart.getScene().getWindow();
