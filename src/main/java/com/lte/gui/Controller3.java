@@ -252,6 +252,12 @@ public class Controller3 {
 		rowHigh4 = 0;
 		rowHigh5 = 0;
 		rowHigh6 = 0;
+		
+		// DB: delete unfinished game
+		if (!(controller.getGameInfo().getOwnPoints() == 3
+				|| controller.getGameInfo().getOpponentPoints() == 3)) {
+			controller.getConnection().deleteUnfinishedGame(controller.getGameInfo().getGameID());
+		}
 
 		Stage stage;
 		stage = (Stage) backToStart.getScene().getWindow();
@@ -388,6 +394,8 @@ public class Controller3 {
 						|| controller.getGameInfo().getOpponentPoints() == 3)) {
 					controller.getConnection().deleteUnfinishedGame(controller.getGameInfo().getGameID());
 				}
+				
+				controller.setThreadPlayerKiNull();
 
 				// Integer Stones per column -> hight of the row
 				rowHigh0 = 0;
