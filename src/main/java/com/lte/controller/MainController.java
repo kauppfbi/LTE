@@ -114,30 +114,6 @@ public class MainController {
 		
 		
 	}
-
-	/**
-	 * Standard format Getters for the Controllers
-	 * @return
-	 */
-	public Controller0 getController0() {
-		return controller0;
-	}
-
-	public Controller1 getController1() {
-		return controller1;
-	}
-
-	public Controller2 getController2() {
-		return controller2;
-	}
-
-	public Controller3 getController3() {
-		return controller3;
-	}
-
-	public Controller4 getController4() {
-		return controller4;
-	}
 	
 	/**
 	 * This method provides a object-recycling-function.<br>
@@ -146,7 +122,7 @@ public class MainController {
 	 * 
 	 * @return Controller0-Object (GUI-Controller for scene0)
 	 */
-	public Controller0 getOrCreateController0() {
+	public Controller0 getController0() {
 		if (controller0 == null){
 			this.controller0 = new Controller0(this);
 			return controller0;
@@ -162,7 +138,7 @@ public class MainController {
 	 * 
 	 * @return Controller1-Object (GUI-Controller for scene1)
 	 */
-	public Controller1 getOrCreateController1() {
+	public Controller1 getController1() {
 		if (controller1 == null){
 			this.controller1 = new Controller1(this);
 			return controller1;
@@ -178,7 +154,7 @@ public class MainController {
 	 * 
 	 * @return Controller2-Object (GUI-Controller for scene2)
 	 */
-	public Controller2 getOrCreateController2() {
+	public Controller2 getController2() {
 		if (controller2 == null){
 			this.controller2 = new Controller2(this);
 			return controller2;
@@ -194,7 +170,7 @@ public class MainController {
 	 * 
 	 * @return Controller3-Object (GUI-Controller for scene3)
 	 */
-	public Controller3 getOrCreateController3() {
+	public Controller3 getController3() {
 		if (controller3 == null){
 			this.controller3 = new Controller3(this);
 			return controller3;
@@ -210,7 +186,7 @@ public class MainController {
 	 * 
 	 * @return Controller4-Object (GUI-Controller for scene4)
 	 */
-	public Controller4 getOrCreateController4() {
+	public Controller4 getController4() {
 		if (controller4 == null){
 			this.controller4 = new Controller4(this);
 			return controller4;
