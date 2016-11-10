@@ -247,7 +247,6 @@ public class Controller3 {
 		
 		// RadioButton
 		if (radioKi.isSelected() == true) {
-			System.out.println("KI fängt an");
 			controller.getGameInfo().setNextPlayer('X');
 			controller.getGameInfo().setStartingPlayer('X');
 			while (true){
@@ -401,13 +400,16 @@ public class Controller3 {
 	}
 
 	private void startNewSet() {
-		controller.getThreadPlayerKiNEW();
-		threadPlayerKiNEW.start();
-		
+		threadPlayerKiNEW = controller.getThreadPlayerKiNEW();
 		if(controller.getGameInfo().getStartingPlayer() == 'X'){
-			synchronized(threadPlayerKiNEW){
-				threadPlayerKiNEW.setNextMove(-1);
-				threadPlayerKiNEW.notify();
+			while (true){
+				synchronized (threadPlayerKiNEW) {
+					if(threadPlayerKiNEW.isReady()){
+						threadPlayerKiNEW.setNextMove(-1);
+						threadPlayerKiNEW.notify();
+						break;
+					}
+				}
 			}
 		}
 
@@ -541,7 +543,8 @@ public class Controller3 {
 	private void addListener(int colIndex, int rowIndex) {
 		Pane pane = new Pane();
 		pane.setOnMouseClicked(e -> {
-			if (controller.getGameInfo().isGameInProgress()) {
+			if (controller.getGameInfo().isGameInProgress() && controller.getGameInfo().getNextPlayer() == 'O') {
+				controller.getGameInfo().setNextPlayer('X');
 				synchronized(threadPlayerKiNEW){
 					threadPlayerKiNEW.setNextMove(colIndex);
 					if(threadPlayerKiNEW.getState() == Thread.State.WAITING){
@@ -565,7 +568,8 @@ public class Controller3 {
 	
 	private void addListener(Node node, int colIndex, int rowIndex){
 		node.setOnMouseClicked(e -> {
-			if (controller.getGameInfo().isGameInProgress()) {
+			if (controller.getGameInfo().isGameInProgress() && controller.getGameInfo().getNextPlayer() == 'O') {
+				controller.getGameInfo().setNextPlayer('X');
 				synchronized(threadPlayerKiNEW){
 					threadPlayerKiNEW.setNextMove(colIndex);
 					if(threadPlayerKiNEW.getState() == Thread.State.WAITING){

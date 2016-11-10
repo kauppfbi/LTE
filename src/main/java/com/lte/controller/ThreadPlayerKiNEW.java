@@ -76,6 +76,7 @@ public class ThreadPlayerKiNEW extends Thread {
 							controller3.fill(fmove, frow3, 'X');
 						}
 					});
+					gameInfo.setNextPlayer('O');
 					this.wait();
 					continue;
 				} catch (Exception e) {
@@ -86,11 +87,8 @@ public class ThreadPlayerKiNEW extends Thread {
 					currentGameScore.play(nextMove, (byte) 2);
 					connection.pushTurn(gameInfo.getGameID(), gameInfo.getSetID(), "O", nextMove);
 					byte winner = currentGameScore.isWon();
-					currentGameScore.print();
-					winner = currentGameScore.isWon();
-					System.out.println("Winner (isWon): " + winner);
 					
-					if(winner == 'N'){
+					if(winner == 0){
 						//no winner so far
 						row = currentGameScore.getRow(nextMove);
 						final int frow = row;
@@ -114,11 +112,10 @@ public class ThreadPlayerKiNEW extends Thread {
 								controller3.fill(fmove2, frow2, 'X');
 							}
 						}); 
-						currentGameScore.print();
 						winner = currentGameScore.isWon();
-						System.out.println("Winner (isWon): " + winner);
-
-						if(winner == 'N'){
+						
+						if(winner == 0){
+							gameInfo.setNextPlayer('O');
 							this.wait();
 							continue;
 						} else if(winner == 1){
@@ -157,6 +154,15 @@ public class ThreadPlayerKiNEW extends Thread {
 			connection.updateScoreOfGame(gameInfo.getGameID(), gameInfo.getOwnPoints(),
 					gameInfo.getOpponentPoints(), "O");
 		}
+		
+		Platform.runLater(new Runnable (){
+
+			@Override
+			public void run() {
+				controller3.gameOver(currentGameScore.isWon(), currentGameScore.winWhere());
+			}
+			
+		});
 	}
 
 	public boolean isReady() {
