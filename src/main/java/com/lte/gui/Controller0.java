@@ -372,6 +372,7 @@ public class Controller0 {
 	@FXML
 	public void kiKiSelected(){
 		playerX.setEditable(false);
+		playerX.setText("LTE");
 	}
 	
 	/**
@@ -380,6 +381,7 @@ public class Controller0 {
 	@FXML
 	public void playerKiSelected(){
 		playerX.setEditable(false);
+		playerX.setText("LTE");
 	}
 	
 	/**
