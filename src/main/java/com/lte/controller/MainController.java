@@ -387,10 +387,11 @@ public class MainController {
 	
 	public void shutdownApplication(){
 		// DB: delete unfinished game
-		if (!(gameInfo.getOwnPoints() == 3 || gameInfo.getOpponentPoints() == 3)) {
-			deleteUnfinishedGame();
+		if(gameInfo != null){
+			if(!(gameInfo.getOwnPoints() == 3 || gameInfo.getOpponentPoints() == 3)) {
+				deleteUnfinishedGame();
+			}
 		}
-
 		if(algorithmManager != null){
 			algorithmManager.shutdown();
 		}
