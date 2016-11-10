@@ -56,9 +56,6 @@ public class ThreadPlay extends Thread {
 
 		System.out.println("Spielen läuft");
 
-		// lade KI
-		algorithmManager = new AlgorithmManager();
-		System.out.println("KI geladen");
 		// Starte neuen Thread um JavaFx zu befuellen
 		Platform.runLater(new Runnable() {
 			@Override

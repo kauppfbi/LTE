@@ -45,7 +45,7 @@ public class ThreadPlayerKi {
 		currentGameScore.initialize();
 		System.out.println("Spielstand initialisiert");
 
-		this.algorithmManager = new AlgorithmManager();
+		this.algorithmManager = algorithmManager;
 		System.out.println("KI geladen");
 
 		// lade DB Controller

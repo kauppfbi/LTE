@@ -73,6 +73,7 @@ public class MainController {
 	 * @param connection
 	 */
 	public MainController(DBconnection connection) {
+		this.algorithmManager = new AlgorithmManager();
 		this.connection = connection;
 		this.soundManager = new SoundManager();
 		initImages();
@@ -409,6 +410,9 @@ public class MainController {
 	}
 	
 	public void shutdownApplication(){
+		if(algorithmManager != null){
+			algorithmManager.shutdown();
+		}
 		if(controller0!= null){
 			controller0.exitApplication();
 		}
