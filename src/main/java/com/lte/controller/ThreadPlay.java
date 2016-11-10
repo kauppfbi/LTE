@@ -88,11 +88,11 @@ public class ThreadPlay extends Thread {
 		gameInfo.setSetID(ids[1]);
 		gameInfo.setOpponentID(ids[2]);
 		}
-		else{
-			gameInfo.setSetID(connection.createNewSet(gameInfo.getGameID(), gameInfo.getOwnPoints(), gameInfo.getOpponentPoints()));
-			
+		else {
+			gameInfo.setSetID(connection.createNewSet(gameInfo.getGameID(), gameInfo.getOwnPoints(),
+					gameInfo.getOpponentPoints(), String.valueOf(gameInfo.getNextPlayer())));
+
 		}
-			
 
 		gameInfo.setGameInProgress(true);
 
