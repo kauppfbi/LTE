@@ -2,6 +2,7 @@ package com.lte.db;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.ListIterator;
 
 import com.lte.models.GameDB;
 import com.lte.models.SetDB;
@@ -786,9 +787,49 @@ public class DBconnection {
 
 		return number;
 	}
+	
+	private void cleanupDB() {
+		System.out.println("LOG: DB cleanup started");
+		ArrayList<Integer> brokenGames = new ArrayList<Integer>();
+		int gameID = 0;
+		
+		
+		try {
+			stmt = con.createStatement();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("LOG: Couldn't create statement");
+		}
+		
+		String sql = "SELECT GAMEID, WINNER FROM PUBLIC.GAME";
+		
+		try {
+			ResultSet res = stmt.executeQuery(sql);
+			while (res.next()) {
+				//int testid = res.getInt(1);
+				//String test = res.getString(2);
+				if (res.getString(2) != null) {
+					System.out.println("LOG: Game not broken, skipping game " + res.getInt(1));
+				} else {
+					brokenGames.add(res.getInt(1));
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Couldn't get games");
+		}
+		
+		for (int i = 0; i < brokenGames.size(); i++) {
+			gameID = brokenGames.get(i);
+			System.out.println("LOG: GameID to delete: " + gameID);
+			deleteUnfinishedGame(gameID);
+		}
+		System.out.println("LOG: DB cleanup finished");
+	}
 
 	public void close() {
 		// Save file
+		cleanupDB();
 		try {
 			if (stmt != null) {
 				stmt.close();
