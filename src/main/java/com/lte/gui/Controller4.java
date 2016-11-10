@@ -317,7 +317,6 @@ public class Controller4 {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-
 			stage.show();
 		}
 	}
@@ -342,6 +341,25 @@ public class Controller4 {
 
 		gameGrid.add(pane, colIndex, rowIndex);
 	}
+	
+	private void addListener(Node node, int colIndex, int rowIndex){
+		node.setOnMouseClicked(e -> {
+			if (controller.getGameInfo().isGameInProgress()) {
+				fill(colIndex, getRow(colIndex), controller.getGameInfo().getNextPlayer(), false);
+				controller.playTurnPlayerPlayer(colIndex);
+				highlightColumn(colIndex, controller.getGameInfo().getNextPlayer());
+			}
+		});
+		
+		node.setOnMouseEntered(e -> {
+			highlightColumn(colIndex, controller.getGameInfo().getNextPlayer());
+		});
+
+		node.setOnMouseExited(e -> {
+			deHighlightColumn(colIndex);
+		});
+	}
+	
 
 	private void highlightColumn(int column, char nextPlayer) {
 		for (Node n : gameGrid.getChildren()) {
@@ -380,10 +398,11 @@ public class Controller4 {
 	 */
 
 	// ************************Fill-Methode***************************
-	public void fill(int columnIndex, int rowIndex, char player, boolean endGame) {
+	private void fill(int columnIndex, int rowIndex, char player, boolean endGame) {
 		// player 0 = red, player 1 = yellow
 		Circle circle = new Circle();
 		circle.setRadius(35.0);
+		addListener((Node) circle, columnIndex, rowIndex);
 
 		if (player == 'X') {
 			circle.setFill(Color.web("#62dbee", 0.85));
