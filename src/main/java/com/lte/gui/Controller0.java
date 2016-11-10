@@ -133,7 +133,7 @@ public class Controller0 {
 			
 					// FXMLLoader
 					FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout1.fxml"));
-					loader.setController(controller.getOrCreateController1());
+					loader.setController(controller.getController1());
 					
 					// set new layout
 					stage.setScene(new Scene((AnchorPane) loader.load()));
@@ -155,7 +155,7 @@ public class Controller0 {
 
 					// FXMLLoader
 					FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout3.fxml"));
-					loader.setController(controller.getOrCreateController3());
+					loader.setController(controller.getController3());
 					
 					// set new layout
 					stage.setScene(new Scene((AnchorPane) loader.load()));
@@ -180,7 +180,7 @@ public class Controller0 {
 
 					// FXMLLoader
 					FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout4.fxml"));
-					loader.setController(controller.getOrCreateController4());
+					loader.setController(controller.getController4());
 					
 					// set new layout
 					stage.setScene(new Scene((AnchorPane) loader.load()));
@@ -222,7 +222,7 @@ public class Controller0 {
 			
 			// FXMLLoader
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout2.fxml"));
-			Controller2 controller2 = controller.getOrCreateController2();
+			Controller2 controller2 = controller.getController2();
 			loader.setController(controller2);
 
 			//set new layout

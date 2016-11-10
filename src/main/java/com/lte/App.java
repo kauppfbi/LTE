@@ -39,7 +39,7 @@ public class App extends Application{
 			MainController controller = new MainController(connection);
 			// FXMLLoader
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("./gui/views/layout0.fxml"));
-			loader.setController(controller.getOrCreateController0());
+			loader.setController(controller.getController0());
 			stage.setScene(new Scene((AnchorPane) loader.load()));
 			// set Icon
 			File file = new File("files/images/icon.png");
