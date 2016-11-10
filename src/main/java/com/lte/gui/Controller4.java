@@ -410,15 +410,6 @@ public class Controller4 {
 	}
 	
 	/**
-	 * Event for leaving the application
-	 * @param event
-	 */
-	@FXML
-	public void exitApplication(ActionEvent event) {
-		Platform.exit();
-	}
-	
-	/**
 	 * Mouse Event to let the User select the row<br>
 	 * to throw the stone<br>
 	 * @param e
@@ -505,6 +496,10 @@ public class Controller4 {
 		row7.setDisable(false);
 	}
 	
+	/**
+	 * Event for leaving the application
+	 * @param event
+	 */
 	public void exitApplication(){
 		Platform.exit();
 	}
