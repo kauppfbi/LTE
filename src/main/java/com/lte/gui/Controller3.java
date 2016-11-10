@@ -293,8 +293,8 @@ public class Controller3 {
 			controller.getGameInfo().setStartingPlayer('O');
 		}
 
-		set.setText(String.valueOf(controller.getGameInfo().getSet() + 1));
 		controller.getGameInfo().setSet(controller.getGameInfo().getSet() + 1);
+		set.setText(String.valueOf(controller.getGameInfo().getSet()));
 
 		// Buttons enabled
 		row1.setDisable(false);
