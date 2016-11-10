@@ -617,6 +617,9 @@ public class Controller3 {
 	 * @param event
 	 */
 	public void exitApplication() {
+		if(threadPlayerKiNEW != null){
+			threadPlayerKiNEW.stop();
+		}
 		Platform.exit();
 	}
 }
