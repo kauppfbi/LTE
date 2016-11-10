@@ -788,6 +788,10 @@ public class DBconnection {
 		return number;
 	}
 	
+	/**
+	 * Cleans up db by deleting all unfinished games and all of its sets and turns.<br>
+	 * Called everytime the program is closed to make sure a consistent db status is present at all times.
+	 */
 	private void cleanupDB() {
 		System.out.println("LOG: DB cleanup started");
 		ArrayList<Integer> brokenGames = new ArrayList<Integer>();
