@@ -259,7 +259,6 @@ public class GameScore {
 		public byte isWon(){
 			byte isGewonnen = 0;
 			
-			
 			//horizantale Möglichkeiten (24)
 			for(byte column = 0; column < 4; column++){
 				for(byte row = 0; row < 6; row++){

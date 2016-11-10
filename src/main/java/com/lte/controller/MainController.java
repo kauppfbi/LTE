@@ -61,7 +61,7 @@ public class MainController {
 
 
 	//Player KI //PlayerPlayer
-	private ThreadPlayerKi threadPlayerKi;
+	private ThreadPlayerKiNEW threadPlayerKiNEW;
 	private ThreadPlayerPlayer threadPlayerPlayer;
 	private HashMap<String, Image> images;
 	private SoundManager soundManager;
@@ -171,11 +171,11 @@ public class MainController {
 	 * @return Controller3-Object (GUI-Controller for scene3)
 	 */
 	public Controller3 getController3() {
-		if (controller3 == null){
+		if (controller3 == null) {
 			this.controller3 = new Controller3(this);
 			return controller3;
-		}else {
-		return controller3;
+		} else {
+			return controller3;
 		}
 	}
 	
@@ -223,14 +223,6 @@ public class MainController {
 		return connection.getScoreboard();
 	}
 	
-	public void setThreadPlayerKiNull() {
-		threadPlayerKi = null;
-	}
-	
-	public ThreadPlayerKi getThreadPlayerKi() {
-		return threadPlayerKi;
-	}
-	
 	public void setThreadPlayerPlayerNull() {
 		threadPlayerPlayer = null;
 	}
@@ -238,7 +230,6 @@ public class MainController {
 	/*
 	 * public methods <-- called by GUI-Controllers
 	 */
-	
 	/**
 	 * This method is called by Controller1, triggered by a User-Action.<br>
 	 * It initializes the interface and instantiates a new Thread which takes over the communication between the modules. 
@@ -258,13 +249,13 @@ public class MainController {
 	 ********* Playing Player KI 
 	 * @return *****************
 	 ***********************************/
-	public int playTurnKi(int column) {
-		resetAlgorithmManager();
-		if (threadPlayerKi == null) {
-			threadPlayerKi = new ThreadPlayerKi(controller3, gameInfo, algorithmManager, settings, connection);
-		}
-		return threadPlayerKi.playTurn(column);
-	}
+//	public int playTurnKi(int column) {
+//		resetAlgorithmManager();
+//		if (threadPlayerKi == null) {
+//			threadPlayerKi = new ThreadPlayerKi(controller3, gameInfo, algorithmManager, settings, connection);
+//		}
+//		return threadPlayerKi.playTurn(column);
+//	}
 	
 	/***********************************
 	 ********* Playing Player Player 
@@ -417,5 +408,13 @@ public class MainController {
 		if(controller4 != null){
 			controller4.exitApplication();
 		}
+	}
+
+	public ThreadPlayerKiNEW getThreadPlayerKiNEW() {
+		if (threadPlayerKiNEW == null || threadPlayerKiNEW.getState() == Thread.State.TERMINATED){
+			threadPlayerKiNEW = new ThreadPlayerKiNEW(controller3, gameInfo, settings, algorithmManager, connection);
+			threadPlayerKiNEW.start();
+		}
+		return threadPlayerKiNEW;
 	}
 }

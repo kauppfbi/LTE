@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Optional;
 import com.lte.controller.MainController;
+import com.lte.controller.ThreadPlayerKiNEW;
 import com.lte.features.SoundManager;
 import com.lte.models.GameInfo;
 import com.lte.models.Settings;
@@ -105,9 +106,10 @@ public class Controller3 {
 	// non-FXML Declarations
 	private MainController controller;
 	ToggleGroup tgroup;
-	// private ThreadReconstruct controller;
 	private SoundManager soundManager;
 	private HashMap<String, Image> images;
+	
+	private ThreadPlayerKiNEW threadPlayerKiNEW;
 
 	// Integer Stones per column -> hight of the row
 	private int rowHigh0 = 0;
@@ -201,7 +203,7 @@ public class Controller3 {
 	 */
 	@FXML
 	private void goToStartmenu(ActionEvent event) throws IOException {
-		controller.setThreadPlayerKiNull();
+		// TODO: End the running Thread
 
 		// Integer Stones per column -> hight of the row
 		rowHigh0 = 0;
@@ -241,13 +243,23 @@ public class Controller3 {
 	 */
 	@FXML
 	private void startSet(ActionEvent event) {
+		threadPlayerKiNEW = controller.getThreadPlayerKiNEW();
 		
 		// RadioButton
 		if (radioKi.isSelected() == true) {
+			System.out.println("KI fängt an");
 			controller.getGameInfo().setNextPlayer('X');
 			controller.getGameInfo().setStartingPlayer('X');
-			int nextMove = controller.playTurnKi(0);
-			fill(nextMove, getRow(nextMove), 'X', false);
+			while (true){
+				synchronized (threadPlayerKiNEW) {
+					if(threadPlayerKiNEW.isReady()){
+						threadPlayerKiNEW.setNextMove(-1);
+						threadPlayerKiNEW.notify();
+						break;
+					}
+				}
+			}
+			
 		} else if (radioPlayer.isSelected() == true) {
 			controller.getGameInfo().setNextPlayer('O');
 			controller.getGameInfo().setStartingPlayer('O');
@@ -280,8 +292,9 @@ public class Controller3 {
 	 * @param winningCombo
 	 * @throws IOException
 	 */
-	public void gameOver(byte winningPlayer, int[][] winningCombo) throws IOException {
-		highlightWinning(winningCombo); // highlights the winning-combo
+	public void gameOver(byte winningPlayer, int[][] winningCombo){
+		// highlights the winning-combo
+		highlightWinning(winningCombo);
 
 		// Winner gets one point
 		if (winningPlayer == 1) {
@@ -292,9 +305,7 @@ public class Controller3 {
 			opponentPoints.setText(String.valueOf(playerO + 1));
 		}
 
-		// Alert-Dialog (Confirmation-Options: Go on with next Set || exit to
-		// Startmenu)
-
+		// Alert-Dialog (Confirmation-Options: Go on with next Set || exit to Startmenu)
 		if (!(controller.getGameInfo().getOwnPoints() == 3 || controller.getGameInfo().getOpponentPoints() == 3)) {
 			Alert alert = new Alert(AlertType.WARNING);
 			alert.setTitle("Game Over"); // Ask the user what the next steps are
@@ -322,24 +333,7 @@ public class Controller3 {
 				set.setText(String.valueOf(satz + 1));
 				controller.getGameInfo().setSet(satz);
 
-				// Neues Thread
-				controller.setThreadPlayerKiNull();
-
-				// Zeilen zurücksetzen
-				rowHigh0 = 0;
-				rowHigh1 = 0;
-				rowHigh2 = 0;
-				rowHigh3 = 0;
-				rowHigh4 = 0;
-				rowHigh5 = 0;
-				rowHigh6 = 0;
-
-				// neuer Zug wenn Ki anfängt
-				if (controller.getGameInfo().getStartingPlayer() == 'X') {
-					int nextMove = controller.playTurnKi(0);
-					fill(nextMove, getRow(nextMove), 'X', false);
-				}
-
+				startNewSet();
 			}
 			if (result.get() == beenden) {
 				// DB: delete unfinished game
@@ -347,17 +341,6 @@ public class Controller3 {
 						|| controller.getGameInfo().getOpponentPoints() == 3)) {
 					controller.deleteUnfinishedGame();
 				}
-
-				controller.setThreadPlayerKiNull();
-
-				// Integer Stones per column -> hight of the row
-				rowHigh0 = 0;
-				rowHigh1 = 0;
-				rowHigh2 = 0;
-				rowHigh3 = 0;
-				rowHigh4 = 0;
-				rowHigh5 = 0;
-				rowHigh6 = 0;
 
 				Stage stage;
 				stage = (Stage) backToStart.getScene().getWindow();
@@ -370,7 +353,11 @@ public class Controller3 {
 				// FXMLLoader
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
 				loader.setController(controller.getController0());
-				stage.setScene(new Scene((AnchorPane) loader.load()));
+				try {
+					stage.setScene(new Scene((AnchorPane) loader.load()));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 
 				stage.show();
 			}
@@ -391,16 +378,6 @@ public class Controller3 {
 			Optional<ButtonType> result = alert.showAndWait();
 
 			if (result.get() == beenden) {
-				controller.setThreadPlayerKiNull();
-
-				// Integer Stones per column -> hight of the row
-				rowHigh0 = 0;
-				rowHigh1 = 0;
-				rowHigh2 = 0;
-				rowHigh3 = 0;
-				rowHigh4 = 0;
-				rowHigh5 = 0;
-				rowHigh6 = 0;
 
 				Stage stage;
 				stage = (Stage) backToStart.getScene().getWindow();
@@ -413,18 +390,42 @@ public class Controller3 {
 				// FXMLLoader
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
 				loader.setController(controller.getController0());
-				stage.setScene(new Scene((AnchorPane) loader.load()));
-
+				try {
+					stage.setScene(new Scene((AnchorPane) loader.load()));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 				stage.show();
 			}
 		}
+	}
+
+	private void startNewSet() {
+		controller.getThreadPlayerKiNEW();
+		threadPlayerKiNEW.start();
+		
+		if(controller.getGameInfo().getStartingPlayer() == 'X'){
+			synchronized(threadPlayerKiNEW){
+				threadPlayerKiNEW.setNextMove(-1);
+				threadPlayerKiNEW.notify();
+			}
+		}
+
+		// PlayerChoice disabled
+		radioKi.setDisable(true);
+		radioPlayer.setDisable(true);
+
+		// startButton disabled
+		startGame.setDisable(true);
+		
+		controller.getGameInfo().setGameInProgress(true);
 	}
 
 	/**
 	 * Shows the stones corresponding to their position in the field
 	 * 
 	 */
-	public void fill(int columnIndex, int rowIndex, char player, boolean endGame) {
+	public void fill(int columnIndex, int rowIndex, char player) {
 		// player 0 = red, player 1 = yellow
 		Circle circle = new Circle();
 		circle.setRadius(35.0);
@@ -541,9 +542,13 @@ public class Controller3 {
 		Pane pane = new Pane();
 		pane.setOnMouseClicked(e -> {
 			if (controller.getGameInfo().isGameInProgress()) {
-				fill(colIndex, getRow(colIndex), 'O', false);
-				int nextMove = controller.playTurnKi(colIndex);
-				fill(nextMove, getRow(nextMove), 'X', false);
+				synchronized(threadPlayerKiNEW){
+					threadPlayerKiNEW.setNextMove(colIndex);
+					if(threadPlayerKiNEW.getState() == Thread.State.WAITING){
+						threadPlayerKiNEW.notify();
+					}
+					
+				}
 			}
 		});
 
@@ -561,9 +566,12 @@ public class Controller3 {
 	private void addListener(Node node, int colIndex, int rowIndex){
 		node.setOnMouseClicked(e -> {
 			if (controller.getGameInfo().isGameInProgress()) {
-				fill(colIndex, getRow(colIndex), 'O', false);
-				int nextMove = controller.playTurnKi(colIndex);
-				fill(nextMove, getRow(nextMove), 'X', false);
+				synchronized(threadPlayerKiNEW){
+					threadPlayerKiNEW.setNextMove(colIndex);
+					if(threadPlayerKiNEW.getState() == Thread.State.WAITING){
+						threadPlayerKiNEW.notify();
+					}
+				}
 			}
 		});
 		

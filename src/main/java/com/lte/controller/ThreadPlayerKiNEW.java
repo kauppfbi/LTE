@@ -18,113 +18,148 @@ public class ThreadPlayerKiNEW extends Thread {
 	private GameScore currentGameScore;
 	private DBconnection connection;
 	private int nextMove;
+	private boolean ready;
 	
-	public ThreadPlayerKiNEW(Controller3 controller3, GameInfo gameInfo, Settings settings, AlgorithmManager algorithmManager){
+	public ThreadPlayerKiNEW(Controller3 controller3, GameInfo gameInfo, Settings settings, AlgorithmManager algorithmManager, DBconnection connection){
 		this.controller3 = controller3;
 		this.gameInfo = gameInfo;
 		this.settings = settings;
 		this.algorithmManager = algorithmManager;
-		
-		currentGameScore = new GameScore();
+		this.connection = connection;
+		this.currentGameScore = new GameScore();
+		this.ready = false;
+	}
+	
+	public void setNextMove(int nextMove){
+		this.nextMove = nextMove;
+	}
+	
+	public synchronized void run(){
+		int move;
+		int row;
 		currentGameScore.initialize();
-
-		// load DB Controller
+		
 		if (gameInfo.getSetID() == -1) {
+			// prepare gameInfo, if there is no current Game
 			int ids[] = connection.startNewGame(gameInfo.getOpponentName(), String.valueOf(gameInfo.getNextPlayer()));
-			// prepare gameInfo
 			gameInfo.setGameID(ids[0]);
 			gameInfo.setSetID(ids[1]);
 			gameInfo.setOpponentID(ids[2]);
 		} else {
+			// new set of current game
 			gameInfo.setSetID(connection.createNewSet(gameInfo.getGameID(), gameInfo.getOwnPoints(),
 					gameInfo.getOpponentPoints(), String.valueOf(gameInfo.getNextPlayer())));
 		}
-	}
-	
-	public void playTurn(int column) {
 		
-		// User plays next turn
-		if (gameInfo.getNextPlayer() == 'O') {
-			System.out.println("Player spielt!");
-			
-			try {
-				currentGameScore.play(column, (byte) 2);
-				connection.pushTurn(gameInfo.getGameID(), gameInfo.getSetID(), "O", column);
-				gameInfo.setNextPlayer('X');
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-
-		// KI plays next turn
-		if (gameInfo.getNextPlayer() == 'X' && currentGameScore.isWon() == 0) {
-			System.out.println("KI spielt");
-			try {
-				// get the column of the next Turn
-				nextMove = algorithmManager.ParallelAlphaBeta(currentGameScore.getField(), 10,
-						settings.getCalculationTime(), (byte) 1);
-				currentGameScore.play(nextMove, (byte) 1);
-				connection.pushTurn(gameInfo.getGameID(), gameInfo.getSetID(), "X", nextMove);
-				gameInfo.setNextPlayer('O');
-				currentGameScore.print();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+		ready = true;
+		try {
+			this.wait();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 		
-		// check if current Game is Won
-		if (currentGameScore.isWon() != 0) {
+		while(true){
+			System.out.println("in While, nextMove: " + nextMove);
+			if(nextMove == -1){
+				System.out.println("Sonderfall: KI fängt an!");
+				// TODO: algorithmDepth ordentlich!!
+				try {
+					move = algorithmManager.ParallelAlphaBeta(currentGameScore.getField(), 10, settings.getCalculationTime(), (byte)1);
+					currentGameScore.play(move, (byte) 1);
+					connection.pushTurn(gameInfo.getGameID(), gameInfo.getSetID(), "X", move);
+					row = currentGameScore.getRow(move);
+					final int frow3 = row;
+					final int fmove = move;
+					Platform.runLater(new Runnable(){
+						@Override
+						public void run(){
+							controller3.fill(fmove, frow3, 'X');
+						}
+					});
+					this.wait();
+					continue;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}	
+			} else{
+				try {
+					currentGameScore.play(nextMove, (byte) 2);
+					connection.pushTurn(gameInfo.getGameID(), gameInfo.getSetID(), "O", nextMove);
+					byte winner = currentGameScore.isWon();
+					currentGameScore.print();
+					winner = currentGameScore.isWon();
+					System.out.println("Winner (isWon): " + winner);
+					
+					if(winner == 'N'){
+						//no winner so far
+						row = currentGameScore.getRow(nextMove);
+						final int frow = row;
+						Platform.runLater(new Runnable(){
+							@Override
+							public void run(){
+								controller3.fill(nextMove, frow, 'O');
+							}
+						}); 
+						move = algorithmManager.ParallelAlphaBeta(currentGameScore.getField(), 10, settings.getCalculationTime(), (byte)1);
+						currentGameScore.play(move, (byte) 1);
+						connection.pushTurn(gameInfo.getGameID(), gameInfo.getSetID(), "X", move);
+						row = currentGameScore.getRow(move);
+						
+						final int frow2 = row;
+						final int fmove2 = move;
+						
+						Platform.runLater(new Runnable(){
+							@Override
+							public void run(){
+								controller3.fill(fmove2, frow2, 'X');
+							}
+						}); 
+						currentGameScore.print();
+						winner = currentGameScore.isWon();
+						System.out.println("Winner (isWon): " + winner);
 
-			algorithmManager.shutdown();
-
-			// TODO Zuordnung von X/O zu Teamnamen
-			System.out.println("KI: " + currentGameScore.isWon() + " hat gewonnen");
-
-			// - Gewinner in DB schreiben + Punkte hochzaehhlen
-			if (currentGameScore.isWon() == 2) {
-				connection.updateWinnerOfSet(gameInfo.getSetID(), "O");
-				gameInfo.setOpponentPoints(gameInfo.getOpponentPoints() + 1);
-			} else if (currentGameScore.isWon() == 1) {
-				connection.updateWinnerOfSet(gameInfo.getSetID(), "X");
-				gameInfo.setOwnPoints(gameInfo.getOwnPoints() + 1);
-			} else {
-				connection.updateWinnerOfSet(gameInfo.getSetID(), "U");
-			}
-
-			// Prüfen ob Game zu Ende und in DB schreiben
-			if (gameInfo.getOwnPoints() == 3) {
-				connection.updateScoreOfGame(gameInfo.getGameID(), gameInfo.getOwnPoints(),
-						gameInfo.getOpponentPoints(), "X");
-			}
-			if (gameInfo.getOpponentPoints() == 3) {
-				connection.updateScoreOfGame(gameInfo.getGameID(), gameInfo.getOwnPoints(),
-						gameInfo.getOpponentPoints(), "O");
-			}
-
-			// Spieler für Beginn der nächsten Runde bestimmen
-			if (gameInfo.getStartingPlayer() == 'X') {
-				gameInfo.setNextPlayer('O');
-				gameInfo.setStartingPlayer('O');
-			} else if (gameInfo.getStartingPlayer() == 'O') {
-				gameInfo.setNextPlayer('X');
-				gameInfo.setStartingPlayer('X');
+						if(winner == 'N'){
+							this.wait();
+							continue;
+						} else if(winner == 1){
+							System.out.println("GameOver, KI gewinnt");
+							break;
+						}
+					} else if (winner == 2){
+						System.out.println("GameOver, User gewinnt");
+						break;
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
-	}
-	
-	public synchronized void run(){
-		int columnIndex = 0;
-		int rowIndex = 0;
-		char player = 'X';
-		boolean endGame = false;
+		algorithmManager.shutdown();
 		
-		Platform.runLater(new Runnable() {
-			public void run(){
-				controller3.fill(columnIndex, rowIndex, player, endGame);
-			}
-		});
+		// - Gewinner in DB schreiben + Punkte hochzaehhlen
+		if(currentGameScore.isWon() == 2){
+			connection.updateWinnerOfSet(gameInfo.getSetID(), "O");
+			gameInfo.setOpponentPoints(gameInfo.getOpponentPoints() + 1);
+		}
+		else if(currentGameScore.isWon() == 1){
+			connection.updateWinnerOfSet(gameInfo.getSetID(), "X");
+			gameInfo.setOwnPoints(gameInfo.getOwnPoints() + 1);
+		} else {
+			connection.updateWinnerOfSet(gameInfo.getSetID(), "U");
+		}
+
+		// Prüfen ob Game zu Ende und in DB schreiben
+		if (gameInfo.getOwnPoints() == 3) {
+			connection.updateScoreOfGame(gameInfo.getGameID(), gameInfo.getOwnPoints(),
+					gameInfo.getOpponentPoints(), "X");
+		}
+		if (gameInfo.getOpponentPoints() == 3) {
+			connection.updateScoreOfGame(gameInfo.getGameID(), gameInfo.getOwnPoints(),
+					gameInfo.getOpponentPoints(), "O");
+		}
 	}
-	
-	
-	
+
+	public boolean isReady() {
+		return ready;
+	}
 }

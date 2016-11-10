@@ -144,12 +144,7 @@ public class ThreadPlayerKi {
 			Platform.runLater(new Runnable() {
 				@Override
 				public void run() {
-					try {
-						controller3.gameOver(currentGameScore.isWon(), currentGameScore.winWhere());
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+					controller3.gameOver(currentGameScore.isWon(), currentGameScore.winWhere());
 				}
 			});
 		}
