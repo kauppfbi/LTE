@@ -125,8 +125,6 @@ public class Controller3{
 	private MainController controller;
 	ToggleGroup tgroup;
 	// private ThreadReconstruct controller;
-	private Settings settings;
-	private GameInfo gameInfo;
 	private SoundManager soundManager;
 	private HashMap<String, Image> images;
 	
@@ -141,8 +139,6 @@ public class Controller3{
 	
 	public Controller3(MainController mainController) {
 		this.controller = mainController;
-		this.settings = mainController.getSettings();
-		this.gameInfo = mainController.getGameInfo();
 		this.soundManager = controller.getSoundManager();		
 		this.images = controller.getImages();
 	}
@@ -154,14 +150,6 @@ public class Controller3{
 
 	public void setController(MainController controller) {
 		this.controller = controller;
-	}
-
-	public Settings getSettings() {
-		return settings;
-	}
-
-	public void setSettings(Settings settings) {
-		this.settings = settings;
 	}
 	
 	
@@ -190,7 +178,7 @@ public class Controller3{
 		ChangeListener<Number> listener2 = new ChangeListener<Number>() {
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
 				System.out.println(timeSpinner.getValue());
-				settings.setCalculationTime(timeSpinner.getValue());
+				controller.getSettings().setCalculationTime(timeSpinner.getValue());
 			}
 		};
 		timeSpinner.valueProperty().addListener(listener2);
@@ -298,8 +286,8 @@ public class Controller3{
 		}
 		
 		
-		set.setText(String.valueOf(gameInfo.getSet() + 1));
-		gameInfo.setSet(gameInfo.getSet() + 1);
+		set.setText(String.valueOf(controller.getGameInfo().getSet() + 1));
+		controller.getGameInfo().setSet(controller.getGameInfo().getSet() + 1);
 		
 		//Buttons enabled
 		row1.setDisable(false);
@@ -340,7 +328,7 @@ public class Controller3{
 		}
 		
 		//Satz fue Anzeige hochzahlen
-		set.setText(String.valueOf(gameInfo.getSet()));
+		set.setText(String.valueOf(controller.getGameInfo().getSet()));
 				
 		// Alert-Dialog (Confirmation-Options: Go on with next Set || exit to Startmenu)
 		Alert alert = new Alert(AlertType.CONFIRMATION);

@@ -85,37 +85,12 @@ public class Controller0 {
 	private HashMap<String, Image> images;
 	
 	
-	// private ThreadReconstruct controller;
-	private Settings settings;
-	private GameInfo gameInfo;
-	
 	public Controller0(MainController mainController) {
 		this.controller = mainController;
 		this.soundManager = controller.getSoundManager();
 		soundManager.play();
 		this.images = controller.getImages();
-	}
-	
-	/*
-	 * Getter and Setter
-	 */
-	public Settings getSettings() {
-		return settings;
-	}
-
-	public void setSettings(Settings settings) {
-		this.settings = settings;
-	}
-
-	public GameInfo getGameInfo() {
-		return gameInfo;
-	}
-
-	public void setGameInfo(GameInfo gameInfo) {
-		this.gameInfo = gameInfo;
-	}
-	
-	
+	}	
 	
 
 	/**
@@ -145,11 +120,9 @@ public class Controller0 {
 					String nameO = playerO.getValue();
 			
 					// new Settings object
-					settings = new Settings();
-					controller.setSettings(settings);
+					controller.setSettings(new Settings());
 					// pass playernames
-					gameInfo = new GameInfo(nameO);
-					controller.setGameInfo(gameInfo);
+					controller.setGameInfo(new GameInfo(nameO));
 			
 					stage = (Stage) toGame.getScene().getWindow();
 			
@@ -169,11 +142,9 @@ public class Controller0 {
 					String nameO = playerO.getValue();
 			
 					// new Settings object
-					settings = new Settings();
-					controller.setSettings(settings);
-					// pass opponennt name
-					gameInfo = new GameInfo(nameO);
-					controller.setGameInfo(gameInfo);
+					controller.setSettings(new Settings());
+					// pass playernames
+					controller.setGameInfo(new GameInfo(nameO));
 					
 					stage = (Stage) toGame.getScene().getWindow();
 					
@@ -196,11 +167,9 @@ public class Controller0 {
 					String nameX = playerX.getText();
 			
 					// new Settings object
-					settings = new Settings();
-					controller.setSettings(settings);
-					// pass opponennt name
-					gameInfo = new GameInfo(nameO, nameX);
-					controller.setGameInfo(gameInfo);
+					controller.setSettings(new Settings());
+					// pass playernames
+					controller.setGameInfo(new GameInfo(nameO, nameX));
 					
 					stage = (Stage) toGame.getScene().getWindow();
 					

@@ -113,9 +113,6 @@ public class Controller4 {
 	// non-FXML Declarations
 	private MainController controller;
 	private ToggleGroup tgroup;
-	// private ThreadReconstruct controller;
-	private Settings settings;
-	private GameInfo gameInfo;
 	private SoundManager soundManager;
 	private HashMap<String, Image> images;
 	
@@ -134,8 +131,6 @@ public class Controller4 {
 
 	public Controller4(MainController mainController) {
 		this.controller = mainController;
-		this.settings = mainController.getSettings();
-		this.gameInfo = mainController.getGameInfo();
 		this.soundManager = controller.getSoundManager();		
 		this.images = controller.getImages();
 	}
@@ -147,14 +142,6 @@ public class Controller4 {
 
 	public void setController(MainController controller) {
 		this.controller = controller;
-	}
-
-	public Settings getSettings() {
-		return settings;
-	}
-
-	public void setSettings(Settings settings) {
-		this.settings = settings;
 	}
 
 	/**
@@ -254,9 +241,9 @@ public class Controller4 {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Game Over");
 		if (winningPlayer == 1) {
-			alert.setHeaderText(gameInfo.getOwnName() + " hat gewonnen" + "\n" + "Was nun?");
+			alert.setHeaderText(controller.getGameInfo().getOwnName() + " hat gewonnen" + "\n" + "Was nun?");
 		} else if (winningPlayer == 2) {
-			alert.setHeaderText(gameInfo.getOpponentName() + " hat gewonnen" + "\n" + "Was nun?");
+			alert.setHeaderText(controller.getGameInfo().getOpponentName() + " hat gewonnen" + "\n" + "Was nun?");
 		} else {
 			alert.setHeaderText("Unentschieden!" + "\n" + "Was nun?");
 		}
@@ -338,15 +325,15 @@ public class Controller4 {
 	private void addListener(int colIndex, int rowIndex) {
 		Pane pane = new Pane();
 		pane.setOnMouseClicked(e -> {
-			if (gameInfo.isGameInProgress()) {
-				fill(colIndex, getRow(colIndex), gameInfo.getNextPlayer(), false);
+			if (controller.getGameInfo().isGameInProgress()) {
+				fill(colIndex, getRow(colIndex), controller.getGameInfo().getNextPlayer(), false);
 				controller.playTurnPlayerPlayer(colIndex);
-				highlightColumn(colIndex, gameInfo.getNextPlayer());
+				highlightColumn(colIndex, controller.getGameInfo().getNextPlayer());
 			}
 		});
 
 		pane.setOnMouseEntered(e -> {
-			highlightColumn(colIndex, gameInfo.getNextPlayer());
+			highlightColumn(colIndex, controller.getGameInfo().getNextPlayer());
 		});
 
 		pane.setOnMouseExited(e -> {
@@ -516,18 +503,18 @@ public class Controller4 {
 		}
 
 		if (radioPlayer1.isSelected() == true) {
-			gameInfo.setNextPlayer('X');
-			gameInfo.setStartingPlayer('X');
+			controller.getGameInfo().setNextPlayer('X');
+			controller.getGameInfo().setStartingPlayer('X');
 		} else if (radioPlayer2.isSelected() == true) {
-			gameInfo.setNextPlayer('O');
-			gameInfo.setStartingPlayer('O');
+			controller.getGameInfo().setNextPlayer('O');
+			controller.getGameInfo().setStartingPlayer('O');
 		}
 
 		// Disable RadioButtons
 		radioPlayer1.setDisable(true);
 		radioPlayer2.setDisable(true);
 
-		gameInfo.setGameInProgress(true);
+		controller.getGameInfo().setGameInProgress(true);
 	}
 	
 	/**

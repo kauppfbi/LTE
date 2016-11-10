@@ -96,8 +96,6 @@ public class Controller1 {
 
 	// non-FXML Declarations
 	private MainController controller;
-	private Settings settings;
-	private GameInfo gameInfo;
 	final FileChooser fileChooser;
 	private SoundManager soundManager;
 	private HashMap<String, Image> images;
@@ -107,9 +105,7 @@ public class Controller1 {
 
 	public Controller1(MainController mainController) {
 		this.controller = mainController;
-		this.settings = mainController.getSettings();
 		this.fileChooser = new FileChooser();
-		this.gameInfo = mainController.getGameInfo();
 		this.soundManager = controller.getSoundManager();		
 		this.images = controller.getImages();
 	}
@@ -122,15 +118,6 @@ public class Controller1 {
 	public void setController(MainController controller) {
 		this.controller = controller;
 	}
-
-	public Settings getSettings() {
-		return settings;
-	}
-
-	public void setSettings(Settings settings) {
-		this.settings = settings;
-	}
-
 	
 	/**
 	 * JavaFX initializations
@@ -162,14 +149,14 @@ public class Controller1 {
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
 				System.out.println("Ausgewaehlte Schnittstelle:" + dataTrans.getSelectionModel().getSelectedIndex());
 				if (dataTrans.getSelectionModel().getSelectedIndex() == 0) {
-					settings.setInterfaceType(InterfaceManager.EVENT_TYPE);
-					settings.setContactPath(null);
+					controller.getSettings().setInterfaceType(InterfaceManager.EVENT_TYPE);
+					controller.getSettings().setContactPath(null);
 					fileSelect.setDisable(true);
 				} else if (dataTrans.getSelectionModel().getSelectedIndex() == 1) {
-					settings.setInterfaceType(InterfaceManager.FILE_Type);
+					controller.getSettings().setInterfaceType(InterfaceManager.FILE_Type);
 					fileSelect.setDisable(false);
 				} else if (dataTrans.getSelectionModel().getSelectedIndex() == 2) {
-					settings.setInterfaceType(InterfaceManager.EVENT_TYPE_JSON);
+					controller.getSettings().setInterfaceType(InterfaceManager.EVENT_TYPE_JSON);
 					fileSelect.setDisable(true);
 				}
 			}
@@ -183,9 +170,9 @@ public class Controller1 {
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
 				System.out.println("Ausgewaehlter Player:" + playerChoice.getSelectionModel().getSelectedIndex());
 				if (playerChoice.getValue().equals("X")) {
-					settings.setServerChar('O');
+					controller.getSettings().setServerChar('O');
 				} else if (playerChoice.getValue().equals("O")) {
-					settings.setServerChar('X');
+					controller.getSettings().setServerChar('X');
 				}
 			}
 		};
@@ -197,7 +184,7 @@ public class Controller1 {
 		ChangeListener<Number> listener2 = new ChangeListener<Number>() {
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
 				System.out.println(timeSpinner.getValue());
-				settings.setCalculationTime(timeSpinner.getValue());
+				controller.getSettings().setCalculationTime(timeSpinner.getValue());
 			}
 		};
 		timeSpinner.valueProperty().addListener(listener2);
@@ -263,7 +250,7 @@ public class Controller1 {
 		directoryChooser.setTitle("Verzeichnis des Kontaktpfades w�hlen!");
 		File selectedFile = directoryChooser.showDialog(mainStage);
 		String kontaktpfad = selectedFile.getPath(); //contact-path for FileInterface
-		settings.setContactPath(kontaktpfad);
+		controller.getSettings().setContactPath(kontaktpfad);
 		textKontaktpfad.setText(kontaktpfad);
 		System.out.println("Kontaktpfad: " + kontaktpfad);
 		return kontaktpfad;
@@ -275,13 +262,13 @@ public class Controller1 {
 	 */
 	@FXML
 	private void startSet(ActionEvent event) {
-		String interfaceType = settings.getInterfaceType();
+		String interfaceType = controller.getSettings().getInterfaceType();
 		if (interfaceType.equals(InterfaceManager.EVENT_TYPE)
 				|| interfaceType.equals(InterfaceManager.EVENT_TYPE_JSON)) {
 			updateCredentials();
 		}
-		set.setText(String.valueOf(gameInfo.getSet() + 1));
-		gameInfo.setSet(gameInfo.getSet() + 1);
+		set.setText(String.valueOf(controller.getGameInfo().getSet() + 1));
+		controller.getGameInfo().setSet(controller.getGameInfo().getSet() + 1);
 		
 		controller.playSet(); //triggers play-method
 		
@@ -328,7 +315,7 @@ public class Controller1 {
 
 		// Change the number of the set
 		// Set-Number +1
-		set.setText(String.valueOf(gameInfo.getSet()));
+		set.setText(String.valueOf(controller.getGameInfo().getSet()));
 		
 		// Alert-Dialog (Confirmation-Options: Go on with next Set || exit to Startmenu)
 		Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -354,8 +341,8 @@ public class Controller1 {
 				clearGrid();
 				
 				//update set
-				set.setText(String.valueOf(gameInfo.getSet() + 1));
-				gameInfo.setSet(gameInfo.getSet() + 1);
+				set.setText(String.valueOf(controller.getGameInfo().getSet() + 1));
+				controller.getGameInfo().setSet(controller.getGameInfo().getSet() + 1);
 				
 	
 				// start new Set
@@ -505,7 +492,7 @@ public class Controller1 {
 		if (selectedCredentials == null){
 			System.err.println("Credentials wurden nicht gewählt!");
 		} else {
-			settings.setCredentials(selectedCredentials);
+			controller.getSettings().setCredentials(selectedCredentials);
 			credentialsManager.setCredentials(selectedCredentials);
 		}
 		
