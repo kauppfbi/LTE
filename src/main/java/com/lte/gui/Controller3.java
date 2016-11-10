@@ -465,6 +465,12 @@ public class Controller3{
 		Node node = gameGrid.getChildren().get(0);
 	    gameGrid.getChildren().clear();
 	    gameGrid.getChildren().add(0,node);	
+	    
+	    for (int i = 0; i < 7; i++) {
+			for (int j = 0; j < 6; j++) {
+				addListener(i, j);
+			}
+		}
 	}
 	
 	/**
@@ -561,6 +567,25 @@ public class Controller3{
 		if(column == 5){return rowHigh5;}
 		if(column == 6){return rowHigh6;}
 		return 0;
+	}
+	
+	private void addListener(int colIndex, int rowIndex) {
+		Pane pane = new Pane();
+		pane.setOnMouseClicked(e -> {
+			if (gameInfo.isGameInProgress()) {
+				System.out.println("Column:");
+			}
+		});
+
+		pane.setOnMouseEntered(e -> {
+			System.out.println("OnMouseEntered");
+		});
+
+		pane.setOnMouseExited(e -> {
+			System.out.println("OnMouseExit");
+		});
+
+		gameGrid.add(pane, colIndex, rowIndex);
 	}
 	
 	
