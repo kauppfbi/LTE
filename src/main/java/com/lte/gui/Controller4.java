@@ -341,6 +341,25 @@ public class Controller4 {
 
 		gameGrid.add(pane, colIndex, rowIndex);
 	}
+	
+	private void addListener(Node node, int colIndex, int rowIndex){
+		node.setOnMouseClicked(e -> {
+			if (controller.getGameInfo().isGameInProgress()) {
+				fill(colIndex, getRow(colIndex), controller.getGameInfo().getNextPlayer(), false);
+				controller.playTurnPlayerPlayer(colIndex);
+				highlightColumn(colIndex, controller.getGameInfo().getNextPlayer());
+			}
+		});
+		
+		node.setOnMouseEntered(e -> {
+			highlightColumn(colIndex, controller.getGameInfo().getNextPlayer());
+		});
+
+		node.setOnMouseExited(e -> {
+			deHighlightColumn(colIndex);
+		});
+	}
+	
 
 	private void highlightColumn(int column, char nextPlayer) {
 		for (Node n : gameGrid.getChildren()) {
