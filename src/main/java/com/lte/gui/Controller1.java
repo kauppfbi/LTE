@@ -318,8 +318,9 @@ public class Controller1 {
 		set.setText(String.valueOf(controller.getGameInfo().getSet()));
 		
 		// Alert-Dialog (Confirmation-Options: Go on with next Set || exit to Startmenu)
-		Alert alert = new Alert(AlertType.CONFIRMATION);
+		Alert alert = new Alert(AlertType.WARNING);
 		alert.setTitle("Game Over"); //Ask the user what the next steps are
+		
 		if (winningPlayer == 1) {
 			alert.setHeaderText("Sie haben gewonnen!" + "\n" + "Was nun?");
 		} else if (winningPlayer == 2) {
@@ -328,11 +329,13 @@ public class Controller1 {
 			alert.setHeaderText("Unentschieden!" + "\n" + "Was nun?");
 		}
 		
+		
 		if(!(controller.getGameInfo().getOwnPoints() == 3 || controller.getGameInfo().getOpponentPoints() == 3)){
 			ButtonType weiter = new ButtonType("Weiter spielen");
 			ButtonType beenden = new ButtonType("Beenden");
 			ButtonType changeSettings = new ButtonType("Einstellungen ändern");
 	
+			alert.setContentText("Unvollständige Spiele werden nicht gespeichert!");
 			alert.getButtonTypes().setAll(weiter, beenden, changeSettings);
 	
 			Optional<ButtonType> result = alert.showAndWait();
