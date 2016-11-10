@@ -98,4 +98,6 @@
          </font>
       </Button>
 	</children>
+	 <Button fx:id="muteButton" layoutX="1200" layoutY="70.0" mnemonicParsing="false" onAction="#mute">
+		</Button>
 </AnchorPane>

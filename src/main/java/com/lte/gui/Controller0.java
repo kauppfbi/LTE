@@ -85,37 +85,12 @@ public class Controller0 {
 	private HashMap<String, Image> images;
 	
 	
-	// private ThreadReconstruct controller;
-	private Settings settings;
-	private GameInfo gameInfo;
-	
 	public Controller0(MainController mainController) {
 		this.controller = mainController;
 		this.soundManager = controller.getSoundManager();
 		soundManager.play();
 		this.images = controller.getImages();
-	}
-	
-	/*
-	 * Getter and Setter
-	 */
-	public Settings getSettings() {
-		return settings;
-	}
-
-	public void setSettings(Settings settings) {
-		this.settings = settings;
-	}
-
-	public GameInfo getGameInfo() {
-		return gameInfo;
-	}
-
-	public void setGameInfo(GameInfo gameInfo) {
-		this.gameInfo = gameInfo;
-	}
-	
-	
+	}	
 	
 
 	/**
@@ -145,11 +120,9 @@ public class Controller0 {
 					String nameO = playerO.getValue();
 			
 					// new Settings object
-					settings = new Settings();
-					controller.setSettings(settings);
+					controller.setSettings(new Settings());
 					// pass playernames
-					gameInfo = new GameInfo(nameO);
-					controller.setGameInfo(gameInfo);
+					controller.setGameInfo(new GameInfo(nameO));
 			
 					stage = (Stage) toGame.getScene().getWindow();
 			
@@ -160,7 +133,7 @@ public class Controller0 {
 			
 					// FXMLLoader
 					FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout1.fxml"));
-					loader.setController(controller.getOrCreateController1());
+					loader.setController(controller.getController1());
 					
 					// set new layout
 					stage.setScene(new Scene((AnchorPane) loader.load()));
@@ -169,11 +142,9 @@ public class Controller0 {
 					String nameO = playerO.getValue();
 			
 					// new Settings object
-					settings = new Settings();
-					controller.setSettings(settings);
-					// pass opponennt name
-					gameInfo = new GameInfo(nameO);
-					controller.setGameInfo(gameInfo);
+					controller.setSettings(new Settings());
+					// pass playernames
+					controller.setGameInfo(new GameInfo(nameO));
 					
 					stage = (Stage) toGame.getScene().getWindow();
 					
@@ -184,7 +155,7 @@ public class Controller0 {
 
 					// FXMLLoader
 					FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout3.fxml"));
-					loader.setController(controller.getOrCreateController3());
+					loader.setController(controller.getController3());
 					
 					// set new layout
 					stage.setScene(new Scene((AnchorPane) loader.load()));
@@ -196,11 +167,9 @@ public class Controller0 {
 					String nameX = playerX.getText();
 			
 					// new Settings object
-					settings = new Settings();
-					controller.setSettings(settings);
-					// pass opponennt name
-					gameInfo = new GameInfo(nameO, nameX);
-					controller.setGameInfo(gameInfo);
+					controller.setSettings(new Settings());
+					// pass playernames
+					controller.setGameInfo(new GameInfo(nameO, nameX));
 					
 					stage = (Stage) toGame.getScene().getWindow();
 					
@@ -211,7 +180,7 @@ public class Controller0 {
 
 					// FXMLLoader
 					FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout4.fxml"));
-					loader.setController(controller.getOrCreateController4());
+					loader.setController(controller.getController4());
 					
 					// set new layout
 					stage.setScene(new Scene((AnchorPane) loader.load()));
@@ -253,7 +222,7 @@ public class Controller0 {
 			
 			// FXMLLoader
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout2.fxml"));
-			Controller2 controller2 = controller.getOrCreateController2();
+			Controller2 controller2 = controller.getController2();
 			loader.setController(controller2);
 
 			//set new layout
@@ -356,17 +325,8 @@ public class Controller0 {
 				muteButton.setGraphic(new ImageView(images.get("speaker")));
 			}
 		}
-	}
-	
-	/**
-	 * Event for leaving the application
-	 * @param event
-	 */
-	@FXML
-	public void exitApplication(WindowEvent event) {
-		Platform.exit();
-	}
-	
+	}	
+
 	/**
 	 * ComboBox Player X editable
 	 */
@@ -381,6 +341,7 @@ public class Controller0 {
 	@FXML
 	public void kiKiSelected(){
 		playerX.setEditable(false);
+		playerX.setText("LTE");
 	}
 	
 	/**
@@ -389,5 +350,16 @@ public class Controller0 {
 	@FXML
 	public void playerKiSelected(){
 		playerX.setEditable(false);
+		playerX.setText("LTE");
 	}
+	
+	/**
+	 * Event for leaving the application
+	 * @param event
+	 */
+	@FXML
+	public void exitApplication() {
+		Platform.exit();
+	}
+	
 }

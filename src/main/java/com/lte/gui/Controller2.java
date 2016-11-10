@@ -78,13 +78,13 @@ public class Controller2 {
 	Text metaText;
 	
 	@FXML
-	Text metaPlayer0;
+	Text metaPlayerO;
 	
 	@FXML
 	Text metaPlayerX;
 	
 	@FXML
-	Text points0;
+	Text pointsO;
 	
 	@FXML
 	Text pointsX;
@@ -101,6 +101,7 @@ public class Controller2 {
 	private SetDB[] sets;
 	private GameDB[] games;
 	private int gameID;
+	private int gameIndex;
 	private SoundManager soundManager;
 	private HashMap<String, Image> images;
 	
@@ -203,7 +204,7 @@ public class Controller2 {
 			    stage = (Stage) backToStart.getScene().getWindow();
 			    // FXMLLoader             
 		        FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
-		        loader.setController(controller.getOrCreateController0());
+		        loader.setController(controller.getController0());
 			    stage.setScene(new Scene((AnchorPane) loader.load()));  
 				stage.show();
 				
@@ -217,7 +218,7 @@ public class Controller2 {
 		    stage = (Stage) backToStart.getScene().getWindow();
 		    // FXMLLoader               
 	        FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
-	        loader.setController(controller.getOrCreateController0());
+	        loader.setController(controller.getController0());
 		    stage.setScene(new Scene((AnchorPane) loader.load()));
 			stage.show();    
 		}
@@ -243,17 +244,17 @@ public class Controller2 {
 		String pointsOpponent = String.valueOf(sets[recSetNumber].getPointsOpponent()); //saves the meta-information of the game
 		String pointsOwn = String.valueOf(sets[recSetNumber].getPointsOwn());
 		
-		String nameOpponent = games[gameID].getOpponentName() ;
+		String nameOpponent = games[gameIndex].getOpponentName() ;
 		String nameOwn = "LTE";
 		
-		String numberAllSets = String.valueOf(games[gameID].getNumberOfSets());
+		String numberAllSets = String.valueOf(games[gameIndex].getNumberOfSets());
 		String numberCurrentSet = String.valueOf(recSetNumber+1);
 		
 		//shows the meta-information of the game
-		metaPlayer0.setText(nameOwn);
+		metaPlayerO.setText(nameOwn);
 		metaPlayerX.setText(nameOpponent);
-		points0.setText(pointsOwn);
-		pointsX.setText(pointsOpponent);
+		pointsX.setText(pointsOwn);
+		pointsO.setText(pointsOpponent);
 		currentSet.setText(numberCurrentSet+" / "+numberAllSets);
 		
 		return recTurns;
@@ -301,9 +302,16 @@ public class Controller2 {
 		stop.setDisable(true);
 		gameChoice.setDisable(false);
 		setChoice.setDisable(false);
+		int set = setChoice.getSelectionModel().getSelectedIndex();
+		String winner = sets[set].getWinner();
+		System.out.println(winner);
+		if(winner.equals("X")){
+			pointsX.setText(String.valueOf((Integer.parseInt(pointsX.getText()) + 1)));
+		} else {
+			pointsO.setText(pointsO.getText() + 1);
+		}
+		
 	}
-	
-	
 	
 	/**
 	 * shows the turns of the selected set in GridPane gameGrid<br>
@@ -395,18 +403,20 @@ public class Controller2 {
 			int gameID = games[i].getGameID();
 			System.out.println(gameID);
 			gameInfo.add(games[i].getOpponentName().concat(" | ").concat(games[i].getPlayTime()));
+			// i is index (position in the gameChoice-Box) - gameID is the gameID to this game
 			connection.put(i, gameID);
 		}
 
 		// PlayerChoice initialization + ChangeListener
 		gameChoice.setItems(gameInfo);
+		// set first entry as default
 		gameChoice.getSelectionModel().selectFirst();
 		
-		// set first entry as default
-		gameID = gameChoice.getSelectionModel().getSelectedIndex();
+		gameIndex = gameChoice.getSelectionModel().getSelectedIndex();
+		gameID = connection.get(gameIndex);
 
 		//setChoice shows first entry without ChangeListener
-		System.out.println("Rekonstruierbares Spiel: (Index, gameID)" + gameID + ", " + connection.get(gameID));// for setChoice
+		System.out.println("Rekonstruierbares Spiel: (gameID, Index)   :" + gameID + ", " + gameChoice.getSelectionModel().getSelectedIndex());// for setChoice
 		System.out.println("gameID beim konfigurieren: " + gameID);
 		sets = controller.getRecSetInfo(gameID);
 		ObservableList<Integer> setNumber = FXCollections.observableArrayList();// setNumber ObservableList gets filled with the number of played Sets
@@ -420,13 +430,15 @@ public class Controller2 {
 		ChangeListener<Number> listenerSet = new ChangeListener<Number>() {
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
 				clearGrid();
+				play.setDisable(false);
 			}
 		};
 		
 		ChangeListener<Number> listenerGame = new ChangeListener<Number>() {
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
 				
-				gameID = gameChoice.getSelectionModel().getSelectedIndex();
+				gameIndex = gameChoice.getSelectionModel().getSelectedIndex();
+				gameID = connection.get(gameIndex);
 				
 				// testing purpose
 				System.out.println("Rekonstruierbares Spiel: (Index, gameID)" + gameID + ", " + connection.get(gameID));
@@ -445,9 +457,9 @@ public class Controller2 {
 				setChoice.setItems(setNumber);
 				setChoice.getSelectionModel().selectFirst();
 				clearGrid();
-				metaPlayer0.setText("");
+				metaPlayerO.setText("");
 				metaPlayerX.setText("");
-				points0.setText("");
+				pointsO.setText("");
 				pointsX.setText("");
 				currentSet.setText("");
 				play.setDisable(false);
@@ -512,7 +524,7 @@ public class Controller2 {
 	 * @param event
 	 */
 	@FXML
-	public void exitApplication(WindowEvent event) {
+	public void exitApplication() {
 		synchronized(threadReconstruct){
 			threadReconstruct.stop();
 		}

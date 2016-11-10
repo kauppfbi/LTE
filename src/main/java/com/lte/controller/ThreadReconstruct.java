@@ -38,7 +38,7 @@ public class ThreadReconstruct extends Thread {
 	@Override
 	/**
 	 * Creates a Thread for each reconstructed Set<br>
-	 * Reconstructs the Turns form recTurn-Array<br<
+	 * Reconstructs the Turns form recTurn-Array<br>
 	 * calls the replayTurn-Method of Controller2 to visualize the Turn<br>
 	 * allows User-interaction (stop,play,pause)<br>
 	 * 
@@ -59,6 +59,7 @@ public class ThreadReconstruct extends Thread {
 			for (int i = 1; i < recTurns.length; i++) {
 	
 				int columnIndex = recTurns[i];
+				
 				int rowIndex = 0;
 				int color = 0;
 	

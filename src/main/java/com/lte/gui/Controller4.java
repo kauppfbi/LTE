@@ -2,16 +2,14 @@ package com.lte.gui;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Optional;
 import com.lte.controller.MainController;
+import com.lte.features.SoundManager;
 import com.lte.models.GameInfo;
 import com.lte.models.Settings;
-import com.sun.org.apache.xerces.internal.util.SynchronizedSymbolTable;
-
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
@@ -20,22 +18,20 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.MediaPlayer.Status;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 /**
  * Controller4 Class for Player-Player
@@ -110,15 +106,18 @@ public class Controller4 {
 
 	@FXML
 	RadioButton radioPlayer2;
+	
+	@FXML
+	Button muteButton;
 
 	// non-FXML Declarations
 	private MainController controller;
 	private ToggleGroup tgroup;
-	// private ThreadReconstruct controller;
-	private Settings settings;
-	private GameInfo gameInfo;
+	private SoundManager soundManager;
+	private HashMap<String, Image> images;
+	
+	//Integer Stones per column -> hight of the row
 
-	// Integer Stones per column -> hight of the row
 	private int rowHigh0 = 0;
 	private int rowHigh1 = 0;
 	private int rowHigh2 = 0;
@@ -132,8 +131,8 @@ public class Controller4 {
 
 	public Controller4(MainController mainController) {
 		this.controller = mainController;
-		this.settings = mainController.getSettings();
-		this.gameInfo = mainController.getGameInfo();
+		this.soundManager = controller.getSoundManager();		
+		this.images = controller.getImages();
 	}
 
 	// Getter and Setter
@@ -145,21 +144,20 @@ public class Controller4 {
 		this.controller = controller;
 	}
 
-	public Settings getSettings() {
-		return settings;
-	}
-
-	public void setSettings(Settings settings) {
-		this.settings = settings;
-	}
-
 	/**
 	 * JavaFX initializations
 	 */
 	// *******FXML-Methoden************
 	@FXML
 	public void initialize() {
-
+		Status status = soundManager.getStatus();
+		if (status == Status.PAUSED) {
+			muteButton.setGraphic(new ImageView(images.get("speaker1-mute")));
+		} else if (status == Status.PLAYING) {
+			muteButton.setGraphic(new ImageView(images.get("speaker1")));
+		}
+		muteButton.setStyle("-fx-background-color: transparent;");
+		
 		set.setText("0");
 
 		// set points
@@ -181,7 +179,18 @@ public class Controller4 {
 		namePlayerO.setText(controller.getGameInfo().getOpponentName());
 		namePlayerX.setText(controller.getGameInfo().getOwnName());
 		System.out.println(controller.getGameInfo().getOwnName());
-
+	}
+	
+	@FXML
+	private void mute(ActionEvent event){
+		Status status = soundManager.playPause();
+		if (status != null) {
+			if (status == Status.PAUSED) {
+				muteButton.setGraphic(new ImageView(images.get("speaker1-mute")));
+			} else if (status == Status.PLAYING) {
+				muteButton.setGraphic(new ImageView(images.get("speaker1")));
+			}
+		}
 	}
 
 	/**
@@ -213,7 +222,7 @@ public class Controller4 {
 
 		// FXMLLoader
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
-		loader.setController(controller.getOrCreateController0());
+		loader.setController(controller.getController0());
 		stage.setScene(new Scene((AnchorPane) loader.load()));
 
 		stage.show();
@@ -232,9 +241,9 @@ public class Controller4 {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Game Over");
 		if (winningPlayer == 1) {
-			alert.setHeaderText(gameInfo.getOwnName() + " hat gewonnen" + "\n" + "Was nun?");
+			alert.setHeaderText(controller.getGameInfo().getOwnName() + " hat gewonnen" + "\n" + "Was nun?");
 		} else if (winningPlayer == 2) {
-			alert.setHeaderText(gameInfo.getOpponentName() + " hat gewonnen" + "\n" + "Was nun?");
+			alert.setHeaderText(controller.getGameInfo().getOpponentName() + " hat gewonnen" + "\n" + "Was nun?");
 		} else {
 			alert.setHeaderText("Unentschieden!" + "\n" + "Was nun?");
 		}
@@ -306,7 +315,6 @@ public class Controller4 {
 			try {
 				stage.setScene(new Scene((AnchorPane) loader.load()));
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
@@ -317,15 +325,15 @@ public class Controller4 {
 	private void addListener(int colIndex, int rowIndex) {
 		Pane pane = new Pane();
 		pane.setOnMouseClicked(e -> {
-			if (gameInfo.isGameInProgress()) {
-				fill(colIndex, getRow(colIndex), gameInfo.getNextPlayer(), false);
+			if (controller.getGameInfo().isGameInProgress()) {
+				fill(colIndex, getRow(colIndex), controller.getGameInfo().getNextPlayer(), false);
 				controller.playTurnPlayerPlayer(colIndex);
-				highlightColumn(colIndex, gameInfo.getNextPlayer());
+				highlightColumn(colIndex, controller.getGameInfo().getNextPlayer());
 			}
 		});
 
 		pane.setOnMouseEntered(e -> {
-			highlightColumn(colIndex, gameInfo.getNextPlayer());
+			highlightColumn(colIndex, controller.getGameInfo().getNextPlayer());
 		});
 
 		pane.setOnMouseExited(e -> {
@@ -495,22 +503,25 @@ public class Controller4 {
 		}
 
 		if (radioPlayer1.isSelected() == true) {
-			gameInfo.setNextPlayer('X');
-			gameInfo.setStartingPlayer('X');
+			controller.getGameInfo().setNextPlayer('X');
+			controller.getGameInfo().setStartingPlayer('X');
 		} else if (radioPlayer2.isSelected() == true) {
-			gameInfo.setNextPlayer('O');
-			gameInfo.setStartingPlayer('O');
+			controller.getGameInfo().setNextPlayer('O');
+			controller.getGameInfo().setStartingPlayer('O');
 		}
 
 		// Disable RadioButtons
 		radioPlayer1.setDisable(true);
 		radioPlayer2.setDisable(true);
 
-		gameInfo.setGameInProgress(true);
-
+		controller.getGameInfo().setGameInProgress(true);
 	}
-
-	public void exitApplication(WindowEvent event) {
+	
+	/**
+	 * Event for leaving the application
+	 * @param event
+	 */
+	public void exitApplication(){
 		Platform.exit();
 	}
 }
