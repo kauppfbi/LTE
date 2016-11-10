@@ -398,10 +398,11 @@ public class Controller4 {
 	 */
 
 	// ************************Fill-Methode***************************
-	public void fill(int columnIndex, int rowIndex, char player, boolean endGame) {
+	private void fill(int columnIndex, int rowIndex, char player, boolean endGame) {
 		// player 0 = red, player 1 = yellow
 		Circle circle = new Circle();
 		circle.setRadius(35.0);
+		addListener((Node) circle, columnIndex, rowIndex);
 
 		if (player == 'X') {
 			circle.setFill(Color.web("#62dbee", 0.85));
