@@ -718,13 +718,14 @@ public class DBconnection {
 				// get starting player and first turn
 				if (res.next()) {
 
-					if (res.getString(4) == "X") {
+					if (res.getString(4).equals("X")) {
 						startingPlayer = 0;
-					} else if (res.getString(4) == "O") {
+					} else if (res.getString(4).equals("O")) {
 						startingPlayer = 1;
 					}
 
 					turns[0] = startingPlayer;
+					System.out.println("LOG: Replay-Turns, SetID = " + mapping[setNumber - 1] + "Starting Player: " + turns[0]);
 					turns[1] = res.getInt(5);
 				}
 
