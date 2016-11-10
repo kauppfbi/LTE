@@ -654,14 +654,37 @@ public class Controller3 {
 		});
 
 		pane.setOnMouseEntered(e -> {
-			//System.out.println("OnMouseEntered");
+			highlightColumn(colIndex);
 		});
 
 		pane.setOnMouseExited(e -> {
-			//System.out.println("OnMouseExit");
+			deHighlightColumn(colIndex);
 		});
 
 		gameGrid.add(pane, colIndex, rowIndex);
+	}
+	
+	private void highlightColumn(int column) {
+		for (Node n : gameGrid.getChildren()) {
+			if (n instanceof Pane) {
+				Pane pane = (Pane) n;
+				if (gameGrid.getColumnIndex(pane) == column) {
+					pane.setStyle("-fx-background-color: #46c668; -fx-opacity: 0.7");
+				}
+			}
+		}
+	}
+
+	private void deHighlightColumn(int column) {
+		for (Node n : gameGrid.getChildren()) {
+
+			if (n instanceof Pane) {
+				Pane pane = (Pane) n;
+				if (gameGrid.getColumnIndex(pane) == column) {
+					pane.setStyle(null);
+				}
+			}
+		}
 	}
 	
 	/**

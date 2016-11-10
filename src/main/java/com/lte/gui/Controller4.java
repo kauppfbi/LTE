@@ -317,7 +317,6 @@ public class Controller4 {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-
 			stage.show();
 		}
 	}
