@@ -94,27 +94,6 @@ public class Controller3 {
 	ImageView imageView;
 
 	@FXML
-	ImageView row1;
-
-	@FXML
-	ImageView row2;
-
-	@FXML
-	ImageView row3;
-
-	@FXML
-	ImageView row4;
-
-	@FXML
-	ImageView row5;
-
-	@FXML
-	ImageView row6;
-
-	@FXML
-	ImageView row7;
-
-	@FXML
 	RadioButton radioKi;
 
 	@FXML
@@ -190,33 +169,13 @@ public class Controller3 {
 		imageView.setImage(image);
 
 		namePlayerX.setText("LTE");
-		// namePlayerO.setText(controller.getGameInfo().getOpponentName());
 
-		// imageView to let the player choose the row to throw stones
-		File file2 = new File("files/images/Pfeil_unten_bearbeitet.png");
-		Image image2 = new Image(file2.toURI().toString());
-		row1.setImage(image2);
-		row2.setImage(image2);
-		row3.setImage(image2);
-		row4.setImage(image2);
-		row5.setImage(image2);
-		row6.setImage(image2);
-		row7.setImage(image2);
 
 		// RadioButton ToggleGroup
 		tgroup = new ToggleGroup();
 		radioKi.setToggleGroup(tgroup);
 		radioKi.setSelected(true);
 		radioPlayer.setToggleGroup(tgroup);
-
-		// ImageViews default disabled
-		row1.setDisable(true);
-		row2.setDisable(true);
-		row3.setDisable(true);
-		row4.setDisable(true);
-		row5.setDisable(true);
-		row6.setDisable(true);
-		row7.setDisable(true);
 
 		// set Player name
 		namePlayerO.setText(controller.getGameInfo().getOpponentName());
@@ -296,15 +255,6 @@ public class Controller3 {
 
 		controller.getGameInfo().setSet(controller.getGameInfo().getSet() + 1);
 		set.setText(String.valueOf(controller.getGameInfo().getSet()));
-
-		// Buttons enabled
-		row1.setDisable(false);
-		row2.setDisable(false);
-		row3.setDisable(false);
-		row4.setDisable(false);
-		row5.setDisable(false);
-		row6.setDisable(false);
-		row7.setDisable(false);
 
 		// PlayerChoice disabled
 		radioKi.setDisable(true);
@@ -560,63 +510,6 @@ public class Controller3 {
 		GridPane.setRowIndex(circle2, (5 - row));
 		gameGrid.getChildren().add(circle2);
 		gameGrid.setHalignment(circle2, HPos.CENTER);
-	}
-
-	/**
-	 * Mouse Event to let the User select the row<br>
-	 * to throw the stone<br>
-	 * 
-	 * @param e
-	 * @throws InterruptedException
-	 */
-	@FXML
-	private void mouseClicked(MouseEvent e) {
-		// fill(int columnIndex, int rowIndex, char player, boolean endGame)
-		Node node = (Node) e.getSource();
-		System.out.println("Node: " + node.getId());
-		if (node.getId().equals("row1")) {
-			if (rowHigh0 <= 5) {
-				fill(0, rowHigh0, 'O', false);
-				int nextMove = controller.playTurnKi(0);
-				fill(nextMove, getRow(nextMove), 'X', false);
-			}
-		} else if (node.getId().equals("row2")) {
-			if (rowHigh1 <= 5) {
-				fill(1, rowHigh1, 'O', false);
-				int nextMove = controller.playTurnKi(1);
-				fill(nextMove, getRow(nextMove), 'X', false);
-			}
-		} else if (node.getId().equals("row3")) {
-			if (rowHigh2 <= 5) {
-				fill(2, rowHigh2, 'O', false);
-				int nextMove = controller.playTurnKi(2);
-				fill(nextMove, getRow(nextMove), 'X', false);
-			}
-		} else if (node.getId().equals("row4")) {
-			if (rowHigh3 <= 5) {
-				fill(3, rowHigh3, 'O', false);
-				int nextMove = controller.playTurnKi(3);
-				fill(nextMove, getRow(nextMove), 'X', false);
-			}
-		} else if (node.getId().equals("row5")) {
-			if (rowHigh4 <= 5) {
-				fill(4, rowHigh4, 'O', false);
-				int nextMove = controller.playTurnKi(4);
-				fill(nextMove, getRow(nextMove), 'X', false);
-			}
-		} else if (node.getId().equals("row6")) {
-			if (rowHigh5 <= 5) {
-				fill(5, rowHigh5, 'O', false);
-				int nextMove = controller.playTurnKi(5);
-				fill(nextMove, getRow(nextMove), 'X', false);
-			}
-		} else if (node.getId().equals("row7")) {
-			if (rowHigh6 <= 5) {
-				fill(6, rowHigh6, 'O', false);
-				int nextMove = controller.playTurnKi(6);
-				fill(nextMove, getRow(nextMove), 'X', false);
-			}
-		}
 	}
 
 	private int getRow(int column) {
