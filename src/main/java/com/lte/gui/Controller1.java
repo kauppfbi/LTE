@@ -225,7 +225,7 @@ public class Controller1 {
 		// DB: delete unfinished game
 		if (!(controller.getGameInfo().getOwnPoints() == 3
 				|| controller.getGameInfo().getOpponentPoints() == 3)) {
-			controller.getConnection().deleteUnfinishedGame(controller.getGameInfo().getGameID());
+			controller.deleteUnfinishedGame();
 		}
 		
 		Stage stage;
@@ -358,12 +358,10 @@ public class Controller1 {
 			} if (result.get() == beenden) {			
 				//DB: delete unfinished game
 				if(!(controller.getGameInfo().getOwnPoints() == 3 || controller.getGameInfo().getOpponentPoints() == 3)){
-				controller.getConnection().deleteUnfinishedGame(controller.getGameInfo().getGameID());
-				}
-				
-				if(!controller.deleteUnfinishedGame()){
-					System.err.println("Deleting unfinished Game in DB was not sucessfully!");
-				}
+					if(!controller.deleteUnfinishedGame()){
+						System.err.println("Deleting unfinished Game in DB was not sucessfully!");
+					}
+				}				
 	
 				Stage stage;
 				stage = (Stage) backToStart.getScene().getWindow();
@@ -521,7 +519,6 @@ public class Controller1 {
 	 */
 	@FXML
 	public void exitApplication() {
-		controller.getConnection().deleteUnfinishedGame(controller.getGameInfo().getGameID());
 		if(controller.getPlayingThread() != null){
 			controller.getPlayingThread().stop();
 		}

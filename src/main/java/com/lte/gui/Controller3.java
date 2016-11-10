@@ -252,11 +252,10 @@ public class Controller3 {
 		rowHigh4 = 0;
 		rowHigh5 = 0;
 		rowHigh6 = 0;
-		
+
 		// DB: delete unfinished game
-		if (!(controller.getGameInfo().getOwnPoints() == 3
-				|| controller.getGameInfo().getOpponentPoints() == 3)) {
-			controller.getConnection().deleteUnfinishedGame(controller.getGameInfo().getGameID());
+		if (!(controller.getGameInfo().getOwnPoints() == 3 || controller.getGameInfo().getOpponentPoints() == 3)) {
+			controller.deleteUnfinishedGame();
 		}
 
 		Stage stage;
@@ -339,8 +338,7 @@ public class Controller3 {
 
 		// Alert-Dialog (Confirmation-Options: Go on with next Set || exit to
 		// Startmenu)
-		
-		
+
 		if (!(controller.getGameInfo().getOwnPoints() == 3 || controller.getGameInfo().getOpponentPoints() == 3)) {
 			Alert alert = new Alert(AlertType.WARNING);
 			alert.setTitle("Game Over"); // Ask the user what the next steps are
@@ -352,7 +350,6 @@ public class Controller3 {
 			} else {
 				alert.setHeaderText("Unentschieden!" + "\n" + "Was nun?");
 			}
-			
 
 			ButtonType weiter = new ButtonType("Weiter spielen");
 			ButtonType beenden = new ButtonType("Beenden");
@@ -392,9 +389,9 @@ public class Controller3 {
 				// DB: delete unfinished game
 				if (!(controller.getGameInfo().getOwnPoints() == 3
 						|| controller.getGameInfo().getOpponentPoints() == 3)) {
-					controller.getConnection().deleteUnfinishedGame(controller.getGameInfo().getGameID());
+					controller.deleteUnfinishedGame();
 				}
-				
+
 				controller.setThreadPlayerKiNull();
 
 				// Integer Stones per column -> hight of the row
@@ -639,7 +636,6 @@ public class Controller3 {
 	 * @param event
 	 */
 	public void exitApplication() {
-		controller.getConnection().deleteUnfinishedGame(controller.getGameInfo().getGameID());
 		Platform.exit();
 	}
 }
