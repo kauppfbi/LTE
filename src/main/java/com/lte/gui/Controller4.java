@@ -504,7 +504,8 @@ public class Controller4 {
 		row6.setDisable(false);
 		row7.setDisable(false);
 	}
-	public void exitApplication(WindowEvent event){
+	
+	public void exitApplication(){
 		Platform.exit();
 	}
 }

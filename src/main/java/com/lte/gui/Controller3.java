@@ -568,7 +568,7 @@ public class Controller3{
 	 * Event for leaving the application
 	 * @param event
 	 */
-	public void exitApplication(WindowEvent event){
+	public void exitApplication(){
 		controller.getConnection().deleteUnfinishedGame(controller.getGameInfo().getGameID());
 		Platform.exit();
 	}

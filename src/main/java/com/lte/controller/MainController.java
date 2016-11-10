@@ -407,4 +407,22 @@ public class MainController {
 			}
 		}
 	}
+	
+	public void shutdownApplication(){
+		if(controller0!= null){
+			controller0.exitApplication();
+		}
+		if(controller1 != null){
+			controller1.exitApplication();
+		}
+		if(controller2 != null){
+			controller2.exitApplication();
+		}
+		if(controller3 != null){
+			controller3.exitApplication();
+		}
+		if(controller4 != null){
+			controller4.exitApplication();
+		}
+	}
 }

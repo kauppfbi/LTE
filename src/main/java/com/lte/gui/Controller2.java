@@ -512,7 +512,7 @@ public class Controller2 {
 	 * @param event
 	 */
 	@FXML
-	public void exitApplication(WindowEvent event) {
+	public void exitApplication() {
 		synchronized(threadReconstruct){
 			threadReconstruct.stop();
 		}

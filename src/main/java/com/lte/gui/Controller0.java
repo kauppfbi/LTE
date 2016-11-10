@@ -356,17 +356,8 @@ public class Controller0 {
 				muteButton.setGraphic(new ImageView(images.get("speaker")));
 			}
 		}
-	}
-	
-	/**
-	 * Event for leaving the application
-	 * @param event
-	 */
-	@FXML
-	public void exitApplication(WindowEvent event) {
-		Platform.exit();
-	}
-	
+	}	
+
 	/**
 	 * ComboBox Player X editable
 	 */
@@ -390,4 +381,14 @@ public class Controller0 {
 	public void playerKiSelected(){
 		playerX.setEditable(false);
 	}
+	
+	/**
+	 * Event for leaving the application
+	 * @param event
+	 */
+	@FXML
+	public void exitApplication() {
+		Platform.exit();
+	}
+	
 }
