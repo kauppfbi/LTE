@@ -646,11 +646,11 @@ public class Controller3 {
 		});
 
 		pane.setOnMouseEntered(e -> {
-			System.out.println("OnMouseEntered");
+			//System.out.println("OnMouseEntered");
 		});
 
 		pane.setOnMouseExited(e -> {
-			System.out.println("OnMouseExit");
+			//System.out.println("OnMouseExit");
 		});
 
 		gameGrid.add(pane, colIndex, rowIndex);
