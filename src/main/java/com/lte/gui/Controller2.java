@@ -403,7 +403,7 @@ public class Controller2 {
 		gameChoice.getSelectionModel().selectFirst();
 		
 		// set first entry as default
-		gameID = gameChoice.getSelectionModel().getSelectedIndex();
+		gameID = connection.get(gameID);
 
 		//setChoice shows first entry without ChangeListener
 		System.out.println("Rekonstruierbares Spiel: (Index, gameID)" + gameID + ", " + connection.get(gameID));// for setChoice
