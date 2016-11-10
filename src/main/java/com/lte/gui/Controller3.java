@@ -341,7 +341,7 @@ public class Controller3{
 			set.setText(String.valueOf(satz + 1));
 			controller.getGameInfo().setSet(satz);
 			
-			//Neues Spiel
+			//Neues Thread
 			controller.setThreadPlayerKiNull();
 			
 			//Zeilen zurücksetzen
@@ -352,6 +352,12 @@ public class Controller3{
 			rowHigh4 = 0;
 			rowHigh5 = 0;
 			rowHigh6 = 0;
+			
+			//neuer Zug wenn Ki anfängt
+			if(controller.getGameInfo().getStartingPlayer() == 'X'){
+				int nextMove = controller.playTurnKi(0);
+				fill(nextMove, getRow(nextMove), 'X', false);
+			}
 
 		}if (result.get() == beenden) {
 			
