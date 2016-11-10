@@ -19,7 +19,7 @@ import com.lte.models.GameScore;
 public class AlgorithmManager {
 
 	//************Klassenvariablen*******************************************
-		final ExecutorService service;
+		private ExecutorService service;
 		List<Callable<Integer>> list = new ArrayList<> ();
 		List<Future<Integer>> future = new ArrayList<> ();
 		int roundCounter = 0;
@@ -27,7 +27,6 @@ public class AlgorithmManager {
 		//************Konstruktoren************************************************
 		public AlgorithmManager() {
 			service = Executors.newFixedThreadPool(7); 
-				
 		}	
 			
 		
@@ -39,6 +38,7 @@ public class AlgorithmManager {
 		 * Shuts thread pool down
 		 */
 		public void shutdown(){
+			System.out.println("Algorithmusmanager wird heruntergefahren!");
 			service.shutdownNow();
 		}
 		
@@ -54,7 +54,9 @@ public class AlgorithmManager {
 		 */
 		public int ParallelAlphaBeta(byte[][] field, int algorithmDepth, double calculationTime, byte playerByte) throws Exception{
 			
-			
+			if(service.isTerminated()){
+				service = Executors.newFixedThreadPool(7);
+			}
 			//Laufzeitanalyse starten
 			final long timeStart = System.currentTimeMillis(); 
 			

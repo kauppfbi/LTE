@@ -294,8 +294,8 @@ public class Controller3 {
 			controller.getGameInfo().setStartingPlayer('O');
 		}
 
-		set.setText(String.valueOf(controller.getGameInfo().getSet() + 1));
 		controller.getGameInfo().setSet(controller.getGameInfo().getSet() + 1);
+		set.setText(String.valueOf(controller.getGameInfo().getSet()));
 
 		// Buttons enabled
 		row1.setDisable(false);
@@ -341,9 +341,6 @@ public class Controller3 {
 			int playerO = Integer.parseInt(opponentPoints.getText());
 			opponentPoints.setText(String.valueOf(playerO + 1));
 		}
-
-		// Satz fue Anzeige hochzahlen
-		set.setText(String.valueOf(controller.getGameInfo().getSet()));
 
 		// Alert-Dialog (Confirmation-Options: Go on with next Set || exit to
 		// Startmenu)

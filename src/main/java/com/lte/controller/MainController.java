@@ -248,6 +248,7 @@ public class MainController {
 		if (!successfull) {
 			JOptionPane.showInternalMessageDialog(null, "Interface wurde nicht erfolgreich initilisiert!");
 		} else{
+			resetAlgorithmManager();
 			playingThread = new ThreadPlay(interfaceManager, controller1, gameInfo, connection, algorithmManager, settings);
 			playingThread.start();
 		}
@@ -257,11 +258,12 @@ public class MainController {
 	 ********* Playing Player KI 
 	 * @return *****************
 	 ***********************************/
-	public int playTurnKi(int column){
-		if(threadPlayerKi == null){
+	public int playTurnKi(int column) {
+		resetAlgorithmManager();
+		if (threadPlayerKi == null) {
 			threadPlayerKi = new ThreadPlayerKi(controller3, gameInfo, algorithmManager, settings, connection);
 		}
-			return threadPlayerKi.playTurn(column);
+		return threadPlayerKi.playTurn(column);
 	}
 	
 	/***********************************
@@ -385,12 +387,18 @@ public class MainController {
 		}
 	}
 	
+	private void resetAlgorithmManager(){
+		algorithmManager.shutdown();
+		this.algorithmManager = new AlgorithmManager();
+	}
+	
 	public void shutdownApplication(){
 		// DB: delete unfinished game
-		if (!(gameInfo.getOwnPoints() == 3 || gameInfo.getOpponentPoints() == 3)) {
-			deleteUnfinishedGame();
+		if(gameInfo != null){
+			if(!(gameInfo.getOwnPoints() == 3 || gameInfo.getOpponentPoints() == 3)) {
+				deleteUnfinishedGame();
+			}
 		}
-
 		if(algorithmManager != null){
 			algorithmManager.shutdown();
 		}
