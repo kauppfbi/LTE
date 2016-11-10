@@ -2,7 +2,6 @@ package com.lte.db;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.ListIterator;
 
 import com.lte.models.GameDB;
 import com.lte.models.SetDB;
@@ -156,9 +155,8 @@ public class DBconnection {
 		// Update game entry with latest score
 
 		int setID = 0;
-		int latestSetID = 0;
-		String newStartingPlayer = "";
-		String lastStartingPlayer = "";
+		//int latestSetID = 0;
+		String newStartingPlayer = startingPlayer;
 
 		try {
 			stmt = con.createStatement();
@@ -166,43 +164,9 @@ public class DBconnection {
 			e.printStackTrace();
 			System.out.println("LOG: Couldn't create statement");
 		}
-
-		// get latest set from selected gameID
-		String sql = "SELECT max(SETID) from PUBLIC.GAMESET WHERE GAMEID = " + gameID;
-
-		try {
-			ResultSet res = stmt.executeQuery(sql);
-
-			if (res.next()) {
-				latestSetID = res.getInt(1);
-			}
-			res.close();
-
-		} catch (SQLException e) {
-			System.out.println("LOG: SQL Error");
-		}
-
-//		// get starting player of last set in game
-//		sql = "SELECT StartingPlayer from PUBLIC.GAMESET where SETID = " + latestSetID;
-//		try {
-//			ResultSet res = stmt.executeQuery(sql);
-//			if (res.next()) {
-//				lastStartingPlayer = res.getString(1);
-//			}
-//			res.close();
-//		} catch (SQLException e) {
-//			System.out.println("LOG: SQL Error");
-//		}
-//
-//		if (lastStartingPlayer.equals("X")) {
-//			newStartingPlayer = "O";
-//		} else if (lastStartingPlayer.equals("O")) {
-//			newStartingPlayer = "X";
-//		}
-
-		newStartingPlayer = startingPlayer;
+		
 		// Create new entry
-		sql = "INSERT INTO \"PUBLIC\".\"GAMESET\" ( \"GAMEID\", \"STARTINGPLAYER\", \"POINTSOWNBEFORESET\", \"POINTSOPPONENTBEFORESET\" ) VALUES ( "
+		String sql = "INSERT INTO \"PUBLIC\".\"GAMESET\" ( \"GAMEID\", \"STARTINGPLAYER\", \"POINTSOWNBEFORESET\", \"POINTSOPPONENTBEFORESET\" ) VALUES ( "
 				+ gameID + ", '" + newStartingPlayer + "', " + currentGamePointsOwn + ", " + currentGamePointsOpponent
 				+ ")";
 
@@ -240,8 +204,6 @@ public class DBconnection {
 	 * @param column
 	 */
 	public void pushTurn(int gameID, int setID, String player, int column) {
-
-		// int turnID = 0;
 
 		try {
 			stmt = con.createStatement();
@@ -805,16 +767,18 @@ public class DBconnection {
 			System.out.println("LOG: Couldn't create statement");
 		}
 		
+		// Get gameID and winner of all games in db
 		String sql = "SELECT GAMEID, WINNER FROM PUBLIC.GAME";
 		
 		try {
 			ResultSet res = stmt.executeQuery(sql);
 			while (res.next()) {
-				//int testid = res.getInt(1);
-				//String test = res.getString(2);
 				if (res.getString(2) != null) {
+					// Winner of game is set
 					System.out.println("LOG: Game not broken, skipping game " + res.getInt(1));
 				} else {
+					// No winner of game set --> inkonsistent
+					// add to brokenGames list
 					brokenGames.add(res.getInt(1));
 				}
 			}
@@ -823,6 +787,7 @@ public class DBconnection {
 			System.out.println("Couldn't get games");
 		}
 		
+		// Loop through list and delete all game dependencies and the game itself with existig method
 		for (int i = 0; i < brokenGames.size(); i++) {
 			gameID = brokenGames.get(i);
 			System.out.println("LOG: GameID to delete: " + gameID);
