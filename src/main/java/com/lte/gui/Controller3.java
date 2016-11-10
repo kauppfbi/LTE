@@ -333,21 +333,24 @@ public class Controller3 {
 
 		// Alert-Dialog (Confirmation-Options: Go on with next Set || exit to
 		// Startmenu)
-		Alert alert = new Alert(AlertType.WARNING);
-		alert.setTitle("Game Over"); // Ask the user what the next steps are
-		if (winningPlayer == 1) {
-			alert.setHeaderText("Die KI hat gewonnen!" + "\n" + "Was nun?");
-		} else if (winningPlayer == 2) {
-			alert.setHeaderText("Sie haben gewonnen!" + "\n" + "Was nun?");
-		} else {
-			alert.setHeaderText("Unentschieden!" + "\n" + "Was nun?");
-		}
+		
 		
 		if (!(controller.getGameInfo().getOwnPoints() == 3 || controller.getGameInfo().getOpponentPoints() == 3)) {
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Game Over"); // Ask the user what the next steps are
+			alert.setContentText("Unvollständige Spiele werden nicht gespeichert!");
+			if (winningPlayer == 1) {
+				alert.setHeaderText("Die KI hat gewonnen!" + "\n" + "Was nun?");
+			} else if (winningPlayer == 2) {
+				alert.setHeaderText("Sie haben gewonnen!" + "\n" + "Was nun?");
+			} else {
+				alert.setHeaderText("Unentschieden!" + "\n" + "Was nun?");
+			}
+			
+
 			ButtonType weiter = new ButtonType("Weiter spielen");
 			ButtonType beenden = new ButtonType("Beenden");
 
-			alert.setContentText("Unvollständige Spiele werden nicht gespeichert!");
 			alert.getButtonTypes().setAll(weiter, beenden);
 
 			Optional<ButtonType> result = alert.showAndWait();
@@ -411,6 +414,15 @@ public class Controller3 {
 				stage.show();
 			}
 		} else {
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Game Over"); // Ask the user what the next steps are
+			if (winningPlayer == 1) {
+				alert.setHeaderText("Die KI hat gewonnen!" + "\n" + "Das Spiel ist nun entschieden.");
+			} else if (winningPlayer == 2) {
+				alert.setHeaderText("Sie haben gewonnen!" + "\n" + "Das Spiel ist nun entschieden.");
+			} else {
+				alert.setHeaderText("Unentschieden!" + "\n" + "Das Spiel ist nun entschieden.");
+			}
 			ButtonType beenden = new ButtonType("Beenden");
 
 			alert.getButtonTypes().setAll(beenden);
