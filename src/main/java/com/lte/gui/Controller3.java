@@ -333,9 +333,6 @@ public class Controller3 {
 			opponentPoints.setText(String.valueOf(playerO + 1));
 		}
 
-		// Satz fue Anzeige hochzahlen
-		set.setText(String.valueOf(controller.getGameInfo().getSet()));
-
 		// Alert-Dialog (Confirmation-Options: Go on with next Set || exit to
 		// Startmenu)
 
