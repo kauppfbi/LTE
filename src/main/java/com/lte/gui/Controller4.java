@@ -2,8 +2,10 @@ package com.lte.gui;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Optional;
 import com.lte.controller.MainController;
+import com.lte.features.SoundManager;
 import com.lte.models.GameInfo;
 import com.lte.models.Settings;
 import com.sun.org.apache.xerces.internal.util.SynchronizedSymbolTable;
@@ -28,6 +30,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.MediaPlayer.Status;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
@@ -107,12 +110,17 @@ public class Controller4 {
 	@FXML
 	RadioButton radioPlayer2;
 	
+	@FXML
+	Button muteButton;
+	
 	// non-FXML Declarations
 	private MainController controller;
 	private ToggleGroup tgroup;
 	// private ThreadReconstruct controller;
 	private Settings settings;
 	private GameInfo gameInfo;
+	private SoundManager soundManager;
+	private HashMap<String, Image> images;
 	
 	//Integer Stones per column -> hight of the row
 	private int rowHigh0 = 0;
@@ -130,6 +138,8 @@ public class Controller4 {
 		this.controller = mainController;
 		this.settings = mainController.getSettings();
 		this.gameInfo = mainController.getGameInfo();
+		this.soundManager = controller.getSoundManager();		
+		this.images = controller.getImages();
 	}
 	
 	// Getter and Setter
@@ -156,7 +166,14 @@ public class Controller4 {
 	// *******FXML-Methoden************
 	@FXML
 	public void initialize() {
-
+		Status status = soundManager.getStatus();
+		if (status == Status.PAUSED) {
+			muteButton.setGraphic(new ImageView(images.get("speaker1-mute")));
+		} else if (status == Status.PLAYING) {
+			muteButton.setGraphic(new ImageView(images.get("speaker1")));
+		}
+		muteButton.setStyle("-fx-background-color: transparent;");
+		
 		set.setText("0");
 
 		//set points
@@ -198,6 +215,18 @@ public class Controller4 {
 		row5.setDisable(true);
 		row6.setDisable(true);
 		row7.setDisable(true);
+	}
+	
+	@FXML
+	private void mute(ActionEvent event){
+		Status status = soundManager.playPause();
+		if (status != null) {
+			if (status == Status.PAUSED) {
+				muteButton.setGraphic(new ImageView(images.get("speaker1-mute")));
+			} else if (status == Status.PLAYING) {
+				muteButton.setGraphic(new ImageView(images.get("speaker1")));
+			}
+		}
 	}
 	
 	/**
