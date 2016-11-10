@@ -478,6 +478,7 @@ public class Controller3 {
 		// player 0 = red, player 1 = yellow
 		Circle circle = new Circle();
 		circle.setRadius(35.0);
+		addListener((Node) circle, columnIndex, rowIndex);
 
 		if (player == 'X') {
 			circle.setFill(Color.web("#62dbee", 0.85));
@@ -662,6 +663,24 @@ public class Controller3 {
 		});
 
 		gameGrid.add(pane, colIndex, rowIndex);
+	}
+	
+	private void addListener(Node node, int colIndex, int rowIndex){
+		node.setOnMouseClicked(e -> {
+			if (controller.getGameInfo().isGameInProgress()) {
+				fill(colIndex, getRow(colIndex), 'O', false);
+				int nextMove = controller.playTurnKi(colIndex);
+				fill(nextMove, getRow(nextMove), 'X', false);
+			}
+		});
+		
+		node.setOnMouseEntered(e -> {
+			highlightColumn(colIndex);
+		});
+
+		node.setOnMouseExited(e -> {
+			deHighlightColumn(colIndex);
+		});
 	}
 	
 	private void highlightColumn(int column) {
