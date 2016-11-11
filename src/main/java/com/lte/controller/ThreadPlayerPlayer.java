@@ -6,6 +6,11 @@ import com.lte.models.GameScore;
 
 import javafx.application.Platform;
 
+/**
+ * The class implements a game of player against player
+ * @author Fabian Soelker
+ *
+ */
 public class ThreadPlayerPlayer {
 
 	//**********************************//
@@ -34,7 +39,11 @@ public class ThreadPlayerPlayer {
 	}
 
 	
-	
+	/**
+	 * Plays the next move in the logic, sets the next player and checks if the game is over
+	 * @param column of the corresponding event
+	 * @return column if game is not interrupted by game over
+	 */
 	public int playTurn(int column){
 			// ***** Player O spielt Zug ******
 			if (gameInfo.getNextPlayer() == 'O') {

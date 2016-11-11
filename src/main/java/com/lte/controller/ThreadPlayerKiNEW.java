@@ -9,6 +9,11 @@ import com.lte.models.Settings;
 
 import javafx.application.Platform;
 
+/**
+ * The class implements a game of a player against the AI
+ * @author Fabian Soelker
+ *
+ */
 public class ThreadPlayerKiNEW extends Thread {
 	
 	private Controller3 controller3;
@@ -30,19 +35,25 @@ public class ThreadPlayerKiNEW extends Thread {
 		this.ready = false;
 	}
 	
+	/**
+	 * The Method checks if the given move is possible on the current field
+	 * @param nextMove next move given by the listener
+	 * @throws Exception If move is not possible on the current field
+	 */
 	public void setNextMove(int nextMove) throws Exception{
 		
 		if(nextMove != -1){
 			currentGameScore.play(nextMove, (byte) 3);
-			currentGameScore.print();
 			currentGameScore.unDo(nextMove);
-			currentGameScore.print();
 			this.nextMove = nextMove;
 		}else{
 			this.nextMove = nextMove;
 		}
 	}
 	
+	/**
+	 * Runs a a whole game in a thread
+	 */
 	public synchronized void run(){
 		int move;
 		int row;
@@ -183,6 +194,10 @@ public class ThreadPlayerKiNEW extends Thread {
 		});
 	}
 
+	/**
+	 * Checks if the thread is ready for the next event
+	 * @return returns boolean false or true
+	 */
 	public boolean isReady() {
 		return ready;
 	}
