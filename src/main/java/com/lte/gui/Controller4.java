@@ -325,9 +325,14 @@ public class Controller4 {
 		Pane pane = new Pane();
 		pane.setOnMouseClicked(e -> {
 			if (controller.getGameInfo().isGameInProgress()) {
-				fill(colIndex, getRow(colIndex), controller.getGameInfo().getNextPlayer(), false);
-				controller.playTurnPlayerPlayer(colIndex);
-				highlightColumn(colIndex, controller.getGameInfo().getNextPlayer());
+				try {
+					char player = controller.getGameInfo().getNextPlayer();
+					controller.playTurnPlayerPlayer(colIndex);
+					fill(colIndex, getRow(colIndex), player, false);
+					highlightColumn(colIndex, controller.getGameInfo().getNextPlayer());
+				} catch (Exception e1) {
+					System.out.println("Zug nicht möglich!");
+				}
 			}
 		});
 
@@ -345,9 +350,14 @@ public class Controller4 {
 	private void addListener(Node node, int colIndex, int rowIndex){
 		node.setOnMouseClicked(e -> {
 			if (controller.getGameInfo().isGameInProgress()) {
-				fill(colIndex, getRow(colIndex), controller.getGameInfo().getNextPlayer(), false);
-				controller.playTurnPlayerPlayer(colIndex);
-				highlightColumn(colIndex, controller.getGameInfo().getNextPlayer());
+				try {
+					char player = controller.getGameInfo().getNextPlayer();
+					controller.playTurnPlayerPlayer(colIndex);
+					fill(colIndex, getRow(colIndex), player, false);
+					highlightColumn(colIndex, controller.getGameInfo().getNextPlayer());
+				} catch (Exception e1) {
+					System.out.println("Zug nicht möglich!");
+				}
 			}
 		});
 		

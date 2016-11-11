@@ -43,13 +43,13 @@ public class ThreadPlayerPlayer {
 	 * Plays the next move in the logic, sets the next player and checks if the game is over
 	 * @param column of the corresponding event
 	 * @return column if game is not interrupted by game over
+	 * @throws Exception if move is not possible on the current field
 	 */
-	public int playTurn(int column){
+	public int playTurn(int column) throws Exception{
 			// ***** Player O spielt Zug ******
 			if (gameInfo.getNextPlayer() == 'O') {
 				System.out.println("Player O spielt!");
 				// -Spiele Gegnerzug im Spielstand
-				try {
 
 						currentGameScore.play(column, (byte)2);
 
@@ -57,16 +57,12 @@ public class ThreadPlayerPlayer {
 
 					gameInfo.setNextPlayer('X');
 
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
 			}
 
 			// ***** Player X spielt Zug ******
 			else if (gameInfo.getNextPlayer() == 'X') {
 				System.out.println("Player X spielt!");
 				// -Spiele Gegnerzug im Spielstand
-				try {
 
 						currentGameScore.play(column, (byte)1);
 
@@ -74,9 +70,6 @@ public class ThreadPlayerPlayer {
 
 					gameInfo.setNextPlayer('O');
 
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
 			}
 
 			// ****** Spiel ist entschieden *******

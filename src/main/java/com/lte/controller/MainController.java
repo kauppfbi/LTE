@@ -259,9 +259,10 @@ public class MainController {
 	
 	/***********************************
 	 ********* Playing Player Player 
-	 * @return *****************
+	 * @return 
+	 * @throws Exception *****************
 	 ***********************************/
-	public int playTurnPlayerPlayer(int column){
+	public int playTurnPlayerPlayer(int column) throws Exception{
 		if(threadPlayerPlayer == null){
 			threadPlayerPlayer = new ThreadPlayerPlayer(controller4, gameInfo);
 		}
