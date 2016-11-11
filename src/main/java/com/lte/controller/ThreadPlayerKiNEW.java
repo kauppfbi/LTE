@@ -30,8 +30,17 @@ public class ThreadPlayerKiNEW extends Thread {
 		this.ready = false;
 	}
 	
-	public void setNextMove(int nextMove){
-		this.nextMove = nextMove;
+	public void setNextMove(int nextMove) throws Exception{
+		
+		if(nextMove != -1){
+			currentGameScore.play(nextMove, (byte) 3);
+			currentGameScore.print();
+			currentGameScore.unDo(nextMove);
+			currentGameScore.print();
+			this.nextMove = nextMove;
+		}else{
+			this.nextMove = nextMove;
+		}
 	}
 	
 	public synchronized void run(){
@@ -153,6 +162,15 @@ public class ThreadPlayerKiNEW extends Thread {
 		if (gameInfo.getOpponentPoints() == 3) {
 			connection.updateScoreOfGame(gameInfo.getGameID(), gameInfo.getOwnPoints(),
 					gameInfo.getOpponentPoints(), "O");
+		}
+		
+		// Spieler für Beginn der nächsten Runde bestimmen
+		if (gameInfo.getStartingPlayer() == 'X') {
+			gameInfo.setNextPlayer('O');
+			gameInfo.setStartingPlayer('O');
+		} else if (gameInfo.getStartingPlayer() == 'O') {
+			gameInfo.setNextPlayer('X');
+			gameInfo.setStartingPlayer('X');
 		}
 		
 		Platform.runLater(new Runnable (){

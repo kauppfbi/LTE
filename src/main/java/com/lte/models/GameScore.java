@@ -115,7 +115,7 @@ public class GameScore {
 					throw new IllegalArgumentException("column ist leer");
 				}
 				//Wenn ein Spielerzeichen gefunden wurde, dann lösche dieses
-				if (field[arraycolumn][row] == 1 || field[arraycolumn][row] ==  2) {
+				if (field[arraycolumn][row] != 0) {
 					field[arraycolumn][row] = 0;
 					break;
 				}

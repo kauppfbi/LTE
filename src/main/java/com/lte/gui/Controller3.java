@@ -252,7 +252,12 @@ public class Controller3 {
 			while (true){
 				synchronized (threadPlayerKiNEW) {
 					if(threadPlayerKiNEW.isReady()){
-						threadPlayerKiNEW.setNextMove(-1);
+						try {
+							threadPlayerKiNEW.setNextMove(-1);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						threadPlayerKiNEW.notify();
 						break;
 					}
@@ -405,9 +410,13 @@ public class Controller3 {
 			while (true){
 				synchronized (threadPlayerKiNEW) {
 					if(threadPlayerKiNEW.isReady()){
-						threadPlayerKiNEW.setNextMove(-1);
-						threadPlayerKiNEW.notify();
-						break;
+						try {
+							threadPlayerKiNEW.setNextMove(-1);
+							threadPlayerKiNEW.notify();
+							break;
+						} catch (Exception e) {
+							System.out.println("Zug nicht möglich!");
+						}
 					}
 				}
 			}
@@ -544,11 +553,16 @@ public class Controller3 {
 		Pane pane = new Pane();
 		pane.setOnMouseClicked(e -> {
 			if (controller.getGameInfo().isGameInProgress() && controller.getGameInfo().getNextPlayer() == 'O') {
-				controller.getGameInfo().setNextPlayer('X');
 				synchronized(threadPlayerKiNEW){
-					threadPlayerKiNEW.setNextMove(colIndex);
-					if(threadPlayerKiNEW.getState() == Thread.State.WAITING){
-						threadPlayerKiNEW.notify();
+					try {
+						threadPlayerKiNEW.setNextMove(colIndex);
+						controller.getGameInfo().setNextPlayer('X');
+						
+						if(threadPlayerKiNEW.getState() == Thread.State.WAITING){
+							threadPlayerKiNEW.notify();
+						}
+					} catch (Exception e1) {
+						System.out.println("Zug nicht möglich!");
 					}
 					
 				}
@@ -569,11 +583,16 @@ public class Controller3 {
 	private void addListener(Node node, int colIndex, int rowIndex){
 		node.setOnMouseClicked(e -> {
 			if (controller.getGameInfo().isGameInProgress() && controller.getGameInfo().getNextPlayer() == 'O') {
-				controller.getGameInfo().setNextPlayer('X');
 				synchronized(threadPlayerKiNEW){
-					threadPlayerKiNEW.setNextMove(colIndex);
-					if(threadPlayerKiNEW.getState() == Thread.State.WAITING){
-						threadPlayerKiNEW.notify();
+					try {
+						threadPlayerKiNEW.setNextMove(colIndex);
+						controller.getGameInfo().setNextPlayer('X');
+						
+						if(threadPlayerKiNEW.getState() == Thread.State.WAITING){
+							threadPlayerKiNEW.notify();
+						}
+					} catch (Exception e1) {
+						System.out.println("Zug nicht möglich!");
 					}
 				}
 			}
