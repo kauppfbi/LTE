@@ -30,7 +30,7 @@ import com.lte.models.*;
  *
  */
 public class Controller0 {
-	// FXML Declarations
+
 	@FXML
 	AnchorPane pane;
 	
