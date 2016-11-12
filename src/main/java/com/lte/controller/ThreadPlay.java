@@ -4,7 +4,6 @@ package com.lte.controller;
 import java.io.IOException;
 
 import com.lte.aiPar.AlgorithmManager;
-import com.lte.db.DBconnection;
 import com.lte.gui.Controller1;
 import com.lte.interfaces.InterfaceManager;
 import com.lte.models.GameInfo;

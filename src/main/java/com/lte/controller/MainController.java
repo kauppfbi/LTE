@@ -5,7 +5,6 @@ import java.util.HashMap;
 
 import javax.swing.JOptionPane;
 import com.lte.aiPar.AlgorithmManager;
-import com.lte.db.DBconnection;
 import com.lte.features.SoundManager;
 import com.lte.gui.Controller0;
 import com.lte.gui.Controller1;
