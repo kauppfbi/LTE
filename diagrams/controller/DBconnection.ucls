@@ -4,7 +4,7 @@
   router="FAN">  
   <class id="1" language="java" name="com.lte.controller.DBconnection" project="LTE" 
     file="/LTE/src/main/java/com/lte/controller/DBconnection.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="442" y="219"/>    
+    <position height="387" width="229" x="170" y="-128"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
