@@ -26,7 +26,8 @@ public class App extends Application{
 	private Stage stage;
 
 	// DB Connection
-	DBconnection connection;
+	private DBconnection connection;
+	private MainController controller;
 
 	public void start(Stage stage) throws IOException {
 		this.stage = stage;
@@ -37,7 +38,7 @@ public class App extends Application{
 			connection = new DBconnection();
 			
 			// Main Controller
-			MainController controller = new MainController(connection);
+			controller = new MainController(connection);
 			// FXMLLoader
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("gui/views/layout0.fxml"));
 			loader.setController(controller.getController0());
