@@ -104,14 +104,6 @@ public class Controller3 {
 		this.images = controller.getImages();
 	}
 
-	public MainController getController() {
-		return controller;
-	}
-
-	public void setController(MainController controller) {
-		this.controller = controller;
-	}
-
 	/**
 	 * JavaFX initializations
 	 */
@@ -157,6 +149,147 @@ public class Controller3 {
 
 		// set Player name
 		namePlayerO.setText(controller.getGameInfo().getOpponentName());
+	}
+
+	/**
+	 * gameOver-method shows the game-result and asks for the next steps (play
+	 * new set, ...)<br>
+	 * 
+	 * @param winningPlayer
+	 * @param winningCombo
+	 * @throws IOException
+	 */
+	public void gameOver(byte winningPlayer, int[][] winningCombo){
+		// highlights the winning-combo
+		highlightWinning(winningCombo);
+	
+		// Winner gets one point
+		if (winningPlayer == 1) {
+			int playerX = Integer.parseInt(ltePoints.getText());
+			ltePoints.setText(String.valueOf(playerX + 1));
+		} else if (winningPlayer == 2) {
+			int playerO = Integer.parseInt(opponentPoints.getText());
+			opponentPoints.setText(String.valueOf(playerO + 1));
+		}
+	
+		// Alert-Dialog (Confirmation-Options: Go on with next Set || exit to Startmenu)
+		if (!(controller.getGameInfo().getOwnPoints() == 3 || controller.getGameInfo().getOpponentPoints() == 3)) {
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Game Over"); // Ask the user what the next steps are
+			alert.setContentText("Unvollständige Spiele werden nicht gespeichert!");
+			if (winningPlayer == 1) {
+				alert.setHeaderText("Die KI hat gewonnen!" + "\n" + "Was nun?");
+			} else if (winningPlayer == 2) {
+				alert.setHeaderText("Sie haben gewonnen!" + "\n" + "Was nun?");
+			} else {
+				alert.setHeaderText("Unentschieden!" + "\n" + "Was nun?");
+			}
+	
+			ButtonType weiter = new ButtonType("Weiter spielen");
+			ButtonType beenden = new ButtonType("Beenden");
+	
+			alert.getButtonTypes().setAll(weiter, beenden);
+	
+			Optional<ButtonType> result = alert.showAndWait();
+	
+			if (result.get() == weiter) {
+				clearGrid();
+	
+				// raise set
+				int satz = Integer.parseInt(set.getText());
+				set.setText(String.valueOf(satz + 1));
+				controller.getGameInfo().setSet(satz);
+	
+				startNewSet();
+			}
+			if (result.get() == beenden) {
+				// DB: delete unfinished game
+				if (!(controller.getGameInfo().getOwnPoints() == 3
+						|| controller.getGameInfo().getOpponentPoints() == 3)) {
+					controller.deleteUnfinishedGame();
+				}
+	
+				Stage stage;
+				stage = (Stage) backToStart.getScene().getWindow();
+	
+				// set Icon
+				File file = new File("files/images/icon.png");
+				Image image = new Image(file.toURI().toString());
+				stage.getIcons().add(image);
+	
+				// FXMLLoader
+				FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
+				loader.setController(controller.getController0());
+				try {
+					stage.setScene(new Scene((AnchorPane) loader.load()));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+	
+				stage.show();
+			}
+		} else {
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Game Over"); 
+			// Ask the user what the next steps are
+			if (winningPlayer == 1) {
+				alert.setHeaderText("Die KI hat gewonnen!" + "\n" + "Das Spiel ist nun entschieden.");
+			} else if (winningPlayer == 2) {
+				alert.setHeaderText("Sie haben gewonnen!" + "\n" + "Das Spiel ist nun entschieden.");
+			} else {
+				alert.setHeaderText("Unentschieden!" + "\n" + "Das Spiel ist nun entschieden.");
+			}
+			ButtonType beenden = new ButtonType("Beenden");
+	
+			alert.getButtonTypes().setAll(beenden);
+	
+			Optional<ButtonType> result = alert.showAndWait();
+	
+			if (result.get() == beenden) {
+	
+				Stage stage;
+				stage = (Stage) backToStart.getScene().getWindow();
+	
+				// set Icon
+				File file = new File("files/images/icon.png");
+				Image image = new Image(file.toURI().toString());
+				stage.getIcons().add(image);
+	
+				// FXMLLoader
+				FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
+				loader.setController(controller.getController0());
+				try {
+					stage.setScene(new Scene((AnchorPane) loader.load()));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				stage.show();
+			}
+		}
+	}
+
+	/**
+	 * Visualize the turns corresponding to their position in the field
+	 */
+	public void fill(int columnIndex, int rowIndex, char player) {
+		// player 0 = red, player 1 = yellow
+		Circle circle = new Circle();
+		circle.setRadius(35.0);
+		addListener((Node) circle, columnIndex, rowIndex);
+	
+		if (player == 'X') {
+			circle.setFill(Color.web("#62dbee", 0.85));
+			GridPane.setColumnIndex(circle, columnIndex);
+			GridPane.setRowIndex(circle, (5 - rowIndex));
+			GridPane.setHalignment(circle, HPos.CENTER);
+			gameGrid.getChildren().add(circle);
+		} else if (player == 'O') {
+			circle.setFill(Color.web("#46c668", 0.8));
+			GridPane.setColumnIndex(circle, columnIndex);
+			GridPane.setRowIndex(circle, (5 - rowIndex));
+			GridPane.setHalignment(circle, HPos.CENTER);
+			gameGrid.getChildren().add(circle);
+		}
 	}
 
 	/**
@@ -266,123 +399,6 @@ public class Controller3 {
 	}
 
 	/**
-	 * gameOver-method shows the game-result and asks for the next steps (play
-	 * new set, ...)<br>
-	 * 
-	 * @param winningPlayer
-	 * @param winningCombo
-	 * @throws IOException
-	 */
-	public void gameOver(byte winningPlayer, int[][] winningCombo){
-		// highlights the winning-combo
-		highlightWinning(winningCombo);
-
-		// Winner gets one point
-		if (winningPlayer == 1) {
-			int playerX = Integer.parseInt(ltePoints.getText());
-			ltePoints.setText(String.valueOf(playerX + 1));
-		} else if (winningPlayer == 2) {
-			int playerO = Integer.parseInt(opponentPoints.getText());
-			opponentPoints.setText(String.valueOf(playerO + 1));
-		}
-
-		// Alert-Dialog (Confirmation-Options: Go on with next Set || exit to Startmenu)
-		if (!(controller.getGameInfo().getOwnPoints() == 3 || controller.getGameInfo().getOpponentPoints() == 3)) {
-			Alert alert = new Alert(AlertType.WARNING);
-			alert.setTitle("Game Over"); // Ask the user what the next steps are
-			alert.setContentText("Unvollständige Spiele werden nicht gespeichert!");
-			if (winningPlayer == 1) {
-				alert.setHeaderText("Die KI hat gewonnen!" + "\n" + "Was nun?");
-			} else if (winningPlayer == 2) {
-				alert.setHeaderText("Sie haben gewonnen!" + "\n" + "Was nun?");
-			} else {
-				alert.setHeaderText("Unentschieden!" + "\n" + "Was nun?");
-			}
-
-			ButtonType weiter = new ButtonType("Weiter spielen");
-			ButtonType beenden = new ButtonType("Beenden");
-
-			alert.getButtonTypes().setAll(weiter, beenden);
-
-			Optional<ButtonType> result = alert.showAndWait();
-
-			if (result.get() == weiter) {
-				clearGrid();
-
-				// raise set
-				int satz = Integer.parseInt(set.getText());
-				set.setText(String.valueOf(satz + 1));
-				controller.getGameInfo().setSet(satz);
-
-				startNewSet();
-			}
-			if (result.get() == beenden) {
-				// DB: delete unfinished game
-				if (!(controller.getGameInfo().getOwnPoints() == 3
-						|| controller.getGameInfo().getOpponentPoints() == 3)) {
-					controller.deleteUnfinishedGame();
-				}
-
-				Stage stage;
-				stage = (Stage) backToStart.getScene().getWindow();
-
-				// set Icon
-				File file = new File("files/images/icon.png");
-				Image image = new Image(file.toURI().toString());
-				stage.getIcons().add(image);
-
-				// FXMLLoader
-				FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
-				loader.setController(controller.getController0());
-				try {
-					stage.setScene(new Scene((AnchorPane) loader.load()));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-
-				stage.show();
-			}
-		} else {
-			Alert alert = new Alert(AlertType.WARNING);
-			alert.setTitle("Game Over"); 
-			// Ask the user what the next steps are
-			if (winningPlayer == 1) {
-				alert.setHeaderText("Die KI hat gewonnen!" + "\n" + "Das Spiel ist nun entschieden.");
-			} else if (winningPlayer == 2) {
-				alert.setHeaderText("Sie haben gewonnen!" + "\n" + "Das Spiel ist nun entschieden.");
-			} else {
-				alert.setHeaderText("Unentschieden!" + "\n" + "Das Spiel ist nun entschieden.");
-			}
-			ButtonType beenden = new ButtonType("Beenden");
-
-			alert.getButtonTypes().setAll(beenden);
-
-			Optional<ButtonType> result = alert.showAndWait();
-
-			if (result.get() == beenden) {
-
-				Stage stage;
-				stage = (Stage) backToStart.getScene().getWindow();
-
-				// set Icon
-				File file = new File("files/images/icon.png");
-				Image image = new Image(file.toURI().toString());
-				stage.getIcons().add(image);
-
-				// FXMLLoader
-				FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
-				loader.setController(controller.getController0());
-				try {
-					stage.setScene(new Scene((AnchorPane) loader.load()));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				stage.show();
-			}
-		}
-	}
-	
-	/**
 	 * starts a new Set<b>
 	 */
 	private void startNewSet() {
@@ -411,30 +427,6 @@ public class Controller3 {
 		startGame.setDisable(true);
 		
 		controller.getGameInfo().setGameInProgress(true);
-	}
-
-	/**
-	 * Visualize the turns corresponding to their position in the field
-	 */
-	public void fill(int columnIndex, int rowIndex, char player) {
-		// player 0 = red, player 1 = yellow
-		Circle circle = new Circle();
-		circle.setRadius(35.0);
-		addListener((Node) circle, columnIndex, rowIndex);
-
-		if (player == 'X') {
-			circle.setFill(Color.web("#62dbee", 0.85));
-			GridPane.setColumnIndex(circle, columnIndex);
-			GridPane.setRowIndex(circle, (5 - rowIndex));
-			GridPane.setHalignment(circle, HPos.CENTER);
-			gameGrid.getChildren().add(circle);
-		} else if (player == 'O') {
-			circle.setFill(Color.web("#46c668", 0.8));
-			GridPane.setColumnIndex(circle, columnIndex);
-			GridPane.setRowIndex(circle, (5 - rowIndex));
-			GridPane.setHalignment(circle, HPos.CENTER);
-			gameGrid.getChildren().add(circle);
-		}
 	}
 
 	/**

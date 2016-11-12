@@ -127,14 +127,6 @@ public class Controller4 {
 		this.images = controller.getImages();
 	}
 
-	public MainController getController() {
-		return controller;
-	}
-
-	public void setController(MainController controller) {
-		this.controller = controller;
-	}
-
 	/**
 	 * JavaFX initializations
 	 */
@@ -171,6 +163,169 @@ public class Controller4 {
 		System.out.println(controller.getGameInfo().getOwnName());
 	}
 	
+	/**
+	 * gameOver-method shows the game-result and asks for the next steps (play
+	 * new set, ...)<br>
+	 * 
+	 * @param winningPlayer
+	 * @param winningCombo
+	 */
+	public void gameOver(byte winningPlayer, int[][] winningCombo) {
+		highlightWinning(winningCombo);
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Game Over");
+		if (winningPlayer == 1) {
+			alert.setHeaderText(controller.getGameInfo().getOwnName() + " hat gewonnen" + "\n" + "Was nun?");
+		} else if (winningPlayer == 2) {
+			alert.setHeaderText(controller.getGameInfo().getOpponentName() + " hat gewonnen" + "\n" + "Was nun?");
+		} else {
+			alert.setHeaderText("Unentschieden!" + "\n" + "Was nun?");
+		}
+	
+		ButtonType weiter = new ButtonType("Weiter spielen");
+		ButtonType beenden = new ButtonType("Beenden");
+	
+		alert.getButtonTypes().setAll(weiter, beenden);
+	
+		Optional<ButtonType> result = alert.showAndWait();
+	
+		if (result.get() == weiter) {
+			clearGrid();
+	
+			// Winner gets one point
+			if (winningPlayer == 1) {
+				int playerX = Integer.parseInt(ltePoints.getText());
+				ltePoints.setText(String.valueOf(playerX + 1));
+				controller.getGameInfo().setOwnPoints(playerX);
+			} else if (winningPlayer == 2) {
+				int playerO = Integer.parseInt(opponentPoints.getText());
+				opponentPoints.setText(String.valueOf(playerO + 1));
+				controller.getGameInfo().setOpponentPoints(playerO);
+			}
+	
+			// raise set
+			int satz = Integer.parseInt(set.getText());
+			set.setText(String.valueOf(satz + 1));
+			controller.getGameInfo().setSet(satz);
+	
+			// new game
+			controller.setThreadPlayerPlayerNull();
+	
+			// reset rows
+			rowHigh0 = 0;
+			rowHigh1 = 0;
+			rowHigh2 = 0;
+			rowHigh3 = 0;
+			rowHigh4 = 0;
+			rowHigh5 = 0;
+			rowHigh6 = 0;
+		} else if (result.get() == beenden) {
+	
+			controller.setThreadPlayerPlayerNull();
+	
+			// Integer Stones per column -> hight of the row
+			rowHigh0 = 0;
+			rowHigh1 = 0;
+			rowHigh2 = 0;
+			rowHigh3 = 0;
+			rowHigh4 = 0;
+			rowHigh5 = 0;
+			rowHigh6 = 0;
+	
+			Stage stage;
+			stage = (Stage) backToStart.getScene().getWindow();
+	
+			// set Icon
+			File file = new File("files/images/icon.png");
+			Image image = new Image(file.toURI().toString());
+			stage.getIcons().add(image);
+	
+			// FXMLLoader
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
+			loader.setController(controller.getController0());
+			try {
+				stage.setScene(new Scene((AnchorPane) loader.load()));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			stage.show();
+		}
+	}
+
+	/**
+	 * Visualize the turns corresponding to their position in the field
+	 */
+	private void fill(int columnIndex, int rowIndex, char player, boolean endGame) {
+		// player 0 = red, player 1 = yellow
+		Circle circle = new Circle();
+		circle.setRadius(35.0);
+		addListener((Node) circle, columnIndex, rowIndex);
+	
+		if (player == 'X') {
+			circle.setFill(Color.web("#62dbee", 0.85));
+			GridPane.setColumnIndex(circle, columnIndex);
+			GridPane.setRowIndex(circle, (5 - rowIndex));
+			GridPane.setHalignment(circle, HPos.CENTER);
+			gameGrid.getChildren().add(circle);
+		} else if (player == 'O') {
+			circle.setFill(Color.web("#46c668", 0.8));
+			GridPane.setColumnIndex(circle, columnIndex);
+			GridPane.setRowIndex(circle, (5 - rowIndex));
+			GridPane.setHalignment(circle, HPos.CENTER);
+			gameGrid.getChildren().add(circle);
+		}
+		if (columnIndex == 0) {
+			rowHigh0++;
+		} else if (columnIndex == 1) {
+			rowHigh1++;
+		} else if (columnIndex == 2) {
+			rowHigh2++;
+		} else if (columnIndex == 3) {
+			rowHigh3++;
+		} else if (columnIndex == 4) {
+			rowHigh4++;
+		} else if (columnIndex == 5) {
+			rowHigh5++;
+		} else if (columnIndex == 6) {
+			rowHigh6++;
+		}
+	
+		System.out.println(rowHigh0 + " " + rowHigh1 + " " + rowHigh2 + " " + rowHigh3 + " " + rowHigh4 + " " + rowHigh5
+				+ " " + rowHigh6);
+	}
+
+	/**
+	 * highlights the winning-combo<br>
+	 * 
+	 * @param woGewonnen
+	 */
+	private void highlightWinning(int[][] woGewonnen) {
+		// Get the positions from the array
+		for (int i = 0; i <= 3; i++) {
+			int column = woGewonnen[i][0];
+			int row = woGewonnen[i][1];
+			setHighlight(column, row);
+		}
+	}
+
+	/**
+	 * changes color to highlight the winning-combo
+	 * 
+	 * @param column
+	 * @param row
+	 */
+	private void setHighlight(int column, int row) {
+		// new Circle
+		Circle circle2 = new Circle();
+		circle2.setRadius(35.0);
+	
+		circle2.setFill(Color.web("#FF0000", 0.8));
+		GridPane.setColumnIndex(circle2, column);
+		GridPane.setRowIndex(circle2, (5 - row));
+		GridPane.setHalignment(circle2, HPos.CENTER);
+		gameGrid.getChildren().add(circle2);
+	}
+
 	/**
 	 * pause the Sound<br>
 	 * 
@@ -221,95 +376,6 @@ public class Controller4 {
 		stage.setScene(new Scene((AnchorPane) loader.load()));
 
 		stage.show();
-	}
-
-	/**
-	 * gameOver-method shows the game-result and asks for the next steps (play
-	 * new set, ...)<br>
-	 * 
-	 * @param winningPlayer
-	 * @param winningCombo
-	 */
-	public void gameOver(byte winningPlayer, int[][] winningCombo) {
-		highlightWinning(winningCombo);
-		Alert alert = new Alert(AlertType.CONFIRMATION);
-		alert.setTitle("Game Over");
-		if (winningPlayer == 1) {
-			alert.setHeaderText(controller.getGameInfo().getOwnName() + " hat gewonnen" + "\n" + "Was nun?");
-		} else if (winningPlayer == 2) {
-			alert.setHeaderText(controller.getGameInfo().getOpponentName() + " hat gewonnen" + "\n" + "Was nun?");
-		} else {
-			alert.setHeaderText("Unentschieden!" + "\n" + "Was nun?");
-		}
-
-		ButtonType weiter = new ButtonType("Weiter spielen");
-		ButtonType beenden = new ButtonType("Beenden");
-
-		alert.getButtonTypes().setAll(weiter, beenden);
-
-		Optional<ButtonType> result = alert.showAndWait();
-
-		if (result.get() == weiter) {
-			clearGrid();
-
-			// Winner gets one point
-			if (winningPlayer == 1) {
-				int playerX = Integer.parseInt(ltePoints.getText());
-				ltePoints.setText(String.valueOf(playerX + 1));
-				controller.getGameInfo().setOwnPoints(playerX);
-			} else if (winningPlayer == 2) {
-				int playerO = Integer.parseInt(opponentPoints.getText());
-				opponentPoints.setText(String.valueOf(playerO + 1));
-				controller.getGameInfo().setOpponentPoints(playerO);
-			}
-
-			// raise set
-			int satz = Integer.parseInt(set.getText());
-			set.setText(String.valueOf(satz + 1));
-			controller.getGameInfo().setSet(satz);
-
-			// new game
-			controller.setThreadPlayerPlayerNull();
-
-			// reset rows
-			rowHigh0 = 0;
-			rowHigh1 = 0;
-			rowHigh2 = 0;
-			rowHigh3 = 0;
-			rowHigh4 = 0;
-			rowHigh5 = 0;
-			rowHigh6 = 0;
-		} else if (result.get() == beenden) {
-
-			controller.setThreadPlayerPlayerNull();
-
-			// Integer Stones per column -> hight of the row
-			rowHigh0 = 0;
-			rowHigh1 = 0;
-			rowHigh2 = 0;
-			rowHigh3 = 0;
-			rowHigh4 = 0;
-			rowHigh5 = 0;
-			rowHigh6 = 0;
-
-			Stage stage;
-			stage = (Stage) backToStart.getScene().getWindow();
-
-			// set Icon
-			File file = new File("files/images/icon.png");
-			Image image = new Image(file.toURI().toString());
-			stage.getIcons().add(image);
-
-			// FXMLLoader
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
-			loader.setController(controller.getController0());
-			try {
-				stage.setScene(new Scene((AnchorPane) loader.load()));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			stage.show();
-		}
 	}
 
 	/**
@@ -415,96 +481,6 @@ public class Controller4 {
 		}
 	}
 
-	/**
-	 * Visualize the turns corresponding to their position in the field
-	 */
-	private void fill(int columnIndex, int rowIndex, char player, boolean endGame) {
-		// player 0 = red, player 1 = yellow
-		Circle circle = new Circle();
-		circle.setRadius(35.0);
-		addListener((Node) circle, columnIndex, rowIndex);
-
-		if (player == 'X') {
-			circle.setFill(Color.web("#62dbee", 0.85));
-			GridPane.setColumnIndex(circle, columnIndex);
-			GridPane.setRowIndex(circle, (5 - rowIndex));
-			GridPane.setHalignment(circle, HPos.CENTER);
-			gameGrid.getChildren().add(circle);
-		} else if (player == 'O') {
-			circle.setFill(Color.web("#46c668", 0.8));
-			GridPane.setColumnIndex(circle, columnIndex);
-			GridPane.setRowIndex(circle, (5 - rowIndex));
-			GridPane.setHalignment(circle, HPos.CENTER);
-			gameGrid.getChildren().add(circle);
-		}
-		if (columnIndex == 0) {
-			rowHigh0++;
-		} else if (columnIndex == 1) {
-			rowHigh1++;
-		} else if (columnIndex == 2) {
-			rowHigh2++;
-		} else if (columnIndex == 3) {
-			rowHigh3++;
-		} else if (columnIndex == 4) {
-			rowHigh4++;
-		} else if (columnIndex == 5) {
-			rowHigh5++;
-		} else if (columnIndex == 6) {
-			rowHigh6++;
-		}
-
-		System.out.println(rowHigh0 + " " + rowHigh1 + " " + rowHigh2 + " " + rowHigh3 + " " + rowHigh4 + " " + rowHigh5
-				+ " " + rowHigh6);
-	}
-
-	/**
-	 * clears the field
-	 */
-	@FXML
-	public void clearGrid() {
-		Node node = gameGrid.getChildren().get(0);
-		gameGrid.getChildren().clear();
-		gameGrid.getChildren().add(0, node);
-
-		for (int i = 0; i < 7; i++) {
-			for (int j = 0; j < 6; j++) {
-				addListener(i, j);
-			}
-		}
-	}
-
-	/**
-	 * highlights the winning-combo<br>
-	 * 
-	 * @param woGewonnen
-	 */
-	public void highlightWinning(int[][] woGewonnen) {
-		// Get the positions from the array
-		for (int i = 0; i <= 3; i++) {
-			int column = woGewonnen[i][0];
-			int row = woGewonnen[i][1];
-			setHighlight(column, row);
-		}
-	}
-
-	/**
-	 * changes color to highlight the winning-combo
-	 * 
-	 * @param column
-	 * @param row
-	 */
-	public void setHighlight(int column, int row) {
-		// new Circle
-		Circle circle2 = new Circle();
-		circle2.setRadius(35.0);
-
-		circle2.setFill(Color.web("#FF0000", 0.8));
-		GridPane.setColumnIndex(circle2, column);
-		GridPane.setRowIndex(circle2, (5 - row));
-		GridPane.setHalignment(circle2, HPos.CENTER);
-		gameGrid.getChildren().add(circle2);
-	}
-
 	private int getRow(int column) {
 		if (column == 0) {
 			return rowHigh0;
@@ -557,6 +533,22 @@ public class Controller4 {
 		controller.getGameInfo().setGameInProgress(true);
 	}
 	
+	/**
+	 * clears the field
+	 */
+	@FXML
+	private void clearGrid() {
+		Node node = gameGrid.getChildren().get(0);
+		gameGrid.getChildren().clear();
+		gameGrid.getChildren().add(0, node);
+	
+		for (int i = 0; i < 7; i++) {
+			for (int j = 0; j < 6; j++) {
+				addListener(i, j);
+			}
+		}
+	}
+
 	/**
 	 * Event for leaving the application<br>
 	 * 

@@ -147,23 +147,6 @@ public class Controller2 {
 	}
 	
 	/**
-	 * pause the Sound<br>
-	 * 
-	 * @param event
-	 */
-	@FXML
-	private void mute(ActionEvent event){
-		Status status = soundManager.playPause();
-		if (status != null) {
-			if (status == Status.PAUSED) {
-				muteButton.setGraphic(new ImageView(images.get("speaker1-mute")));
-			} else if (status == Status.PLAYING) {
-				muteButton.setGraphic(new ImageView(images.get("speaker1")));
-			}
-		}
-	}
-	
-	/**
 	 * Go back to Screen0 and close any running threadReconstruction<br>
 	 * 
 	 * @param event
@@ -225,159 +208,19 @@ public class Controller2 {
 	}
 	
 	/**
-	 * sets the current Set-Meta-Information on the Screen<br>
-	 * returns the reconstruct Turns of the current Set<br>
+	 * highlights the winning-combo<br>
 	 * 
-	 * @return
+	 * @param woGewonnen
 	 */
-	private int [] prepareRecTurns(){
-		int recSetNumber = setChoice.getSelectionModel().getSelectedIndex();
-		int[] recTurns = sets[recSetNumber].getReplayTurns();
-		
-		String pointsOpponent = String.valueOf(sets[recSetNumber].getPointsOpponent()); //saves the meta-information of the game
-		String pointsOwn = String.valueOf(sets[recSetNumber].getPointsOwn());
-		
-		String nameOpponent = games[gameIndex].getOpponentName() ;
-		String nameOwn = "LTE";
-		
-		String numberAllSets = String.valueOf(games[gameIndex].getNumberOfSets());
-		String numberCurrentSet = String.valueOf(recSetNumber+1);
-		
-		// shows the meta-information of the game
-		metaPlayerO.setText(nameOwn);
-		metaPlayerX.setText(nameOpponent);
-		pointsX.setText(pointsOwn);
-		pointsO.setText(pointsOpponent);
-		currentSet.setText(numberCurrentSet+" / "+numberAllSets);
-		
-		return recTurns;
-	}
-	
-	/**
-	 * is called by the "Play" button<br>
-	 * sets the Reconstruct-Thread on RUNNABLE<br>
-	 * calls prepareRecTurns() to give the Reconstruct-Thread the recTurns<br>
-	 * 
-	 * @param event
-	 */
-	@FXML
-	public void playRec(ActionEvent event){
-		pause.setDisable(false);
-		play.setDisable(true);
-		stop.setDisable(false);
-		gameChoice.setDisable(true);
-		setChoice.setDisable(true);
-
-		synchronized (threadReconstruct) {
-			if (threadReconstruct.getState() == Thread.State.NEW) {
-				threadReconstruct.setRecTurns(prepareRecTurns());
-				threadReconstruct.start();
-			} else if (threadReconstruct.getState() == Thread.State.TERMINATED){
-				threadReconstruct = new ThreadReconstruct(this, null);
-				threadReconstruct.setRecTurns(prepareRecTurns());
-				threadReconstruct.start();
-			} else if (threadReconstruct.getState() == Thread.State.WAITING) {
-				threadReconstruct.notify();
-			}
+	public void highlightWinning(int[][] woGewonnen){
+		//Get the positions from the array
+		for(int i = 0; i<=3; i++){
+			int column = woGewonnen[i][0];
+			int row = woGewonnen[i][1];
+			setHighlight(column, row);
 		}
 	}
-	
-	/**
-	 * called when Reconstruct-Thread of current Set finished<br>
-	 * disables navigation buttons (play, pause, stop)<br>
-	 * enables Choice-Boxes and allows user to select new game/set<br>
-	 */
-	public void playRecFinished(){
-		play.setDisable(true);
-		pause.setDisable(true);
-		stop.setDisable(true);
-		gameChoice.setDisable(false);
-		setChoice.setDisable(false);
-		int set = setChoice.getSelectionModel().getSelectedIndex();
-		String winner = sets[set].getWinner();
-		System.out.println(winner);
-		if(winner.equals("X")){
-			pointsX.setText(String.valueOf((Integer.parseInt(pointsX.getText()) + 1)));
-		} else {
-			pointsO.setText(pointsO.getText() + 1);
-		}
-		
-	}
-	
-	/**
-	 * shows the turns of the selected set in GridPane gameGrid<br>
-	 * is called by the Reconstruct-Thread<br>
-	 * 
-	 * @param recTurns
-	 */
-	public void replayTurn (int columnIndex, int rowIndex, int color) {
-		Circle circle = new Circle();
-		circle.setRadius(35.0);
 
-		if (color == 0) {	
-			// blue
-			circle.setFill(Color.web("#62dbee", 0.85));
-		} else if (color == 1) {
-			// green
-			circle.setFill(Color.web("#46c668", 0.8));
-		}	
-			
-		GridPane.setColumnIndex(circle, columnIndex);
-		GridPane.setRowIndex(circle, (5 - rowIndex));
-		GridPane.setHalignment(circle, HPos.CENTER);
-		gameGrid.getChildren().add(circle);
-	}
-
-	
-	/**
-	 * is called by the "pause" button <br>
-	 * sets the currently running Reconstruct-Thread to WAIT by interrupting it<br>
-	 * 
-	 * @param event
-	 */
-	@FXML
-	public void pauseRec(ActionEvent event) {
-		
-		play.setDisable(false);
-		pause.setDisable(true);
-		stop.setDisable(false);
-		gameChoice.setDisable(true);
-		setChoice.setDisable(true);
-		
-		synchronized (threadReconstruct) {
-			System.out.println(threadReconstruct.getState());
-			if (threadReconstruct.getState() == Thread.State.RUNNABLE || threadReconstruct.getState() == Thread.State.TIMED_WAITING) {
-				threadReconstruct.interrupt();
-			} else {
-				threadReconstruct.notify();
-			}
-		}	
-	}
-	
-	
-	/**
-	 * if button "Stop" is clicked<br>
-	 * sets the State of threadReconstruction to TERMINATED<br>
-	 * allows the user to select another game/set to reconstruct<br>
-	 * 
-	 * @param event
-	 */
-	@FXML
-	public void stopAction(ActionEvent event){
-		
-		play.setDisable(true);
-		pause.setDisable(true);
-		stop.setDisable(true);
-		gameChoice.setDisable(false);
-		setChoice.setDisable(false);
-		
-		synchronized(threadReconstruct){
-			if(threadReconstruct.getState() != Thread.State.TERMINATED){
-				threadReconstruct.stop();
-			}
-		}
-	}
-	
 	/**
 	 * initialization of of ChoiceBoxes and ChangeListener<br>
 	 * gets data from Database<br>
@@ -397,7 +240,7 @@ public class Controller2 {
 			// i is index (position in the gameChoice-Box) - gameID is the gameID to this game
 			connection.put(i, gameID);
 		}
-
+	
 		// PlayerChoice initialization + ChangeListener
 		gameChoice.setItems(gameInfo);
 		// set first entry as default
@@ -405,7 +248,7 @@ public class Controller2 {
 		
 		gameIndex = gameChoice.getSelectionModel().getSelectedIndex();
 		gameID = connection.get(gameIndex);
-
+	
 		//setChoice shows first entry without ChangeListener
 		System.out.println("Rekonstruierbares Spiel: (gameID, Index)   :" + gameID + ", " + gameChoice.getSelectionModel().getSelectedIndex());
 		System.out.println("gameID beim konfigurieren: " + gameID);
@@ -417,7 +260,7 @@ public class Controller2 {
 		}
 		setChoice.setItems(setNumber);
 		setChoice.getSelectionModel().selectFirst();
-
+	
 		
 		ChangeListener<Number> listenerSet = new ChangeListener<Number>() {
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
@@ -467,38 +310,89 @@ public class Controller2 {
 			alert.showAndWait();
 		}
 	}
-	
+
 	/**
-	 * clears the field
+	 * called when Reconstruct-Thread of current Set finished<br>
+	 * disables navigation buttons (play, pause, stop)<br>
+	 * enables Choice-Boxes and allows user to select new game/set<br>
 	 */
-	@FXML
-	public void clearGrid() {
-		Node node = gameGrid.getChildren().get(0);
-	    gameGrid.getChildren().clear();
-	    gameGrid.getChildren().add(0,node);	
-	}
-	
-	/**
-	 * highlights the winning-combo<br>
-	 * 
-	 * @param woGewonnen
-	 */
-	public void highlightWinning(int[][] woGewonnen){
-		//Get the positions from the array
-		for(int i = 0; i<=3; i++){
-			int column = woGewonnen[i][0];
-			int row = woGewonnen[i][1];
-			setHighlight(column, row);
+	public void playRecFinished(){
+		play.setDisable(true);
+		pause.setDisable(true);
+		stop.setDisable(true);
+		gameChoice.setDisable(false);
+		setChoice.setDisable(false);
+		int set = setChoice.getSelectionModel().getSelectedIndex();
+		String winner = sets[set].getWinner();
+		System.out.println(winner);
+		if(winner.equals("X")){
+			pointsX.setText(String.valueOf((Integer.parseInt(pointsX.getText()) + 1)));
+		} else {
+			pointsO.setText(pointsO.getText() + 1);
 		}
+		
 	}
+
+	/**
+	 * shows the turns of the selected set in GridPane gameGrid<br>
+	 * is called by the Reconstruct-Thread<br>
+	 * 
+	 * @param recTurns
+	 */
+	public void replayTurn (int columnIndex, int rowIndex, int color) {
+		Circle circle = new Circle();
+		circle.setRadius(35.0);
 	
+		if (color == 0) {	
+			// blue
+			circle.setFill(Color.web("#62dbee", 0.85));
+		} else if (color == 1) {
+			// green
+			circle.setFill(Color.web("#46c668", 0.8));
+		}	
+			
+		GridPane.setColumnIndex(circle, columnIndex);
+		GridPane.setRowIndex(circle, (5 - rowIndex));
+		GridPane.setHalignment(circle, HPos.CENTER);
+		gameGrid.getChildren().add(circle);
+	}
+
+	/**
+	 * sets the current Set-Meta-Information on the Screen<br>
+	 * returns the reconstruct Turns of the current Set<br>
+	 * 
+	 * @return
+	 */
+	private int [] prepareRecTurns(){
+		int recSetNumber = setChoice.getSelectionModel().getSelectedIndex();
+		int[] recTurns = sets[recSetNumber].getReplayTurns();
+		
+		String pointsOpponent = String.valueOf(sets[recSetNumber].getPointsOpponent()); //saves the meta-information of the game
+		String pointsOwn = String.valueOf(sets[recSetNumber].getPointsOwn());
+		
+		String nameOpponent = games[gameIndex].getOpponentName() ;
+		String nameOwn = "LTE";
+		
+		String numberAllSets = String.valueOf(games[gameIndex].getNumberOfSets());
+		String numberCurrentSet = String.valueOf(recSetNumber+1);
+		
+		// shows the meta-information of the game
+		metaPlayerO.setText(nameOwn);
+		metaPlayerX.setText(nameOpponent);
+		pointsX.setText(pointsOwn);
+		pointsO.setText(pointsOpponent);
+		currentSet.setText(numberCurrentSet+" / "+numberAllSets);
+		
+		return recTurns;
+	}
+
 	/**
 	 * changes color to highlight the winning-combo<br>
 	 * 
 	 * @param column
 	 * @param row
 	 */
-	public void setHighlight(int column, int row){
+	private void setHighlight(int column, int row){
 		//new Circle
 		Circle circle2 = new Circle();
 		circle2.setRadius(35.0);
@@ -508,6 +402,111 @@ public class Controller2 {
 		GridPane.setRowIndex(circle2, (5 - row));
 		GridPane.setHalignment(circle2, HPos.CENTER);
 		gameGrid.getChildren().add(circle2);
+	}
+
+	/**
+	 * pause the Sound<br>
+	 * 
+	 * @param event
+	 */
+	@FXML
+	private void mute(ActionEvent event){
+		Status status = soundManager.playPause();
+		if (status != null) {
+			if (status == Status.PAUSED) {
+				muteButton.setGraphic(new ImageView(images.get("speaker1-mute")));
+			} else if (status == Status.PLAYING) {
+				muteButton.setGraphic(new ImageView(images.get("speaker1")));
+			}
+		}
+	}
+
+	/**
+	 * is called by the "Play" button<br>
+	 * sets the Reconstruct-Thread on RUNNABLE<br>
+	 * calls prepareRecTurns() to give the Reconstruct-Thread the recTurns<br>
+	 * 
+	 * @param event
+	 */
+	@FXML
+	private void playRec(ActionEvent event){
+		pause.setDisable(false);
+		play.setDisable(true);
+		stop.setDisable(false);
+		gameChoice.setDisable(true);
+		setChoice.setDisable(true);
+
+		synchronized (threadReconstruct) {
+			if (threadReconstruct.getState() == Thread.State.NEW) {
+				threadReconstruct.setRecTurns(prepareRecTurns());
+				threadReconstruct.start();
+			} else if (threadReconstruct.getState() == Thread.State.TERMINATED){
+				threadReconstruct = new ThreadReconstruct(this, null);
+				threadReconstruct.setRecTurns(prepareRecTurns());
+				threadReconstruct.start();
+			} else if (threadReconstruct.getState() == Thread.State.WAITING) {
+				threadReconstruct.notify();
+			}
+		}
+	}
+	
+	/**
+	 * is called by the "pause" button <br>
+	 * sets the currently running Reconstruct-Thread to WAIT by interrupting it<br>
+	 * 
+	 * @param event
+	 */
+	@FXML
+	private void pauseRec(ActionEvent event) {
+		
+		play.setDisable(false);
+		pause.setDisable(true);
+		stop.setDisable(false);
+		gameChoice.setDisable(true);
+		setChoice.setDisable(true);
+		
+		synchronized (threadReconstruct) {
+			System.out.println(threadReconstruct.getState());
+			if (threadReconstruct.getState() == Thread.State.RUNNABLE || threadReconstruct.getState() == Thread.State.TIMED_WAITING) {
+				threadReconstruct.interrupt();
+			} else {
+				threadReconstruct.notify();
+			}
+		}	
+	}
+	
+	
+	/**
+	 * if button "Stop" is clicked<br>
+	 * sets the State of threadReconstruction to TERMINATED<br>
+	 * allows the user to select another game/set to reconstruct<br>
+	 * 
+	 * @param event
+	 */
+	@FXML
+	private void stopAction(ActionEvent event){
+		
+		play.setDisable(true);
+		pause.setDisable(true);
+		stop.setDisable(true);
+		gameChoice.setDisable(false);
+		setChoice.setDisable(false);
+		
+		synchronized(threadReconstruct){
+			if(threadReconstruct.getState() != Thread.State.TERMINATED){
+				threadReconstruct.stop();
+			}
+		}
+	}
+	
+	/**
+	 * clears the field
+	 */
+	@FXML
+	private void clearGrid() {
+		Node node = gameGrid.getChildren().get(0);
+	    gameGrid.getChildren().clear();
+	    gameGrid.getChildren().add(0,node);	
 	}
 	
 	/**

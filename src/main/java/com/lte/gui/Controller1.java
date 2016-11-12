@@ -110,14 +110,6 @@ public class Controller1 {
 		this.soundManager = controller.getSoundManager();		
 		this.images = controller.getImages();
 	}
-
-	public MainController getController() {
-		return controller;
-	}
-
-	public void setController(MainController controller) {
-		this.controller = controller;
-	}
 	
 	/**
 	 * JavaFX initializations<br>
@@ -202,97 +194,6 @@ public class Controller1 {
 		namePlayerO.setText(controller.getGameInfo().getOpponentName());
 	}
 
-	/**
-	 * pause the Sound<br>
-	 * 
-	 * @param event
-	 */
-	@FXML
-	private void mute(ActionEvent event){
-		Status status = soundManager.playPause();
-		if (status != null) {
-			if (status == Status.PAUSED) {
-				muteButton.setGraphic(new ImageView(images.get("speaker1-mute")));
-			} else if (status == Status.PLAYING) {
-				muteButton.setGraphic(new ImageView(images.get("speaker1")));
-			}
-		}
-	}
-
-	/**
-	 * Back to Screen0<br>
-	 * 
-	 * @param event
-	 * @throws IOException
-	 */
-	@FXML
-	private void goToStartmenu(ActionEvent event) throws IOException {
-
-		// DB: delete unfinished game
-		if (!(controller.getGameInfo().getOwnPoints() == 3
-				|| controller.getGameInfo().getOpponentPoints() == 3)) {
-			controller.deleteUnfinishedGame();
-		}
-		
-		Stage stage;
-		stage = (Stage) backToStart.getScene().getWindow();
-
-		// set Icon
-		File file = new File("files/images/icon.png");
-		Image image = new Image(file.toURI().toString());
-		stage.getIcons().add(image);
-
-		// FXMLLoader
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
-		loader.setController(controller.getController0());
-		stage.setScene(new Scene((AnchorPane) loader.load()));
-		stage.show();
-	}
-
-	/**
-	 * DirectoryChooser for file-interface<br>
-	 * 
-	 * @return String kontaktpfad
-	 */
-	@FXML
-	private String fileSelect() {
-		Stage mainStage = null;
-		DirectoryChooser directoryChooser = new DirectoryChooser(); //new directoryChooser
-		directoryChooser.setTitle("Verzeichnis des Kontaktpfades w�hlen!");
-		File selectedFile = directoryChooser.showDialog(mainStage);
-		String kontaktpfad = selectedFile.getPath(); //contact-path for FileInterface
-		controller.getSettings().setContactPath(kontaktpfad);
-		textKontaktpfad.setText(kontaktpfad);
-		System.out.println("Kontaktpfad: " + kontaktpfad);
-		return kontaktpfad;
-	}
-
-	/**
-	 * starts the game set<br>
-	 * 
-	 * @param event
-	 */
-	@FXML
-	private void startSet(ActionEvent event) {
-		String interfaceType = controller.getSettings().getInterfaceType();
-		if (interfaceType.equals(InterfaceManager.EVENT_TYPE)
-				|| interfaceType.equals(InterfaceManager.EVENT_TYPE_JSON)) {
-			updateCredentials();
-		}
-		set.setText(String.valueOf(controller.getGameInfo().getSet() + 1));
-		controller.getGameInfo().setSet(controller.getGameInfo().getSet() + 1);
-		
-		controller.playSet(); //triggers play-method
-		
-		//Disable settings during game
-		startGame.setDisable(true);
-		backToStart.setDisable(true);
-		timeSpinner.setDisable(true);
-		fileSelect.setDisable(true);
-		dataTrans.setDisable(true);
-		playerChoice.setDisable(true);
-	}
-	
 	/**
 	 * Client shows that it is ready to play the set
 	 */
@@ -453,17 +354,6 @@ public class Controller1 {
 	}
 
 	/**
-	 * clears the field
-	 */
-	@FXML
-	public void clearGrid() {
-		Node node = gameGrid.getChildren().get(0); //saves gameGrid as a node
-	    gameGrid.getChildren().clear(); //clears the Grid
-	    gameGrid.getChildren().add(0,node); //adds the node
-		
-	}
-	
-	/**
 	 * highlights the winning-combo<br>
 	 * 
 	 * @param woGewonnen
@@ -483,7 +373,7 @@ public class Controller1 {
 	 * @param column
 	 * @param row
 	 */
-	public void setHighlight(int column, int row){
+	private void setHighlight(int column, int row){
 		//new Circle
 		Circle circle2 = new Circle();
 		circle2.setRadius(35.0);
@@ -495,6 +385,80 @@ public class Controller1 {
 		gameGrid.getChildren().add(circle2);
 	}
 	
+	/**
+	 * starts the game set<br>
+	 * 
+	 * @param event
+	 */
+	@FXML
+	private void startSet(ActionEvent event) {
+		String interfaceType = controller.getSettings().getInterfaceType();
+		if (interfaceType.equals(InterfaceManager.EVENT_TYPE)
+				|| interfaceType.equals(InterfaceManager.EVENT_TYPE_JSON)) {
+			updateCredentials();
+		}
+		set.setText(String.valueOf(controller.getGameInfo().getSet() + 1));
+		controller.getGameInfo().setSet(controller.getGameInfo().getSet() + 1);
+		
+		controller.playSet(); //triggers play-method
+		
+		//Disable settings during game
+		startGame.setDisable(true);
+		backToStart.setDisable(true);
+		timeSpinner.setDisable(true);
+		fileSelect.setDisable(true);
+		dataTrans.setDisable(true);
+		playerChoice.setDisable(true);
+	}
+
+	/**
+	 * Back to Screen0<br>
+	 * 
+	 * @param event
+	 * @throws IOException
+	 */
+	@FXML
+	private void goToStartmenu(ActionEvent event) throws IOException {
+	
+		// DB: delete unfinished game
+		if (!(controller.getGameInfo().getOwnPoints() == 3
+				|| controller.getGameInfo().getOpponentPoints() == 3)) {
+			controller.deleteUnfinishedGame();
+		}
+		
+		Stage stage;
+		stage = (Stage) backToStart.getScene().getWindow();
+	
+		// set Icon
+		File file = new File("files/images/icon.png");
+		Image image = new Image(file.toURI().toString());
+		stage.getIcons().add(image);
+	
+		// FXMLLoader
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
+		loader.setController(controller.getController0());
+		stage.setScene(new Scene((AnchorPane) loader.load()));
+		stage.show();
+	}
+
+	/**
+	 * DirectoryChooser for file-interface<br>
+	 * 
+	 * @return String kontaktpfad
+	 */
+	@FXML
+	private String fileSelect() {
+		Stage mainStage = null;
+		DirectoryChooser directoryChooser = new DirectoryChooser(); //new directoryChooser
+		directoryChooser.setTitle("Verzeichnis des Kontaktpfades w�hlen!");
+		File selectedFile = directoryChooser.showDialog(mainStage);
+		String kontaktpfad = selectedFile.getPath(); //contact-path for FileInterface
+		controller.getSettings().setContactPath(kontaktpfad);
+		textKontaktpfad.setText(kontaktpfad);
+		System.out.println("Kontaktpfad: " + kontaktpfad);
+		return kontaktpfad;
+	}
+
 	/**
 	 * updates the Credentials
 	 */
@@ -515,6 +479,34 @@ public class Controller1 {
 		
 	}
 	
+	/**
+	 * clears the field
+	 */
+	@FXML
+	private void clearGrid() {
+		Node node = gameGrid.getChildren().get(0); //saves gameGrid as a node
+	    gameGrid.getChildren().clear(); //clears the Grid
+	    gameGrid.getChildren().add(0,node); //adds the node
+		
+	}
+
+	/**
+	 * pause the Sound<br>
+	 * 
+	 * @param event
+	 */
+	@FXML
+	private void mute(ActionEvent event){
+		Status status = soundManager.playPause();
+		if (status != null) {
+			if (status == Status.PAUSED) {
+				muteButton.setGraphic(new ImageView(images.get("speaker1-mute")));
+			} else if (status == Status.PLAYING) {
+				muteButton.setGraphic(new ImageView(images.get("speaker1")));
+			}
+		}
+	}
+
 	/**
 	 * Event for leaving the application<br>
 	 * 

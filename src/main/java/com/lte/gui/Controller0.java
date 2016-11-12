@@ -95,7 +95,6 @@ public class Controller0 {
 		this.images = controller.getImages();
 	}	
 	
-
 	/**
 	 * JavaFX initializations 
 	 */
@@ -165,6 +164,35 @@ public class Controller0 {
 		}
 
 	/**
+	 * ComboBox Player X editable
+	 */
+	@FXML
+	private void playerPlayerSelected(){
+		playerX.setEditable(true);
+	}
+
+
+	/**
+	 * ComboBox Player X editable false
+	 */
+	@FXML
+	private void playerKiSelected(){
+		playerX.setEditable(false);
+		playerX.setText("LTE");
+	}
+
+
+	/**
+	 * ComboBox Player X editable false
+	 */
+	@FXML
+	private void kiKiSelected(){
+		playerX.setEditable(false);
+		playerX.setText("LTE");
+	}
+
+
+	/**
 	 * buttonPressed event Handler<br>
 	 * Changes Layout from Layout0 to Game-Screen<br>
 	 * Button "Weiter zum Spiel" fires this event<br>
@@ -173,7 +201,7 @@ public class Controller0 {
 	 * @throws IOException
 	 */
 	@FXML
-	public void toGame(ActionEvent event) throws IOException {				
+	private void toGame(ActionEvent event) throws IOException {				
 		//Is one player-name empty?
 		if (playerX.getText().isEmpty()==true || playerO.getValue().isEmpty()==true) {
 			//Error-Message: Name is null!
@@ -282,7 +310,8 @@ public class Controller0 {
 	 * @param event
 	 * @throws IOException
 	 */
-	public void reconstructGame(ActionEvent event) throws IOException {
+	@FXML
+	private void reconstructGame(ActionEvent event) throws IOException {
 		Stage stage;
 		if (event.getSource() == reGame) {
 			stage = (Stage) toGame.getScene().getWindow();
@@ -324,32 +353,6 @@ public class Controller0 {
 		}
 	}	
 
-	/**
-	 * ComboBox Player X editable
-	 */
-	@FXML
-	public void playerPlayerSelected(){
-		playerX.setEditable(true);
-	}
-	
-	/**
-	 * ComboBox Player X editable false
-	 */
-	@FXML
-	public void kiKiSelected(){
-		playerX.setEditable(false);
-		playerX.setText("LTE");
-	}
-	
-	/**
-	 * ComboBox Player X editable false
-	 */
-	@FXML
-	public void playerKiSelected(){
-		playerX.setEditable(false);
-		playerX.setText("LTE");
-	}
-	
 	/**
 	 * Event for leaving the application<br>
 	 * 
