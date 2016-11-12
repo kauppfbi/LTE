@@ -93,6 +93,7 @@ public class Controller3 {
 	private ThreadPlayerKiNEW threadPlayerKiNEW;
 
 	/**
+	 * constructor for Controller3<br>
 	 * sets the mainController, soundManager and Images<br>
 	 * 
 	 * @param mainController
@@ -210,7 +211,6 @@ public class Controller3 {
 		stage.setScene(new Scene((AnchorPane) loader.load()));
 
 		stage.show();
-
 	}
 
 	/**

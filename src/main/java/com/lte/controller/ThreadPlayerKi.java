@@ -12,9 +12,7 @@ import com.lte.models.Settings;
 import javafx.application.Platform;
 
 public class ThreadPlayerKi {
-
-	// hallo
-	// **********************************//
+	
 	// GUI controller
 	private Controller3 controller3;
 

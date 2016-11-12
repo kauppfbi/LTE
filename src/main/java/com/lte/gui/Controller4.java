@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.Optional;
 import com.lte.controller.MainController;
 import com.lte.features.SoundManager;
-import com.lte.models.GameInfo;
-import com.lte.models.Settings;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -34,25 +32,12 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 /**
- * Controller4 Class for Player-Player
+ * Controller4 Class for Player-Player<br>
  * 
  * @author FelixH
- *
- *
- *         TODO: Siegmustererkennung! Line155: Uebernahme des GegnerNamen
- *         funktioniert noch nicht, ebenso in Con3 Außerdem wird Name1 ncoh auf
- *         default LTE gelassen Selbiger Fehler sollte ggf auch für unser
- *         Hauptprogramm KI-KI angepasst werden Siegmustererkennung muss
- *         RadioButtons wieder freigeben Logik für gewonnene Sätze?!
- *
- *
- *         Problem: nach ein paar geworfenen Steinen -> back to Startmenu ->
- *         wieder auf Screen4 -> keine Steine können mehr geworfen werden
- *
  */
 public class Controller4 {
 
-	// FXML Declarations
 	@FXML
 	Pane gameSet;
 
@@ -113,14 +98,12 @@ public class Controller4 {
 	@FXML
 	Button fixButton;
 
-	// non-FXML Declarations
 	private MainController controller;
 	private ToggleGroup tgroup;
 	private SoundManager soundManager;
 	private HashMap<String, Image> images;
 	
 	//Integer Stones per column -> hight of the row
-
 	private int rowHigh0 = 0;
 	private int rowHigh1 = 0;
 	private int rowHigh2 = 0;
@@ -132,13 +115,18 @@ public class Controller4 {
 	// Initial Player
 	// char player = 'X';
 
+	/**
+	 * constructor for Controller4<br>
+	 * sets the mainController, soundManager and Images<br>
+	 * 
+	 * @param mainController
+	 */
 	public Controller4(MainController mainController) {
 		this.controller = mainController;
 		this.soundManager = controller.getSoundManager();		
 		this.images = controller.getImages();
 	}
 
-	// Getter and Setter
 	public MainController getController() {
 		return controller;
 	}
@@ -150,7 +138,6 @@ public class Controller4 {
 	/**
 	 * JavaFX initializations
 	 */
-	// *******FXML-Methoden************
 	@FXML
 	public void initialize() {
 		Status status = soundManager.getStatus();
@@ -184,6 +171,11 @@ public class Controller4 {
 		System.out.println(controller.getGameInfo().getOwnName());
 	}
 	
+	/**
+	 * pause the Sound<br>
+	 * 
+	 * @param event
+	 */
 	@FXML
 	private void mute(ActionEvent event){
 		Status status = soundManager.playPause();
@@ -197,7 +189,7 @@ public class Controller4 {
 	}
 
 	/**
-	 * Back to Screen0
+	 * Back to Screen0<br>
 	 * 
 	 * @param event
 	 * @throws IOException
@@ -229,12 +221,11 @@ public class Controller4 {
 		stage.setScene(new Scene((AnchorPane) loader.load()));
 
 		stage.show();
-
 	}
 
 	/**
 	 * gameOver-method shows the game-result and asks for the next steps (play
-	 * new set, ...)
+	 * new set, ...)<br>
 	 * 
 	 * @param winningPlayer
 	 * @param winningCombo
@@ -277,10 +268,10 @@ public class Controller4 {
 			set.setText(String.valueOf(satz + 1));
 			controller.getGameInfo().setSet(satz);
 
-			// Neues Spiel
+			// new game
 			controller.setThreadPlayerPlayerNull();
 
-			// Zeilen zurücksetzen
+			// reset rows
 			rowHigh0 = 0;
 			rowHigh1 = 0;
 			rowHigh2 = 0;
@@ -288,9 +279,6 @@ public class Controller4 {
 			rowHigh4 = 0;
 			rowHigh5 = 0;
 			rowHigh6 = 0;
-
-			//
-
 		} else if (result.get() == beenden) {
 
 			controller.setThreadPlayerPlayerNull();
@@ -324,6 +312,12 @@ public class Controller4 {
 		}
 	}
 
+	/**
+	 * sets listeners on the columns and cells<br>
+	 * 
+	 * @param colIndex
+	 * @param rowIndex
+	 */
 	private void addListener(int colIndex, int rowIndex) {
 		Pane pane = new Pane();
 		pane.setOnMouseClicked(e -> {
@@ -350,6 +344,13 @@ public class Controller4 {
 		gameGrid.add(pane, colIndex, rowIndex);
 	}
 	
+	/**
+	 * sets listeners on the visualized circles<br>
+	 * 
+	 * @param node
+	 * @param colIndex
+	 * @param rowIndex
+	 */
 	private void addListener(Node node, int colIndex, int rowIndex){
 		node.setOnMouseClicked(e -> {
 			if (controller.getGameInfo().isGameInProgress()) {
@@ -373,13 +374,17 @@ public class Controller4 {
 		});
 	}
 	
-
+	/**
+	 * Highlights the hovered column<br>
+	 * 
+	 * @param column
+	 */
 	private void highlightColumn(int column, char nextPlayer) {
 		for (Node n : gameGrid.getChildren()) {
 
 			if (n instanceof Pane) {
 				Pane pane = (Pane) n;
-				if (gameGrid.getColumnIndex(pane) == column) {
+				if (GridPane.getColumnIndex(pane) == column) {
 					if (nextPlayer == 'X') {
 						String colorString = "#62bdee";
 						pane.setStyle("-fx-background-color: " + colorString + "; -fx-opacity: 0.7");
@@ -393,12 +398,17 @@ public class Controller4 {
 		}
 	}
 
+	/**
+	 * Stops highlighting the last column, as soon as hovered over the next column<br>
+	 * 
+	 * @param column
+	 */
 	private void deHighlightColumn(int column) {
 		for (Node n : gameGrid.getChildren()) {
 
 			if (n instanceof Pane) {
 				Pane pane = (Pane) n;
-				if (gameGrid.getColumnIndex(pane) == column) {
+				if (GridPane.getColumnIndex(pane) == column) {
 					pane.setStyle(null);
 				}
 			}
@@ -406,11 +416,8 @@ public class Controller4 {
 	}
 
 	/**
-	 * Shows the stones corresponding to their position in the field
-	 * 
+	 * Visualize the turns corresponding to their position in the field
 	 */
-
-	// ************************Fill-Methode***************************
 	private void fill(int columnIndex, int rowIndex, char player, boolean endGame) {
 		// player 0 = red, player 1 = yellow
 		Circle circle = new Circle();
@@ -421,14 +428,14 @@ public class Controller4 {
 			circle.setFill(Color.web("#62dbee", 0.85));
 			GridPane.setColumnIndex(circle, columnIndex);
 			GridPane.setRowIndex(circle, (5 - rowIndex));
+			GridPane.setHalignment(circle, HPos.CENTER);
 			gameGrid.getChildren().add(circle);
-			gameGrid.setHalignment(circle, HPos.CENTER);
 		} else if (player == 'O') {
 			circle.setFill(Color.web("#46c668", 0.8));
 			GridPane.setColumnIndex(circle, columnIndex);
 			GridPane.setRowIndex(circle, (5 - rowIndex));
+			GridPane.setHalignment(circle, HPos.CENTER);
 			gameGrid.getChildren().add(circle);
-			gameGrid.setHalignment(circle, HPos.CENTER);
 		}
 		if (columnIndex == 0) {
 			rowHigh0++;
@@ -467,7 +474,7 @@ public class Controller4 {
 	}
 
 	/**
-	 * highlights the winning-combo
+	 * highlights the winning-combo<br>
 	 * 
 	 * @param woGewonnen
 	 */
@@ -494,8 +501,8 @@ public class Controller4 {
 		circle2.setFill(Color.web("#FF0000", 0.8));
 		GridPane.setColumnIndex(circle2, column);
 		GridPane.setRowIndex(circle2, (5 - row));
+		GridPane.setHalignment(circle2, HPos.CENTER);
 		gameGrid.getChildren().add(circle2);
-		gameGrid.setHalignment(circle2, HPos.CENTER);
 	}
 
 	private int getRow(int column) {
@@ -551,7 +558,8 @@ public class Controller4 {
 	}
 	
 	/**
-	 * Event for leaving the application
+	 * Event for leaving the application<br>
+	 * 
 	 * @param event
 	 */
 	public void exitApplication(){
