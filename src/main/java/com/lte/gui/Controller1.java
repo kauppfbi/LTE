@@ -9,8 +9,6 @@ import com.lte.features.CredentialsInputDialog;
 import com.lte.features.SoundManager;
 import com.lte.interfaces.CredentialsManager;
 import com.lte.interfaces.InterfaceManager;
-import com.lte.models.GameInfo;
-import com.lte.models.Settings;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -34,17 +32,16 @@ import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 /**
- * Class Controller1 manages the Game-Screen
- * It´s the main part of the application and shows among other things the game-field
+ * Class Controller1 manages the Game-Screen<br>
+ * It´s the main part of the application and shows among other things the game-field<br>
+ * 
  * @author FelixH
  *
  */
 public class Controller1 {
 
-	// FXML Declarations
 	@FXML 
 	AnchorPane pane;
 	
@@ -93,8 +90,6 @@ public class Controller1 {
 	@FXML
 	Button muteButton;
 	
-
-	// non-FXML Declarations
 	private MainController controller;
 	final FileChooser fileChooser;
 	private SoundManager soundManager;
@@ -102,7 +97,13 @@ public class Controller1 {
 
 	String playerX = "defaultX";
 	String playerO = "defaultO";
-
+	
+	/**
+	 * constructor for Controller1<br>
+	 * sets the mainController, soundManager, fileChooser and Images<br>
+	 * 
+	 * @param mainController
+	 */
 	public Controller1(MainController mainController) {
 		this.controller = mainController;
 		this.fileChooser = new FileChooser();
@@ -110,7 +111,6 @@ public class Controller1 {
 		this.images = controller.getImages();
 	}
 
-	// Getter and Setter
 	public MainController getController() {
 		return controller;
 	}
@@ -120,7 +120,8 @@ public class Controller1 {
 	}
 	
 	/**
-	 * JavaFX initializations
+	 * JavaFX initializations<br>
+	 * is responsible for changeListener initializations (for settings-UI)
 	 */
 	@FXML
 	public void initialize() {
@@ -132,9 +133,8 @@ public class Controller1 {
 		}
 		muteButton.setStyle("-fx-background-color: transparent;");
 		
+		// initialize meta-informations
 		set.setText("0");
-
-		//set points
 		ltePoints.setText("0");
 		opponentPoints.setText("0");
 
@@ -202,6 +202,11 @@ public class Controller1 {
 		namePlayerO.setText(controller.getGameInfo().getOpponentName());
 	}
 
+	/**
+	 * pause the Sound<br>
+	 * 
+	 * @param event
+	 */
 	@FXML
 	private void mute(ActionEvent event){
 		Status status = soundManager.playPause();
@@ -215,7 +220,8 @@ public class Controller1 {
 	}
 
 	/**
-	 * Back to Screen0
+	 * Back to Screen0<br>
+	 * 
 	 * @param event
 	 * @throws IOException
 	 */
@@ -240,12 +246,12 @@ public class Controller1 {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
 		loader.setController(controller.getController0());
 		stage.setScene(new Scene((AnchorPane) loader.load()));
-
 		stage.show();
 	}
 
 	/**
-	 * DirectoryChooser for file-interface
+	 * DirectoryChooser for file-interface<br>
+	 * 
 	 * @return String kontaktpfad
 	 */
 	@FXML
@@ -262,7 +268,8 @@ public class Controller1 {
 	}
 
 	/**
-	 * starts the game set
+	 * starts the game set<br>
+	 * 
 	 * @param event
 	 */
 	@FXML
@@ -299,7 +306,7 @@ public class Controller1 {
 
 	/**
 	 * gameOver-method shows the game-result and asks
-	 * for the next steps (play new set, ...)
+	 * for the next steps (play new set, ...)<br>
 	 * 
 	 * @param winningPlayer
 	 * @param winningCombo
@@ -317,11 +324,9 @@ public class Controller1 {
 			opponentPoints.setText(String.valueOf(playerO + 1));
 		}
 		
-
 		// Change the number of the set
 		// Set-Number +1
 		set.setText(String.valueOf(controller.getGameInfo().getSet()));
-		
 		
 		if(!(controller.getGameInfo().getOwnPoints() == 3 || controller.getGameInfo().getOpponentPoints() == 3)){
 			Alert alert = new Alert(AlertType.WARNING);
@@ -351,7 +356,6 @@ public class Controller1 {
 				set.setText(String.valueOf(controller.getGameInfo().getSet() + 1));
 				controller.getGameInfo().setSet(controller.getGameInfo().getSet() + 1);
 				
-	
 				// start new Set
 				controller.playSet();
 	
@@ -406,9 +410,7 @@ public class Controller1 {
 			alert.getButtonTypes().setAll(beenden);
 			Optional<ButtonType> result = alert.showAndWait();
 	
-			if (result.get() == beenden) {
-				// TODO ggf. Spiel zu Rekonstruieren speichern
-				
+			if (result.get() == beenden) {				
 				Stage stage;
 				stage = (Stage) backToStart.getScene().getWindow();
 	
@@ -429,10 +431,8 @@ public class Controller1 {
 
 	
 	/**
-	 * Shows the stones corresponding to their position in the field
-	 * 
+	 * Visualize the turns corresponding to their position in the field
 	 */
-	// ************************Fill-Method***************************
 	public void fill(int columnIndex, int rowIndex, char player, boolean endGame) {
 		Circle circle = new Circle();
 		circle.setRadius(35.0);
@@ -441,14 +441,14 @@ public class Controller1 {
 			circle.setFill(Color.web("#62dbee", 0.85));
 			GridPane.setColumnIndex(circle, columnIndex);
 			GridPane.setRowIndex(circle, (5 - rowIndex));
+			GridPane.setHalignment(circle, HPos.CENTER);
 			gameGrid.getChildren().add(circle);
-			gameGrid.setHalignment(circle, HPos.CENTER);
 		} else if (player == 'O') {
 			circle.setFill(Color.web("#46c668", 0.8));
 			GridPane.setColumnIndex(circle, columnIndex);
 			GridPane.setRowIndex(circle, (5 - rowIndex));
+			GridPane.setHalignment(circle, HPos.CENTER);
 			gameGrid.getChildren().add(circle);
-			gameGrid.setHalignment(circle, HPos.CENTER);
 		}
 	}
 
@@ -464,7 +464,8 @@ public class Controller1 {
 	}
 	
 	/**
-	 * highlights the winning-combo
+	 * highlights the winning-combo<br>
+	 * 
 	 * @param woGewonnen
 	 */
 	public void highlightWinning(int[][] woGewonnen){
@@ -477,7 +478,8 @@ public class Controller1 {
 	}
 	
 	/**
-	 * changes color to highlight the winning-combo
+	 * changes color to highlight the winning-combo<br>
+	 * 
 	 * @param column
 	 * @param row
 	 */
@@ -489,8 +491,8 @@ public class Controller1 {
 		circle2.setFill(Color.web("#FF0000", 0.8));
 		GridPane.setColumnIndex(circle2, column);
 		GridPane.setRowIndex(circle2, (5 - row));
+		GridPane.setHalignment(circle2, HPos.CENTER);
 		gameGrid.getChildren().add(circle2);
-		gameGrid.setHalignment(circle2, HPos.CENTER);
 	}
 	
 	/**
@@ -514,7 +516,8 @@ public class Controller1 {
 	}
 	
 	/**
-	 * Event for leaving the application
+	 * Event for leaving the application<br>
+	 * 
 	 * @param event
 	 */
 	@FXML

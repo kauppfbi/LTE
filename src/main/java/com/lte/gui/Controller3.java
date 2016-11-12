@@ -31,7 +31,6 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -40,23 +39,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 /**
- * Class for Screen3 AI vs. User
+ * Class for Screen3 AI vs. User<br>
  * 
  * @author FelixH
- *
- *         TODO: Einbindung der KI, Nach dem Wurf des Spielers muss KI
- *         initialisiert werden <br>
- *         KI sollte ebenfalls rowHigh1 - rowHigh7 beim Wurf eines Steines
- *         hochzählen, damit der Player<br>
- *         nicht die Würfe der KI überschreiben kann. <br>
- *         Außerdem müssen die Würfe des Players an KI übergeben werden
- *
- *         Siegmustererkennung!
- *
- *
  */
 public class Controller3 {
 
@@ -103,12 +90,10 @@ public class Controller3 {
 	@FXML
 	Button muteButton;
 
-	// non-FXML Declarations
 	private MainController controller;
 	ToggleGroup tgroup;
 	private SoundManager soundManager;
 	private HashMap<String, Image> images;
-	
 	private ThreadPlayerKiNEW threadPlayerKiNEW;
 
 	// Integer Stones per column -> hight of the row
@@ -120,13 +105,17 @@ public class Controller3 {
 	private int rowHigh5 = 0;
 	private int rowHigh6 = 0;
 
+	/**
+	 * sets the mainController, soundManager and Images<br>
+	 * 
+	 * @param mainController
+	 */
 	public Controller3(MainController mainController) {
 		this.controller = mainController;
 		this.soundManager = controller.getSoundManager();
 		this.images = controller.getImages();
 	}
 
-	// Getter and Setter
 	public MainController getController() {
 		return controller;
 	}

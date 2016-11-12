@@ -2,7 +2,6 @@ package com.lte.gui;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.TreeMap;
@@ -17,7 +16,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
@@ -34,16 +32,15 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 /**
- * Class Controller2 manages the Reconstruction-Screen
+ * Class Controller2 manages the Reconstruction-Screen<br>
+ * 
  * @author FelixH
  *
  */
 public class Controller2 {
 	
-	// FXML Declarations
 	@FXML
 	AnchorPane pane;
 	
@@ -95,7 +92,6 @@ public class Controller2 {
 	@FXML
 	Button muteButton;
 	
-	// non-FXML Declarations
 	private MainController controller;	
 	private ThreadReconstruct threadReconstruct;
 	private SetDB[] sets;
@@ -104,7 +100,6 @@ public class Controller2 {
 	private int gameIndex;
 	private SoundManager soundManager;
 	private HashMap<String, Image> images;
-	
 	
 	/**
 	 * constructor for the Controller2<br>
@@ -151,6 +146,11 @@ public class Controller2 {
 		stop.setDisable(true);
 	}
 	
+	/**
+	 * pause the Sound<br>
+	 * 
+	 * @param event
+	 */
 	@FXML
 	private void mute(ActionEvent event){
 		Status status = soundManager.playPause();
@@ -231,15 +231,8 @@ public class Controller2 {
 	 * @return
 	 */
 	private int [] prepareRecTurns(){
-		//System.out.println("GameID:" + gameID);
-		//System.out.println("sets beim Spielen: " + sets[0].getSetID());
-		
 		int recSetNumber = setChoice.getSelectionModel().getSelectedIndex();
-		//System.out.println("Setnumber:" + recSetNumber);
-		//System.out.println("SetID: " + sets[recSetNumber].getSetID());
-		
 		int[] recTurns = sets[recSetNumber].getReplayTurns();
-		//System.out.println("RecTurns:" + recTurns);
 		
 		String pointsOpponent = String.valueOf(sets[recSetNumber].getPointsOpponent()); //saves the meta-information of the game
 		String pointsOwn = String.valueOf(sets[recSetNumber].getPointsOwn());
@@ -250,7 +243,7 @@ public class Controller2 {
 		String numberAllSets = String.valueOf(games[gameIndex].getNumberOfSets());
 		String numberCurrentSet = String.valueOf(recSetNumber+1);
 		
-		//shows the meta-information of the game
+		// shows the meta-information of the game
 		metaPlayerO.setText(nameOwn);
 		metaPlayerX.setText(nameOpponent);
 		pointsX.setText(pointsOwn);
@@ -269,13 +262,11 @@ public class Controller2 {
 	 */
 	@FXML
 	public void playRec(ActionEvent event){
-		
 		pause.setDisable(false);
 		play.setDisable(true);
 		stop.setDisable(false);
 		gameChoice.setDisable(true);
 		setChoice.setDisable(true);
-
 
 		synchronized (threadReconstruct) {
 			if (threadReconstruct.getState() == Thread.State.NEW) {
@@ -365,7 +356,7 @@ public class Controller2 {
 	
 	
 	/**
-	 * if button "Abbruch" is clicked<br>
+	 * if button "Stop" is clicked<br>
 	 * sets the State of threadReconstruction to TERMINATED<br>
 	 * allows the user to select another game/set to reconstruct<br>
 	 * 
@@ -416,10 +407,11 @@ public class Controller2 {
 		gameID = connection.get(gameIndex);
 
 		//setChoice shows first entry without ChangeListener
-		System.out.println("Rekonstruierbares Spiel: (gameID, Index)   :" + gameID + ", " + gameChoice.getSelectionModel().getSelectedIndex());// for setChoice
+		System.out.println("Rekonstruierbares Spiel: (gameID, Index)   :" + gameID + ", " + gameChoice.getSelectionModel().getSelectedIndex());
 		System.out.println("gameID beim konfigurieren: " + gameID);
 		sets = controller.getRecSetInfo(gameID);
-		ObservableList<Integer> setNumber = FXCollections.observableArrayList();// setNumber ObservableList gets filled with the number of played Sets
+		// setNumber ObservableList gets filled with the number of played Sets
+		ObservableList<Integer> setNumber = FXCollections.observableArrayList();
 		for(int i = 1; i <= sets.length; i++){
 			setNumber.add(i);
 		}
@@ -439,9 +431,6 @@ public class Controller2 {
 				
 				gameIndex = gameChoice.getSelectionModel().getSelectedIndex();
 				gameID = connection.get(gameIndex);
-				
-				// testing purpose
-				System.out.println("Rekonstruierbares Spiel: (Index, gameID)" + gameID + ", " + connection.get(gameID));
 				
 				// for setChoice
 				System.out.println("gameID beim konfigurieren: " + gameID);
@@ -490,7 +479,8 @@ public class Controller2 {
 	}
 	
 	/**
-	 * highlights the winning-combo
+	 * highlights the winning-combo<br>
+	 * 
 	 * @param woGewonnen
 	 */
 	public void highlightWinning(int[][] woGewonnen){
@@ -503,7 +493,8 @@ public class Controller2 {
 	}
 	
 	/**
-	 * changes color to highlight the winning-combo
+	 * changes color to highlight the winning-combo<br>
+	 * 
 	 * @param column
 	 * @param row
 	 */
@@ -520,7 +511,8 @@ public class Controller2 {
 	}
 	
 	/**
-	 * Event for leaving the application
+	 * Event for leaving the application<br>
+	 * 
 	 * @param event
 	 */
 	@FXML

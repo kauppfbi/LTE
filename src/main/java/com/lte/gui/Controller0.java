@@ -12,8 +12,6 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.media.MediaPlayer.Status;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
-
 import java.io.File;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
@@ -26,7 +24,8 @@ import com.lte.models.*;
 
 
 /**
- * Class Controller0 manages the first Screen of the application
+ * Class Controller0 manages the first Screen of the application<br>
+ * 
  * @author FelixH
  *
  */
@@ -77,14 +76,18 @@ public class Controller0 {
 	@FXML
 	Button muteButton;
 	
-	// non-FXML Declarations
 	private MainController controller;
 	private String errorPlayer;
 	private ToggleGroup tgroup;
 	private SoundManager soundManager;
 	private HashMap<String, Image> images;
 	
-	
+	/**
+	 * constructor for Controller0<br>
+	 * sets the mainController, soundManager and Images<br>
+	 * 
+	 * @param mainController
+	 */
 	public Controller0(MainController mainController) {
 		this.controller = mainController;
 		this.soundManager = controller.getSoundManager();
@@ -94,26 +97,94 @@ public class Controller0 {
 	
 
 	/**
-	 * buttonPressed event Handler
-	 * Changes Layout from Layout0 to Game-Screen
-	 * Button "Weiter zum Spiel" fires this event
+	 * JavaFX initializations 
+	 */
+	@FXML
+	public void initialize() {
+		Status status = soundManager.getStatus();
+		System.out.println(status);
+		if (status == Status.PAUSED) {
+			muteButton.setGraphic(new ImageView(images.get("speaker-mute")));
+		} else if (status == Status.PLAYING || status == Status.UNKNOWN) {
+			muteButton.setGraphic(new ImageView(images.get("speaker")));
+		}
+		muteButton.setStyle("-fx-background-color: transparent;");
+		
+		// Background Image
+		File file = new File("files/images/Screen0.png");
+		Image image = new Image(file.toURI().toString());
+		imageView.setImage(image);
+		
+		//name playerX default LTE
+		playerX.setEditable(false);
+		playerX.setText("LTE");
+		
+		
+		//set playerO editable
+		playerO.setEditable(true);
+		
+		//initialize ToggleGroup for RadioButtons
+		tgroup = new ToggleGroup();
+		AiVsAi.setToggleGroup(tgroup);
+		AiVsAi.setSelected(true);
+		AiVsPlayer.setToggleGroup(tgroup);
+		PlayerVsPlayer.setToggleGroup(tgroup);
+		
+		//load opponent-player names in comboBox
+		String[] opponentNamesArray = controller.getOpponentNames();
+		for(int i=0; i<opponentNamesArray.length; i++){
+			playerO.getItems().add(opponentNamesArray[i]);
+		}
+		playerO.getSelectionModel().selectFirst();
+		
+		try {
+			DBscoreboard[] info = controller.getScoreBoardInfo();
+			ObservableList<DBscoreboard> tableData = FXCollections.observableArrayList();
+			
+			for(int i = 0; i < info.length; i++){
+				tableData.add(info[i]);
+			}
+	
+			opponentName.setCellValueFactory(
+					new PropertyValueFactory<DBscoreboard,String>("opponentName")
+			);
+			opponentScore.setCellValueFactory(
+				    new PropertyValueFactory<DBscoreboard,Integer>("score")
+			);
+			opponentWins.setCellValueFactory(
+					new PropertyValueFactory<DBscoreboard,Integer>("wins")
+			);
+			opponentLoses.setCellValueFactory(
+					new PropertyValueFactory<DBscoreboard,Integer>("loses")
+			);
+	
+			scoreBoard.setItems(tableData);
+			} catch(NullPointerException e){
+				System.out.println("DB hat inkonsistente Daten...");
+			}	
+		}
+
+	/**
+	 * buttonPressed event Handler<br>
+	 * Changes Layout from Layout0 to Game-Screen<br>
+	 * Button "Weiter zum Spiel" fires this event<br>
+	 * 
 	 * @param event
 	 * @throws IOException
 	 */
-	// *******************Switch von Welcome zu Game Screen********************
 	@FXML
 	public void toGame(ActionEvent event) throws IOException {				
 		//Is one player-name empty?
-		if(playerX.getText().isEmpty()==true || playerO.getValue().isEmpty()==true){
+		if (playerX.getText().isEmpty()==true || playerO.getValue().isEmpty()==true) {
 			//Error-Message: Name is null!
 			Alert alert2 = new Alert(AlertType.WARNING);
 			alert2.setTitle("Information");
 			alert2.setHeaderText("Spielername leer!");
 			alert2.setContentText("Ein Spielername wurde nicht gesetzt!");
 			alert2.show();
-		}else{
-			//Are the playerNames shorter than 10 characters?
-			if(playerX.getText().length()<=9 && playerO.getValue().length()<=9){
+		} else {
+			// Are the playerNames shorter than 10 characters?
+			if (playerX.getText().length()<=9 && playerO.getValue().length()<=9) {
 				Stage stage;
 				if (event.getSource() == toGame && AiVsAi.isSelected()==true) {
 					// Set team-names
@@ -161,8 +232,8 @@ public class Controller0 {
 					stage.setScene(new Scene((AnchorPane) loader.load()));
 
 					stage.show();
-				}else if(event.getSource() == toGame && PlayerVsPlayer.isSelected()==true) {
-					//setNames
+				} else if(event.getSource() == toGame && PlayerVsPlayer.isSelected()==true) {
+					// setNames
 					String nameO = playerO.getValue();
 					String nameX = playerX.getText();
 			
@@ -186,8 +257,8 @@ public class Controller0 {
 					stage.setScene(new Scene((AnchorPane) loader.load()));
 					stage.show();
 				}
-			}else{
-				//Which PlayerName is too long?
+			} else {
+				// Which PlayerName is too long?
 				if(playerX.getText().length()>9){
 					errorPlayer = "Spieler 1";
 				}else{
@@ -206,7 +277,8 @@ public class Controller0 {
 
 	
 	/**
-	 * Change Screen from Screen0 to Reconstruction-Screen
+	 * Change Screen from Screen0 to Reconstruction-Screen<br>
+	 * 
 	 * @param event
 	 * @throws IOException
 	 */
@@ -236,85 +308,10 @@ public class Controller0 {
 	}
 
 	/**
-	 * JavaFX initializations 
+	 * pause the Sound<br>
+	 * 
+	 * @param event
 	 */
-	@FXML
-	public void initialize() {
-		Status status = soundManager.getStatus();
-		System.out.println(status);
-		if (status == Status.PAUSED) {
-			muteButton.setGraphic(new ImageView(images.get("speaker-mute")));
-		} else if (status == Status.PLAYING || status == Status.UNKNOWN) {
-			muteButton.setGraphic(new ImageView(images.get("speaker")));
-		}
-		muteButton.setStyle("-fx-background-color: transparent;");
-		
-		// Background Image
-		File file = new File("files/images/Screen0.png");
-		Image image = new Image(file.toURI().toString());
-		imageView.setImage(image);
-		
-		//name playerX default LTE
-		playerX.setEditable(false);
-		playerX.setText("LTE");
-		
-		
-		//set playerO editable
-		playerO.setEditable(true);
-		
-		//initialize ToggleGroup for RadioButtons
-		tgroup = new ToggleGroup();
-		AiVsAi.setToggleGroup(tgroup);
-		AiVsAi.setSelected(true);
-		AiVsPlayer.setToggleGroup(tgroup);
-		PlayerVsPlayer.setToggleGroup(tgroup);
-		
-		//load opponent-player names in comboBox
-		String[] opponentNamesArray = controller.getOpponentNames();
-		for(int i=0; i<opponentNamesArray.length; i++){
-			playerO.getItems().add(opponentNamesArray[i]);
-		}
-		playerO.getSelectionModel().selectFirst();
-		
-		try {
-			DBscoreboard[] info = controller.getScoreBoardInfo();
-
-
-		ObservableList<DBscoreboard> tableData = FXCollections.observableArrayList(
-				//new DBscoreboard("Flo", 1, 1, 1),
-				//new DBscoreboard("Fabi", 2, 2, 2)		
-		);
-		
-		for(int i = 0; i < info.length; i++){
-			tableData.add(info[i]);
-		}
-
-		opponentName.setCellValueFactory(
-				new PropertyValueFactory<DBscoreboard,String>("opponentName")
-		);
-		opponentScore.setCellValueFactory(
-			    new PropertyValueFactory<DBscoreboard,Integer>("score")
-		);
-		opponentWins.setCellValueFactory(
-				new PropertyValueFactory<DBscoreboard,Integer>("wins")
-		);
-		opponentLoses.setCellValueFactory(
-				new PropertyValueFactory<DBscoreboard,Integer>("loses")
-		);
-
-
-		scoreBoard.setItems(tableData);
-		} catch(NullPointerException e){
-			System.out.println("DB hat inkonsistente Daten...");
-		}
-//      opponentName.setCellValueFactory(cellData -> cellData.);
-//      lastNameColumn.setCellValueFactory(cellData -> cellData.getValue().lastNameProperty());
-//		for(int i = 0; i < 1 ;i++){
-//			System.out.println(info[i].getScore());
-//		}
-		
-	}
-
 	@FXML
 	private void mute(ActionEvent event){
 		Status status = soundManager.playPause();
@@ -354,7 +351,8 @@ public class Controller0 {
 	}
 	
 	/**
-	 * Event for leaving the application
+	 * Event for leaving the application<br>
+	 * 
 	 * @param event
 	 */
 	@FXML
