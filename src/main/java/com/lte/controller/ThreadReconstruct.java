@@ -104,7 +104,6 @@ public class ThreadReconstruct extends Thread {
 					try {
 						gameScore.play(columnIndex, (byte) 1);
 					} catch (Exception e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					
@@ -115,7 +114,6 @@ public class ThreadReconstruct extends Thread {
 					try {
 						gameScore.play(columnIndex, (byte) 2);
 					} catch (Exception e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
@@ -140,8 +138,6 @@ public class ThreadReconstruct extends Thread {
 					}
 				}
 			}
-			// for
-			// - Rückgabe der gewonnen Kombination aus dem Spieldstand int[4][1] ->
 			Platform.runLater(new Runnable() {
 				@Override
 				public void run() {
