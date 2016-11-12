@@ -4,7 +4,7 @@
   router="FAN">  
   <class id="1" language="java" name="com.lte.interfaces.FileIM" project="LTE" 
     file="/LTE/src/main/java/com/lte/interfaces/FileIM.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="225" width="194" x="376" y="96"/>    
+    <position height="-1" width="-1" x="131" y="427"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -13,7 +13,7 @@
   </class>  
   <interface id="2" language="java" name="com.lte.interfaces.InterfaceManager" project="LTE" 
     file="/LTE/src/main/java/com/lte/interfaces/InterfaceManager.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="171" width="194" x="610" y="379"/>    
+    <position height="-1" width="-1" x="365" y="139"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -22,7 +22,7 @@
   </interface>  
   <class id="3" language="java" name="com.lte.interfaces.EventIM" project="LTE" 
     file="/LTE/src/main/java/com/lte/interfaces/EventIM.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="243" width="194" x="610" y="96"/>    
+    <position height="-1" width="-1" x="365" y="427"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -31,7 +31,7 @@
   </class>  
   <class id="4" language="java" name="com.lte.interfaces.EventIMJSON" project="LTE" 
     file="/LTE/src/main/java/com/lte/interfaces/EventIMJSON.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="225" width="194" x="844" y="96"/>    
+    <position height="-1" width="-1" x="599" y="427"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -39,15 +39,15 @@
     </display>  
   </class>  
   <realization id="5">    
-    <end type="SOURCE" refId="4"/>    
+    <end type="SOURCE" refId="1"/>    
     <end type="TARGET" refId="2"/>  
   </realization>  
   <realization id="6">    
-    <end type="SOURCE" refId="3"/>    
+    <end type="SOURCE" refId="4"/>    
     <end type="TARGET" refId="2"/>  
   </realization>  
   <realization id="7">    
-    <end type="SOURCE" refId="1"/>    
+    <end type="SOURCE" refId="3"/>    
     <end type="TARGET" refId="2"/>  
   </realization>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
