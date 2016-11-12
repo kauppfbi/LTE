@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.1.11" icons="true" automaticImage="JPEG" always-add-relationships="false" 
+  generalizations="true" realizations="true" associations="true" dependencies="false" nesting-relationships="true" 
+  router="FAN">  
+  <class id="1" language="java" name="com.lte.aiPar.AlgorithmManager" project="LTE" 
+    file="/LTE/src/main/java/com/lte/aiPar/AlgorithmManager.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="39" width="129" x="294" y="91"/>    
+    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="2" language="java" name="com.lte.aiPar.SingleAlgorithm" project="LTE" 
+    file="/LTE/src/main/java/com/lte/aiPar/SingleAlgorithm.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="39" width="114" x="463" y="91"/>    
+    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="com.lte.aiPar.Algorithm" project="LTE" 
+    file="/LTE/src/main/java/com/lte/aiPar/Algorithm.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="39" width="87" x="617" y="91"/>    
+    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <classifier-display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
+    sort-features="false" accessors="true" visibility="true">    
+    <attributes public="false" package="false" protected="false" private="false" static="false"/>    
+    <operations public="false" package="false" protected="false" private="false" static="false"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

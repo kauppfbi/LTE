@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.1.11" icons="true" automaticImage="JPEG" always-add-relationships="true" 
+  generalizations="true" realizations="true" associations="true" dependencies="false" nesting-relationships="true" 
+  router="FAN">  
+  <class id="1" language="java" name="com.lte.models.ServerMessage" project="LTE" 
+    file="/LTE/src/main/java/com/lte/models/ServerMessage.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="363" y="154"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="2" language="java" name="com.lte.models.GameScore" project="LTE" 
+    file="/LTE/src/main/java/com/lte/models/GameScore.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="489" y="154"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="com.lte.models.DBscoreboard" project="LTE" 
+    file="/LTE/src/main/java/com/lte/models/DBscoreboard.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="358" y="216"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="4" language="java" name="com.lte.models.GameDB" project="LTE" 
+    file="/LTE/src/main/java/com/lte/models/GameDB.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="477" y="217"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="5" language="java" name="com.lte.models.GameInfo" project="LTE" 
+    file="/LTE/src/main/java/com/lte/models/GameInfo.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="599" y="155"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="6" language="java" name="com.lte.models.SetDB" project="LTE" 
+    file="/LTE/src/main/java/com/lte/models/SetDB.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="579" y="217"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="7" language="java" name="com.lte.models.Settings" project="LTE" 
+    file="/LTE/src/main/java/com/lte/models/Settings.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="705" y="154"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    sort-features="false" accessors="true" visibility="true">    
+    <attributes public="false" package="false" protected="false" private="false" static="false"/>    
+    <operations public="false" package="false" protected="false" private="false" static="false"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>
