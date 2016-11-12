@@ -324,8 +324,8 @@ public class Controller2 {
 			
 		GridPane.setColumnIndex(circle, columnIndex);
 		GridPane.setRowIndex(circle, (5 - rowIndex));
+		GridPane.setHalignment(circle, HPos.CENTER);
 		gameGrid.getChildren().add(circle);
-		gameGrid.setHalignment(circle, HPos.CENTER);
 	}
 
 	
@@ -506,8 +506,8 @@ public class Controller2 {
 		circle2.setFill(Color.web("#FF0000", 0.8));
 		GridPane.setColumnIndex(circle2, column);
 		GridPane.setRowIndex(circle2, (5 - row));
+		GridPane.setHalignment(circle2, HPos.CENTER);
 		gameGrid.getChildren().add(circle2);
-		gameGrid.setHalignment(circle2, HPos.CENTER);
 	}
 	
 	/**

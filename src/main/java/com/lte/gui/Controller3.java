@@ -7,10 +7,6 @@ import java.util.Optional;
 import com.lte.controller.MainController;
 import com.lte.controller.ThreadPlayerKiNEW;
 import com.lte.features.SoundManager;
-import com.lte.models.GameInfo;
-import com.lte.models.Settings;
-import com.sun.corba.se.pept.transport.EventHandler;
-
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -91,7 +87,7 @@ public class Controller3 {
 	Button muteButton;
 
 	private MainController controller;
-	ToggleGroup tgroup;
+	private ToggleGroup tgroup;
 	private SoundManager soundManager;
 	private HashMap<String, Image> images;
 	private ThreadPlayerKiNEW threadPlayerKiNEW;
@@ -161,7 +157,6 @@ public class Controller3 {
 
 		namePlayerX.setText("LTE");
 
-
 		// RadioButton ToggleGroup
 		tgroup = new ToggleGroup();
 		radioKi.setToggleGroup(tgroup);
@@ -172,6 +167,11 @@ public class Controller3 {
 		namePlayerO.setText(controller.getGameInfo().getOpponentName());
 	}
 
+	/**
+	 * pause the Sound<br>
+	 * 
+	 * @param event
+	 */
 	@FXML
 	private void mute(ActionEvent event) {
 		Status status = soundManager.playPause();
@@ -185,15 +185,13 @@ public class Controller3 {
 	}
 
 	/**
-	 * Back to Screen0
+	 * Back to Screen0<br>
 	 * 
 	 * @param event
 	 * @throws IOException
 	 */
 	@FXML
 	private void goToStartmenu(ActionEvent event) throws IOException {
-		// TODO: End the running Thread
-
 		// Integer Stones per column -> hight of the row
 		rowHigh0 = 0;
 		rowHigh1 = 0;
@@ -202,7 +200,15 @@ public class Controller3 {
 		rowHigh4 = 0;
 		rowHigh5 = 0;
 		rowHigh6 = 0;
-
+		
+		// terminate running Thread
+		if(threadPlayerKiNEW != null){
+			synchronized(threadPlayerKiNEW){
+				threadPlayerKiNEW.stop();
+				System.out.println("Thread beendet");
+			}
+		}
+		
 		// DB: delete unfinished game
 		if (!(controller.getGameInfo().getOwnPoints() == 3 || controller.getGameInfo().getOpponentPoints() == 3)) {
 			controller.deleteUnfinishedGame();
