@@ -1,7 +1,6 @@
 package com.lte.controller;
 
 import com.lte.aiPar.AlgorithmManager;
-import com.lte.db.DBconnection;
 import com.lte.gui.Controller3;
 import com.lte.models.GameInfo;
 import com.lte.models.GameScore;

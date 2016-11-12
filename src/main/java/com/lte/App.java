@@ -3,8 +3,9 @@ package com.lte;
 import java.io.File;
 import java.io.IOException;
 
+import com.lte.controller.DBconnection;
 import com.lte.controller.MainController;
-import com.lte.db.DBconnection;
+
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
