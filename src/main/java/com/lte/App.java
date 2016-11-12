@@ -38,7 +38,7 @@ public class App extends Application{
 			// Main Controller
 			MainController controller = new MainController(connection);
 			// FXMLLoader
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("./gui/views/layout0.fxml"));
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("gui/views/layout0.fxml"));
 			loader.setController(controller.getController0());
 			stage.setScene(new Scene((AnchorPane) loader.load()));
 			// set Icon
@@ -54,6 +54,7 @@ public class App extends Application{
 				}
 			);
 			
+			stage.setResizable(false);
 			stage.show();
 
 		} catch (IOException e) {
