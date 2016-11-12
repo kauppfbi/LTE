@@ -109,6 +109,9 @@ public class Controller4 {
 	
 	@FXML
 	Button muteButton;
+	
+	@FXML
+	Button fixButton;
 
 	// non-FXML Declarations
 	private MainController controller;
@@ -539,10 +542,11 @@ public class Controller4 {
 			controller.getGameInfo().setStartingPlayer('O');
 		}
 
-		// Disable RadioButtons
+		// Disable RadioButtons and fixButton
 		radioPlayer1.setDisable(true);
 		radioPlayer2.setDisable(true);
-
+		fixButton.setDisable(true);
+		
 		controller.getGameInfo().setGameInProgress(true);
 	}
 	

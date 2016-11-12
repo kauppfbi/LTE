@@ -92,15 +92,6 @@ public class Controller3 {
 	private HashMap<String, Image> images;
 	private ThreadPlayerKiNEW threadPlayerKiNEW;
 
-	// Integer Stones per column -> hight of the row
-	private int rowHigh0 = 0;
-	private int rowHigh1 = 0;
-	private int rowHigh2 = 0;
-	private int rowHigh3 = 0;
-	private int rowHigh4 = 0;
-	private int rowHigh5 = 0;
-	private int rowHigh6 = 0;
-
 	/**
 	 * sets the mainController, soundManager and Images<br>
 	 * 
@@ -192,15 +183,6 @@ public class Controller3 {
 	 */
 	@FXML
 	private void goToStartmenu(ActionEvent event) throws IOException {
-		// Integer Stones per column -> hight of the row
-		rowHigh0 = 0;
-		rowHigh1 = 0;
-		rowHigh2 = 0;
-		rowHigh3 = 0;
-		rowHigh4 = 0;
-		rowHigh5 = 0;
-		rowHigh6 = 0;
-		
 		// terminate running Thread
 		if(threadPlayerKiNEW != null){
 			synchronized(threadPlayerKiNEW){
@@ -232,7 +214,7 @@ public class Controller3 {
 	}
 
 	/**
-	 * starts the game set
+	 * starts the game set<br>
 	 * 
 	 * @param event
 	 */
@@ -285,7 +267,7 @@ public class Controller3 {
 
 	/**
 	 * gameOver-method shows the game-result and asks for the next steps (play
-	 * new set, ...)
+	 * new set, ...)<br>
 	 * 
 	 * @param winningPlayer
 	 * @param winningCombo
@@ -362,7 +344,8 @@ public class Controller3 {
 			}
 		} else {
 			Alert alert = new Alert(AlertType.WARNING);
-			alert.setTitle("Game Over"); // Ask the user what the next steps are
+			alert.setTitle("Game Over"); 
+			// Ask the user what the next steps are
 			if (winningPlayer == 1) {
 				alert.setHeaderText("Die KI hat gewonnen!" + "\n" + "Das Spiel ist nun entschieden.");
 			} else if (winningPlayer == 2) {
@@ -398,7 +381,10 @@ public class Controller3 {
 			}
 		}
 	}
-
+	
+	/**
+	 * starts a new Set<b>
+	 */
 	private void startNewSet() {
 		threadPlayerKiNEW = controller.getThreadPlayerKiNEW();
 		if(controller.getGameInfo().getStartingPlayer() == 'X'){
@@ -428,8 +414,7 @@ public class Controller3 {
 	}
 
 	/**
-	 * Shows the stones corresponding to their position in the field
-	 * 
+	 * Visualize the turns corresponding to their position in the field
 	 */
 	public void fill(int columnIndex, int rowIndex, char player) {
 		// player 0 = red, player 1 = yellow
@@ -441,33 +426,15 @@ public class Controller3 {
 			circle.setFill(Color.web("#62dbee", 0.85));
 			GridPane.setColumnIndex(circle, columnIndex);
 			GridPane.setRowIndex(circle, (5 - rowIndex));
+			GridPane.setHalignment(circle, HPos.CENTER);
 			gameGrid.getChildren().add(circle);
-			gameGrid.setHalignment(circle, HPos.CENTER);
 		} else if (player == 'O') {
 			circle.setFill(Color.web("#46c668", 0.8));
 			GridPane.setColumnIndex(circle, columnIndex);
 			GridPane.setRowIndex(circle, (5 - rowIndex));
+			GridPane.setHalignment(circle, HPos.CENTER);
 			gameGrid.getChildren().add(circle);
-			gameGrid.setHalignment(circle, HPos.CENTER);
 		}
-		if (columnIndex == 0) {
-			rowHigh0++;
-		} else if (columnIndex == 1) {
-			rowHigh1++;
-		} else if (columnIndex == 2) {
-			rowHigh2++;
-		} else if (columnIndex == 3) {
-			rowHigh3++;
-		} else if (columnIndex == 4) {
-			rowHigh4++;
-		} else if (columnIndex == 5) {
-			rowHigh5++;
-		} else if (columnIndex == 6) {
-			rowHigh6++;
-		}
-
-		System.out.println(rowHigh0 + " " + rowHigh1 + " " + rowHigh2 + " " + rowHigh3 + " " + rowHigh4 + " " + rowHigh5
-				+ " " + rowHigh6);
 	}
 
 	/**
@@ -515,35 +482,16 @@ public class Controller3 {
 		circle2.setFill(Color.web("#FF0000", 0.8));
 		GridPane.setColumnIndex(circle2, column);
 		GridPane.setRowIndex(circle2, (5 - row));
+		GridPane.setHalignment(circle2, HPos.CENTER);
 		gameGrid.getChildren().add(circle2);
-		gameGrid.setHalignment(circle2, HPos.CENTER);
 	}
 
-	private int getRow(int column) {
-		if (column == 0) {
-			return rowHigh0;
-		}
-		if (column == 1) {
-			return rowHigh1;
-		}
-		if (column == 2) {
-			return rowHigh2;
-		}
-		if (column == 3) {
-			return rowHigh3;
-		}
-		if (column == 4) {
-			return rowHigh4;
-		}
-		if (column == 5) {
-			return rowHigh5;
-		}
-		if (column == 6) {
-			return rowHigh6;
-		}
-		return 0;
-	}
-	
+	/**
+	 * sets listeners on the columns and cells<br>
+	 * 
+	 * @param colIndex
+	 * @param rowIndex
+	 */
 	private void addListener(int colIndex, int rowIndex) {
 		Pane pane = new Pane();
 		pane.setOnMouseClicked(e -> {
@@ -575,6 +523,13 @@ public class Controller3 {
 		gameGrid.add(pane, colIndex, rowIndex);
 	}
 	
+	/**
+	 * sets listeners on the visualized circles<br>
+	 * 
+	 * @param node
+	 * @param colIndex
+	 * @param rowIndex
+	 */
 	private void addListener(Node node, int colIndex, int rowIndex){
 		node.setOnMouseClicked(e -> {
 			if (controller.getGameInfo().isGameInProgress() && controller.getGameInfo().getNextPlayer() == 'O') {
@@ -602,23 +557,33 @@ public class Controller3 {
 		});
 	}
 	
+	/**
+	 * Highlights the hovered column<br>
+	 * 
+	 * @param column
+	 */
 	private void highlightColumn(int column) {
 		for (Node n : gameGrid.getChildren()) {
 			if (n instanceof Pane) {
 				Pane pane = (Pane) n;
-				if (gameGrid.getColumnIndex(pane) == column) {
+				if (GridPane.getColumnIndex(pane) == column) {
 					pane.setStyle("-fx-background-color: #46c668; -fx-opacity: 0.7");
 				}
 			}
 		}
 	}
 
+	/**
+	 * Stops highlighting the last column, as soon as hovered over the next column<br>
+	 * 
+	 * @param column
+	 */
 	private void deHighlightColumn(int column) {
 		for (Node n : gameGrid.getChildren()) {
 
 			if (n instanceof Pane) {
 				Pane pane = (Pane) n;
-				if (gameGrid.getColumnIndex(pane) == column) {
+				if (GridPane.getColumnIndex(pane) == column) {
 					pane.setStyle(null);
 				}
 			}
@@ -626,7 +591,7 @@ public class Controller3 {
 	}
 	
 	/**
-	 * Event for leaving the application
+	 * Event for leaving the application<br>
 	 * 
 	 * @param event
 	 */

@@ -92,7 +92,7 @@
             <Font size="18.0" />
          </font>
       </RadioButton>
-      <Button layoutX="968.0" layoutY="453.0" mnemonicParsing="false" onAction="#fixPlayerChoice" text="Fixieren">
+      <Button fx:id="fixButton" layoutX="968.0" layoutY="453.0" mnemonicParsing="false" onAction="#fixPlayerChoice" text="Fixieren">
          <font>
             <Font size="18.0" />
          </font>
