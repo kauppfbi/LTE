@@ -261,7 +261,7 @@
   </association>  
   <association id="45">    
     <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="46" name="playingThread">        
+      <attribute id="46" name="threadPlay">        
         <position height="0" width="0" x="0" y="0"/>      
       </attribute>      
       <multiplicity id="47" minimum="0" maximum="1">        
@@ -457,7 +457,7 @@
   </association>  
   <association id="96">    
     <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="97" name="playingThread">        
+      <attribute id="97" name="threadPlay">        
         <position height="0" width="0" x="0" y="0"/>      
       </attribute>      
       <multiplicity id="98" minimum="0" maximum="1">        

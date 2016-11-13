@@ -56,11 +56,8 @@ public class MainController {
 	private AlgorithmManager algorithmManager;
 	
 	//threads
-	private ThreadPlay playingThread;
-
-
-	//Player KI //PlayerPlayer
-	private ThreadPlayerKiNEW threadPlayerKiNEW;
+	private ThreadPlay threadPlay;
+	private ThreadPlayerKi threadPlayerKi;
 	private ThreadPlayerPlayer threadPlayerPlayer;
 	private HashMap<String, Image> images;
 	private SoundManager soundManager;
@@ -194,12 +191,20 @@ public class MainController {
 		}
 	}
 	
-	public ThreadPlay getPlayingThread(){
-		return playingThread;
+	public ThreadPlay getThreadPlay(){
+		return threadPlay;
 	}
 	
-	public DBconnection getConnection() {
-		return connection;
+	public ThreadPlayerKi getThreadPlayerKi() {
+		if (threadPlayerKi == null || threadPlayerKi.getState() == Thread.State.TERMINATED){
+			threadPlayerKi = new ThreadPlayerKi(controllerPlayerKi, gameInfo, settings, algorithmManager, connection);
+			threadPlayerKi.start();
+		}
+		return threadPlayerKi;
+	}
+
+	public SoundManager getSoundManager() {
+		return soundManager;
 	}
 
 	public Settings getSettings() {
@@ -239,8 +244,8 @@ public class MainController {
 			JOptionPane.showInternalMessageDialog(null, "Interface wurde nicht erfolgreich initilisiert!");
 		} else{
 			resetAlgorithmManager();
-			playingThread = new ThreadPlay(interfaceManager, controllerKiKi, gameInfo, connection, algorithmManager, settings);
-			playingThread.start();
+			threadPlay = new ThreadPlay(interfaceManager, controllerKiKi, gameInfo, connection, algorithmManager, settings);
+			threadPlay.start();
 		}
 	}
 	
@@ -354,21 +359,16 @@ public class MainController {
 		return images;
 	}
 
-	public SoundManager getSoundManager() {
-		return soundManager;
-	}
-	
-
 	/**
 	 * This method evaluates, if the dbConnection object can be used.<br>
 	 * This method should be used before calling DB-methods to avoid SQL-Exceptions.
 	 * @return true, if the connection-Object can be used without problems.
 	 */
 	private boolean isConnectionFree (){
-		if (playingThread == null){
+		if (threadPlay == null){
 			return true;
 		} else {
-			if(playingThread.getState() == Thread.State.NEW || playingThread.getState() == Thread.State.TERMINATED){
+			if(threadPlay.getState() == Thread.State.NEW || threadPlay.getState() == Thread.State.TERMINATED){
 				return true;
 			} else {
 				System.err.println("DB Connection belegt!");
@@ -407,13 +407,5 @@ public class MainController {
 		if(controllerPlayerPlayer != null){
 			controllerPlayerPlayer.exitApplication();
 		}
-	}
-
-	public ThreadPlayerKiNEW getThreadPlayerKiNEW() {
-		if (threadPlayerKiNEW == null || threadPlayerKiNEW.getState() == Thread.State.TERMINATED){
-			threadPlayerKiNEW = new ThreadPlayerKiNEW(controllerPlayerKi, gameInfo, settings, algorithmManager, connection);
-			threadPlayerKiNEW.start();
-		}
-		return threadPlayerKiNEW;
 	}
 }

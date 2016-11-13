@@ -514,8 +514,8 @@ public class ControllerKiKi {
 	 */
 	@FXML
 	public void exitApplication() {
-		if(controller.getPlayingThread() != null){
-			controller.getPlayingThread().stop();
+		if(controller.getThreadPlay() != null){
+			controller.getThreadPlay().stop();
 		}
 		System.out.println("controller1 exit completed");
 		Platform.exit();

@@ -20,8 +20,8 @@
       <operations public="false" package="false" protected="false" private="false" static="false"/>    
     </display>  
   </class>  
-  <class id="3" language="java" name="com.lte.controller.ThreadPlayerKiNEW" project="LTE" 
-    file="/LTE/src/main/java/com/lte/controller/ThreadPlayerKiNEW.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="3" language="java" name="com.lte.controller.ThreadPlayerKi" project="LTE" 
+    file="/LTE/src/main/java/com/lte/controller/ThreadPlayerKi.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="388" y="121"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
@@ -49,7 +49,7 @@
   </class>  
   <association id="6">    
     <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="7" name="threadPlayerKiNEW">        
+      <attribute id="7" name="threadPlayerKi">        
         <position height="0" width="0" x="0" y="0"/>      
       </attribute>      
       <multiplicity id="8" minimum="0" maximum="1">        
@@ -101,7 +101,7 @@
   </association>  
   <association id="21">    
     <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="22" name="playingThread">        
+      <attribute id="22" name="threadPlay">        
         <position height="18" width="76" x="637" y="47"/>      
       </attribute>      
       <multiplicity id="23" minimum="0" maximum="1">        

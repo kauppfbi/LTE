@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Optional;
 import com.lte.controller.MainController;
-import com.lte.controller.ThreadPlayerKiNEW;
+import com.lte.controller.ThreadPlayerKi;
 import com.lte.features.SoundManager;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -90,7 +90,7 @@ public class ControllerPlayerKi {
 	private ToggleGroup tgroup;
 	private SoundManager soundManager;
 	private HashMap<String, Image> images;
-	private ThreadPlayerKiNEW threadPlayerKiNEW;
+	private ThreadPlayerKi threadPlayerKi;
 
 	/**
 	 * constructor for Controller3<br>
@@ -256,7 +256,7 @@ public class ControllerPlayerKi {
 				stage.getIcons().add(image);
 	
 				// FXMLLoader
-				FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
+				FXMLLoader loader = new FXMLLoader(getClass().getResource("views/start.fxml"));
 				loader.setController(controller.getControllerStart());
 				try {
 					stage.setScene(new Scene((AnchorPane) loader.load()));
@@ -318,9 +318,9 @@ public class ControllerPlayerKi {
 	@FXML
 	private void goToStartmenu(ActionEvent event) throws IOException {
 		// terminate running Thread
-		if(threadPlayerKiNEW != null){
-			synchronized(threadPlayerKiNEW){
-				threadPlayerKiNEW.stop();
+		if(threadPlayerKi != null){
+			synchronized(threadPlayerKi){
+				threadPlayerKi.stop();
 				System.out.println("Thread beendet");
 			}
 		}
@@ -353,22 +353,22 @@ public class ControllerPlayerKi {
 	 */
 	@FXML
 	private void startSet(ActionEvent event) {
-		threadPlayerKiNEW = controller.getThreadPlayerKiNEW();
+		threadPlayerKi = controller.getThreadPlayerKi();
 		
 		// RadioButton
 		if (radioKi.isSelected() == true) {
 			controller.getGameInfo().setNextPlayer('X');
 			controller.getGameInfo().setStartingPlayer('X');
 			while (true){
-				synchronized (threadPlayerKiNEW) {
-					if(threadPlayerKiNEW.isReady()){
+				synchronized (threadPlayerKi) {
+					if(threadPlayerKi.isReady()){
 						try {
-							threadPlayerKiNEW.setNextMove(-1);
+							threadPlayerKi.setNextMove(-1);
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						threadPlayerKiNEW.notify();
+						threadPlayerKi.notify();
 						break;
 					}
 				}
@@ -402,14 +402,14 @@ public class ControllerPlayerKi {
 	 * starts a new Set<b>
 	 */
 	private void startNewSet() {
-		threadPlayerKiNEW = controller.getThreadPlayerKiNEW();
+		threadPlayerKi = controller.getThreadPlayerKi();
 		if(controller.getGameInfo().getStartingPlayer() == 'X'){
 			while (true){
-				synchronized (threadPlayerKiNEW) {
-					if(threadPlayerKiNEW.isReady()){
+				synchronized (threadPlayerKi) {
+					if(threadPlayerKi.isReady()){
 						try {
-							threadPlayerKiNEW.setNextMove(-1);
-							threadPlayerKiNEW.notify();
+							threadPlayerKi.setNextMove(-1);
+							threadPlayerKi.notify();
 							break;
 						} catch (Exception e) {
 							System.out.println("Zug nicht möglich!");
@@ -488,13 +488,13 @@ public class ControllerPlayerKi {
 		Pane pane = new Pane();
 		pane.setOnMouseClicked(e -> {
 			if (controller.getGameInfo().isGameInProgress() && controller.getGameInfo().getNextPlayer() == 'O') {
-				synchronized(threadPlayerKiNEW){
+				synchronized(threadPlayerKi){
 					try {
-						threadPlayerKiNEW.setNextMove(colIndex);
+						threadPlayerKi.setNextMove(colIndex);
 						controller.getGameInfo().setNextPlayer('X');
 						
-						if(threadPlayerKiNEW.getState() == Thread.State.WAITING){
-							threadPlayerKiNEW.notify();
+						if(threadPlayerKi.getState() == Thread.State.WAITING){
+							threadPlayerKi.notify();
 						}
 					} catch (Exception e1) {
 						System.out.println("Zug nicht möglich!");
@@ -525,13 +525,13 @@ public class ControllerPlayerKi {
 	private void addListener(Node node, int colIndex, int rowIndex){
 		node.setOnMouseClicked(e -> {
 			if (controller.getGameInfo().isGameInProgress() && controller.getGameInfo().getNextPlayer() == 'O') {
-				synchronized(threadPlayerKiNEW){
+				synchronized(threadPlayerKi){
 					try {
-						threadPlayerKiNEW.setNextMove(colIndex);
+						threadPlayerKi.setNextMove(colIndex);
 						controller.getGameInfo().setNextPlayer('X');
 						
-						if(threadPlayerKiNEW.getState() == Thread.State.WAITING){
-							threadPlayerKiNEW.notify();
+						if(threadPlayerKi.getState() == Thread.State.WAITING){
+							threadPlayerKi.notify();
 						}
 					} catch (Exception e1) {
 						System.out.println("Zug nicht möglich!");
@@ -588,8 +588,8 @@ public class ControllerPlayerKi {
 	 * @param event
 	 */
 	public void exitApplication() {
-		if(threadPlayerKiNEW != null){
-			threadPlayerKiNEW.stop();
+		if(threadPlayerKi != null){
+			threadPlayerKi.stop();
 		}
 		Platform.exit();
 	}
