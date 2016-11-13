@@ -39,11 +39,11 @@ public class MainController {
 	private InterfaceManager interfaceManager;
 
 	// GUI controller
-	private ControllerStart controller0;
-	private ControllerKiKi controller1;
-	private ControllerReconstruct controller2;
-	private ControllerPlayerKi controller3;
-	private ControllerPlayerPlayer controller4;
+	private ControllerStart controllerStart;
+	private ControllerKiKi controllerKiKi;
+	private ControllerReconstruct controllerReconstruct;
+	private ControllerPlayerKi controllerPlayerKi;
+	private ControllerPlayerPlayer controllerPlayerPlayer;
 
 	// model(s)
 	private Settings settings;
@@ -121,12 +121,12 @@ public class MainController {
 	 * 
 	 * @return Controller0-Object (GUI-Controller for scene0)
 	 */
-	public ControllerStart getController0() {
-		if (controller0 == null){
-			this.controller0 = new ControllerStart(this);
-			return controller0;
+	public ControllerStart getControllerStart() {
+		if (controllerStart == null){
+			this.controllerStart = new ControllerStart(this);
+			return controllerStart;
 		}else {
-		return controller0;
+		return controllerStart;
 		}
 	}
 
@@ -137,12 +137,12 @@ public class MainController {
 	 * 
 	 * @return Controller1-Object (GUI-Controller for scene1)
 	 */
-	public ControllerKiKi getController1() {
-		if (controller1 == null){
-			this.controller1 = new ControllerKiKi(this);
-			return controller1;
+	public ControllerKiKi getControllerKiKi() {
+		if (controllerKiKi == null){
+			this.controllerKiKi = new ControllerKiKi(this);
+			return controllerKiKi;
 		}else {
-		return controller1;
+		return controllerKiKi;
 		}
 	}
 
@@ -153,12 +153,12 @@ public class MainController {
 	 * 
 	 * @return Controller2-Object (GUI-Controller for scene2)
 	 */
-	public ControllerReconstruct getController2() {
-		if (controller2 == null){
-			this.controller2 = new ControllerReconstruct(this);
-			return controller2;
+	public ControllerReconstruct getControllerReconstruct() {
+		if (controllerReconstruct == null){
+			this.controllerReconstruct = new ControllerReconstruct(this);
+			return controllerReconstruct;
 		}else {
-		return controller2;
+		return controllerReconstruct;
 		}
 	}
 	
@@ -169,12 +169,12 @@ public class MainController {
 	 * 
 	 * @return Controller3-Object (GUI-Controller for scene3)
 	 */
-	public ControllerPlayerKi getController3() {
-		if (controller3 == null) {
-			this.controller3 = new ControllerPlayerKi(this);
-			return controller3;
+	public ControllerPlayerKi getControllerPlayerKi() {
+		if (controllerPlayerKi == null) {
+			this.controllerPlayerKi = new ControllerPlayerKi(this);
+			return controllerPlayerKi;
 		} else {
-			return controller3;
+			return controllerPlayerKi;
 		}
 	}
 	
@@ -185,12 +185,12 @@ public class MainController {
 	 * 
 	 * @return Controller4-Object (GUI-Controller for scene4)
 	 */
-	public ControllerPlayerPlayer getController4() {
-		if (controller4 == null){
-			this.controller4 = new ControllerPlayerPlayer(this);
-			return controller4;
+	public ControllerPlayerPlayer getControllerPlayerPlayer() {
+		if (controllerPlayerPlayer == null){
+			this.controllerPlayerPlayer = new ControllerPlayerPlayer(this);
+			return controllerPlayerPlayer;
 		}else {
-		return controller4;
+		return controllerPlayerPlayer;
 		}
 	}
 	
@@ -239,7 +239,7 @@ public class MainController {
 			JOptionPane.showInternalMessageDialog(null, "Interface wurde nicht erfolgreich initilisiert!");
 		} else{
 			resetAlgorithmManager();
-			playingThread = new ThreadPlay(interfaceManager, controller1, gameInfo, connection, algorithmManager, settings);
+			playingThread = new ThreadPlay(interfaceManager, controllerKiKi, gameInfo, connection, algorithmManager, settings);
 			playingThread.start();
 		}
 	}
@@ -263,7 +263,7 @@ public class MainController {
 	 ***********************************/
 	public int playTurnPlayerPlayer(int column) throws Exception{
 		if(threadPlayerPlayer == null){
-			threadPlayerPlayer = new ThreadPlayerPlayer(controller4, gameInfo);
+			threadPlayerPlayer = new ThreadPlayerPlayer(controllerPlayerPlayer, gameInfo);
 		}
 			return threadPlayerPlayer.playTurn(column);
 	}
@@ -393,26 +393,26 @@ public class MainController {
 		if(algorithmManager != null){
 			algorithmManager.shutdown();
 		}
-		if(controller0!= null){
-			controller0.exitApplication();
+		if(controllerStart!= null){
+			controllerStart.exitApplication();
 		}
-		if(controller1 != null){
-			controller1.exitApplication();
+		if(controllerKiKi != null){
+			controllerKiKi.exitApplication();
 		}
-		if(controller2 != null){
-			controller2.exitApplication();
+		if(controllerReconstruct != null){
+			controllerReconstruct.exitApplication();
 		}
-		if(controller3 != null){
-			controller3.exitApplication();
+		if(controllerPlayerKi != null){
+			controllerPlayerKi.exitApplication();
 		}
-		if(controller4 != null){
-			controller4.exitApplication();
+		if(controllerPlayerPlayer != null){
+			controllerPlayerPlayer.exitApplication();
 		}
 	}
 
 	public ThreadPlayerKiNEW getThreadPlayerKiNEW() {
 		if (threadPlayerKiNEW == null || threadPlayerKiNEW.getState() == Thread.State.TERMINATED){
-			threadPlayerKiNEW = new ThreadPlayerKiNEW(controller3, gameInfo, settings, algorithmManager, connection);
+			threadPlayerKiNEW = new ThreadPlayerKiNEW(controllerPlayerKi, gameInfo, settings, algorithmManager, connection);
 			threadPlayerKiNEW.start();
 		}
 		return threadPlayerKiNEW;

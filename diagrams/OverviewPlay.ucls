@@ -146,7 +146,7 @@
   </association>  
   <association id="31">    
     <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="32" name="controller1">        
+      <attribute id="32" name="controllerKiKi">        
         <position height="0" width="0" x="0" y="0"/>      
       </attribute>      
       <multiplicity id="33" minimum="0" maximum="1">        

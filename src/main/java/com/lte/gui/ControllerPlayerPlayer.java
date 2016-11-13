@@ -242,7 +242,7 @@ public class ControllerPlayerPlayer {
 	
 			// FXMLLoader
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
-			loader.setController(controller.getController0());
+			loader.setController(controller.getControllerStart());
 			try {
 				stage.setScene(new Scene((AnchorPane) loader.load()));
 			} catch (IOException e) {
@@ -372,7 +372,7 @@ public class ControllerPlayerPlayer {
 
 		// FXMLLoader
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("views/start.fxml"));
-		loader.setController(controller.getController0());
+		loader.setController(controller.getControllerStart());
 		stage.setScene(new Scene((AnchorPane) loader.load()));
 
 		stage.show();

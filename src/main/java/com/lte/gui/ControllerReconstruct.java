@@ -187,7 +187,7 @@ public class ControllerReconstruct {
 			    stage = (Stage) backToStart.getScene().getWindow();
 			    // FXMLLoader             
 		        FXMLLoader loader = new FXMLLoader(getClass().getResource("views/start.fxml"));
-		        loader.setController(controller.getController0());
+		        loader.setController(controller.getControllerStart());
 			    stage.setScene(new Scene((AnchorPane) loader.load()));  
 				stage.show();
 				
@@ -201,7 +201,7 @@ public class ControllerReconstruct {
 		    stage = (Stage) backToStart.getScene().getWindow();
 		    // FXMLLoader               
 	        FXMLLoader loader = new FXMLLoader(getClass().getResource("views/start.fxml"));
-	        loader.setController(controller.getController0());
+	        loader.setController(controller.getControllerStart());
 		    stage.setScene(new Scene((AnchorPane) loader.load()));
 			stage.show();    
 		}
