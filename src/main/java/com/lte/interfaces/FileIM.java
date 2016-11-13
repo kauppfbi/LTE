@@ -1,4 +1,4 @@
-package  com.lte.interfaces;
+package com.lte.interfaces;
 
 import com.lte.models.ServerMessage;
 
@@ -13,14 +13,25 @@ import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 
+/**
+ * Interface Manager for File Interface<br>
+ * implements InterfaceManager
+ * 
+ * @author kauppfbi
+ *
+ */
 public class FileIM implements InterfaceManager {
 
 	private String path;
 	private String filename;
 	private char player;
 
-	ServerMessage serverMessage;
-
+	/**
+	 * Constructor<br>
+	 * It requires the contactPath as String and the assigned player as a char.
+	 * @param path
+	 * @param player
+	 */
 	public FileIM(String path, char player) {
 		this.path = path + "/";
 		this.player = player;
@@ -29,7 +40,6 @@ public class FileIM implements InterfaceManager {
 		this.filename = "spieler" + player + "2server.txt";
 	}
 
-
 	@Override
 	public ServerMessage receiveMessage() {
 		String fileName = "server2spieler" + player + ".xml";
@@ -37,14 +47,14 @@ public class FileIM implements InterfaceManager {
 		ServerMessage serverMessage = null;
 		while (true) {
 			try {
-				//System.out.println("wait for xml: " + path + fileName);
+				// System.out.println("wait for xml: " + path + fileName);
 				serverMessage = readXML(path + fileName);
 				if (serverMessage != null) {
 					break;
 				}
 			} catch (IOException e) {
 				try {
-					//System.err.println("ServerXML nicht gefunden!");
+					// System.err.println("ServerXML nicht gefunden!");
 					// e.printStackTrace();
 					Thread.sleep(300);
 				} catch (InterruptedException e1) {
@@ -63,7 +73,7 @@ public class FileIM implements InterfaceManager {
 			writer.print(String.valueOf(column));
 			writer.close();
 		} catch (FileNotFoundException | UnsupportedEncodingException e) {
-			File file = new File(path + filename);
+			new File(path + filename);
 			try {
 				writer = new PrintWriter(path + filename, "UTF-8");
 				writer.print(String.valueOf(column));
@@ -81,11 +91,16 @@ public class FileIM implements InterfaceManager {
 
 	}
 
+	/**
+	 * This method takes over to read the xml-File from the server.
+	 * @param filePath
+	 * @return a serverMessage object
+	 * @throws IOException
+	 */
 	private ServerMessage readXML(String filePath) throws IOException {
 
 		Document doc = null;
 		ServerMessage message = null;
-
 		File f = new File(filePath);
 
 		try {
@@ -111,7 +126,6 @@ public class FileIM implements InterfaceManager {
 		} catch (JDOMException e) {
 			e.printStackTrace();
 		}
-
 		return message;
 	}
 }

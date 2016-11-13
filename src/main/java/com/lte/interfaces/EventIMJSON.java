@@ -10,13 +10,26 @@ import com.pusher.client.PusherOptions;
 import com.pusher.client.channel.PrivateChannel;
 import com.pusher.client.channel.PrivateChannelEventListener;
 
+/**
+ * Event Interface Manager, which processes JSON-objects as server response.<br>
+ * implements InterfaceManager
+ * 
+ * @author kauppfbi
+ *
+ */
 public class EventIMJSON implements InterfaceManager {
 	private PusherOptions options;
 	private Pusher pusher;
 	private PrivateChannel channel;
 	private ServerMessage serverMessage;
-	
-	public EventIMJSON(String [] credentials){
+
+	/**
+	 * Constructor, which processes the delivered credentials for setting up the
+	 * connection in a private channel.
+	 * 
+	 * @param credentials
+	 */
+	public EventIMJSON(String[] credentials) {
 		this.options = new PusherOptions();
 		options.setAuthorizer(new Authorizer() {
 			@Override
@@ -34,7 +47,7 @@ public class EventIMJSON implements InterfaceManager {
 		pusher.connect();
 
 		this.channel = pusher.subscribePrivate("private-channel");
-		
+
 		try {
 
 			channel.bind("MoveToAgent", new PrivateChannelEventListener() {
@@ -55,7 +68,7 @@ public class EventIMJSON implements InterfaceManager {
 				public void onEvent(String channelName, String eventName, final String message) {
 					System.out.println(message);
 					setServerMessage(message);
-					
+
 				}
 			});
 		} catch (Exception e) {
@@ -64,18 +77,16 @@ public class EventIMJSON implements InterfaceManager {
 		}
 	}
 
-
 	@Override
 	public ServerMessage receiveMessage() {
-		ServerMessage localMessage; 
-		
-		while(true){
-			if(serverMessage != null){
+		ServerMessage localMessage;
+
+		while (true) {
+			if (serverMessage != null) {
 				localMessage = serverMessage;
 				serverMessage = null;
 				break;
-			}
-			else{
+			} else {
 				try {
 					Thread.sleep(100);
 				} catch (InterruptedException e) {
@@ -83,20 +94,24 @@ public class EventIMJSON implements InterfaceManager {
 				}
 			}
 		}
-		
+
 		return localMessage;
 	}
 
 	@Override
 	public void sendMove(int column) {
 		channel.trigger("client-event", "{\"move\": \"" + column + "\"}");
-		
+
 	}
 
-	
-	// prepares received message 
-	private void setServerMessage(String message){
-		
+	/**
+	 * prepares the received message (JSON) from the pusher-server and builds a
+	 * new serverMessage-object.
+	 * 
+	 * @param message
+	 */
+	private void setServerMessage(String message) {
+
 		JSONObject jsonMessage = new JSONObject(message);
 
 		JSONObject content = jsonMessage.getJSONObject("content");
@@ -109,7 +124,7 @@ public class EventIMJSON implements InterfaceManager {
 
 		// neues ServerMessage Objekt erstellen
 		serverMessage = new ServerMessage(unlocked, setStatus, opponentMove, winner);
-		
+
 	}
 
 }

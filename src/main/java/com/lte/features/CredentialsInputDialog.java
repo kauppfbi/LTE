@@ -9,15 +9,36 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 
+/**
+ * This class provides a InputDialog-Window to enter pusher credentials dynamically.
+ * 
+ * @author kauppfbi
+ *
+ */
 public class CredentialsInputDialog {
+	/**
+	 * credentials [0] == appID credentials [1] == appKey credentials [2] ==
+	 * appSecret
+	 */
 	private String[] credentials;
-	private Dialog<String []> dialog;
+	private Dialog<String[]> dialog;
 
+	/**
+	 * default Constructor, which requires the last used credentials in a String
+	 * Array
+	 * 
+	 * @param defaultCredentials
+	 */
 	public CredentialsInputDialog(String[] defaultCredentials) {
 		this.credentials = defaultCredentials;
 	}
-	
-	public String [] getResult(){
+
+	/**
+	 * Call this method to receive the input data.
+	 * 
+	 * @return the entered data in String Array
+	 */
+	public String[] getResult() {
 
 		// Create the custom dialog.
 		dialog = new Dialog<String[]>();
@@ -50,26 +71,26 @@ public class CredentialsInputDialog {
 		id.textProperty().addListener((observable, oldValue, newValue) -> {
 			credentials[0] = newValue;
 		});
-		
+
 		key.textProperty().addListener((observable, oldValue, newValue) -> {
 			credentials[1] = newValue;
 		});
-		
+
 		secret.textProperty().addListener((observable, oldValue, newValue) -> {
 			credentials[2] = newValue;
 		});
-		
+
 		dialog.setResultConverter(dialogButton -> {
-		    if (dialogButton == confirmType) {
-		        return new String [] {id.getText(), key.getText(), secret.getText()};
-		    }
-		    return null;
+			if (dialogButton == confirmType) {
+				return new String[] { id.getText(), key.getText(), secret.getText() };
+			}
+			return null;
 		});
 
 		dialog.getDialogPane().setContent(grid);
 		Optional<String[]> optionalResult = dialog.showAndWait();
 		credentials = null;
-		optionalResult.ifPresent(result ->{
+		optionalResult.ifPresent(result -> {
 			credentials = result;
 		});
 		return credentials;
