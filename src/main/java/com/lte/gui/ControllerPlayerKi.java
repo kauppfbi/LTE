@@ -257,7 +257,7 @@ public class ControllerPlayerKi {
 				stage.getIcons().add(image);
 
 				// FXMLLoader
-				FXMLLoader loader = new FXMLLoader(getClass().getResource("views/start.fxml"));
+				FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layoutStart.fxml"));
 				loader.setController(controller.getControllerStart());
 				try {
 					stage.setScene(new Scene((AnchorPane) loader.load()));
