@@ -7,6 +7,12 @@ import com.lte.models.GameDB;
 import com.lte.models.SetDB;
 import com.lte.models.DBscoreboard;
 
+/**
+ * This DBconnection class provides predefined DB-Queries.
+ * 
+ * @author kauppfbi
+ *
+ */
 public class DBconnection {
 
 	// Create db connection and statement object
@@ -14,6 +20,9 @@ public class DBconnection {
 	public Connection con = null;
 	public Statement stmt = null;
 
+	/**
+	 * default constructor
+	 */
 	public DBconnection() {
 
 		// load jdbc driver
@@ -150,12 +159,13 @@ public class DBconnection {
 	 * @param currentGamePointsOpponent
 	 * @return ID of new gameset
 	 */
-	public int createNewSet(int gameID, int currentGamePointsOwn, int currentGamePointsOpponent, String startingPlayer) {
+	public int createNewSet(int gameID, int currentGamePointsOwn, int currentGamePointsOpponent,
+			String startingPlayer) {
 		// Set starting player to opposite player than set before
 		// Update game entry with latest score
 
 		int setID = 0;
-		//int latestSetID = 0;
+		// int latestSetID = 0;
 		String newStartingPlayer = startingPlayer;
 
 		try {
@@ -164,7 +174,7 @@ public class DBconnection {
 			e.printStackTrace();
 			System.out.println("LOG: Couldn't create statement");
 		}
-		
+
 		// Create new entry
 		String sql = "INSERT INTO \"PUBLIC\".\"GAMESET\" ( \"GAMEID\", \"STARTINGPLAYER\", \"POINTSOWNBEFORESET\", \"POINTSOPPONENTBEFORESET\" ) VALUES ( "
 				+ gameID + ", '" + newStartingPlayer + "', " + currentGamePointsOwn + ", " + currentGamePointsOpponent
@@ -249,8 +259,8 @@ public class DBconnection {
 	 * @param pointsOpponent
 	 */
 	public void updateScoreOfGame(int gameID, int pointsOwn, int pointsOpponent, String winner) {
-		String sql = "UPDATE PUBLIC.GAME SET (POINTSOWN, POINTSOPPONENT, WINNER) = (" + pointsOwn
-				+ ", " + pointsOpponent + ", '" + winner + "') WHERE GAMEID = " + gameID;
+		String sql = "UPDATE PUBLIC.GAME SET (POINTSOWN, POINTSOPPONENT, WINNER) = (" + pointsOwn + ", "
+				+ pointsOpponent + ", '" + winner + "') WHERE GAMEID = " + gameID;
 		try {
 			stmt.executeQuery(sql);
 			System.out.println("LOG: Set game score");
@@ -488,9 +498,10 @@ public class DBconnection {
 		return opponentsStats;
 
 	}
-	
+
 	/**
 	 * Method returns all existing opponent names to show in option box on UI
+	 * 
 	 * @return String array with all names
 	 */
 	public String[] getOpponentNames() {
@@ -500,20 +511,19 @@ public class DBconnection {
 			e.printStackTrace();
 			System.out.println("LOG: couldn't create statement");
 		}
-		
+
 		int totalOpponents = 0;
 		String[] names = new String[1];
 		names[0] = "";
 		int counter = 0;
-		
+
 		String sql = "SELECT OPPONENTNAME FROM \"PUBLIC\".\"OPPONENT\" ORDER BY OPPONENTNAME ASC";
 		PreparedStatement stmt2;
-		
+
 		try {
-			stmt2 = con.prepareStatement(sql, ResultSet.TYPE_SCROLL_SENSITIVE,
-					ResultSet.CONCUR_UPDATABLE);
+			stmt2 = con.prepareStatement(sql, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 			ResultSet res = stmt2.executeQuery();
-			
+
 			if (res.next()) {
 				System.out.println("LOG: got all opponent names");
 				res.last();
@@ -521,21 +531,22 @@ public class DBconnection {
 				names = new String[totalOpponents];
 				res.beforeFirst();
 			}
-			
+
 			while (res.next()) {
 				names[counter] = res.getString(1);
 				counter++;
 			}
-			
+
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 			System.out.println("LOG: couldn't get opponent names or create array");
 		}
 		return names;
 	}
-	
+
 	/**
 	 * Method used to delete unfinished games if user aborts game
+	 * 
 	 * @param gameID
 	 */
 	public void deleteUnfinishedGame(int gameID) {
@@ -545,7 +556,7 @@ public class DBconnection {
 			e.printStackTrace();
 			System.out.println("LOG: couldn't create statement");
 		}
-		
+
 		String sql = "DELETE FROM PUBLIC.TURN WHERE GAMEID = " + gameID + ";";
 		try {
 			stmt.executeQuery(sql);
@@ -689,7 +700,8 @@ public class DBconnection {
 					}
 
 					turns[0] = startingPlayer;
-					System.out.println("LOG: Replay-Turns, SetID = " + mapping[setNumber - 1] + "Starting Player: " + turns[0]);
+					System.out.println(
+							"LOG: Replay-Turns, SetID = " + mapping[setNumber - 1] + "Starting Player: " + turns[0]);
 					turns[1] = res.getInt(5);
 				}
 
@@ -749,27 +761,28 @@ public class DBconnection {
 
 		return number;
 	}
-	
+
 	/**
-	 * Cleans up db by deleting all unfinished games and all of its sets and turns.<br>
-	 * Called everytime the program is closed to make sure a consistent db status is present at all times.
+	 * Cleans up db by deleting all unfinished games and all of its sets and
+	 * turns.<br>
+	 * Called everytime the program is closed to make sure a consistent db
+	 * status is present at all times.
 	 */
 	private void cleanupDB() {
 		System.out.println("LOG: DB cleanup started");
 		ArrayList<Integer> brokenGames = new ArrayList<Integer>();
 		int gameID = 0;
-		
-		
+
 		try {
 			stmt = con.createStatement();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println("LOG: Couldn't create statement");
 		}
-		
+
 		// Get gameID and winner of all games in db
 		String sql = "SELECT GAMEID, WINNER FROM PUBLIC.GAME";
-		
+
 		try {
 			ResultSet res = stmt.executeQuery(sql);
 			while (res.next()) {
@@ -786,8 +799,9 @@ public class DBconnection {
 			e.printStackTrace();
 			System.out.println("Couldn't get games");
 		}
-		
-		// Loop through list and delete all game dependencies and the game itself with existig method
+
+		// Loop through list and delete all game dependencies and the game
+		// itself with existig method
 		for (int i = 0; i < brokenGames.size(); i++) {
 			gameID = brokenGames.get(i);
 			System.out.println("LOG: GameID to delete: " + gameID);
@@ -796,6 +810,10 @@ public class DBconnection {
 		System.out.println("LOG: DB cleanup finished");
 	}
 
+	/**
+	 * Method triggers Cleanup and closes the Connection and the current
+	 * statement.
+	 */
 	public void close() {
 		// Save file
 		cleanupDB();
