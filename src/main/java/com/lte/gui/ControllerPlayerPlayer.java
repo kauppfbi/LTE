@@ -208,9 +208,6 @@ public class ControllerPlayerPlayer {
 			set.setText(String.valueOf(satz + 1));
 			controller.getGameInfo().setSet(satz);
 	
-			// new game
-			controller.setThreadPlayerPlayerNull();
-	
 			// reset rows
 			rowHigh0 = 0;
 			rowHigh1 = 0;
@@ -220,8 +217,6 @@ public class ControllerPlayerPlayer {
 			rowHigh5 = 0;
 			rowHigh6 = 0;
 		} else if (result.get() == beenden) {
-	
-			controller.setThreadPlayerPlayerNull();
 	
 			// Integer Stones per column -> hight of the row
 			rowHigh0 = 0;
@@ -351,7 +346,6 @@ public class ControllerPlayerPlayer {
 	 */
 	@FXML
 	private void goToStartmenu(ActionEvent event) throws IOException {
-		controller.setThreadPlayerPlayerNull();
 
 		// Integer Stones per column -> hight of the row
 		rowHigh0 = 0;

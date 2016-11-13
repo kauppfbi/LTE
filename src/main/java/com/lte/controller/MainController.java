@@ -31,10 +31,7 @@ import javafx.scene.image.Image;
  *
  */
 public class MainController {
-	/*
-	 * Attributes
-	 */
-
+	
 	// interface to server
 	private InterfaceManager interfaceManager;
 
@@ -45,7 +42,7 @@ public class MainController {
 	private ControllerPlayerKi controllerPlayerKi;
 	private ControllerPlayerPlayer controllerPlayerPlayer;
 
-	// model(s)
+	// models
 	private Settings settings;
 	private GameInfo gameInfo;
 
@@ -55,11 +52,15 @@ public class MainController {
 	// KI Manager
 	private AlgorithmManager algorithmManager;
 	
-	//threads
+	// threads
 	private ThreadPlay threadPlay;
 	private ThreadPlayerKi threadPlayerKi;
 	private ThreadPlayerPlayer threadPlayerPlayer;
+	
+	//HasMap, which holds several images
 	private HashMap<String, Image> images;
+	
+	// Manager for sounds and music in gameplay
 	private SoundManager soundManager;
 
 
@@ -75,41 +76,9 @@ public class MainController {
 		initImages();
 	}
 
-	private void initImages() {
-		images = new HashMap<String, Image>();
-		File fileButton; 
-		Image imageButton; 
-		
-		fileButton = new File("files/images/speaker.png");
-		imageButton = new Image(fileButton.toURI().toString());
-		images.put("speaker", imageButton);
-		
-		fileButton = new File("files/images/speaker-mute.png");
-		imageButton = new Image(fileButton.toURI().toString());
-		images.put("speaker-mute", imageButton);
-
-		fileButton = new File("files/images/speaker1.png");
-		imageButton = new Image(fileButton.toURI().toString());
-		images.put("speaker1", imageButton);
-		
-		fileButton = new File("files/images/speaker1-mute.png");
-		imageButton = new Image(fileButton.toURI().toString());
-		images.put("speaker1-mute", imageButton);
-		
-		fileButton = new File("files/images/play.png");
-		imageButton = new Image(fileButton.toURI().toString());
-		images.put("play", imageButton);
-		
-		fileButton = new File("files/images/pause.png");
-		imageButton = new Image(fileButton.toURI().toString());
-		images.put("pause", imageButton);
-		
-		fileButton = new File("files/images/stop.png");
-		imageButton = new Image(fileButton.toURI().toString());
-		images.put("stop", imageButton);
-		
-		
-	}
+	/*
+	 * Getter for GUI Controllers
+	 */
 	
 	/**
 	 * This method provides a object-recycling-function.<br>
@@ -191,6 +160,12 @@ public class MainController {
 		}
 	}
 	
+	
+	/*
+	 * Getter for Threads
+	 */
+	
+	
 	public ThreadPlay getThreadPlay(){
 		return threadPlay;
 	}
@@ -202,10 +177,14 @@ public class MainController {
 		}
 		return threadPlayerKi;
 	}
-
-	public SoundManager getSoundManager() {
-		return soundManager;
+	
+	public ThreadPlayerPlayer getThreadPlayerPlayer(){
+		return threadPlayerPlayer;
 	}
+
+	/*
+	 * Getter and Setter for models
+	 */
 
 	public Settings getSettings() {
 		return settings;
@@ -223,54 +202,24 @@ public class MainController {
 		this.gameInfo = gameInfo;
 	}
 	
-	public DBscoreboard[] getScoreBoardInfo(){
-		return connection.getScoreboard();
+	/*
+	 * Other getters 
+	 */
+	
+	public SoundManager getSoundManager() {
+		return soundManager;
 	}
 	
-	public void setThreadPlayerPlayerNull() {
-		threadPlayerPlayer = null;
+	public HashMap<String, Image> getImages() {
+		return images;
 	}
 
 	/*
-	 * public methods <-- called by GUI-Controllers
+	 * DB-Methods
 	 */
-	/**
-	 * This method is called by Controller1, triggered by a User-Action.<br>
-	 * It initializes the interface and instantiates a new Thread which takes over the communication between the modules. 
-	 */
-	public void playSet(){
-		boolean successfull = initializeInterface();
-		if (!successfull) {
-			JOptionPane.showInternalMessageDialog(null, "Interface wurde nicht erfolgreich initilisiert!");
-		} else{
-			resetAlgorithmManager();
-			threadPlay = new ThreadPlay(interfaceManager, controllerKiKi, gameInfo, connection, algorithmManager, settings);
-			threadPlay.start();
-		}
-	}
 	
-	/***********************************
-	 ********* Playing Player KI 
-	 * @return *****************
-	 ***********************************/
-//	public int playTurnKi(int column) {
-//		resetAlgorithmManager();
-//		if (threadPlayerKi == null) {
-//			threadPlayerKi = new ThreadPlayerKi(controller3, gameInfo, algorithmManager, settings, connection);
-//		}
-//		return threadPlayerKi.playTurn(column);
-//	}
-	
-	/***********************************
-	 ********* Playing Player Player 
-	 * @return 
-	 * @throws Exception *****************
-	 ***********************************/
-	public int playTurnPlayerPlayer(int column) throws Exception{
-		if(threadPlayerPlayer == null){
-			threadPlayerPlayer = new ThreadPlayerPlayer(controllerPlayerPlayer, gameInfo);
-		}
-			return threadPlayerPlayer.playTurn(column);
+	public DBscoreboard[] getScoreBoardInfo(){
+		return connection.getScoreboard();
 	}
 	
 	/**
@@ -327,6 +276,36 @@ public class MainController {
 		}
 	}
 	
+	
+	/*
+	 * other public methods
+	 */
+	
+	/**
+	 * This method is called by Controller1, triggered by a User-Action.<br>
+	 * It initializes the interface and instantiates a new Thread which takes over the communication between the modules. 
+	 */
+	public void playSet(){
+		boolean successfull = initializeInterface();
+		if (!successfull) {
+			JOptionPane.showInternalMessageDialog(null, "Interface wurde nicht erfolgreich initilisiert!");
+		} else{
+			resetAlgorithmManager();
+			threadPlay = new ThreadPlay(interfaceManager, controllerKiKi, gameInfo, connection, algorithmManager, settings);
+			threadPlay.start();
+		}
+	}
+	
+	
+	public int playTurnPlayerPlayer(int column) throws Exception{
+		if(threadPlayerPlayer == null){
+			threadPlayerPlayer = new ThreadPlayerPlayer(controllerPlayerPlayer, gameInfo);
+		}
+			return threadPlayerPlayer.playTurn(column);
+	}
+	
+	
+	
 	/*
 	 * private methods - helping methods
 	 */
@@ -354,10 +333,42 @@ public class MainController {
 			return false;
 		}
 	}
-
-	public HashMap<String, Image> getImages() {
-		return images;
-	}
+		
+		private void initImages() {
+			images = new HashMap<String, Image>();
+			File fileButton; 
+			Image imageButton; 
+			
+			fileButton = new File("files/images/speaker.png");
+			imageButton = new Image(fileButton.toURI().toString());
+			images.put("speaker", imageButton);
+			
+			fileButton = new File("files/images/speaker-mute.png");
+			imageButton = new Image(fileButton.toURI().toString());
+			images.put("speaker-mute", imageButton);
+		
+			fileButton = new File("files/images/speaker1.png");
+			imageButton = new Image(fileButton.toURI().toString());
+			images.put("speaker1", imageButton);
+			
+			fileButton = new File("files/images/speaker1-mute.png");
+			imageButton = new Image(fileButton.toURI().toString());
+			images.put("speaker1-mute", imageButton);
+			
+			fileButton = new File("files/images/play.png");
+			imageButton = new Image(fileButton.toURI().toString());
+			images.put("play", imageButton);
+			
+			fileButton = new File("files/images/pause.png");
+			imageButton = new Image(fileButton.toURI().toString());
+			images.put("pause", imageButton);
+			
+			fileButton = new File("files/images/stop.png");
+			imageButton = new Image(fileButton.toURI().toString());
+			images.put("stop", imageButton);
+			
+			
+		}
 
 	/**
 	 * This method evaluates, if the dbConnection object can be used.<br>
@@ -382,6 +393,14 @@ public class MainController {
 		this.algorithmManager = new AlgorithmManager();
 	}
 	
+	
+	/*
+	 * Shutdown method
+	 */
+	
+	/**
+	 * 
+	 */
 	public void shutdownApplication(){
 		// DB: delete unfinished game
 		if(gameInfo != null){
