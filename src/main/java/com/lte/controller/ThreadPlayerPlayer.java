@@ -53,10 +53,10 @@ public class ThreadPlayerPlayer {
 	 * @throws Exception
 	 *             if move is not possible on the current field
 	 */
-	public int playTurn(int column) throws Exception {
+	public void playTurn(int column) throws Exception {
 		// ***** Player O spielt Zug ******
 		if (gameInfo.getNextPlayer() == 'O') {
-			System.out.println("Player O spielt!");
+			//System.out.println("Player O spielt!");
 			// -Spiele Gegnerzug im Spielstand
 
 			currentGameScore.play(column, (byte) 2);
@@ -69,7 +69,7 @@ public class ThreadPlayerPlayer {
 
 		// ***** Player X spielt Zug ******
 		else if (gameInfo.getNextPlayer() == 'X') {
-			System.out.println("Player X spielt!");
+			//System.out.println("Player X spielt!");
 			// -Spiele Gegnerzug im Spielstand
 
 			currentGameScore.play(column, (byte) 1);
@@ -104,7 +104,6 @@ public class ThreadPlayerPlayer {
 			});
 
 		}
-		return nextMove;
 	}
 
 }

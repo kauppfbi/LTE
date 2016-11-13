@@ -84,12 +84,12 @@ public class MainController {
 
 	/**
 	 * This method provides a object-recycling-function.<br>
-	 * In case of a scene change to scene0/layout0, the controller-object can be
-	 * used again.<br>
+	 * In case of a scene change to scene0/layout0 (start), the
+	 * controller-object can be used again.<br>
 	 * If the mainController did not instantiate a object yet, the method call
 	 * its constructor and returns the new object.
 	 * 
-	 * @return Controller0-Object (GUI-Controller for scene0)
+	 * @return ControllerStart-Object (GUI-Controller for scene0)
 	 */
 	public ControllerStart getControllerStart() {
 		if (controllerStart == null) {
@@ -102,12 +102,12 @@ public class MainController {
 
 	/**
 	 * This method provides a object-recycling-function.<br>
-	 * In case of a scene change to scene1/layout1, the controller-object can be
-	 * used again.<br>
+	 * In case of a scene change to scene1/layout1 (ai vs. ai), the
+	 * controller-object can be used again.<br>
 	 * If the mainController did not instantiate a object yet, the method call
 	 * its constructor and returns the new object.
 	 * 
-	 * @return Controller1-Object (GUI-Controller for scene1)
+	 * @return ControllerKiKi-Object (GUI-Controller for scene1)
 	 */
 	public ControllerKiKi getControllerKiKi() {
 		if (controllerKiKi == null) {
@@ -120,12 +120,12 @@ public class MainController {
 
 	/**
 	 * This method provides a object-recycling-function.<br>
-	 * In case of a scene change to scene2/layout2, the controller-object can be
-	 * used again.<br>
+	 * In case of a scene change to scene2/layout2 (Reconstruction), the
+	 * controller-object can be used again.<br>
 	 * If the mainController did not instantiate a object yet, the method call
 	 * its constructor and returns the new object.
 	 * 
-	 * @return Controller2-Object (GUI-Controller for scene2)
+	 * @return ControllerReconstruct-Object (GUI-Controller for scene2)
 	 */
 	public ControllerReconstruct getControllerReconstruct() {
 		if (controllerReconstruct == null) {
@@ -138,12 +138,12 @@ public class MainController {
 
 	/**
 	 * This method provides a object-recycling-function.<br>
-	 * In case of a scene change to scene3/layout3, the controller-object can be
-	 * used again.<br>
+	 * In case of a scene change to scene3/layout3 (Player vs. AI), the
+	 * controller-object can be used again.<br>
 	 * If the mainController did not instantiate a object yet, the method call
 	 * its constructor and returns the new object.
 	 * 
-	 * @return Controller3-Object (GUI-Controller for scene3)
+	 * @return ControllerPlayerKi-Object (GUI-Controller for scene3)
 	 */
 	public ControllerPlayerKi getControllerPlayerKi() {
 		if (controllerPlayerKi == null) {
@@ -156,12 +156,12 @@ public class MainController {
 
 	/**
 	 * This method provides a object-recycling-function.<br>
-	 * In case of a scene change to scene4/layout4, the controller-object can be
-	 * used again.<br>
+	 * In case of a scene change to scene4/layout4 (Player vs. Player), the
+	 * controller-object can be used again.<br>
 	 * If the mainController did not instantiate a object yet, the method call
 	 * its constructor and returns the new object.
 	 * 
-	 * @return Controller4-Object (GUI-Controller for scene4)
+	 * @return ControllerPlayerPlayer-Object (GUI-Controller for scene4)
 	 */
 	public ControllerPlayerPlayer getControllerPlayerPlayer() {
 		if (controllerPlayerPlayer == null) {
@@ -319,20 +319,30 @@ public class MainController {
 		}
 	}
 
-	public int playTurnPlayerPlayer(int column) throws Exception {
+	/**
+	 * 
+	 * @param column
+	 * @return int value of
+	 * @throws Exception
+	 *             if column is full already
+	 */
+	public void playTurnPlayerPlayer(int column) throws Exception {
 		if (threadPlayerPlayer == null) {
 			threadPlayerPlayer = new ThreadPlayerPlayer(controllerPlayerPlayer, gameInfo);
 		}
-		return threadPlayerPlayer.playTurn(column);
+		threadPlayerPlayer.playTurn(column);
+	}
+
+	/**
+	 * This method does a reset of the ThreadPlayerPlayer-Object.
+	 */
+	public void resetThreadPlayerPlayer() {
+		this.threadPlayerPlayer = null;
 	}
 
 	/*
 	 * private methods - helping methods
 	 */
-
-	public void resetThreadPlayerPlayer(){
-		this.threadPlayerPlayer = null; 
-	}
 
 	/**
 	 * checks completeness of settings-object; if it is complete, the interface
@@ -416,6 +426,10 @@ public class MainController {
 		}
 	}
 
+	/**
+	 * shuts down the current maanager and its threads ands initializes a new
+	 * object.
+	 */
 	private void resetAlgorithmManager() {
 		algorithmManager.shutdown();
 		this.algorithmManager = new AlgorithmManager();
