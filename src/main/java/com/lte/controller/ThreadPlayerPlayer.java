@@ -1,6 +1,6 @@
 package com.lte.controller;
 
-import com.lte.gui.Controller4;
+import com.lte.gui.ControllerPlayerPlayer;
 import com.lte.models.GameInfo;
 import com.lte.models.GameScore;
 
@@ -15,7 +15,7 @@ public class ThreadPlayerPlayer {
 
 	//**********************************//
 	// GUI controller
-	private Controller4 controller4;
+	private ControllerPlayerPlayer controller4;
 
 	// model(s)
 	private GameInfo gameInfo;
@@ -25,7 +25,7 @@ public class ThreadPlayerPlayer {
 	private int nextMove;
 //
 ////**********************************//
-	public ThreadPlayerPlayer(Controller4 controller4, GameInfo gameInfo) {
+	public ThreadPlayerPlayer(ControllerPlayerPlayer controller4, GameInfo gameInfo) {
 		this.controller4 = controller4;
 		this.gameInfo = gameInfo;
 		

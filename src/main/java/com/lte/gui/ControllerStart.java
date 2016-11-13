@@ -29,7 +29,7 @@ import com.lte.models.*;
  * @author FelixH
  *
  */
-public class Controller0 {
+public class ControllerStart {
 
 	@FXML
 	AnchorPane pane;
@@ -88,7 +88,7 @@ public class Controller0 {
 	 * 
 	 * @param mainController
 	 */
-	public Controller0(MainController mainController) {
+	public ControllerStart(MainController mainController) {
 		this.controller = mainController;
 		this.soundManager = controller.getSoundManager();
 		soundManager.play();
@@ -323,7 +323,7 @@ public class Controller0 {
 			
 			// FXMLLoader
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layoutReconstruct.fxml"));
-			Controller2 controller2 = controller.getController2();
+			ControllerReconstruct controller2 = controller.getController2();
 			loader.setController(controller2);
 
 			//set new layout

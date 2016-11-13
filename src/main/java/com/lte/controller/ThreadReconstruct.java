@@ -1,6 +1,6 @@
 package com.lte.controller;
 
-import com.lte.gui.Controller2;
+import com.lte.gui.ControllerReconstruct;
 import com.lte.models.GameScore;
 
 import javafx.application.Platform;
@@ -14,7 +14,7 @@ import javafx.application.Platform;
  */
 public class ThreadReconstruct extends Thread {
 
-	private Controller2 controller2;
+	private ControllerReconstruct controller2;
 	private int[] recTurns;
 	private GameScore gameScore;
 
@@ -24,7 +24,7 @@ public class ThreadReconstruct extends Thread {
 	 * @param controller2
 	 * @param recTurns
 	 */
-	public ThreadReconstruct(Controller2 controller2, int[] recTurns) {
+	public ThreadReconstruct(ControllerReconstruct controller2, int[] recTurns) {
 		this.controller2 = controller2;
 		this.recTurns = recTurns;
 		this.gameScore = new GameScore();

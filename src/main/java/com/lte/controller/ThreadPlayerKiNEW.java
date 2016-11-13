@@ -1,7 +1,7 @@
 package com.lte.controller;
 
 import com.lte.aiPar.AlgorithmManager;
-import com.lte.gui.Controller3;
+import com.lte.gui.ControllerPlayerKi;
 import com.lte.models.GameInfo;
 import com.lte.models.GameScore;
 import com.lte.models.Settings;
@@ -15,7 +15,7 @@ import javafx.application.Platform;
  */
 public class ThreadPlayerKiNEW extends Thread {
 	
-	private Controller3 controller3;
+	private ControllerPlayerKi controller3;
 	private AlgorithmManager algorithmManager;
 	private GameInfo gameInfo;
 	private Settings settings;
@@ -24,7 +24,7 @@ public class ThreadPlayerKiNEW extends Thread {
 	private int nextMove;
 	private boolean ready;
 	
-	public ThreadPlayerKiNEW(Controller3 controller3, GameInfo gameInfo, Settings settings, AlgorithmManager algorithmManager, DBconnection connection){
+	public ThreadPlayerKiNEW(ControllerPlayerKi controller3, GameInfo gameInfo, Settings settings, AlgorithmManager algorithmManager, DBconnection connection){
 		this.controller3 = controller3;
 		this.gameInfo = gameInfo;
 		this.settings = settings;

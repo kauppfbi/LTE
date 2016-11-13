@@ -4,7 +4,7 @@ package com.lte.controller;
 import java.io.IOException;
 
 import com.lte.aiPar.AlgorithmManager;
-import com.lte.gui.Controller1;
+import com.lte.gui.ControllerKiKi;
 import com.lte.interfaces.InterfaceManager;
 import com.lte.models.GameInfo;
 import com.lte.models.ServerMessage;
@@ -26,7 +26,7 @@ public class ThreadPlay extends Thread {
 	long timeStart;
 
 	// GUI controller
-	private Controller1 controller1;
+	private ControllerKiKi controller1;
 
 	// model(s)
 	private GameInfo gameInfo;
@@ -38,7 +38,7 @@ public class ThreadPlay extends Thread {
 	// KI Manager
 	AlgorithmManager algorithmManager;
 
-	public ThreadPlay(InterfaceManager interfaceManager, Controller1 controller1, GameInfo gameInfo,
+	public ThreadPlay(InterfaceManager interfaceManager, ControllerKiKi controller1, GameInfo gameInfo,
 			DBconnection connection, AlgorithmManager algorithmManager, Settings settings) {
 		this.interfaceManager = interfaceManager;
 		this.controller1 = controller1;

@@ -3,7 +3,7 @@ package com.lte.controller;
 import java.io.IOException;
 
 import com.lte.aiPar.AlgorithmManager;
-import com.lte.gui.Controller3;
+import com.lte.gui.ControllerPlayerKi;
 import com.lte.models.GameInfo;
 import com.lte.models.GameScore;
 import com.lte.models.Settings;
@@ -13,7 +13,7 @@ import javafx.application.Platform;
 public class ThreadPlayerKi {
 	
 	// GUI controller
-	private Controller3 controller3;
+	private ControllerPlayerKi controller3;
 
 	// model(s)
 	private GameInfo gameInfo;
@@ -29,7 +29,7 @@ public class ThreadPlayerKi {
 	private int nextMove;
 
 	//// **********************************//
-	public ThreadPlayerKi(Controller3 controller3, GameInfo gameInfo, AlgorithmManager algorithmManager,
+	public ThreadPlayerKi(ControllerPlayerKi controller3, GameInfo gameInfo, AlgorithmManager algorithmManager,
 			Settings settings, DBconnection connectionInput) {
 		this.controller3 = controller3;
 		this.gameInfo = gameInfo;

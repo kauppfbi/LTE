@@ -40,7 +40,7 @@ import javafx.stage.Stage;
  * @author FelixH
  *
  */
-public class Controller1 {
+public class ControllerKiKi {
 
 	@FXML 
 	AnchorPane pane;
@@ -104,7 +104,7 @@ public class Controller1 {
 	 * 
 	 * @param mainController
 	 */
-	public Controller1(MainController mainController) {
+	public ControllerKiKi(MainController mainController) {
 		this.controller = mainController;
 		this.fileChooser = new FileChooser();
 		this.soundManager = controller.getSoundManager();		

@@ -6,11 +6,11 @@ import java.util.HashMap;
 import javax.swing.JOptionPane;
 import com.lte.aiPar.AlgorithmManager;
 import com.lte.features.SoundManager;
-import com.lte.gui.Controller0;
-import com.lte.gui.Controller1;
-import com.lte.gui.Controller2;
-import com.lte.gui.Controller3;
-import com.lte.gui.Controller4;
+import com.lte.gui.ControllerStart;
+import com.lte.gui.ControllerKiKi;
+import com.lte.gui.ControllerReconstruct;
+import com.lte.gui.ControllerPlayerKi;
+import com.lte.gui.ControllerPlayerPlayer;
 import com.lte.interfaces.EventIM;
 import com.lte.interfaces.EventIMJSON;
 import com.lte.interfaces.FileIM;
@@ -39,11 +39,11 @@ public class MainController {
 	private InterfaceManager interfaceManager;
 
 	// GUI controller
-	private Controller0 controller0;
-	private Controller1 controller1;
-	private Controller2 controller2;
-	private Controller3 controller3;
-	private Controller4 controller4;
+	private ControllerStart controller0;
+	private ControllerKiKi controller1;
+	private ControllerReconstruct controller2;
+	private ControllerPlayerKi controller3;
+	private ControllerPlayerPlayer controller4;
 
 	// model(s)
 	private Settings settings;
@@ -121,9 +121,9 @@ public class MainController {
 	 * 
 	 * @return Controller0-Object (GUI-Controller for scene0)
 	 */
-	public Controller0 getController0() {
+	public ControllerStart getController0() {
 		if (controller0 == null){
-			this.controller0 = new Controller0(this);
+			this.controller0 = new ControllerStart(this);
 			return controller0;
 		}else {
 		return controller0;
@@ -137,9 +137,9 @@ public class MainController {
 	 * 
 	 * @return Controller1-Object (GUI-Controller for scene1)
 	 */
-	public Controller1 getController1() {
+	public ControllerKiKi getController1() {
 		if (controller1 == null){
-			this.controller1 = new Controller1(this);
+			this.controller1 = new ControllerKiKi(this);
 			return controller1;
 		}else {
 		return controller1;
@@ -153,9 +153,9 @@ public class MainController {
 	 * 
 	 * @return Controller2-Object (GUI-Controller for scene2)
 	 */
-	public Controller2 getController2() {
+	public ControllerReconstruct getController2() {
 		if (controller2 == null){
-			this.controller2 = new Controller2(this);
+			this.controller2 = new ControllerReconstruct(this);
 			return controller2;
 		}else {
 		return controller2;
@@ -169,9 +169,9 @@ public class MainController {
 	 * 
 	 * @return Controller3-Object (GUI-Controller for scene3)
 	 */
-	public Controller3 getController3() {
+	public ControllerPlayerKi getController3() {
 		if (controller3 == null) {
-			this.controller3 = new Controller3(this);
+			this.controller3 = new ControllerPlayerKi(this);
 			return controller3;
 		} else {
 			return controller3;
@@ -185,9 +185,9 @@ public class MainController {
 	 * 
 	 * @return Controller4-Object (GUI-Controller for scene4)
 	 */
-	public Controller4 getController4() {
+	public ControllerPlayerPlayer getController4() {
 		if (controller4 == null){
-			this.controller4 = new Controller4(this);
+			this.controller4 = new ControllerPlayerPlayer(this);
 			return controller4;
 		}else {
 		return controller4;

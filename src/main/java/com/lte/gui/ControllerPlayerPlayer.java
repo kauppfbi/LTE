@@ -36,7 +36,7 @@ import javafx.stage.Stage;
  * 
  * @author FelixH
  */
-public class Controller4 {
+public class ControllerPlayerPlayer {
 
 	@FXML
 	Pane gameSet;
@@ -121,7 +121,7 @@ public class Controller4 {
 	 * 
 	 * @param mainController
 	 */
-	public Controller4(MainController mainController) {
+	public ControllerPlayerPlayer(MainController mainController) {
 		this.controller = mainController;
 		this.soundManager = controller.getSoundManager();		
 		this.images = controller.getImages();

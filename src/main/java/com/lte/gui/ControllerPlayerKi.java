@@ -41,7 +41,7 @@ import javafx.stage.Stage;
  * 
  * @author FelixH
  */
-public class Controller3 {
+public class ControllerPlayerKi {
 
 	// FXML Declarations
 	@FXML
@@ -98,7 +98,7 @@ public class Controller3 {
 	 * 
 	 * @param mainController
 	 */
-	public Controller3(MainController mainController) {
+	public ControllerPlayerKi(MainController mainController) {
 		this.controller = mainController;
 		this.soundManager = controller.getSoundManager();
 		this.images = controller.getImages();

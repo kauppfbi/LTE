@@ -39,7 +39,7 @@ import javafx.stage.Stage;
  * @author FelixH
  *
  */
-public class Controller2 {
+public class ControllerReconstruct {
 	
 	@FXML
 	AnchorPane pane;
@@ -107,7 +107,7 @@ public class Controller2 {
 	 * 
 	 * @param mainController
 	 */
-	public Controller2(MainController mainController) {
+	public ControllerReconstruct(MainController mainController) {
 		this.controller = mainController;
 		this.soundManager = controller.getSoundManager();		
 		this.images = controller.getImages();
