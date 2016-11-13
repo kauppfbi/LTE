@@ -333,7 +333,6 @@ public class MainController {
 	 * @return true if interface was initialized successfully
 	 */
 	private boolean initializeInterface() {
-		System.out.println(settings);
 		if (settings.isCompleted()) {
 			if (settings.getInterfaceType() == InterfaceManager.FILE_Type) {
 				interfaceManager = new FileIM(settings.getContactPath(), settings.getServerChar());
