@@ -1,14 +1,11 @@
-package  com.lte.models;
-
+package com.lte.models;
 
 import com.lte.interfaces.InterfaceManager;
 
-
-
 /**
  * 
- * @author Florian & Fabian
- * Object Settings: saves the settings for the current Game
+ * @author Florian & Fabian Object Settings: saves the settings for the current
+ *         Game
  *
  */
 
@@ -19,8 +16,8 @@ public class Settings {
 	// initialization with pusher-interface as the default interface
 	private String interfaceType;
 	private char serverChar;
-	private String [] credentials;
-	
+	private String[] credentials;
+
 	public Settings(double calculationTime, String contactPath, String interfaceType, char serverChar) {
 		this.calculationTime = calculationTime;
 		this.contactPath = contactPath;
@@ -28,15 +25,14 @@ public class Settings {
 		this.serverChar = serverChar;
 	}
 
-	public Settings(){
-		//default values
+	public Settings() {
+		// default values
 		this.calculationTime = 2.0;
 		this.interfaceType = InterfaceManager.EVENT_TYPE;
 		this.serverChar = 'n';
 	}
 
-	
-	//Getter and Setter methods
+	// Getter and Setter methods
 	public double getCalculationTime() {
 		return calculationTime;
 	}
@@ -61,14 +57,13 @@ public class Settings {
 		this.interfaceType = interfaceType;
 	}
 
-		
 	public char getServerChar() {
 		return serverChar;
 	}
 
 	public void setServerChar(char serverChar) {
 		this.serverChar = serverChar;
-	}	
+	}
 
 	public String[] getCredentials() {
 		return credentials;
@@ -78,20 +73,20 @@ public class Settings {
 		this.credentials = credentials;
 	}
 
-	
 	/**
 	 * checks if the settings are completed
-	 * @return boolean, wheter all attributes are set
+	 * 
+	 * @return boolean, whether all attributes are set
 	 */
-	public boolean isCompleted(){
+	public boolean isCompleted() {
 		boolean completed = false;
-		//Pusher-Interface: interfaceType and Calculating-Time
-		//File-Interface: InterfaceType, Calculating-Time, Contact-Path and ServerChar
-		if (interfaceType == InterfaceManager.EVENT_TYPE || interfaceType == InterfaceManager.EVENT_TYPE_JSON){
+		// Pusher-Interface: interfaceType and Calculating-Time
+		// File-Interface: InterfaceType, Calculating-Time, Contact-Path and
+		// ServerChar
+		if (interfaceType == InterfaceManager.EVENT_TYPE || interfaceType == InterfaceManager.EVENT_TYPE_JSON) {
 			completed = true;
-		}
-		else if(interfaceType == InterfaceManager.FILE_Type){
-			if(contactPath != null && (!contactPath.equals("")) && serverChar != 'n'){
+		} else if (interfaceType == InterfaceManager.FILE_Type) {
+			if (contactPath != null && (!contactPath.equals("")) && serverChar != 'n') {
 				completed = true;
 			} else {
 				System.err.println("Settings not completed!");
@@ -100,13 +95,4 @@ public class Settings {
 		}
 		return completed;
 	}
-
-	/**
-	 * toString method
-	 */
-	@Override
-	public String toString() {
-		return "Settings ===============\ncalculationTime=" + calculationTime + ", \ncontactPath=" + contactPath + ", \ninterfaceType="
-				+ interfaceType + ", \nserverChar=" + serverChar;
-	}	
 }

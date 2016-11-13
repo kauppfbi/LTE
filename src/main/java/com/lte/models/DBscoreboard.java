@@ -3,6 +3,12 @@ package com.lte.models;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
+/**
+ * This class is a classic model, which holds appropriate information for the leaderboard at the starting-screen.<br>
+ * One Object holds one record for the table.
+ * @author kauppfbi
+ *
+ */
 public class DBscoreboard {
 	private SimpleStringProperty opponentName;
 	private SimpleIntegerProperty score;
@@ -14,8 +20,12 @@ public class DBscoreboard {
 	 */
 	public DBscoreboard(){};
 	
-	/*
-	 * constructor
+	/**
+	 * Default constructor<br>
+	 * @param opponentName
+	 * @param score
+	 * @param wins
+	 * @param loses
 	 */
 	public DBscoreboard(String opponentName, int score, int wins, int loses){
 		this.opponentName = new SimpleStringProperty(opponentName);

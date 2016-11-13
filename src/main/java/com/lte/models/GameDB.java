@@ -1,9 +1,9 @@
 package  com.lte.models;
 
 /**
- * GameDB is a model
- * GameDB-Objects are used for reconstruct the past games
- * GameDB-Object equals one entry in DB-Table Game
+ * GameDB is a model.<br>
+ * GameDB-Objects are used for reconstruct the past games.<br>
+ * One GameDB-Object equals one entry in DB-Table Game
  * 
  * @author Florian
  *
