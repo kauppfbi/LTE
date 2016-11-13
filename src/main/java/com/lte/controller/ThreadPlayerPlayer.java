@@ -22,8 +22,6 @@ public class ThreadPlayerPlayer {
 	private GameInfo gameInfo;
 	private GameScore currentGameScore;
 
-	private int nextMove;
-
 	/**
 	 * Default Constructor
 	 * 
