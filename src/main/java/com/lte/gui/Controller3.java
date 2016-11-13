@@ -339,7 +339,7 @@ public class Controller3 {
 		stage.getIcons().add(image);
 
 		// FXMLLoader
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("views/start.fxml"));
 		loader.setController(controller.getController0());
 		stage.setScene(new Scene((AnchorPane) loader.load()));
 

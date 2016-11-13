@@ -171,9 +171,9 @@ public class Controller2 {
 			alert.setHeaderText("Wenn Sie nun zum Startmenu wechseln," + "\n" + "geht das aktuell rekonstruierte Spiel verloren!" + "\n\n" + "Trotzdem wechseln?");
 			
 			ButtonType change = new ButtonType("Wechseln");
-			ButtonType cancle = new ButtonType("Abbrechen");
+			ButtonType cancel = new ButtonType("Abbrechen");
 	
-			alert.getButtonTypes().setAll(change, cancle);
+			alert.getButtonTypes().setAll(change, cancel);
 	
 			Optional<ButtonType> result = alert.showAndWait();
 			
@@ -186,12 +186,12 @@ public class Controller2 {
 				Stage stage; 
 			    stage = (Stage) backToStart.getScene().getWindow();
 			    // FXMLLoader             
-		        FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
+		        FXMLLoader loader = new FXMLLoader(getClass().getResource("views/start.fxml"));
 		        loader.setController(controller.getController0());
 			    stage.setScene(new Scene((AnchorPane) loader.load()));  
 				stage.show();
 				
-			} else if(result.get() == cancle){
+			} else if(result.get() == cancel){
 				alert.close();
 				pause.setDisable(true);
 			}
@@ -200,7 +200,7 @@ public class Controller2 {
 			Stage stage;
 		    stage = (Stage) backToStart.getScene().getWindow();
 		    // FXMLLoader               
-	        FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
+	        FXMLLoader loader = new FXMLLoader(getClass().getResource("views/start.fxml"));
 	        loader.setController(controller.getController0());
 		    stage.setScene(new Scene((AnchorPane) loader.load()));
 			stage.show();    
