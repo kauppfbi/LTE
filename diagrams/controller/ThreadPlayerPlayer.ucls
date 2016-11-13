@@ -2,9 +2,9 @@
 <class-diagram version="1.1.11" icons="true" automaticImage="JPEG" always-add-relationships="false" 
   generalizations="true" realizations="true" associations="true" dependencies="false" nesting-relationships="true" 
   router="FAN">  
-  <class id="1" language="java" name="com.lte.gui.Controller1" project="LTE" 
-    file="/LTE/src/main/java/com/lte/gui/Controller1.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="399" y="206"/>    
+  <class id="1" language="java" name="com.lte.controller.ThreadPlayerPlayer" project="LTE" 
+    file="/LTE/src/main/java/com/lte/controller/ThreadPlayerPlayer.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="171" width="282" x="262" y="66"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
