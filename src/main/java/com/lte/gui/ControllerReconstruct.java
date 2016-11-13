@@ -329,14 +329,16 @@ public class ControllerReconstruct {
 		} else {
 			pointsO.setText(pointsO.getText() + 1);
 		}
-		
+
 	}
 
 	/**
-	 * shows the turns of the selected set in GridPane gameGrid<br>
+	 * * shows the turns of the selected set in GridPane gameGrid<br>
 	 * is called by the Reconstruct-Thread<br>
 	 * 
-	 * @param recTurns
+	 * @param columnIndex
+	 * @param rowIndex
+	 * @param color
 	 */
 	public void replayTurn (int columnIndex, int rowIndex, int color) {
 		Circle circle = new Circle();
@@ -510,10 +512,7 @@ public class ControllerReconstruct {
 	
 	/**
 	 * Event for leaving the application<br>
-	 * 
-	 * @param event
 	 */
-	@FXML
 	public void exitApplication() {
 		synchronized(threadReconstruct){
 			threadReconstruct.stop();

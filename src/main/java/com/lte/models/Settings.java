@@ -3,10 +3,8 @@ package com.lte.models;
 import com.lte.interfaces.InterfaceManager;
 
 /**
- * 
- * @author Florian & Fabian Object Settings: saves the settings for the current
- *         Game
- *
+ * Object Settings: saves the settings for the current game.<br>
+ * @author Florian and Fabian 
  */
 
 public class Settings {

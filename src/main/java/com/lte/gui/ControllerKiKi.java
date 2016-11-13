@@ -331,6 +331,11 @@ public class ControllerKiKi {
 
 	/**
 	 * Visualize the turns corresponding to their position in the field
+	 * 
+	 * @param columnIndex
+	 * @param rowIndex
+	 * @param player
+	 * @param endGame
 	 */
 	public void fill(int columnIndex, int rowIndex, char player, boolean endGame) {
 		Circle circle = new Circle();
@@ -505,11 +510,8 @@ public class ControllerKiKi {
 	}
 
 	/**
-	 * Event for leaving the application<br>
-	 * 
-	 * @param event
+	 * Call this method, when application is closing.
 	 */
-	@FXML
 	public void exitApplication() {
 		// DB: delete unfinished game
 		GameInfo gameInfo = controller.getGameInfo();

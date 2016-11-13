@@ -27,7 +27,7 @@ public class EventIM implements InterfaceManager {
 	 * Constructor, which processes the delivered credentials for setting up the
 	 * connection in a private channel.
 	 * 
-	 * @param credentials
+	 * @param credentials -S String Array[id, key, secret]
 	 */
 	public EventIM(String[] credentials) {
 		this.options = new PusherOptions();

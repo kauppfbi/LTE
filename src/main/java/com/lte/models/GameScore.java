@@ -143,7 +143,7 @@ public class GameScore {
 	/**
 	 * Return possible moves for the current field of the game score
 	 * 
-	 * @return ArrayList<Integer> with possible moves
+	 * @return ArrayList (Integer values) with possible moves
 	 */
 	public byte[] possibleMoves() {
 

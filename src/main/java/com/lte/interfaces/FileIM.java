@@ -29,8 +29,8 @@ public class FileIM implements InterfaceManager {
 	/**
 	 * Constructor<br>
 	 * It requires the contactPath as String and the assigned player as a char.
-	 * @param path
-	 * @param player
+	 * @param path - String for contact path
+	 * @param player - char for our assigned player-char
 	 */
 	public FileIM(String path, char player) {
 		this.path = path + "/";

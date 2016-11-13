@@ -23,7 +23,7 @@ public interface InterfaceManager {
 	
 	/**
 	 * This method sends our next move to the server.
-	 * @param column
+	 * @param column - int value of the column index
 	 */
 	public void sendMove(int column);
 	

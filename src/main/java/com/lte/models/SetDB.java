@@ -6,8 +6,8 @@ package com.lte.models;
  * SetDB-Object equals one entry in DB-Table GameSet<br><br>
  * 
  * Info: the int[]-Array stores the playedTurns,<br>
- * int[0] == 0 -> We started the set<br>
- * int[0] == 1 -> Enemy started the set<br>
+ * int[0] == 0 - We started the set<br>
+ * int[0] == 1 - Enemy started the set<br>
  * 
  * @author Florian
  *

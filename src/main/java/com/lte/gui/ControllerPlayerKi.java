@@ -157,7 +157,6 @@ public class ControllerPlayerKi {
 	 * 
 	 * @param winningPlayer
 	 * @param winningCombo
-	 * @throws IOException
 	 */
 	public void gameOver(byte winningPlayer, int[][] winningCombo) {
 		// highlights the winning-combo
@@ -271,6 +270,9 @@ public class ControllerPlayerKi {
 
 	/**
 	 * Visualize the turns corresponding to their position in the field
+	 * @param columnIndex
+	 * @param rowIndex
+	 * @param player
 	 */
 	public void fill(int columnIndex, int rowIndex, char player) {
 		// player 0 = red, player 1 = yellow
@@ -586,7 +588,6 @@ public class ControllerPlayerKi {
 	/**
 	 * Event for leaving the application<br>
 	 * 
-	 * @param event
 	 */
 	public void exitApplication() {
 		// DB: delete unfinished game

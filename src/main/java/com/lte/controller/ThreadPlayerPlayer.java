@@ -47,7 +47,6 @@ public class ThreadPlayerPlayer {
 	 * 
 	 * @param column
 	 *            of the corresponding event
-	 * @return column if game is not interrupted by game over
 	 * @throws Exception
 	 *             if move is not possible on the current field
 	 */

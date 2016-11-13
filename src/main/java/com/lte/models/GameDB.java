@@ -17,10 +17,10 @@ public class GameDB {
 	/**
 	 * Constructor for GameDB<br><br>
 	 * 
-	 * @param gameID
-	 * @param opponentName
-	 * @param playTime
-	 * @param numberOfSets
+	 * @param gameID - int: Game ID (ID in DB)
+	 * @param opponentName - String: name of opponent
+	 * @param playTime - String: Date and Time 
+	 * @param numberOfSets - int: amount of sets in this game
 	 */
 	public GameDB(int gameID, String opponentName, String playTime, int numberOfSets) {
 		this.gameID = gameID;

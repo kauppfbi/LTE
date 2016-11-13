@@ -22,10 +22,10 @@ public class DBscoreboard {
 	
 	/**
 	 * Default constructor<br>
-	 * @param opponentName
-	 * @param score
-	 * @param wins
-	 * @param loses
+	 * @param opponentName - String: name of opponent
+	 * @param score - int: score (wins-loses)
+	 * @param wins - int: wins
+	 * @param loses - int: loses
 	 */
 	public DBscoreboard(String opponentName, int score, int wins, int loses){
 		this.opponentName = new SimpleStringProperty(opponentName);

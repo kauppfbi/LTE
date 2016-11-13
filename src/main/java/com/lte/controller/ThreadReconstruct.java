@@ -21,7 +21,7 @@ public class ThreadReconstruct extends Thread {
 	/**
 	 * constructor<br>
 	 * 
-	 * @param controller2
+	 * @param controllerReconstruct
 	 * @param recTurns
 	 */
 	public ThreadReconstruct(ControllerReconstruct controllerReconstruct, int[] recTurns) {

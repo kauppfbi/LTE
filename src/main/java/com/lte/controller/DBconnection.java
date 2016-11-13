@@ -157,6 +157,7 @@ public class DBconnection {
 	 * @param gameID
 	 * @param currentGamePointsOwn
 	 * @param currentGamePointsOpponent
+	 * @param startingPlayer
 	 * @return ID of new gameset
 	 */
 	public int createNewSet(int gameID, int currentGamePointsOwn, int currentGamePointsOpponent,

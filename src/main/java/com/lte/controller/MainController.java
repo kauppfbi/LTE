@@ -320,11 +320,8 @@ public class MainController {
 	}
 
 	/**
-	 * 
 	 * @param column
-	 * @return int value of
-	 * @throws Exception
-	 *             if column is full already
+	 * @throws Exception if column is full already
 	 */
 	public void playTurnPlayerPlayer(int column) throws Exception {
 		if (threadPlayerPlayer == null) {

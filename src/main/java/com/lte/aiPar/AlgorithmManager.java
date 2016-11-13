@@ -42,19 +42,14 @@ public class AlgorithmManager {
 	}
 
 	// ******Alpha Beta**************************************
+	
 	/**
-	 * Multi threaded implementation of alpha beta algorithm to compute the next
-	 * move
 	 * 
-	 * @param field
-	 *            current field for processing the next move
-	 * @param algorithmDepth
-	 *            algorithm depth for alpha beta algorithm
-	 * @param playerByte
-	 *            character of own player
-	 * @param opponent
-	 *            character of opponent
-	 * @return best move as integer
+	 * @param field - current field for processing the next move
+	 * @param algorithmDepth - algorithm depth for alpha beta algorithm
+	 * @param calculationTime - max. calculation time for the ai
+	 * @param playerByte - character of own player
+	 * @return best move as integer value
 	 * @throws Exception
 	 */
 	public int ParallelAlphaBeta(byte[][] field, int algorithmDepth, double calculationTime, byte playerByte)
