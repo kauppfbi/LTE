@@ -352,15 +352,4 @@ public class ControllerStart {
 			}
 		}
 	}	
-
-	/**
-	 * Event for leaving the application<br>
-	 * 
-	 * @param event
-	 */
-	@FXML
-	public void exitApplication() {
-		Platform.exit();
-	}
-	
 }

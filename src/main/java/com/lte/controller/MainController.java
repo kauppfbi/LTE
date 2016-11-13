@@ -440,17 +440,8 @@ public class MainController {
 	 * It closes all threads triggers other shutdown and closing methods.
 	 */
 	public void shutdownApplication() {
-		// DB: delete unfinished game
-		if (gameInfo != null) {
-			if (!(gameInfo.getOwnPoints() == 3 || gameInfo.getOpponentPoints() == 3)) {
-				deleteUnfinishedGame();
-			}
-		}
 		if (algorithmManager != null) {
 			algorithmManager.shutdown();
-		}
-		if (controllerStart != null) {
-			controllerStart.exitApplication();
 		}
 		if (controllerKiKi != null) {
 			controllerKiKi.exitApplication();
@@ -460,9 +451,6 @@ public class MainController {
 		}
 		if (controllerPlayerKi != null) {
 			controllerPlayerKi.exitApplication();
-		}
-		if (controllerPlayerPlayer != null) {
-			controllerPlayerPlayer.exitApplication();
 		}
 	}
 }

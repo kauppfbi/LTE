@@ -7,7 +7,7 @@ import java.util.Optional;
 import com.lte.controller.MainController;
 import com.lte.controller.ThreadPlayerKi;
 import com.lte.features.SoundManager;
-import javafx.application.Platform;
+import com.lte.models.GameInfo;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -219,7 +219,7 @@ public class ControllerPlayerKi {
 				stage.getIcons().add(image);
 
 				// FXMLLoader
-				FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
+				FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layoutStart.fxml"));
 				loader.setController(controller.getControllerStart());
 				try {
 					stage.setScene(new Scene((AnchorPane) loader.load()));
@@ -589,9 +589,16 @@ public class ControllerPlayerKi {
 	 * @param event
 	 */
 	public void exitApplication() {
+		// DB: delete unfinished game
+		GameInfo gameInfo = controller.getGameInfo();
+		if (gameInfo != null) {
+			if (!(gameInfo.getOwnPoints() == 3 || gameInfo.getOpponentPoints() == 3)) {
+				controller.deleteUnfinishedGame();
+			}
+		}
+
 		if (threadPlayerKi != null) {
 			threadPlayerKi.stop();
 		}
-		Platform.exit();
 	}
 }

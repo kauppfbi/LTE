@@ -9,7 +9,7 @@ import com.lte.features.CredentialsInputDialog;
 import com.lte.features.CredentialsManager;
 import com.lte.features.SoundManager;
 import com.lte.interfaces.InterfaceManager;
-import javafx.application.Platform;
+import com.lte.models.GameInfo;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -511,10 +511,16 @@ public class ControllerKiKi {
 	 */
 	@FXML
 	public void exitApplication() {
+		// DB: delete unfinished game
+		GameInfo gameInfo = controller.getGameInfo();
+		if (gameInfo != null) {
+			if (!(gameInfo.getOwnPoints() == 3 || gameInfo.getOpponentPoints() == 3)) {
+				controller.deleteUnfinishedGame();
+			}
+		}
 		if (controller.getThreadPlay() != null) {
 			controller.getThreadPlay().stop();
 		}
 		System.out.println("controller1 exit completed");
-		Platform.exit();
 	}
 }

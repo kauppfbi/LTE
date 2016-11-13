@@ -10,7 +10,6 @@ import com.lte.controller.ThreadReconstruct;
 import com.lte.features.SoundManager;
 import com.lte.models.GameDB;
 import com.lte.models.SetDB;
-import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -519,6 +518,5 @@ public class ControllerReconstruct {
 		synchronized(threadReconstruct){
 			threadReconstruct.stop();
 		}
-		Platform.exit();
 	}
 }

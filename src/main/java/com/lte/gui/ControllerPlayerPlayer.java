@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.Optional;
 import com.lte.controller.MainController;
 import com.lte.features.SoundManager;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -462,14 +461,5 @@ public class ControllerPlayerPlayer {
 				addListener(i, j);
 			}
 		}
-	}
-
-	/**
-	 * Event for leaving the application<br>
-	 * 
-	 * @param event
-	 */
-	public void exitApplication(){
-		Platform.exit();
 	}
 }
