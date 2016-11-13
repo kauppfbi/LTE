@@ -35,67 +35,60 @@ public class ThreadReconstruct extends Thread {
 		this.recTurns = recTurns;
 	}
 
-	@Override
 	/**
 	 * Creates a Thread for each reconstructed Set<br>
 	 * Reconstructs the Turns form recTurn-Array<br>
 	 * calls the replayTurn-Method of Controller2 to visualize the Turn<br>
 	 * allows User-interaction (stop,play,pause)<br>
-	 * 
 	 */
+	@Override
 	public synchronized void run() {
 
-		int rowIndex0 = 0;
-		int rowIndex1 = 0;
-		int rowIndex2 = 0;
-		int rowIndex3 = 0;
-		int rowIndex4 = 0;
-		int rowIndex5 = 0;
-		int rowIndex6 = 0;
-		
-		if(recTurns == null){
+		int[] rowIndex = new int[7];
+
+		if (recTurns == null) {
 			controller2.playRecFinished();
 		} else {
 			for (int i = 1; i < recTurns.length; i++) {
-	
+
 				int columnIndex = recTurns[i];
-				
-				int rowIndex = 0;
+
+				int rowIndexTemp = 0;
 				int color = 0;
-	
+
 				switch (recTurns[i]) {
 				case 0:
-					rowIndex = rowIndex0;
-					rowIndex0++;
+					rowIndexTemp = rowIndex[0];
+					rowIndex[0]++;
 					break;
 				case 1:
-					rowIndex = rowIndex1;
-					rowIndex1++;
+					rowIndexTemp = rowIndex[1];
+					rowIndex[1]++;
 					break;
 				case 2:
-					rowIndex = rowIndex2;
-					rowIndex2++;
+					rowIndexTemp = rowIndex[2];
+					rowIndex[2]++;
 					break;
 				case 3:
-					rowIndex = rowIndex3;
-					rowIndex3++;
+					rowIndexTemp = rowIndex[3];
+					rowIndex[3]++;
 					break;
 				case 4:
-					rowIndex = rowIndex4;
-					rowIndex4++;
+					rowIndexTemp = rowIndex[4];
+					rowIndex[4]++;
 					break;
 				case 5:
-					rowIndex = rowIndex5;
-					rowIndex5++;
+					rowIndexTemp = rowIndex[5];
+					rowIndex[5]++;
 					break;
 				case 6:
-					rowIndex = rowIndex6;
-					rowIndex6++;
+					rowIndexTemp = rowIndex[6];
+					rowIndex[6]++;
 					break;
 				default:
 					break;
 				}
-	
+
 				// logic for color select
 				if (recTurns[0] == 0) {
 					recTurns[0] = 1;
@@ -106,7 +99,7 @@ public class ThreadReconstruct extends Thread {
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-					
+
 				} else if (recTurns[0] == 1) {
 					recTurns[0] = 0;
 					// green
@@ -117,17 +110,17 @@ public class ThreadReconstruct extends Thread {
 						e.printStackTrace();
 					}
 				}
-	
-				final int fRowIndex = rowIndex;
+
+				final int fRowIndex = rowIndexTemp;
 				final int fColor = color;
-	
+
 				Platform.runLater(new Runnable() {
 					@Override
 					public void run() {
 						controller2.replayTurn(columnIndex, fRowIndex, fColor);
 					}
 				});
-	
+
 				try {
 					this.wait(1000);
 				} catch (InterruptedException e) {
@@ -145,6 +138,6 @@ public class ThreadReconstruct extends Thread {
 				}
 			});
 			controller2.playRecFinished();
-		}//else
+		} // else
 	}// run
 }

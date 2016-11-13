@@ -24,14 +24,16 @@ import com.lte.models.Settings;
 import javafx.scene.image.Image;
 
 /**
- * main controller; coordinates data exchange and communication between all
- * interfaces or rather controllers; also coordinates Threads
- *  
+ * The main controller class <br>
+ * coordinates data exchange and communication between all interfaces or rather
+ * controllers<br>
+ * and coordinates Threads
+ * 
  * @author kauppfbi
  *
  */
 public class MainController {
-	
+
 	// interface to server
 	private InterfaceManager interfaceManager;
 
@@ -51,22 +53,22 @@ public class MainController {
 
 	// KI Manager
 	private AlgorithmManager algorithmManager;
-	
+
 	// threads
 	private ThreadPlay threadPlay;
 	private ThreadPlayerKi threadPlayerKi;
 	private ThreadPlayerPlayer threadPlayerPlayer;
-	
-	//HasMap, which holds several images
+
+	// HashMap, which holds several images
 	private HashMap<String, Image> images;
-	
+
 	// Manager for sounds and music in gameplay
 	private SoundManager soundManager;
-
 
 	/**
 	 * default constructor<br>
 	 * needs a DBconnection object as parameter
+	 * 
 	 * @param connection
 	 */
 	public MainController(DBconnection connection) {
@@ -79,59 +81,67 @@ public class MainController {
 	/*
 	 * Getter for GUI Controllers
 	 */
-	
+
 	/**
 	 * This method provides a object-recycling-function.<br>
-	 * In case of a scene change to scene0/layout0, the controller-object can be used again.<br>
-	 * If the mainController did not instantiate a object yet, the method call its constructor and returns the new object.
+	 * In case of a scene change to scene0/layout0, the controller-object can be
+	 * used again.<br>
+	 * If the mainController did not instantiate a object yet, the method call
+	 * its constructor and returns the new object.
 	 * 
 	 * @return Controller0-Object (GUI-Controller for scene0)
 	 */
 	public ControllerStart getControllerStart() {
-		if (controllerStart == null){
+		if (controllerStart == null) {
 			this.controllerStart = new ControllerStart(this);
 			return controllerStart;
-		}else {
-		return controllerStart;
+		} else {
+			return controllerStart;
 		}
 	}
 
 	/**
 	 * This method provides a object-recycling-function.<br>
-	 * In case of a scene change to scene1/layout1, the controller-object can be used again.<br>
-	 * If the mainController did not instantiate a object yet, the method call its constructor and returns the new object.
+	 * In case of a scene change to scene1/layout1, the controller-object can be
+	 * used again.<br>
+	 * If the mainController did not instantiate a object yet, the method call
+	 * its constructor and returns the new object.
 	 * 
 	 * @return Controller1-Object (GUI-Controller for scene1)
 	 */
 	public ControllerKiKi getControllerKiKi() {
-		if (controllerKiKi == null){
+		if (controllerKiKi == null) {
 			this.controllerKiKi = new ControllerKiKi(this);
 			return controllerKiKi;
-		}else {
-		return controllerKiKi;
+		} else {
+			return controllerKiKi;
 		}
 	}
 
 	/**
 	 * This method provides a object-recycling-function.<br>
-	 * In case of a scene change to scene2/layout2, the controller-object can be used again.<br>
-	 * If the mainController did not instantiate a object yet, the method call its constructor and returns the new object.
+	 * In case of a scene change to scene2/layout2, the controller-object can be
+	 * used again.<br>
+	 * If the mainController did not instantiate a object yet, the method call
+	 * its constructor and returns the new object.
 	 * 
 	 * @return Controller2-Object (GUI-Controller for scene2)
 	 */
 	public ControllerReconstruct getControllerReconstruct() {
-		if (controllerReconstruct == null){
+		if (controllerReconstruct == null) {
 			this.controllerReconstruct = new ControllerReconstruct(this);
 			return controllerReconstruct;
-		}else {
-		return controllerReconstruct;
+		} else {
+			return controllerReconstruct;
 		}
 	}
-	
+
 	/**
 	 * This method provides a object-recycling-function.<br>
-	 * In case of a scene change to scene3/layout3, the controller-object can be used again.<br>
-	 * If the mainController did not instantiate a object yet, the method call its constructor and returns the new object.
+	 * In case of a scene change to scene3/layout3, the controller-object can be
+	 * used again.<br>
+	 * If the mainController did not instantiate a object yet, the method call
+	 * its constructor and returns the new object.
 	 * 
 	 * @return Controller3-Object (GUI-Controller for scene3)
 	 */
@@ -143,42 +153,47 @@ public class MainController {
 			return controllerPlayerKi;
 		}
 	}
-	
+
 	/**
 	 * This method provides a object-recycling-function.<br>
-	 * In case of a scene change to scene4/layout4, the controller-object can be used again.<br>
-	 * If the mainController did not instantiate a object yet, the method call its constructor and returns the new object.
+	 * In case of a scene change to scene4/layout4, the controller-object can be
+	 * used again.<br>
+	 * If the mainController did not instantiate a object yet, the method call
+	 * its constructor and returns the new object.
 	 * 
 	 * @return Controller4-Object (GUI-Controller for scene4)
 	 */
 	public ControllerPlayerPlayer getControllerPlayerPlayer() {
-		if (controllerPlayerPlayer == null){
+		if (controllerPlayerPlayer == null) {
 			this.controllerPlayerPlayer = new ControllerPlayerPlayer(this);
 			return controllerPlayerPlayer;
-		}else {
-		return controllerPlayerPlayer;
+		} else {
+			return controllerPlayerPlayer;
 		}
 	}
-	
-	
+
 	/*
 	 * Getter for Threads
 	 */
-	
-	
-	public ThreadPlay getThreadPlay(){
+
+	public ThreadPlay getThreadPlay() {
 		return threadPlay;
 	}
-	
+
+	/**
+	 * Modified Getter-Method, which always returns a running thread.
+	 * 
+	 * @return running thread <i>ThreadPlayerKi</i>
+	 */
 	public ThreadPlayerKi getThreadPlayerKi() {
-		if (threadPlayerKi == null || threadPlayerKi.getState() == Thread.State.TERMINATED){
+		if (threadPlayerKi == null || threadPlayerKi.getState() == Thread.State.TERMINATED) {
 			threadPlayerKi = new ThreadPlayerKi(controllerPlayerKi, gameInfo, settings, algorithmManager, connection);
 			threadPlayerKi.start();
 		}
 		return threadPlayerKi;
 	}
-	
-	public ThreadPlayerPlayer getThreadPlayerPlayer(){
+
+	public ThreadPlayerPlayer getThreadPlayerPlayer() {
 		return threadPlayerPlayer;
 	}
 
@@ -201,15 +216,15 @@ public class MainController {
 	public void setGameInfo(GameInfo gameInfo) {
 		this.gameInfo = gameInfo;
 	}
-	
+
 	/*
-	 * Other getters 
+	 * Other getters
 	 */
-	
+
 	public SoundManager getSoundManager() {
 		return soundManager;
 	}
-	
+
 	public HashMap<String, Image> getImages() {
 		return images;
 	}
@@ -217,24 +232,31 @@ public class MainController {
 	/*
 	 * DB-Methods
 	 */
-	
-	public DBscoreboard[] getScoreBoardInfo(){
-		return connection.getScoreboard();
-	}
-	
+
 	/**
 	 * Conducts DB Query.
+	 * 
+	 * @return Array DBscoreboard-objects
+	 */
+	public DBscoreboard[] getScoreBoardInfo() {
+		return connection.getScoreboard();
+	}
+
+	/**
+	 * Conducts DB Query.
+	 * 
 	 * @param GameID
-	 * @return Array of SetDB-Objects (meta-information for every Set in DB, which is connected to the game with the transfered gaemID)
+	 * @return Array of SetDB-Objects (meta-information for every Set in DB,
+	 *         which is connected to the game with the transfered gaemID)
 	 */
 	public SetDB[] getRecSetInfo(int GameID) {
-		if (isConnectionFree()){
-			return connection.getSetInfos(GameID);	
+		if (isConnectionFree()) {
+			return connection.getSetInfos(GameID);
 		} else {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Conducts DB Query.
 	 * 
@@ -275,37 +297,35 @@ public class MainController {
 			return false;
 		}
 	}
-	
-	
+
 	/*
 	 * other public methods
 	 */
-	
+
 	/**
 	 * This method is called by Controller1, triggered by a User-Action.<br>
-	 * It initializes the interface and instantiates a new Thread which takes over the communication between the modules. 
+	 * It initializes the interface and instantiates a new Thread which takes
+	 * over the communication between the modules.
 	 */
-	public void playSet(){
+	public void playSet() {
 		boolean successfull = initializeInterface();
 		if (!successfull) {
 			JOptionPane.showInternalMessageDialog(null, "Interface wurde nicht erfolgreich initilisiert!");
-		} else{
+		} else {
 			resetAlgorithmManager();
-			threadPlay = new ThreadPlay(interfaceManager, controllerKiKi, gameInfo, connection, algorithmManager, settings);
+			threadPlay = new ThreadPlay(interfaceManager, controllerKiKi, gameInfo, connection, algorithmManager,
+					settings);
 			threadPlay.start();
 		}
 	}
-	
-	
-	public int playTurnPlayerPlayer(int column) throws Exception{
-		if(threadPlayerPlayer == null){
+
+	public int playTurnPlayerPlayer(int column) throws Exception {
+		if (threadPlayerPlayer == null) {
 			threadPlayerPlayer = new ThreadPlayerPlayer(controllerPlayerPlayer, gameInfo);
 		}
-			return threadPlayerPlayer.playTurn(column);
+		return threadPlayerPlayer.playTurn(column);
 	}
-	
-	
-	
+
 	/*
 	 * private methods - helping methods
 	 */
@@ -333,53 +353,57 @@ public class MainController {
 			return false;
 		}
 	}
-		
-		private void initImages() {
-			images = new HashMap<String, Image>();
-			File fileButton; 
-			Image imageButton; 
-			
-			fileButton = new File("files/images/speaker.png");
-			imageButton = new Image(fileButton.toURI().toString());
-			images.put("speaker", imageButton);
-			
-			fileButton = new File("files/images/speaker-mute.png");
-			imageButton = new Image(fileButton.toURI().toString());
-			images.put("speaker-mute", imageButton);
-		
-			fileButton = new File("files/images/speaker1.png");
-			imageButton = new Image(fileButton.toURI().toString());
-			images.put("speaker1", imageButton);
-			
-			fileButton = new File("files/images/speaker1-mute.png");
-			imageButton = new Image(fileButton.toURI().toString());
-			images.put("speaker1-mute", imageButton);
-			
-			fileButton = new File("files/images/play.png");
-			imageButton = new Image(fileButton.toURI().toString());
-			images.put("play", imageButton);
-			
-			fileButton = new File("files/images/pause.png");
-			imageButton = new Image(fileButton.toURI().toString());
-			images.put("pause", imageButton);
-			
-			fileButton = new File("files/images/stop.png");
-			imageButton = new Image(fileButton.toURI().toString());
-			images.put("stop", imageButton);
-			
-			
-		}
+
+	/**
+	 * This method fills the global variable images, which is a HashMap
+	 */
+	private void initImages() {
+		images = new HashMap<String, Image>();
+		File fileButton;
+		Image imageButton;
+
+		fileButton = new File("files/images/speaker.png");
+		imageButton = new Image(fileButton.toURI().toString());
+		images.put("speaker", imageButton);
+
+		fileButton = new File("files/images/speaker-mute.png");
+		imageButton = new Image(fileButton.toURI().toString());
+		images.put("speaker-mute", imageButton);
+
+		fileButton = new File("files/images/speaker1.png");
+		imageButton = new Image(fileButton.toURI().toString());
+		images.put("speaker1", imageButton);
+
+		fileButton = new File("files/images/speaker1-mute.png");
+		imageButton = new Image(fileButton.toURI().toString());
+		images.put("speaker1-mute", imageButton);
+
+		fileButton = new File("files/images/play.png");
+		imageButton = new Image(fileButton.toURI().toString());
+		images.put("play", imageButton);
+
+		fileButton = new File("files/images/pause.png");
+		imageButton = new Image(fileButton.toURI().toString());
+		images.put("pause", imageButton);
+
+		fileButton = new File("files/images/stop.png");
+		imageButton = new Image(fileButton.toURI().toString());
+		images.put("stop", imageButton);
+
+	}
 
 	/**
 	 * This method evaluates, if the dbConnection object can be used.<br>
-	 * This method should be used before calling DB-methods to avoid SQL-Exceptions.
+	 * This method should be used before calling DB-methods to avoid
+	 * SQL-Exceptions.
+	 * 
 	 * @return true, if the connection-Object can be used without problems.
 	 */
-	private boolean isConnectionFree (){
-		if (threadPlay == null){
+	private boolean isConnectionFree() {
+		if (threadPlay == null) {
 			return true;
 		} else {
-			if(threadPlay.getState() == Thread.State.NEW || threadPlay.getState() == Thread.State.TERMINATED){
+			if (threadPlay.getState() == Thread.State.NEW || threadPlay.getState() == Thread.State.TERMINATED) {
 				return true;
 			} else {
 				System.err.println("DB Connection belegt!");
@@ -387,43 +411,43 @@ public class MainController {
 			}
 		}
 	}
-	
-	private void resetAlgorithmManager(){
+
+	private void resetAlgorithmManager() {
 		algorithmManager.shutdown();
 		this.algorithmManager = new AlgorithmManager();
 	}
-	
-	
+
 	/*
 	 * Shutdown method
 	 */
-	
+
 	/**
-	 * 
+	 * This method is called, when the Application is closing.<br>
+	 * It closes all threads triggers other shutdown and closing methods.
 	 */
-	public void shutdownApplication(){
+	public void shutdownApplication() {
 		// DB: delete unfinished game
-		if(gameInfo != null){
-			if(!(gameInfo.getOwnPoints() == 3 || gameInfo.getOpponentPoints() == 3)) {
+		if (gameInfo != null) {
+			if (!(gameInfo.getOwnPoints() == 3 || gameInfo.getOpponentPoints() == 3)) {
 				deleteUnfinishedGame();
 			}
 		}
-		if(algorithmManager != null){
+		if (algorithmManager != null) {
 			algorithmManager.shutdown();
 		}
-		if(controllerStart!= null){
+		if (controllerStart != null) {
 			controllerStart.exitApplication();
 		}
-		if(controllerKiKi != null){
+		if (controllerKiKi != null) {
 			controllerKiKi.exitApplication();
 		}
-		if(controllerReconstruct != null){
+		if (controllerReconstruct != null) {
 			controllerReconstruct.exitApplication();
 		}
-		if(controllerPlayerKi != null){
+		if (controllerPlayerKi != null) {
 			controllerPlayerKi.exitApplication();
 		}
-		if(controllerPlayerPlayer != null){
+		if (controllerPlayerPlayer != null) {
 			controllerPlayerPlayer.exitApplication();
 		}
 	}
