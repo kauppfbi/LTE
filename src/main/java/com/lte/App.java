@@ -29,6 +29,9 @@ public class App extends Application{
 	private DBconnection connection;
 	private MainController controller;
 
+	/**
+	 * This method is called by starting the application.
+	 */
 	public void start(Stage stage) throws IOException {
 		this.stage = stage;
 		this.stage.setTitle("4 Gewinnt!");
@@ -70,6 +73,9 @@ public class App extends Application{
 		launch(args);
 	}
 	
+	/**
+	 * triggers the closing method of the DBconnection-object.
+	 */
 	@Override
 	public void stop(){
 	    System.out.println("Close App, shutdown DB!");
