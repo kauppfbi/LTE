@@ -14,7 +14,7 @@ import javafx.application.Platform;
  */
 public class ThreadReconstruct extends Thread {
 
-	private ControllerReconstruct controller2;
+	private ControllerReconstruct controllerReconstruct;
 	private int[] recTurns;
 	private GameScore gameScore;
 
@@ -24,8 +24,8 @@ public class ThreadReconstruct extends Thread {
 	 * @param controller2
 	 * @param recTurns
 	 */
-	public ThreadReconstruct(ControllerReconstruct controller2, int[] recTurns) {
-		this.controller2 = controller2;
+	public ThreadReconstruct(ControllerReconstruct controllerReconstruct, int[] recTurns) {
+		this.controllerReconstruct = controllerReconstruct;
 		this.recTurns = recTurns;
 		this.gameScore = new GameScore();
 		this.gameScore.initialize();
@@ -47,7 +47,7 @@ public class ThreadReconstruct extends Thread {
 		int[] rowIndex = new int[7];
 
 		if (recTurns == null) {
-			controller2.playRecFinished();
+			controllerReconstruct.playRecFinished();
 		} else {
 			for (int i = 1; i < recTurns.length; i++) {
 
@@ -117,7 +117,7 @@ public class ThreadReconstruct extends Thread {
 				Platform.runLater(new Runnable() {
 					@Override
 					public void run() {
-						controller2.replayTurn(columnIndex, fRowIndex, fColor);
+						controllerReconstruct.replayTurn(columnIndex, fRowIndex, fColor);
 					}
 				});
 
@@ -134,10 +134,10 @@ public class ThreadReconstruct extends Thread {
 			Platform.runLater(new Runnable() {
 				@Override
 				public void run() {
-					controller2.highlightWinning(gameScore.winWhere());
+					controllerReconstruct.highlightWinning(gameScore.winWhere());
 				}
 			});
-			controller2.playRecFinished();
+			controllerReconstruct.playRecFinished();
 		} // else
 	}// run
 }

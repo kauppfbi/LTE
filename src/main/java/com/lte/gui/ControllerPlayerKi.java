@@ -37,7 +37,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 /**
- * Class for Screen3 AI vs. User<br>
+ * Class for Screen AI vs. User<br>
  * 
  * @author FelixH
  */
@@ -93,7 +93,7 @@ public class ControllerPlayerKi {
 	private ThreadPlayerKi threadPlayerKi;
 
 	/**
-	 * constructor for Controller3<br>
+	 * constructor for ControllerPlayerKi<br>
 	 * sets the mainController, soundManager and Images<br>
 	 * 
 	 * @param mainController
@@ -159,10 +159,10 @@ public class ControllerPlayerKi {
 	 * @param winningCombo
 	 * @throws IOException
 	 */
-	public void gameOver(byte winningPlayer, int[][] winningCombo){
+	public void gameOver(byte winningPlayer, int[][] winningCombo) {
 		// highlights the winning-combo
 		highlightWinning(winningCombo);
-	
+
 		// Winner gets one point
 		if (winningPlayer == 1) {
 			int playerX = Integer.parseInt(ltePoints.getText());
@@ -171,8 +171,9 @@ public class ControllerPlayerKi {
 			int playerO = Integer.parseInt(opponentPoints.getText());
 			opponentPoints.setText(String.valueOf(playerO + 1));
 		}
-	
-		// Alert-Dialog (Confirmation-Options: Go on with next Set || exit to Startmenu)
+
+		// Alert-Dialog (Confirmation-Options: Go on with next Set || exit to
+		// Startmenu)
 		if (!(controller.getGameInfo().getOwnPoints() == 3 || controller.getGameInfo().getOpponentPoints() == 3)) {
 			Alert alert = new Alert(AlertType.WARNING);
 			alert.setTitle("Game Over"); // Ask the user what the next steps are
@@ -184,22 +185,22 @@ public class ControllerPlayerKi {
 			} else {
 				alert.setHeaderText("Unentschieden!" + "\n" + "Was nun?");
 			}
-	
+
 			ButtonType weiter = new ButtonType("Weiter spielen");
 			ButtonType beenden = new ButtonType("Beenden");
-	
+
 			alert.getButtonTypes().setAll(weiter, beenden);
-	
+
 			Optional<ButtonType> result = alert.showAndWait();
-	
+
 			if (result.get() == weiter) {
 				clearGrid();
-	
+
 				// raise set
 				int satz = Integer.parseInt(set.getText());
 				set.setText(String.valueOf(satz + 1));
 				controller.getGameInfo().setSet(satz);
-	
+
 				startNewSet();
 			}
 			if (result.get() == beenden) {
@@ -208,15 +209,15 @@ public class ControllerPlayerKi {
 						|| controller.getGameInfo().getOpponentPoints() == 3)) {
 					controller.deleteUnfinishedGame();
 				}
-	
+
 				Stage stage;
 				stage = (Stage) backToStart.getScene().getWindow();
-	
+
 				// set Icon
 				File file = new File("files/images/icon.png");
 				Image image = new Image(file.toURI().toString());
 				stage.getIcons().add(image);
-	
+
 				// FXMLLoader
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
 				loader.setController(controller.getControllerStart());
@@ -225,12 +226,12 @@ public class ControllerPlayerKi {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-	
+
 				stage.show();
 			}
 		} else {
 			Alert alert = new Alert(AlertType.WARNING);
-			alert.setTitle("Game Over"); 
+			alert.setTitle("Game Over");
 			// Ask the user what the next steps are
 			if (winningPlayer == 1) {
 				alert.setHeaderText("Die KI hat gewonnen!" + "\n" + "Das Spiel ist nun entschieden.");
@@ -240,21 +241,21 @@ public class ControllerPlayerKi {
 				alert.setHeaderText("Unentschieden!" + "\n" + "Das Spiel ist nun entschieden.");
 			}
 			ButtonType beenden = new ButtonType("Beenden");
-	
+
 			alert.getButtonTypes().setAll(beenden);
-	
+
 			Optional<ButtonType> result = alert.showAndWait();
-	
+
 			if (result.get() == beenden) {
-	
+
 				Stage stage;
 				stage = (Stage) backToStart.getScene().getWindow();
-	
+
 				// set Icon
 				File file = new File("files/images/icon.png");
 				Image image = new Image(file.toURI().toString());
 				stage.getIcons().add(image);
-	
+
 				// FXMLLoader
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("views/start.fxml"));
 				loader.setController(controller.getControllerStart());
@@ -276,7 +277,7 @@ public class ControllerPlayerKi {
 		Circle circle = new Circle();
 		circle.setRadius(35.0);
 		addListener((Node) circle, columnIndex, rowIndex);
-	
+
 		if (player == 'X') {
 			circle.setFill(Color.web("#62dbee", 0.85));
 			GridPane.setColumnIndex(circle, columnIndex);
@@ -310,7 +311,7 @@ public class ControllerPlayerKi {
 	}
 
 	/**
-	 * Back to Screen0<br>
+	 * Back to ScreenStart<br>
 	 * 
 	 * @param event
 	 * @throws IOException
@@ -318,13 +319,13 @@ public class ControllerPlayerKi {
 	@FXML
 	private void goToStartmenu(ActionEvent event) throws IOException {
 		// terminate running Thread
-		if(threadPlayerKi != null){
-			synchronized(threadPlayerKi){
+		if (threadPlayerKi != null) {
+			synchronized (threadPlayerKi) {
 				threadPlayerKi.stop();
 				System.out.println("Thread beendet");
 			}
 		}
-		
+
 		// DB: delete unfinished game
 		if (!(controller.getGameInfo().getOwnPoints() == 3 || controller.getGameInfo().getOpponentPoints() == 3)) {
 			controller.deleteUnfinishedGame();
@@ -339,7 +340,7 @@ public class ControllerPlayerKi {
 		stage.getIcons().add(image);
 
 		// FXMLLoader
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("views/start.fxml"));
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layoutStart.fxml"));
 		loader.setController(controller.getControllerStart());
 		stage.setScene(new Scene((AnchorPane) loader.load()));
 
@@ -354,14 +355,14 @@ public class ControllerPlayerKi {
 	@FXML
 	private void startSet(ActionEvent event) {
 		threadPlayerKi = controller.getThreadPlayerKi();
-		
+
 		// RadioButton
 		if (radioKi.isSelected() == true) {
 			controller.getGameInfo().setNextPlayer('X');
 			controller.getGameInfo().setStartingPlayer('X');
-			while (true){
+			while (true) {
 				synchronized (threadPlayerKi) {
-					if(threadPlayerKi.isReady()){
+					if (threadPlayerKi.isReady()) {
 						try {
 							threadPlayerKi.setNextMove(-1);
 						} catch (Exception e) {
@@ -372,7 +373,7 @@ public class ControllerPlayerKi {
 					}
 				}
 			}
-			
+
 		} else if (radioPlayer.isSelected() == true) {
 			controller.getGameInfo().setNextPlayer('O');
 			controller.getGameInfo().setStartingPlayer('O');
@@ -387,13 +388,13 @@ public class ControllerPlayerKi {
 
 		// startButton disabled
 		startGame.setDisable(true);
-		
+
 		for (int i = 0; i < 7; i++) {
 			for (int j = 0; j < 6; j++) {
 				addListener(i, j);
 			}
 		}
-		
+
 		controller.getGameInfo().setGameInProgress(true);
 	}
 
@@ -402,10 +403,10 @@ public class ControllerPlayerKi {
 	 */
 	private void startNewSet() {
 		threadPlayerKi = controller.getThreadPlayerKi();
-		if(controller.getGameInfo().getStartingPlayer() == 'X'){
-			while (true){
+		if (controller.getGameInfo().getStartingPlayer() == 'X') {
+			while (true) {
 				synchronized (threadPlayerKi) {
-					if(threadPlayerKi.isReady()){
+					if (threadPlayerKi.isReady()) {
 						try {
 							threadPlayerKi.setNextMove(-1);
 							threadPlayerKi.notify();
@@ -424,7 +425,7 @@ public class ControllerPlayerKi {
 
 		// startButton disabled
 		startGame.setDisable(true);
-		
+
 		controller.getGameInfo().setGameInProgress(true);
 	}
 
@@ -435,10 +436,10 @@ public class ControllerPlayerKi {
 	private void clearGrid() {
 		Node node = gameGrid.getChildren().get(0);
 
-	    gameGrid.getChildren().clear();
-	    gameGrid.getChildren().add(0,node);	
-	    
-	    for (int i = 0; i < 7; i++) {
+		gameGrid.getChildren().clear();
+		gameGrid.getChildren().add(0, node);
+
+		for (int i = 0; i < 7; i++) {
 			for (int j = 0; j < 6; j++) {
 				addListener(i, j);
 			}
@@ -487,18 +488,18 @@ public class ControllerPlayerKi {
 		Pane pane = new Pane();
 		pane.setOnMouseClicked(e -> {
 			if (controller.getGameInfo().isGameInProgress() && controller.getGameInfo().getNextPlayer() == 'O') {
-				synchronized(threadPlayerKi){
+				synchronized (threadPlayerKi) {
 					try {
 						threadPlayerKi.setNextMove(colIndex);
 						controller.getGameInfo().setNextPlayer('X');
-						
-						if(threadPlayerKi.getState() == Thread.State.WAITING){
+
+						if (threadPlayerKi.getState() == Thread.State.WAITING) {
 							threadPlayerKi.notify();
 						}
 					} catch (Exception e1) {
 						System.out.println("Zug nicht möglich!");
 					}
-					
+
 				}
 			}
 		});
@@ -513,7 +514,7 @@ public class ControllerPlayerKi {
 
 		gameGrid.add(pane, colIndex, rowIndex);
 	}
-	
+
 	/**
 	 * sets listeners on the visualized circles<br>
 	 * 
@@ -521,15 +522,15 @@ public class ControllerPlayerKi {
 	 * @param colIndex
 	 * @param rowIndex
 	 */
-	private void addListener(Node node, int colIndex, int rowIndex){
+	private void addListener(Node node, int colIndex, int rowIndex) {
 		node.setOnMouseClicked(e -> {
 			if (controller.getGameInfo().isGameInProgress() && controller.getGameInfo().getNextPlayer() == 'O') {
-				synchronized(threadPlayerKi){
+				synchronized (threadPlayerKi) {
 					try {
 						threadPlayerKi.setNextMove(colIndex);
 						controller.getGameInfo().setNextPlayer('X');
-						
-						if(threadPlayerKi.getState() == Thread.State.WAITING){
+
+						if (threadPlayerKi.getState() == Thread.State.WAITING) {
 							threadPlayerKi.notify();
 						}
 					} catch (Exception e1) {
@@ -538,7 +539,7 @@ public class ControllerPlayerKi {
 				}
 			}
 		});
-		
+
 		node.setOnMouseEntered(e -> {
 			highlightColumn(colIndex);
 		});
@@ -547,7 +548,7 @@ public class ControllerPlayerKi {
 			deHighlightColumn(colIndex);
 		});
 	}
-	
+
 	/**
 	 * Highlights the hovered column<br>
 	 * 
@@ -565,7 +566,8 @@ public class ControllerPlayerKi {
 	}
 
 	/**
-	 * Stops highlighting the last column, as soon as hovered over the next column<br>
+	 * Stops highlighting the last column, as soon as hovered over the next
+	 * column<br>
 	 * 
 	 * @param column
 	 */
@@ -580,14 +582,14 @@ public class ControllerPlayerKi {
 			}
 		}
 	}
-	
+
 	/**
 	 * Event for leaving the application<br>
 	 * 
 	 * @param event
 	 */
 	public void exitApplication() {
-		if(threadPlayerKi != null){
+		if (threadPlayerKi != null) {
 			threadPlayerKi.stop();
 		}
 		Platform.exit();

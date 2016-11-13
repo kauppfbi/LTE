@@ -153,7 +153,7 @@ public class ControllerReconstruct {
 	 * @throws IOException
 	 */
 	@FXML
-	public void goToStartmenu(ActionEvent event) throws IOException{
+	private void goToStartmenu(ActionEvent event) throws IOException{
 		
 		// interrupt the Thread, if it was running
 		if(threadReconstruct.getState() == Thread.State.RUNNABLE || threadReconstruct.getState() == Thread.State.TIMED_WAITING){
@@ -186,7 +186,7 @@ public class ControllerReconstruct {
 				Stage stage; 
 			    stage = (Stage) backToStart.getScene().getWindow();
 			    // FXMLLoader             
-		        FXMLLoader loader = new FXMLLoader(getClass().getResource("views/start.fxml"));
+		        FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layoutStart.fxml"));
 		        loader.setController(controller.getControllerStart());
 			    stage.setScene(new Scene((AnchorPane) loader.load()));  
 				stage.show();
@@ -200,7 +200,7 @@ public class ControllerReconstruct {
 			Stage stage;
 		    stage = (Stage) backToStart.getScene().getWindow();
 		    // FXMLLoader               
-	        FXMLLoader loader = new FXMLLoader(getClass().getResource("views/start.fxml"));
+	        FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layoutStart.fxml"));
 	        loader.setController(controller.getControllerStart());
 		    stage.setScene(new Scene((AnchorPane) loader.load()));
 			stage.show();    

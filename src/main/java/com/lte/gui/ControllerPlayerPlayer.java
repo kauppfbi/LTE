@@ -32,7 +32,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 /**
- * Controller4 Class for Player-Player<br>
+ * GuiController Class for ScenePlayer-Player<br>
  * 
  * @author FelixH
  */
@@ -66,27 +66,6 @@ public class ControllerPlayerPlayer {
 	ImageView imageView;
 
 	@FXML
-	ImageView row1;
-
-	@FXML
-	ImageView row2;
-
-	@FXML
-	ImageView row3;
-
-	@FXML
-	ImageView row4;
-
-	@FXML
-	ImageView row5;
-
-	@FXML
-	ImageView row6;
-
-	@FXML
-	ImageView row7;
-
-	@FXML
 	RadioButton radioPlayer1;
 
 	@FXML
@@ -104,13 +83,7 @@ public class ControllerPlayerPlayer {
 	private HashMap<String, Image> images;
 	
 	//Integer Stones per column -> hight of the row
-	private int rowHigh0 = 0;
-	private int rowHigh1 = 0;
-	private int rowHigh2 = 0;
-	private int rowHigh3 = 0;
-	private int rowHigh4 = 0;
-	private int rowHigh5 = 0;
-	private int rowHigh6 = 0;
+	private int rowHeight[];
 
 	// Initial Player
 	// char player = 'X';
@@ -125,6 +98,7 @@ public class ControllerPlayerPlayer {
 		this.controller = mainController;
 		this.soundManager = controller.getSoundManager();		
 		this.images = controller.getImages();
+		this.rowHeight = new int [7];
 	}
 
 	/**
@@ -191,7 +165,8 @@ public class ControllerPlayerPlayer {
 	
 		if (result.get() == weiter) {
 			clearGrid();
-	
+			controller.resetThreadPlayerPlayer();
+			
 			// Winner gets one point
 			if (winningPlayer == 1) {
 				int playerX = Integer.parseInt(ltePoints.getText());
@@ -209,23 +184,15 @@ public class ControllerPlayerPlayer {
 			controller.getGameInfo().setSet(satz);
 	
 			// reset rows
-			rowHigh0 = 0;
-			rowHigh1 = 0;
-			rowHigh2 = 0;
-			rowHigh3 = 0;
-			rowHigh4 = 0;
-			rowHigh5 = 0;
-			rowHigh6 = 0;
+			rowHeight = null;
+			rowHeight = new int [7];
 		} else if (result.get() == beenden) {
 	
-			// Integer Stones per column -> hight of the row
-			rowHigh0 = 0;
-			rowHigh1 = 0;
-			rowHigh2 = 0;
-			rowHigh3 = 0;
-			rowHigh4 = 0;
-			rowHigh5 = 0;
-			rowHigh6 = 0;
+			controller.resetThreadPlayerPlayer();
+			
+			// reset rows
+			rowHeight = null;
+			rowHeight = new int [7];
 	
 			Stage stage;
 			stage = (Stage) backToStart.getScene().getWindow();
@@ -236,7 +203,7 @@ public class ControllerPlayerPlayer {
 			stage.getIcons().add(image);
 	
 			// FXMLLoader
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layoutStart.fxml"));
 			loader.setController(controller.getControllerStart());
 			try {
 				stage.setScene(new Scene((AnchorPane) loader.load()));
@@ -269,24 +236,7 @@ public class ControllerPlayerPlayer {
 			GridPane.setHalignment(circle, HPos.CENTER);
 			gameGrid.getChildren().add(circle);
 		}
-		if (columnIndex == 0) {
-			rowHigh0++;
-		} else if (columnIndex == 1) {
-			rowHigh1++;
-		} else if (columnIndex == 2) {
-			rowHigh2++;
-		} else if (columnIndex == 3) {
-			rowHigh3++;
-		} else if (columnIndex == 4) {
-			rowHigh4++;
-		} else if (columnIndex == 5) {
-			rowHigh5++;
-		} else if (columnIndex == 6) {
-			rowHigh6++;
-		}
-	
-		System.out.println(rowHigh0 + " " + rowHigh1 + " " + rowHigh2 + " " + rowHigh3 + " " + rowHigh4 + " " + rowHigh5
-				+ " " + rowHigh6);
+		rowHeight[columnIndex]++;
 	}
 
 	/**
@@ -347,14 +297,10 @@ public class ControllerPlayerPlayer {
 	@FXML
 	private void goToStartmenu(ActionEvent event) throws IOException {
 
+		controller.resetThreadPlayerPlayer();
+		
 		// Integer Stones per column -> hight of the row
-		rowHigh0 = 0;
-		rowHigh1 = 0;
-		rowHigh2 = 0;
-		rowHigh3 = 0;
-		rowHigh4 = 0;
-		rowHigh5 = 0;
-		rowHigh6 = 0;
+		rowHeight = new int [7];
 
 		Stage stage;
 		stage = (Stage) backToStart.getScene().getWindow();
@@ -365,7 +311,7 @@ public class ControllerPlayerPlayer {
 		stage.getIcons().add(image);
 
 		// FXMLLoader
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("views/start.fxml"));
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layoutStart.fxml"));
 		loader.setController(controller.getControllerStart());
 		stage.setScene(new Scene((AnchorPane) loader.load()));
 
@@ -385,7 +331,7 @@ public class ControllerPlayerPlayer {
 				try {
 					char player = controller.getGameInfo().getNextPlayer();
 					controller.playTurnPlayerPlayer(colIndex);
-					fill(colIndex, getRow(colIndex), player, false);
+					fill(colIndex, rowHeight[colIndex], player, false);
 					highlightColumn(colIndex, controller.getGameInfo().getNextPlayer());
 				} catch (Exception e1) {
 					System.out.println("Zug nicht möglich!");
@@ -417,7 +363,7 @@ public class ControllerPlayerPlayer {
 				try {
 					char player = controller.getGameInfo().getNextPlayer();
 					controller.playTurnPlayerPlayer(colIndex);
-					fill(colIndex, getRow(colIndex), player, false);
+					fill(colIndex, rowHeight[colIndex], player, false);
 					highlightColumn(colIndex, controller.getGameInfo().getNextPlayer());
 				} catch (Exception e1) {
 					System.out.println("Zug nicht möglich!");
@@ -473,31 +419,6 @@ public class ControllerPlayerPlayer {
 				}
 			}
 		}
-	}
-
-	private int getRow(int column) {
-		if (column == 0) {
-			return rowHigh0;
-		}
-		if (column == 1) {
-			return rowHigh1;
-		}
-		if (column == 2) {
-			return rowHigh2;
-		}
-		if (column == 3) {
-			return rowHigh3;
-		}
-		if (column == 4) {
-			return rowHigh4;
-		}
-		if (column == 5) {
-			return rowHigh5;
-		}
-		if (column == 6) {
-			return rowHigh6;
-		}
-		return 0;
 	}
 
 	/**

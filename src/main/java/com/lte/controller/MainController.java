@@ -330,6 +330,10 @@ public class MainController {
 	 * private methods - helping methods
 	 */
 
+	public void resetThreadPlayerPlayer(){
+		this.threadPlayerPlayer = null; 
+	}
+
 	/**
 	 * checks completeness of settings-object; if it is complete, the interface
 	 * InterfaceManager is automatically instantiated
@@ -416,10 +420,6 @@ public class MainController {
 		algorithmManager.shutdown();
 		this.algorithmManager = new AlgorithmManager();
 	}
-
-	/*
-	 * Shutdown method
-	 */
 
 	/**
 	 * This method is called, when the Application is closing.<br>

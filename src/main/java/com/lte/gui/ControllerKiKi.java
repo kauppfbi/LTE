@@ -35,16 +35,17 @@ import javafx.stage.Stage;
 
 /**
  * Class Controller1 manages the Game-Screen<br>
- * It´s the main part of the application and shows among other things the game-field<br>
+ * It´s the main part of the application and shows among other things the
+ * game-field<br>
  * 
  * @author FelixH
  *
  */
 public class ControllerKiKi {
 
-	@FXML 
+	@FXML
 	AnchorPane pane;
-	
+
 	@FXML
 	Button fileSelect;
 
@@ -86,31 +87,26 @@ public class ControllerKiKi {
 
 	@FXML
 	ChoiceBox<String> playerChoice;
-	
+
 	@FXML
 	Button muteButton;
-	
+
 	private MainController controller;
-	final FileChooser fileChooser;
 	private SoundManager soundManager;
 	private HashMap<String, Image> images;
 
-	String playerX = "defaultX";
-	String playerO = "defaultO";
-	
 	/**
-	 * constructor for Controller1<br>
-	 * sets the mainController, soundManager, fileChooser and Images<br>
+	 * constructor for ControllerKiKi<br>
+	 * sets the mainController, soundManager and Images<br>
 	 * 
 	 * @param mainController
 	 */
 	public ControllerKiKi(MainController mainController) {
 		this.controller = mainController;
-		this.fileChooser = new FileChooser();
-		this.soundManager = controller.getSoundManager();		
+		this.soundManager = controller.getSoundManager();
 		this.images = controller.getImages();
 	}
-	
+
 	/**
 	 * JavaFX initializations<br>
 	 * is responsible for changeListener initializations (for settings-UI)
@@ -124,7 +120,7 @@ public class ControllerKiKi {
 			muteButton.setGraphic(new ImageView(images.get("speaker1")));
 		}
 		muteButton.setStyle("-fx-background-color: transparent;");
-		
+
 		// initialize meta-informations
 		set.setText("0");
 		ltePoints.setText("0");
@@ -189,15 +185,15 @@ public class ControllerKiKi {
 		File file = new File("files/images/gameplay.png");
 		Image image = new Image(file.toURI().toString());
 		imageView.setImage(image);
-		
+
 		namePlayerX.setText("LTE");
 		namePlayerO.setText(controller.getGameInfo().getOpponentName());
 	}
 
 	/**
-	 * Client shows that it is ready to play the set
+	 * Calling the method to show, that threadPlay is ready for the game
 	 */
-	public void showReady(){
+	public void showReady() {
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Information");
 		alert.setHeaderText("Spiel initialisiert");
@@ -206,16 +202,16 @@ public class ControllerKiKi {
 	}
 
 	/**
-	 * gameOver-method shows the game-result and asks
-	 * for the next steps (play new set, ...)<br>
+	 * gameOver-method shows the game-result and asks for the next steps (play
+	 * new set, ...)<br>
 	 * 
 	 * @param winningPlayer
 	 * @param winningCombo
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public void gameOver(byte winningPlayer, int[][] winningCombo) throws IOException {
-		highlightWinning(winningCombo); //highlights the winning-combo
-		
+		highlightWinning(winningCombo); // highlights the winning-combo
+
 		// Winner gets +1 Set-Point
 		if (winningPlayer == 1) {
 			int playerX = Integer.parseInt(ltePoints.getText());
@@ -224,12 +220,12 @@ public class ControllerKiKi {
 			int playerO = Integer.parseInt(opponentPoints.getText());
 			opponentPoints.setText(String.valueOf(playerO + 1));
 		}
-		
+
 		// Change the number of the set
 		// Set-Number +1
 		set.setText(String.valueOf(controller.getGameInfo().getSet()));
-		
-		if(!(controller.getGameInfo().getOwnPoints() == 3 || controller.getGameInfo().getOpponentPoints() == 3)){
+
+		if (!(controller.getGameInfo().getOwnPoints() == 3 || controller.getGameInfo().getOpponentPoints() == 3)) {
 			Alert alert = new Alert(AlertType.WARNING);
 			alert.setTitle("Game Over"); // Ask the user what the next steps are
 			alert.setContentText("Unvollständige Spiele werden nicht gespeichert!");
@@ -240,42 +236,44 @@ public class ControllerKiKi {
 			} else {
 				alert.setHeaderText("Unentschieden!" + "\n" + "Was nun?");
 			}
-			
+
 			ButtonType weiter = new ButtonType("Weiter spielen");
 			ButtonType beenden = new ButtonType("Beenden");
 			ButtonType changeSettings = new ButtonType("Einstellungen ändern");
-	
+
 			alert.setContentText("Unvollständige Spiele werden nicht gespeichert!");
 			alert.getButtonTypes().setAll(weiter, beenden, changeSettings);
-	
+
 			Optional<ButtonType> result = alert.showAndWait();
-	
+
 			if (result.get() == weiter) {
 				clearGrid();
-				
-				//update set
+
+				// update set
 				set.setText(String.valueOf(controller.getGameInfo().getSet() + 1));
 				controller.getGameInfo().setSet(controller.getGameInfo().getSet() + 1);
-				
+
 				// start new Set
 				controller.playSet();
-	
-			} if (result.get() == beenden) {			
-				//DB: delete unfinished game
-				if(!(controller.getGameInfo().getOwnPoints() == 3 || controller.getGameInfo().getOpponentPoints() == 3)){
-					if(!controller.deleteUnfinishedGame()){
+
+			}
+			if (result.get() == beenden) {
+				// DB: delete unfinished game
+				if (!(controller.getGameInfo().getOwnPoints() == 3
+						|| controller.getGameInfo().getOpponentPoints() == 3)) {
+					if (!controller.deleteUnfinishedGame()) {
 						System.err.println("Deleting unfinished Game in DB was not sucessfully!");
 					}
-				}				
-	
+				}
+
 				Stage stage;
 				stage = (Stage) backToStart.getScene().getWindow();
-	
+
 				// set Icon
 				File file = new File("files/images/icon.png");
 				Image image = new Image(file.toURI().toString());
 				stage.getIcons().add(image);
-	
+
 				// FXMLLoader
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
 				loader.setController(controller.getControllerStart());
@@ -285,8 +283,8 @@ public class ControllerKiKi {
 					e.printStackTrace();
 				}
 				stage.show();
-			} else if (result.get() == changeSettings){
-				//enable Settings
+			} else if (result.get() == changeSettings) {
+				// enable Settings
 				startGame.setDisable(false);
 				backToStart.setDisable(false);
 				timeSpinner.setDisable(false);
@@ -295,8 +293,9 @@ public class ControllerKiKi {
 				playerChoice.setDisable(false);
 				clearGrid();
 			}
-		// If one of the players has won three sets, the game gets saved in the DB	
-		} else{
+			// If one of the players has won three sets, the game gets saved in
+			// the DB
+		} else {
 			Alert alert = new Alert(AlertType.WARNING);
 			alert.setTitle("Game Over"); // Ask the user what the next steps are
 			if (winningPlayer == 1) {
@@ -310,27 +309,26 @@ public class ControllerKiKi {
 
 			alert.getButtonTypes().setAll(beenden);
 			Optional<ButtonType> result = alert.showAndWait();
-	
-			if (result.get() == beenden) {				
+
+			if (result.get() == beenden) {
 				Stage stage;
 				stage = (Stage) backToStart.getScene().getWindow();
-	
+
 				// set Icon
 				File file = new File("files/images/icon.png");
 				Image image = new Image(file.toURI().toString());
 				stage.getIcons().add(image);
-	
+
 				// FXMLLoader
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layout0.fxml"));
 				loader.setController(controller.getControllerStart());
 				stage.setScene(new Scene((AnchorPane) loader.load()));
-	
+
 				stage.show();
 			}
 		}
 	}
 
-	
 	/**
 	 * Visualize the turns corresponding to their position in the field
 	 */
@@ -358,33 +356,33 @@ public class ControllerKiKi {
 	 * 
 	 * @param woGewonnen
 	 */
-	public void highlightWinning(int[][] woGewonnen){
-		//Get the positions from the array
-		for(int i = 0; i<=3; i++){
+	public void highlightWinning(int[][] woGewonnen) {
+		// Get the positions from the array
+		for (int i = 0; i <= 3; i++) {
 			int column = woGewonnen[i][0];
 			int row = woGewonnen[i][1];
 			setHighlight(column, row);
 		}
 	}
-	
+
 	/**
 	 * changes color to highlight the winning-combo<br>
 	 * 
 	 * @param column
 	 * @param row
 	 */
-	private void setHighlight(int column, int row){
-		//new Circle
+	private void setHighlight(int column, int row) {
+		// new Circle
 		Circle circle2 = new Circle();
 		circle2.setRadius(35.0);
-		
+
 		circle2.setFill(Color.web("#FF0000", 0.8));
 		GridPane.setColumnIndex(circle2, column);
 		GridPane.setRowIndex(circle2, (5 - row));
 		GridPane.setHalignment(circle2, HPos.CENTER);
 		gameGrid.getChildren().add(circle2);
 	}
-	
+
 	/**
 	 * starts the game set<br>
 	 * 
@@ -399,10 +397,10 @@ public class ControllerKiKi {
 		}
 		set.setText(String.valueOf(controller.getGameInfo().getSet() + 1));
 		controller.getGameInfo().setSet(controller.getGameInfo().getSet() + 1);
-		
-		controller.playSet(); //triggers play-method
-		
-		//Disable settings during game
+
+		controller.playSet(); // triggers play-method
+
+		// Disable settings during game
 		startGame.setDisable(true);
 		backToStart.setDisable(true);
 		timeSpinner.setDisable(true);
@@ -412,30 +410,29 @@ public class ControllerKiKi {
 	}
 
 	/**
-	 * Back to Screen0<br>
+	 * Back to ScreenStart<br>
 	 * 
 	 * @param event
 	 * @throws IOException
 	 */
 	@FXML
 	private void goToStartmenu(ActionEvent event) throws IOException {
-	
+
 		// DB: delete unfinished game
-		if (!(controller.getGameInfo().getOwnPoints() == 3
-				|| controller.getGameInfo().getOpponentPoints() == 3)) {
+		if (!(controller.getGameInfo().getOwnPoints() == 3 || controller.getGameInfo().getOpponentPoints() == 3)) {
 			controller.deleteUnfinishedGame();
 		}
-		
+
 		Stage stage;
 		stage = (Stage) backToStart.getScene().getWindow();
-	
+
 		// set Icon
 		File file = new File("files/images/icon.png");
 		Image image = new Image(file.toURI().toString());
 		stage.getIcons().add(image);
-	
+
 		// FXMLLoader
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("views/start.fxml"));
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("views/layoutStart.fxml"));
 		loader.setController(controller.getControllerStart());
 		stage.setScene(new Scene((AnchorPane) loader.load()));
 		stage.show();
@@ -444,15 +441,17 @@ public class ControllerKiKi {
 	/**
 	 * DirectoryChooser for file-interface<br>
 	 * 
-	 * @return String kontaktpfad
+	 * @return String contactPath
 	 */
 	@FXML
 	private String fileSelect() {
 		Stage mainStage = null;
-		DirectoryChooser directoryChooser = new DirectoryChooser(); //new directoryChooser
+		DirectoryChooser directoryChooser = new DirectoryChooser(); // new
+																	// directoryChooser
 		directoryChooser.setTitle("Verzeichnis des Kontaktpfades w�hlen!");
 		File selectedFile = directoryChooser.showDialog(mainStage);
-		String kontaktpfad = selectedFile.getPath(); //contact-path for FileInterface
+		String kontaktpfad = selectedFile.getPath(); // contact-path for
+														// FileInterface
 		controller.getSettings().setContactPath(kontaktpfad);
 		textKontaktpfad.setText(kontaktpfad);
 		System.out.println("Kontaktpfad: " + kontaktpfad);
@@ -462,32 +461,30 @@ public class ControllerKiKi {
 	/**
 	 * updates the Credentials
 	 */
-	private void updateCredentials(){
+	private void updateCredentials() {
 		CredentialsManager credentialsManager = new CredentialsManager();
-		String [] defaultCredentials = credentialsManager.readCredentials();
-		
-		
+		String[] defaultCredentials = credentialsManager.readCredentials();
+
 		CredentialsInputDialog dialog = new CredentialsInputDialog(defaultCredentials);
-		String [] selectedCredentials = dialog.getResult();
-		
-		if (selectedCredentials == null){
+		String[] selectedCredentials = dialog.getResult();
+
+		if (selectedCredentials == null) {
 			System.err.println("Credentials wurden nicht gewählt!");
 		} else {
 			controller.getSettings().setCredentials(selectedCredentials);
 			credentialsManager.setCredentials(selectedCredentials);
 		}
-		
 	}
-	
+
 	/**
 	 * clears the field
 	 */
 	@FXML
 	private void clearGrid() {
-		Node node = gameGrid.getChildren().get(0); //saves gameGrid as a node
-	    gameGrid.getChildren().clear(); //clears the Grid
-	    gameGrid.getChildren().add(0,node); //adds the node
-		
+		Node node = gameGrid.getChildren().get(0); // saves gameGrid as a node
+		gameGrid.getChildren().clear(); // clears the Grid
+		gameGrid.getChildren().add(0, node); // adds the node
+
 	}
 
 	/**
@@ -496,7 +493,7 @@ public class ControllerKiKi {
 	 * @param event
 	 */
 	@FXML
-	private void mute(ActionEvent event){
+	private void mute(ActionEvent event) {
 		Status status = soundManager.playPause();
 		if (status != null) {
 			if (status == Status.PAUSED) {
@@ -514,7 +511,7 @@ public class ControllerKiKi {
 	 */
 	@FXML
 	public void exitApplication() {
-		if(controller.getThreadPlay() != null){
+		if (controller.getThreadPlay() != null) {
 			controller.getThreadPlay().stop();
 		}
 		System.out.println("controller1 exit completed");

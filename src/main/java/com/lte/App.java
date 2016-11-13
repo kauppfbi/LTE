@@ -40,7 +40,7 @@ public class App extends Application{
 			// Main Controller
 			controller = new MainController(connection);
 			// FXMLLoader
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("gui/views/start.fxml"));
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("gui/views/layoutStart.fxml"));
 			loader.setController(controller.getControllerStart());
 			stage.setScene(new Scene((AnchorPane) loader.load()));
 			// set Icon

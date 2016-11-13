@@ -16,7 +16,7 @@ public class ThreadPlayerPlayer {
 
 	// **********************************//
 	// GUI controller
-	private ControllerPlayerPlayer controller4;
+	private ControllerPlayerPlayer controllerPlayerPlayer;
 
 	// model(s)
 	private GameInfo gameInfo;
@@ -27,11 +27,11 @@ public class ThreadPlayerPlayer {
 	/**
 	 * Default Constructor
 	 * 
-	 * @param controller4
+	 * @param controllerPlayerPlayer
 	 * @param gameInfo
 	 */
-	public ThreadPlayerPlayer(ControllerPlayerPlayer controller4, GameInfo gameInfo) {
-		this.controller4 = controller4;
+	public ThreadPlayerPlayer(ControllerPlayerPlayer controllerPlayerPlayer, GameInfo gameInfo) {
+		this.controllerPlayerPlayer = controllerPlayerPlayer;
 		this.gameInfo = gameInfo;
 
 		System.out.println("Spielen läuft");
@@ -99,7 +99,7 @@ public class ThreadPlayerPlayer {
 			Platform.runLater(new Runnable() {
 				@Override
 				public void run() {
-					controller4.gameOver(currentGameScore.isWon(), currentGameScore.winWhere());
+					controllerPlayerPlayer.gameOver(currentGameScore.isWon(), currentGameScore.winWhere());
 				}
 			});
 
